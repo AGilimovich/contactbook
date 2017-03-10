@@ -264,7 +264,7 @@ th {
   font-family: 'Glyphicons Halflings';
 
   src: url('fonts/glyphicons-halflings-regular.eot');
-  src: url('fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('dist/fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('dist/fonts/glyphicons-halflings-regular.woff') format('woff'), url('dist/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('dist/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+  src: url('fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('fonts/glyphicons-halflings-regular.woff') format('woff'), url('fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 .glyphicon {
   position: relative;
@@ -2274,7 +2274,7 @@ th {
   padding: 8px;
   line-height: 1.42857143;
   vertical-align: top;
-  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
 }
 .table > thead > tr > th {
   vertical-align: bottom;

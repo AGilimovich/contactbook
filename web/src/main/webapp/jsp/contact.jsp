@@ -3,7 +3,7 @@
 <head>
     <title>Title</title>
     <link rel="stylesheet" href="../resources/css/contact.css">
-    <link rel="stylesheet" href="../lib/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="../resources/css/bootstrap/bootstrap.css">
     <script src="../resources/js/contact.js" defer></script>
 </head>
 <body>

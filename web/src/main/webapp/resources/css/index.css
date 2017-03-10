@@ -1,0 +1,52 @@
+body {
+    background-color: #ffffff;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/*Container for contact's photo*/
+.photo-container {
+    height: 90px;
+    width: 90px;
+    overflow: hidden;
+}
+
+/*Photo of contact*/
+.photo {
+    margin: auto;
+    display: block;
+}
+
+/*Pagination*/
+.pages {
+    text-align: center;
+}
+
+/*The name of contact*/
+.name {
+    font-size: 1.3em;
+}
+
+/*Checkbox inside table for selecting contact*/
+#table-checkbox {
+    vertical-align: middle;
+    font-size: 4em;
+}
+
+
+
+.btn-delete {
+    margin-left: 30px;
+}
+
+.btn-add {
+    margin-left: 30px;
+}
+
+
+.items-display select {
+    display: inline;
+    max-width: 70px;
+}
+

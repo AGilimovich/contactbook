@@ -2,9 +2,9 @@
 <html>
 <head>
     <title>Title</title>
-    <link rel="stylesheet" href="../../../WEB-INF/lib/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="../resources/css/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="../resources/css/search.css">
-    <script src="../resources/js/search.js.js" defer></script>
+    <script src="../resources/js/search.js" defer></script>
 </head>
 <body>
 <nav class="navbar navbar-default">

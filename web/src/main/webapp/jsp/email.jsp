@@ -3,7 +3,7 @@
 <head>
 
     <title>Title</title>
-    <link rel="stylesheet" href="../../../WEB-INF/lib/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="../resources/css/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="../resources/css/email.css">
 
 </head>
