@@ -1,0 +1,25 @@
+.top-buffer {
+    margin: 15px 0;
+}
+
+
+
+.btn-search {
+    width: 100%;
+    margin: 15px 35% 0 0;
+    font-size: 1.4em;
+
+}
+
+.date {
+    max-width: 170px;
+    display: inline-block;
+}
+
+.gender {
+    max-width: 60px;
+}
+
+.family {
+    max-width: 175px;
+}

@@ -1,0 +1,25 @@
+.buffer-top {
+    margin-top: 15px;
+}
+
+#text-field {
+    min-height: 500px;
+}
+
+.offset20px {
+    margin-left: 20px
+}
+
+select {
+    max-width: 30%;
+}
+
+.control-group {
+    text-align: center;
+}
+
+.control-group > button {
+    display: inline-block;
+    margin: 0 15px;
+}
+
