@@ -1,10 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
     <title>Title</title>
-    <link rel="stylesheet" href="../resources/css/bootstrap/bootstrap.css">
-    <link rel="stylesheet" href="../resources/css/search.css">
-    <script src="../resources/js/search.js" defer></script>
+    <link rel="stylesheet" href="/resources/css/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="/resources/css/search.css">
 </head>
 <body>
 <nav class="navbar navbar-default">

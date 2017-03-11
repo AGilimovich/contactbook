@@ -23,11 +23,28 @@ public class Contact {
     private Address address;
     private ArrayList<Phone> phones;
     private ArrayList<Attachment> attachments;
-    private Image photo;
+    private String photo;
+
+    public Contact(int id, String name, String surname, String patronymic, Date dateOfBirth, Gender gender, String citizenship, FamilyStatus familyStatus, String webSite, String email, String placeOfWork, Address address, ArrayList<Phone> phones, ArrayList<Attachment> attachments, String photo) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.patronymic = patronymic;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+        this.citizenship = citizenship;
+        this.familyStatus = familyStatus;
+        this.webSite = webSite;
+        this.email = email;
+        this.placeOfWork = placeOfWork;
+        this.address = address;
+        this.phones = phones;
+        this.attachments = attachments;
+        this.photo = photo;
+    }
 
     public enum Gender {
         MALE, FEMALE;
-
 
     }
 

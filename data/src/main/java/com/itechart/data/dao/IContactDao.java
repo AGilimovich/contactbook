@@ -2,6 +2,7 @@ package com.itechart.data.dao;
 
 import com.itechart.data.entity.Contact;
 
+import java.util.ArrayList;
 import java.util.Properties;
 
 /**
@@ -14,6 +15,8 @@ public interface IContactDao {
     void delete(Contact contact);
 
     void update(Contact contact);
+
+    ArrayList<Contact> getAll();
 
     Contact getContactById(int id);
 

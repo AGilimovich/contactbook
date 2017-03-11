@@ -9,23 +9,21 @@ import java.sql.SQLException;
  */
 public class JdbcDataSource implements IDataSource {
 
+    private String url;
+    private String password;
+    private String name;
 
-//    private final String INIT_QUERY = "CREATE DATABASE IF NOT EXISTS contact_book;";
 
-
-    public JdbcDataSource(String driver) throws ClassNotFoundException {
-
+    public JdbcDataSource(String driver, String url, String name, String password) throws ClassNotFoundException {
         Class.forName(driver);
+        this.url = url;
+        this.name = name;
+        this.password = password;
 
     }
 
-    public Connection getConnection(String url, String name, String password) throws SQLException {
+    public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, name, password);
-//        Statement st = cn.createStatement();
-
-
-        //        st.executeUpdate(INIT_QUERY);
-//        st.executeUpdate("USE contact_book;");
     }
 
 

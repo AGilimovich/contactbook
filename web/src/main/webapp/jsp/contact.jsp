@@ -1,9 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
     <title>Title</title>
-    <link rel="stylesheet" href="../resources/css/contact.css">
-    <link rel="stylesheet" href="../resources/css/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="/resources/css/contact.css">
+    <link rel="stylesheet" href="/resources/css/bootstrap/bootstrap.css">
     <script src="../resources/js/contact.js" defer></script>
 </head>
 <body>
@@ -27,7 +28,7 @@
             <div class="col-md-1">
                 <div class="row">
                     <div class="photo-container">
-                        <img src="../../resources/male.jpg" alt="photo" height="100%" id="photo">
+                        <img src="/resources/images/male.jpg" alt="photo" height="100%" id="photo">
                     </div>
                 </div>
             </div>

@@ -6,49 +6,31 @@
     <display-name>Contact book</display-name>
 
     <servlet>
-    <servlet-name>MainServlet</servlet-name>
-    <servlet-class>com.itechart.web.controller.MainCtrl</servlet-class>
+        <servlet-name>FrontController</servlet-name>
+        <servlet-class>com.itechart.web.controller.FrontCtrl</servlet-class>
     </servlet>
 
     <servlet-mapping>
-    <servlet-name>MainServlet</servlet-name>
-    <url-pattern>/main</url-pattern>
+        <servlet-name>FrontController</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.css</url-pattern>
+    </servlet-mapping>
 
-    <!--<servlet>-->
-        <!--<servlet-name>MainServlet</servlet-name>-->
-        <!--<servlet-class>com.MainCtrl</servlet-class>-->
-    <!--</servlet>-->
-    <!--<servlet>-->
-        <!--<servlet-name>EmailServlet</servlet-name>-->
-        <!--<servlet-class>com.EmailCtrl</servlet-class>-->
-    <!--</servlet>-->
-    <!--<servlet>-->
-        <!--<servlet-name>ContactServlet</servlet-name>-->
-        <!--<servlet-class>com.ContactCtrl</servlet-class>-->
-    <!--</servlet>-->
-    <!--<servlet>-->
-        <!--<servlet-name>SearchServlet</servlet-name>-->
-        <!--<servlet-class>com.ContactCtrl</servlet-class>-->
-    <!--</servlet>-->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.js</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.jpg</url-pattern>
+    </servlet-mapping>
 
-
-    <!--<servlet-mapping>-->
-        <!--<servlet-name>MainServlet</servlet-name>-->
-        <!--<url-pattern>/</url-pattern>-->
-    <!--</servlet-mapping>-->
-    <!--<servlet-mapping>-->
-        <!--<servlet-name>EmailServlet</servlet-name>-->
-        <!--<url-pattern>/email</url-pattern>-->
-    <!--</servlet-mapping>-->
-    <!--<servlet-mapping>-->
-        <!--<servlet-name>ContactServlet</servlet-name>-->
-        <!--<url-pattern>/contact</url-pattern>-->
-    <!--</servlet-mapping>-->
-    <!--<servlet-mapping>-->
-        <!--<servlet-name>SearchServlet</servlet-name>-->
-        <!--<url-pattern>/search</url-pattern>-->
-    <!--</servlet-mapping>-->
+    <welcome-file-list>
+        <welcome-file>FrontController</welcome-file>
+    </welcome-file-list>
 
 </web-app>
