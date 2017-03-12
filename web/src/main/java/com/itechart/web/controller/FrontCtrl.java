@@ -28,7 +28,6 @@ public class FrontCtrl extends HttpServlet {
         CommandFactory factory = new CommandFactory();
         Command command = factory.getCommand(request);
         String page = command.execute(request, response);
-        request.setAttribute("param", "Alex");//todo delete
         dispatch(request, response, page);
     }
 

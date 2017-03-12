@@ -25,9 +25,7 @@
         </div>
     </div>
 </nav>
-<% String name = (String) request.getAttribute("param"); %>
-<%= name%>
-<c:out value="${param}"></c:out>
+
 
 <div class="container-fluid">
     <form action="">
@@ -81,8 +79,8 @@
                                     <p>${contact.dateOfBirth}</p>
                                 </div>
                                 <div class="col-md-2">
-                                    <p>${contact.country}, ул. ${contact.street},
-                                        д.${contact.house}-${contact.apartment}</p>
+                                    <p>${contact.address.country}, ул. ${contact.address.street},
+                                        д.${contact.address.house}-${contact.address.apartment}</p>
                                 </div>
                                 <div class="col-md-2">
                                     <p>${contact.placeOfWork}</p>

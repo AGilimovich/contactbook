@@ -35,7 +35,7 @@ public class CommandFactory {
     public Command getCommand(HttpServletRequest request) throws ServletException {
 
         String path = request.getServletPath();
-
+        System.out.println(path);
 
         if (path.isEmpty()) return new ShowContactsCommand(dao);
         switch (path) {
