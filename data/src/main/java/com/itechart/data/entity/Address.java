@@ -24,4 +24,31 @@ public class Address {
     private String apartment;
     private String zipCode;
 
+    public int getId() {
+        return id;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public String getHouse() {
+        return house;
+    }
+
+    public String getApartment() {
+        return apartment;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
 }

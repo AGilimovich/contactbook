@@ -19,4 +19,24 @@ public class Attachment {
         this.comment = comment;
         this.file = file;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Date getUploadDate() {
+        return uploadDate;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public String getFile() {
+        return file;
+    }
 }

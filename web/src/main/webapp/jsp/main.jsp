@@ -25,6 +25,10 @@
         </div>
     </div>
 </nav>
+<% String name = (String) request.getAttribute("param"); %>
+<%= name%>
+<c:out value="${param}"></c:out>
+
 <div class="container-fluid">
     <form action="">
         <div class="row">
@@ -54,8 +58,11 @@
                             </div>
                         </td>
                         <td>
-                            <p><a href="/contact/edit" class="name">Гилимович Александр Сергеевич <span
-                                    class="glyphicon glyphicon-pencil"></span></a></p>
+                            <p><a href="/contact/edit"
+                                  class="name">${contact.surname} ${contact.name} ${contact.patronymic}
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                            </p>
 
                             <div class="row">
                                 <div class="col-md-2">
@@ -74,11 +81,10 @@
                                     <p>${contact.dateOfBirth}</p>
                                 </div>
                                 <div class="col-md-2">
-                                        <%--<p>г. Минск, ул.Селицкого, 77-112</p>--%>
-                                    <p>${contact.address}</p>
+                                    <p>${contact.country}, ул. ${contact.street},
+                                        д.${contact.house}-${contact.apartment}</p>
                                 </div>
                                 <div class="col-md-2">
-                                    <p>Тунеядец</p>
                                     <p>${contact.placeOfWork}</p>
 
                                 </div>

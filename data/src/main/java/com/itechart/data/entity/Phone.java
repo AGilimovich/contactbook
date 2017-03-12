@@ -25,4 +25,28 @@ public class Phone {
     public enum PhoneType {
         HOME, MOBILE;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public String getOperatorCode() {
+        return operatorCode;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public PhoneType getPhoneType() {
+        return phoneType;
+    }
+
+    public String getComment() {
+        return comment;
+    }
 }

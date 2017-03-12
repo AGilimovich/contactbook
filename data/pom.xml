@@ -2,14 +2,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>contactbook</artifactId>
-        <groupId>groupId</groupId>
+        <groupId>com.itechart</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>data</artifactId>
     <packaging>jar</packaging>
     <name>data</name>
-    <url>http://maven.apache.org</url>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
@@ -18,5 +17,7 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.39</version>
         </dependency>
+
     </dependencies>
+
 </project>

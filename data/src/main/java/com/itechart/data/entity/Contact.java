@@ -1,6 +1,5 @@
 package com.itechart.data.entity;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -43,6 +42,10 @@ public class Contact {
         this.photo = photo;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public enum Gender {
         MALE, FEMALE;
 
@@ -50,6 +53,63 @@ public class Contact {
 
     public enum FamilyStatus {
         SINGLE, MARRIED;
+    }
+
+
+    public int getId() {
+        return id;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public String getPatronymic() {
+        return patronymic;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public String getCitizenship() {
+        return citizenship;
+    }
+
+    public FamilyStatus getFamilyStatus() {
+        return familyStatus;
+    }
+
+    public String getWebSite() {
+        return webSite;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPlaceOfWork() {
+        return placeOfWork;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public ArrayList<Phone> getPhones() {
+        return phones;
+    }
+
+    public ArrayList<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    public String getPhoto() {
+        return photo;
     }
 
 }
