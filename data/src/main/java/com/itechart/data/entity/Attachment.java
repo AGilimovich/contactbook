@@ -12,12 +12,19 @@ public class Attachment {
     private String comment;
     private String file;
 
-    public Attachment(int id, String name, Date uploadDate, String comment, String file) {
+    public long getContact() {
+        return contact;
+    }
+
+    private long contact;
+
+    public Attachment(int id, String name, Date uploadDate, String comment, String file, long contact) {
         this.id = id;
         this.name = name;
         this.uploadDate = uploadDate;
         this.comment = comment;
         this.file = file;
+        this.contact = contact;
     }
 
     public int getId() {

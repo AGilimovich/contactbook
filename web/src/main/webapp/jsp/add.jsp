@@ -147,70 +147,65 @@
                 <button type="button" class="btn">Отменить</button>
             </div>
         </div>
+        <%--Add phone POPUP--%>
+        <div id="phone-popup" class="popup">
+            <div class="popup-content">
+                <p>Код страны:</p>
+                <input type="tel" required class="form-control">
+
+                <p>Код оператора:</p>
+                <input type="tel" required class="form-control">
+
+                <p>Телефонный номер:</p>
+                <input type="tel" required class="form-control">
+
+                <input type="radio" name="type" value="home" required> Дом.
+                <input type="radio" name="type" value="mobile"> Моб.
+
+                <p>Комментарий:</p>
+                <input type="text" class="form-control">
+
+                <div class="controls-group">
+                    <button id="btn-save-phone" type="button" class="btn">Сохранить</button>
+                    <button id="btn-undo-phone" class="btn">Отменить</button>
+                </div>
+            </div>
+        </div>
+
+        <%--Add file POPUP--%>
+        <div id="attach-popup" class="popup">
+            <div class="popup-content">
+
+                <input type="file" required>
+
+                <p>Имя файла:</p>
+                <input type="text" required class="form-control">
+
+                <p>Комментарий:</p>
+                <input type="text" class="form-control">
+
+                <div class="row controls-group">
+                    <button id="btn-save-attach" class="btn" type="button">Сохранить</button>
+                    <button id="btn-undo-attach" class="btn">Отменить</button>
+                </div>
+            </div>
+        </div>
+
+        <%--Add photo POPUP--%>
+        <div id="photo-popup" class="popup">
+            <div class="popup-content">
+                <p>Путь к картинке:</p>
+                <input type="file" accept="image/*,image/jpeg" required class="form-control">
+
+                <div class="row controls-group">
+                    <button class="btn">Найти</button>
+                    <button id="btn-save-photo" class="btn" type="button">Сохранить</button>
+                    <button id="btn-undo-photo" class="btn">Отменить</button>
+                </div>
+            </div>
+        </div>
+
     </form>
-</div>
-
-<div id="phone-popup" class="popup">
-    <div class="popup-content">
-        <form action="/contact/phone" method="post">
-            <p>Код страны:</p>
-            <input type="tel" required class="form-control">
-
-            <p>Код оператора:</p>
-            <input type="tel" required class="form-control">
-
-            <p>Телефонный номер:</p>
-            <input type="tel" required class="form-control">
-
-            <input type="radio" name="type" value="home" required> Дом.
-            <input type="radio" name="type" value="mobile"> Моб.
-
-            <p>Комментарий:</p>
-            <input type="text" class="form-control">
-
-            <div class="controls-group">
-                <button id="btn-save-phone" type="submit" class="btn">Сохранить</button>
-                <button id="btn-undo-phone" class="btn">Отменить</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-
-<div id="attach-popup" class="popup">
-    <div class="popup-content">
-        <form action="/contact/attach" method="post">
-
-            <input type="file" required>
-
-            <p>Имя файла:</p>
-            <input type="text" required class="form-control">
-
-            <p>Комментарий:</p>
-            <input type="text" class="form-control">
-
-            <div class="row controls-group">
-                <button id="btn-save-attach" class="btn" type="submit">Сохранить</button>
-                <button id="btn-undo-attach" class="btn">Отменить</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-
-<div id="photo-popup" class="popup">
-    <div class="popup-content">
-        <form action="/contact/photo" method="post">
-            <p>Путь к картинке:</p>
-            <input type="file" accept="image/*,image/jpeg" required class="form-control">
-
-            <div class="row controls-group">
-                <button class="btn">Найти</button>
-                <button id="btn-save-photo" class="btn" type="submit">Сохранить</button>
-                <button id="btn-undo-photo" class="btn">Отменить</button>
-            </div>
-        </form>
-    </div>
 </div>
 
 

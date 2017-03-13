@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
  * Command for invoking emailing view.
  */
 public class ShowEmailViewCommand implements Command {
+
+
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         return "/jsp/email.jsp";

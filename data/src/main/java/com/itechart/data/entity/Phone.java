@@ -5,22 +5,23 @@ package com.itechart.data.entity;
  */
 public class Phone {
     private int id;
+    private String countryCode;
+    private String operatorCode;
+    private String phoneNumber;
+    private PhoneType phoneType;
+    private String comment;
+    private int contact;
 
-
-    public Phone(int id, String countryCode, String operatorCode, String phoneNumber, PhoneType phoneType, String comment) {
+    public Phone(int id, String countryCode, String operatorCode, String phoneNumber, PhoneType phoneType, String comment, int contact) {
         this.id = id;
         this.countryCode = countryCode;
         this.operatorCode = operatorCode;
         this.phoneNumber = phoneNumber;
         this.phoneType = phoneType;
         this.comment = comment;
+        this.contact = contact;
     }
 
-    private String countryCode;
-    private String operatorCode;
-    private String phoneNumber;
-    private PhoneType phoneType;
-    private String comment;
 
     public enum PhoneType {
         HOME, MOBILE;
@@ -48,5 +49,9 @@ public class Phone {
 
     public String getComment() {
         return comment;
+    }
+
+    public int getContact() {
+        return contact;
     }
 }

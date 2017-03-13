@@ -1,6 +1,7 @@
 package com.itechart.web.command;
 
-import com.itechart.data.dao.ContactDao;
+import com.itechart.data.dao.JdbcContactDao;
+import com.itechart.data.dto.ContactDTO;
 import com.itechart.data.entity.Contact;
 
 import javax.servlet.ServletException;
@@ -12,16 +13,17 @@ import java.util.ArrayList;
  * Implementation of command which shows contacts according to request.
  */
 public class ShowContactsCommand implements Command {
-    private ContactDao dao;
+    private JdbcContactDao dao;
 
-    public ShowContactsCommand(ContactDao dao) {
+    public ShowContactsCommand(JdbcContactDao dao) {
         this.dao = dao;
     }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        ArrayList<Contact> contacts = dao.getAll();
+        ArrayList<ContactDTO> contacts = dao.getAllDto();
         request.setAttribute("contacts", contacts);
+
         return "/jsp/main.jsp";
     }
 }

@@ -1,8 +1,5 @@
 package com.itechart.web.controller;
 
-import com.itechart.data.dao.ContactDao;
-import com.itechart.data.db.JdbcDataSource;
-import com.itechart.data.entity.Contact;
 import com.itechart.web.command.Command;
 import com.itechart.web.command.CommandFactory;
 
@@ -13,8 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 /**
  * This is controller of all requests on the main form.

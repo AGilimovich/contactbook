@@ -1,13 +1,12 @@
 package com.itechart.data.entity;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Represents Contact entity.
  */
 public class Contact {
-    private int id;
+    private int contactId;
 
     private String name;
     private String surname;
@@ -16,16 +15,14 @@ public class Contact {
     private Gender gender;
     private String citizenship;
     private FamilyStatus familyStatus;
-    private String webSite;
+    private String website;
     private String email;
     private String placeOfWork;
     private Address address;
-    private ArrayList<Phone> phones;
-    private ArrayList<Attachment> attachments;
     private String photo;
 
-    public Contact(int id, String name, String surname, String patronymic, Date dateOfBirth, Gender gender, String citizenship, FamilyStatus familyStatus, String webSite, String email, String placeOfWork, Address address, ArrayList<Phone> phones, ArrayList<Attachment> attachments, String photo) {
-        this.id = id;
+    public Contact(int contactId, String name, String surname, String patronymic, Date dateOfBirth, Gender gender, String citizenship, FamilyStatus familyStatus, String website, String email, String placeOfWork, Address address, String photo) {
+        this.contactId = contactId;
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
@@ -33,12 +30,11 @@ public class Contact {
         this.gender = gender;
         this.citizenship = citizenship;
         this.familyStatus = familyStatus;
-        this.webSite = webSite;
+        this.website = website;
         this.email = email;
         this.placeOfWork = placeOfWork;
         this.address = address;
-        this.phones = phones;
-        this.attachments = attachments;
+
         this.photo = photo;
     }
 
@@ -57,7 +53,7 @@ public class Contact {
 
 
     public int getId() {
-        return id;
+        return contactId;
     }
 
     public String getSurname() {
@@ -84,8 +80,8 @@ public class Contact {
         return familyStatus;
     }
 
-    public String getWebSite() {
-        return webSite;
+    public String getWebsite() {
+        return website;
     }
 
     public String getEmail() {
@@ -98,14 +94,6 @@ public class Contact {
 
     public Address getAddress() {
         return address;
-    }
-
-    public ArrayList<Phone> getPhones() {
-        return phones;
-    }
-
-    public ArrayList<Attachment> getAttachments() {
-        return attachments;
     }
 
     public String getPhoto() {

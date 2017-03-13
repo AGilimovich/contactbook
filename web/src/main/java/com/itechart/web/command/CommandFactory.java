@@ -1,20 +1,21 @@
 package com.itechart.web.command;
 
-import com.itechart.data.dao.ContactDao;
+import com.itechart.data.dao.JdbcAttachmentDao;
+import com.itechart.data.dao.JdbcContactDao;
+import com.itechart.data.dao.JdbcPhoneDao;
 import com.itechart.data.db.JdbcDataSource;
-import com.itechart.data.entity.Contact;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.regex.Pattern;
 
 /**
  * Factory class for which produces command objects.
  */
 public class CommandFactory {
-    private ContactDao dao;
+    private JdbcContactDao contactDao;
+    private JdbcPhoneDao phoneDao;
+    private JdbcAttachmentDao attachmentDao;
 
     public CommandFactory() {
         ResourceBundle properties = ResourceBundle.getBundle("db/database");
@@ -24,7 +25,9 @@ public class CommandFactory {
         String DB_PASSWORD = properties.getString("DB_PASSWORD");
         try {
             JdbcDataSource ds = new JdbcDataSource(JDBC_DRIVER, DB_URL, DB_USER, DB_PASSWORD);
-            dao = new ContactDao(ds);
+            contactDao = new JdbcContactDao(ds);
+            phoneDao = new JdbcPhoneDao(ds);
+            attachmentDao = new JdbcAttachmentDao(ds);
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -36,22 +39,21 @@ public class CommandFactory {
 
         String path = request.getServletPath();
         System.out.println(path);
-        System.out.println(request.getPathInfo());
 
-        if (path.isEmpty()) return new ShowContactsCommand(dao);
+        if (path.isEmpty()) return new ShowContactsCommand(contactDao);
         switch (path) {
             case "/":
-                return new ShowContactsCommand(dao);
+                return new ShowContactsCommand(contactDao);
             case "/email":
                 return new ShowEmailViewCommand();
             case "/search":
                 return new ShowSearchViewCommand();
-            case "contact/add":
-                return new CreateContactCommand();
-            case "contact/edit":
-                return new EditContactCommand();
-            case "contact/delete":
-                return new DeleteContactCommand();
+            case "/add":
+                return new CreateContactCommand(contactDao);
+            case "/edit":
+                return new EditContactCommand(contactDao, phoneDao, attachmentDao);
+            case "/delete":
+                return new DeleteContactCommand(contactDao);
             default:
                 throw new ServletException("no such path");
         }

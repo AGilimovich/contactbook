@@ -16,9 +16,11 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="/search"><span class="glyphicon glyphicon-search"></span> Поиск
+                <li class="active"><a href="${pageContext.request.contextPath}/search"><span
+                        class="glyphicon glyphicon-search"></span> Поиск
                     контактов</a></li>
-                <li><a href="/email"><span class="glyphicon glyphicon-envelope"></span> Отправка Email</a></li>
+                <li><a href="${pageContext.request.contextPath}/email"><span
+                        class="glyphicon glyphicon-envelope"></span> Отправка Email</a></li>
 
             </ul>
 
@@ -45,20 +47,19 @@
 
                     <tr valign="middle">
                         <td id="table-checkbox" width="5%" align="middle">
-                            <input type="checkbox" name="isSelected" value="${contact.id}">
+                            <input type="checkbox" name="isSelected" value="${contact.contactId}">
                         </td>
 
                         <td width="110px">
                             <div class="photo-container">
                                     <%--<img src="/resources/images/male.jpg" alt="" height="100%" class="photo">--%>
-                                <img src=${contact.photo} alt="" height="100%" class="photo">
+                                    <img src=${contact.photo} alt="" height="100%" class="photo">
 
                             </div>
                         </td>
                         <td>
-                            <p><a href="/contact/edit"
+                            <p><a href="${pageContext.request.contextPath}/edit?id=${contact.contactId}"
                                   class="name">${contact.surname} ${contact.name} ${contact.patronymic}
-                                <span class="glyphicon glyphicon-pencil"></span>
                             </a>
                             </p>
 
@@ -79,8 +80,8 @@
                                     <p>${contact.dateOfBirth}</p>
                                 </div>
                                 <div class="col-md-2">
-                                    <p>${contact.address.country}, ул. ${contact.address.street},
-                                        д.${contact.address.house}-${contact.address.apartment}</p>
+                                    <p>${contact.country}, ул. ${contact.street},
+                                        д.${contact.house}-${contact.apartment}</p>
                                 </div>
                                 <div class="col-md-2">
                                     <p>${contact.placeOfWork}</p>

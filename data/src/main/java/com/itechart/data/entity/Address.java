@@ -5,7 +5,12 @@ package com.itechart.data.entity;
  */
 public class Address {
     private int id;
-
+    private String country;
+    private String city;
+    private String street;
+    private String house;
+    private String apartment;
+    private String zipCode;
 
     public Address(int id, String country, String city, String street, String house, String apartment, String zipCode) {
         this.id = id;
@@ -15,14 +20,10 @@ public class Address {
         this.house = house;
         this.apartment = apartment;
         this.zipCode = zipCode;
+
     }
 
-    private String country;
-    private String city;
-    private String street;
-    private String house;
-    private String apartment;
-    private String zipCode;
+
 
     public int getId() {
         return id;
