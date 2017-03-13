@@ -1,1 +1,1 @@
-Study project.
+Case study

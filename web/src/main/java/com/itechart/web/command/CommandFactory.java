@@ -36,6 +36,7 @@ public class CommandFactory {
 
         String path = request.getServletPath();
         System.out.println(path);
+        System.out.println(request.getPathInfo());
 
         if (path.isEmpty()) return new ShowContactsCommand(dao);
         switch (path) {
