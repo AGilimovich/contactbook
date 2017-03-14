@@ -4,7 +4,7 @@ package com.itechart.data.entity;
  * Represents living address of contact.
  */
 public class Address {
-    private int id;
+    private long id;
     private String country;
     private String city;
     private String street;
@@ -12,7 +12,7 @@ public class Address {
     private String apartment;
     private String zipCode;
 
-    public Address(int id, String country, String city, String street, String house, String apartment, String zipCode) {
+    public Address(long id, String country, String city, String street, String house, String apartment, String zipCode) {
         this.id = id;
         this.country = country;
         this.city = city;
@@ -23,9 +23,10 @@ public class Address {
 
     }
 
+    public Address() {
+    }
 
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -51,5 +52,33 @@ public class Address {
 
     public String getZipCode() {
         return zipCode;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public void setHouse(String house) {
+        this.house = house;
+    }
+
+    public void setApartment(String apartment) {
+        this.apartment = apartment;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 }

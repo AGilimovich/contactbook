@@ -10,17 +10,17 @@ import java.util.ArrayList;
  */
 public interface IContactDao {
 
-    void save(Contact contact);
+    long save(Contact contact);
 
-    void delete(Contact contact);
+    void delete(long id);
 
     void update(Contact contact);
 
     ArrayList<Contact> getAll();
 
-    Contact getContactById(int id);
+    Contact getContactById(long id);
 
-    ArrayList<ContactDTO> getAllDto();
+//    ArrayList<ContactDTO> getAllDto();
 
 
 }

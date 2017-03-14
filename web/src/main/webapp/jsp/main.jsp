@@ -32,10 +32,10 @@
 <div class="container-fluid">
     <form action="">
         <div class="row">
-            <button type="submit" formaction="contact/delete" formmethod="post" class="btn btn-danger btn-delete">
+            <button type="submit" formaction="${pageContext.request.contextPath}/delete" formmethod="post" class="btn btn-danger btn-delete">
                 Удалить
             </button>
-            <button type="submit" formaction="contact/add" formmethod="get" class="btn btn-primary btn-add">
+            <button type="submit" formaction="${pageContext.request.contextPath}/add" formmethod="get" class="btn btn-primary btn-add">
                 Добавить <span
                     class="glyphicon glyphicon-plus"></span></button>
 
@@ -53,7 +53,7 @@
                         <td width="110px">
                             <div class="photo-container">
                                     <%--<img src="/resources/images/male.jpg" alt="" height="100%" class="photo">--%>
-                                    <img src=${contact.photo} alt="" height="100%" class="photo">
+                                    <img src="${contact.photo}" alt="photo" height="100%" class="photo">
 
                             </div>
                         </td>

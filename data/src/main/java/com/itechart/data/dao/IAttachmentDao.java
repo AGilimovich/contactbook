@@ -9,13 +9,13 @@ import java.util.ArrayList;
  */
 public interface IAttachmentDao {
 
-    ArrayList<Attachment> getAllForContact(int id);
+    ArrayList<Attachment> getAllForContact(long id);
 
-    Attachment getAttachmentById(int id);
+    Attachment getAttachmentById(long id);
 
-    void save(Attachment attachment);
+    long save(Attachment attachment);
 
-    void delete(Attachment attachment);
+    void delete(long id);
 
     void update(Attachment attachment);
 

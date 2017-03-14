@@ -6,7 +6,7 @@ import java.util.Date;
  * Represents attachments added by contact.
  */
 public class Attachment {
-    private int id;
+    private long id;
     private String name;
     private Date uploadDate;
     private String comment;
@@ -18,7 +18,7 @@ public class Attachment {
 
     private long contact;
 
-    public Attachment(int id, String name, Date uploadDate, String comment, String file, long contact) {
+    public Attachment(long id, String name, Date uploadDate, String comment, String file, long contact) {
         this.id = id;
         this.name = name;
         this.uploadDate = uploadDate;
@@ -27,7 +27,10 @@ public class Attachment {
         this.contact = contact;
     }
 
-    public int getId() {
+    public Attachment() {
+    }
+
+    public long getId() {
         return id;
     }
 
@@ -45,5 +48,29 @@ public class Attachment {
 
     public String getFile() {
         return file;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUploadDate(Date uploadDate) {
+        this.uploadDate = uploadDate;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
+    }
+
+    public void setContact(long contact) {
+        this.contact = contact;
     }
 }

@@ -6,7 +6,7 @@ import java.util.Date;
  * Represents Contact entity.
  */
 public class Contact {
-    private int contactId;
+    private long contactId;
 
     private String name;
     private String surname;
@@ -18,10 +18,10 @@ public class Contact {
     private String website;
     private String email;
     private String placeOfWork;
-    private Address address;
+    private long address;
     private String photo;
 
-    public Contact(int contactId, String name, String surname, String patronymic, Date dateOfBirth, Gender gender, String citizenship, FamilyStatus familyStatus, String website, String email, String placeOfWork, Address address, String photo) {
+    public Contact(long contactId, String name, String surname, String patronymic, Date dateOfBirth, Gender gender, String citizenship, FamilyStatus familyStatus, String website, String email, String placeOfWork, long address, String photo) {
         this.contactId = contactId;
         this.name = name;
         this.surname = surname;
@@ -34,8 +34,10 @@ public class Contact {
         this.email = email;
         this.placeOfWork = placeOfWork;
         this.address = address;
-
         this.photo = photo;
+    }
+
+    public Contact() {
     }
 
     public String getName() {
@@ -52,7 +54,7 @@ public class Contact {
     }
 
 
-    public int getId() {
+    public long getId() {
         return contactId;
     }
 
@@ -92,7 +94,7 @@ public class Contact {
         return placeOfWork;
     }
 
-    public Address getAddress() {
+    public long getAddress() {
         return address;
     }
 
@@ -100,4 +102,55 @@ public class Contact {
         return photo;
     }
 
+    public void setContactId(long contactId) {
+        this.contactId = contactId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public void setCitizenship(String citizenship) {
+        this.citizenship = citizenship;
+    }
+
+    public void setFamilyStatus(FamilyStatus familyStatus) {
+        this.familyStatus = familyStatus;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPlaceOfWork(String placeOfWork) {
+        this.placeOfWork = placeOfWork;
+    }
+
+    public void setAddress(long address) {
+        this.address = address;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 }

@@ -1,6 +1,5 @@
 package com.itechart.data.dao;
 
-import com.itechart.data.dto.ContactDTO;
 import com.itechart.data.entity.Phone;
 
 import java.util.ArrayList;
@@ -10,13 +9,13 @@ import java.util.ArrayList;
  */
 public interface IPhoneDao {
 
-    ArrayList<Phone> getAllForContact(int id);
+    ArrayList<Phone> getAllForContact(long id);
 
-    Phone getPhoneById(int id);
+    Phone getPhoneById(long id);
 
-    void save(Phone phone);
+    long save(Phone phone);
 
-    void delete(Phone phone);
+    void delete(long id);
 
     void update(Phone phone);
 

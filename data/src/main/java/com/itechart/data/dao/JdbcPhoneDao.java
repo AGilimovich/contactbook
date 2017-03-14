@@ -27,7 +27,7 @@ public class JdbcPhoneDao implements IPhoneDao {
 
 
     @Override
-    public ArrayList<Phone> getAllForContact(int id) {
+    public ArrayList<Phone> getAllForContact(long id) {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -35,16 +35,16 @@ public class JdbcPhoneDao implements IPhoneDao {
         try {
             cn = ds.getConnection();
             st = cn.prepareStatement(SELECT_PHONES_FOR_CONTACT_QUERY);
-            st.setInt(1, id);
+            st.setLong(1, id);
             rs = st.executeQuery();
             while (rs.next()) {
-                int phone_id = rs.getInt("phoneId");
+                long phone_id = rs.getLong("phoneId");
                 String countryCode = rs.getString("countryCode");
                 String operatorCode = rs.getString("operatorCode");
                 String phoneNumber = rs.getString("phoneNumber");
                 Phone.PhoneType phoneType = Phone.PhoneType.valueOf(rs.getString("phoneTypeValue").toUpperCase());
                 String phone_comment = rs.getString("comment");
-                int contact = rs.getInt("contact");
+                long contact = rs.getLong("contact");
                 Phone phone = new Phone(phone_id, countryCode, operatorCode, phoneNumber, phoneType, phone_comment, contact);
                 phones.add(phone);
             }
@@ -71,7 +71,7 @@ public class JdbcPhoneDao implements IPhoneDao {
     }
 
     @Override
-    public Phone getPhoneById(int id) {
+    public Phone getPhoneById(long id) {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -79,16 +79,16 @@ public class JdbcPhoneDao implements IPhoneDao {
         try {
             cn = ds.getConnection();
             st = cn.prepareStatement(SELECT_PHONE_FOR_ID_QUERY);
-            st.setInt(1, id);
+            st.setLong(1, id);
             rs = st.executeQuery();
             rs.next();
-            int phone_id = rs.getInt("phoneId");
+            long phone_id = rs.getLong("phoneId");
             String countryCode = rs.getString("countryCode");
             String operatorCode = rs.getString("operatorCode");
             String phoneNumber = rs.getString("phoneNumber");
             Phone.PhoneType phoneType = Phone.PhoneType.valueOf(rs.getString("phoneTypeValue").toUpperCase());
             String phone_comment = rs.getString("comment");
-            int contact = rs.getInt("contact");
+            long contact = rs.getLong("contact");
             phone = new Phone(phone_id, countryCode, operatorCode, phoneNumber, phoneType, phone_comment, contact);
 
         } catch (SQLException e) {
@@ -116,12 +116,12 @@ public class JdbcPhoneDao implements IPhoneDao {
 
 
     @Override
-    public void save(Phone phone) {
-
+    public long save(Phone phone) {
+        return 0;
     }
 
     @Override
-    public void delete(Phone phone) {
+    public void delete(long id) {
 
     }
 

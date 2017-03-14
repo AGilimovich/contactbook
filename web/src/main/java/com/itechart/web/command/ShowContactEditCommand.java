@@ -1,8 +1,10 @@
 package com.itechart.web.command;
 
+import com.itechart.data.dao.JdbcAddressDao;
 import com.itechart.data.dao.JdbcAttachmentDao;
 import com.itechart.data.dao.JdbcContactDao;
 import com.itechart.data.dao.JdbcPhoneDao;
+import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Attachment;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.Phone;
@@ -10,35 +12,42 @@ import com.itechart.data.entity.Phone;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Enumeration;
 
 /**
- * Command for editing existing contact.
+ * Command for creating new contact.
  */
-public class EditContactCommand implements Command {
-
-
+public class ShowContactEditCommand implements Command {
     private JdbcContactDao contactDao;
     private JdbcPhoneDao phoneDao;
     private JdbcAttachmentDao attachmentDao;
+    private JdbcAddressDao addressDao;
 
-    public EditContactCommand(JdbcContactDao contactDao, JdbcPhoneDao phoneDao, JdbcAttachmentDao attachmentDao) {
+    public ShowContactEditCommand(JdbcContactDao contactDao, JdbcAddressDao addressDao, JdbcPhoneDao phoneDao, JdbcAttachmentDao attachmentDao) {
         this.contactDao = contactDao;
         this.phoneDao = phoneDao;
         this.attachmentDao = attachmentDao;
+        this.addressDao = addressDao;
     }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        int id = Integer.valueOf(request.getParameter("id"));
-        Contact c = contactDao.getContactById(id);
+
+        long id = Long.valueOf(request.getParameter("id"));
+        Contact contact = contactDao.getContactById(id);
+        Address address = addressDao.getAddressById(contact.getAddress());
         ArrayList<Phone> phones = phoneDao.getAllForContact(id);
         ArrayList<Attachment> attachments = attachmentDao.getAllForContact(id);
-        request.setAttribute("contact", c);
+
+        request.getSession().setAttribute("action", "update");
+        request.getSession().setAttribute("id", id);
+        request.setAttribute("contact", contact);
+        request.setAttribute("address", address);
         request.setAttribute("phones", phones);
         request.setAttribute("attachments", attachments);
-        return "/jsp/edit.jsp";
+
+        return "/jsp/contact.jsp";
 
     }
 }

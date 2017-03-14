@@ -22,7 +22,7 @@
 
 
 <div class="container-fluid">
-    <form action="/contact" method="post" class="form-horizontal">
+    <form action="${pageContext.request.contextPath}/${action}" method="post" class="form-horizontal">
         <div class="row">
 
             <!--Photo-->
@@ -38,61 +38,72 @@
                 <div class="row">
                     <div class="col-md-6">
                         <p>Имя:</p>
-                        <input type="text" value="${contact.name}" class="form-control" required>
+                        <input type="text" name="name" value="${contact.name}" class="form-control">
 
                         <p>Фамилия:</p>
-                        <input type="text" value="${contact.surname}" class="form-control" required>
+                        <input type="text" name="surname" value="${contact.surname}" class="form-control">
 
                         <p>Отчество:</p>
-                        <input type="text" value="${contact.patronymic}" class="form-control" required>
+                        <input type="text" name="patronymic" value="${contact.patronymic}" class="form-control"
+                        >
 
                         <p>Дата рождения:</p>
-                        <input type="date" value="${contact.dateOfBirth}" class="form-control" required>
+                        <input type="date" name="dateOfBirth" value="${contact.dateOfBirth}" class="form-control">
 
                         <p>Пол:</p>
-                        <input type="radio" name="gender" value="male" required> м
-                        <input type="radio" name="gender" value="female"> ж
+
+
+                        <input type="radio" name="gender" value="male" ${contact.gender.name() =='MALE'?'checked':''} ${contact == null ?'checked':''}> м
+
+                        <input type="radio" name="gender"
+                               value="female" ${contact.gender.name() =='FEMALE'?'checked':''}> ж
 
                         <p>Гражданство:</p>
-                        <input type="text" value="${contact.citizenship}" class="form-control" required>
+                        <input type="text" name="citizenship" value="${contact.citizenship}" class="form-control">
 
                         <p>Семейное положение:</p>
 
                         <div class="row">
-                            <div class="col-md-1"><input type="radio" name="familyStatus" value="marries" required>
+                            <div class="col-md-1"><input type="radio" name="familyStatus"
+                                                         value="married" ${contact.familyStatus.name() =='MARRIED'?'checked':''} ${contact == null ?'checked':''}>
                             </div>
-                            <div class="col-md-4">женат / замужем</div>
-                            <div class="col-md-1"><input type="radio" name="familyStatus" value="single"></div>
+                            <div class="col-md-4"><span>женат / замужем</span></div>
+                            <div class="col-md-1"><input type="radio" name="familyStatus"
+                                                         value="single" ${contact.familyStatus.name() =='SINGLE'?'checked':''} >
+                            </div>
                             <div class="col-md-6">
-                                холост / не замужем
+                                <span>холост / не замужем</span>
                             </div>
                         </div>
                         <p>Веб-сайт:</p>
-                        <input type="text" value="${contact.website}" class="form-control">
+                        <input type="text" name="website" value="${contact.website}" class="form-control">
 
                         <p>Email:</p>
-                        <input type="email" value="${contact.email}" class="form-control" required>
+                        <input type="email" name="email" value="${contact.email}" class="form-control">
 
                         <p>Текущее место работы:</p>
-                        <input type="text" value="${contact.placeOfWork}" class="form-control">
+                        <input type="text" name="placeOfWork" value="${contact.placeOfWork}" class="form-control">
                     </div>
                     <div class="col-md-6">
                         <h3>Адрес</h3>
 
                         <p>Страна:</p>
-                        <input type="text" value="${contact.address.country}" class="form-control">
+                        <input type="text" name="country" value="${address.country}" class="form-control">
 
                         <p>Город:</p>
-                        <input type="text" value="${contact.address.city}" class="form-control">
+                        <input type="text" name="city" value="${address.city}" class="form-control">
 
                         <p>Улица:</p>
-                        <input type="text" value="${contact.address.street}" class="form-control">
+                        <input type="text" name="street" value="${address.street}" class="form-control">
 
                         <p>Дом:</p>
-                        <input type="text" value="${contact.address.house}" class="form-control">
+                        <input type="text" name="house" value="${address.house}" class="form-control">
 
                         <p>Квартира:</p>
-                        <input type="text" value="${contact.address.apartment}" class="form-control">
+                        <input type="text" name="apartment" value="${address.apartment}" class="form-control">
+
+                        <p>Почтовый индекс:</p>
+                        <input type="text" name="zipCode" value="${address.zipCode}" class="form-control">
                     </div>
                 </div>
             </div>
@@ -110,10 +121,10 @@
                 <table class="tbl" width="100%">
                     <c:forEach var="phone" items="${phones}">
                         <tr>
-                            <td width="6%"><input type="checkbox"></td>
-                            <td width="30%">${phone.countryCode} (${phone.operatorCode}) ${phone.phoneNumber}"</td>
-                            <td align="center" width="14%">${phone.phoneType.name()}</td>
-                            <td width="50%">${phone.comment}</td>
+                            <td width="6%"><input type="checkbox" name="phoneIsSelected"></td>
+                            <td width="20%">${phone.countryCode} (${phone.operatorCode}) ${phone.phoneNumber}</td>
+                            <td align="center" width="20%">${phone.phoneType.name()}</td>
+                            <td width="54%">${phone.comment}</td>
                         </tr>
                     </c:forEach>
 
@@ -130,48 +141,46 @@
                 <table class="tbl" width="100%">
                     <c:forEach var="attachment" items="${attachments}">
                         <tr>
-                            <td width="6%"><input type="checkbox"></td>
-                            <td width="30%">${attachment.name}</td>
+                            <td width="6%"><input type="checkbox" name="attachIsSelected"></td>
+                            <td width="20%">${attachment.name}</td>
 
-                            <td align="center" width="14%">
+                            <td align="center" width="20%">
                                 <fmt:formatDate value="${attachment.uploadDate}" var="formattedDate"
                                                 type="date" pattern="MM-dd-yyyy HH:mm:ss"/>
                                     ${formattedDate}
                             </td>
-                            <td width="50%">${attachment.comment}</td>
+                            <td width="54%">${attachment.comment}</td>
                         </tr>
                     </c:forEach>
-
                 </table>
-
-
             </div>
-
-
         </div>
+
+        <%--Buttons for form--%>
         <div class="row">
             <div class="controls-group">
                 <button class="btn" type="submit">Сохранить</button>
                 <button type="button" class="btn">Отменить</button>
             </div>
         </div>
+
         <%--Add phone POPUP--%>
         <div id="phone-popup" class="popup">
             <div class="popup-content">
                 <p>Код страны:</p>
-                <input type="tel" required class="form-control">
+                <input type="tel" class="form-control" name="countryCode">
 
                 <p>Код оператора:</p>
-                <input type="tel" required class="form-control">
+                <input type="tel" class="form-control" name="operatorCode">
 
                 <p>Телефонный номер:</p>
-                <input type="tel" required class="form-control">
+                <input type="tel" class="form-control" name="phoneNumber">
 
-                <input type="radio" name="type" value="home" required> Дом.
-                <input type="radio" name="type" value="mobile"> Моб.
+                <input type="radio" name="phoneType" value="home"> Дом.
+                <input type="radio" name="phoneType" value="mobile"> Моб.
 
                 <p>Комментарий:</p>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="phoneComment">
 
                 <div class="controls-group">
                     <button id="btn-save-phone" type="button" class="btn">Сохранить</button>
@@ -184,13 +193,13 @@
         <div id="attach-popup" class="popup">
             <div class="popup-content">
 
-                <input type="file" required>
+                <input type="file" name="file">
 
                 <p>Имя файла:</p>
-                <input type="text" required class="form-control">
+                <input type="text" class="form-control" name="fileName">
 
                 <p>Комментарий:</p>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="attachComment">
 
                 <div class="row controls-group">
                     <button id="btn-save-attach" class="btn" type="button">Сохранить</button>
@@ -203,10 +212,10 @@
         <div id="photo-popup" class="popup">
             <div class="popup-content">
                 <p>Путь к картинке:</p>
-                <input type="file" accept="image/*,image/jpeg" required class="form-control">
+                <input type="file" accept="image/*,image/jpeg" name="photoFile" class="form-control">
 
                 <div class="row controls-group">
-                    <button class="btn">Найти</button>
+                    <button class="btn" type="button">Найти</button>
                     <button id="btn-save-photo" class="btn" type="button">Сохранить</button>
                     <button id="btn-undo-photo" class="btn">Отменить</button>
                 </div>

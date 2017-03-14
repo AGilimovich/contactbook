@@ -10,37 +10,42 @@ import com.itechart.data.entity.Contact;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 /**
  * Created by Aleksandr on 14.03.2017.
  */
-public class CreateContactCommand implements Command {
+public class UpdateContactCommand implements Command {
     private JdbcContactDao contactDao;
     private JdbcPhoneDao phoneDao;
     private JdbcAttachmentDao attachmentDao;
     private JdbcAddressDao addressDao;
 
-    public CreateContactCommand(JdbcContactDao contactDao, JdbcPhoneDao phoneDao, JdbcAttachmentDao attachmentDao, JdbcAddressDao addressDao) {
+
+    public UpdateContactCommand(JdbcContactDao contactDao, JdbcAddressDao addressDao, JdbcPhoneDao phoneDao, JdbcAttachmentDao attachmentDao) {
         this.contactDao = contactDao;
+        this.addressDao = addressDao;
         this.phoneDao = phoneDao;
         this.attachmentDao = attachmentDao;
-        this.addressDao = addressDao;
     }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        Address address = new Address();
+        long id = (long) request.getSession().getAttribute("id");
+
+        Contact contact = contactDao.getContactById(id);
+        Address address = addressDao.getAddressById(contact.getAddress());
         address.setCountry(request.getParameter("country"));
         address.setCity(request.getParameter("city"));
         address.setStreet(request.getParameter("street"));
         address.setHouse(request.getParameter("house"));
         address.setApartment(request.getParameter("apartment"));
         address.setZipCode(request.getParameter("zipCode"));
-        long addressId = addressDao.save(address);
+        addressDao.update(address);
 
-        Contact contact = new Contact();
+
         contact.setName(request.getParameter("name"));
         contact.setSurname(request.getParameter("surname"));
         contact.setPatronymic(request.getParameter("patronymic"));
@@ -53,7 +58,6 @@ public class CreateContactCommand implements Command {
                 e.printStackTrace();
             }
         }
-
         if (request.getParameter("gender") != null) {
             contact.setGender(Contact.Gender.valueOf(request.getParameter("gender").toUpperCase()));
         }
@@ -64,13 +68,16 @@ public class CreateContactCommand implements Command {
         contact.setWebsite(request.getParameter("website"));
         contact.setEmail(request.getParameter("email"));
         contact.setPlaceOfWork(request.getParameter("placeOfWork"));
-        contact.setAddress(addressId);
         contact.setPhoto(request.getParameter("photo"));
-        long contactId = contactDao.save(contact);
+
+        contactDao.update(contact);
+
+        // TODO: 14.03.2017 update phones and attachments
 
         request.getSession().removeAttribute("action");
+        request.getSession().removeAttribute("id");
 
-        // TODO: 14.03.2017 Phones and attachments saving
         return (new ShowContactsViewCommand(contactDao, addressDao)).execute(request, response);
     }
 }
+

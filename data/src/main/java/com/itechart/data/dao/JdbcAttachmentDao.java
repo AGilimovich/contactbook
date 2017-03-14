@@ -26,7 +26,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
 
 
     @Override
-    public ArrayList<Attachment> getAllForContact(int id) {
+    public ArrayList<Attachment> getAllForContact(long id) {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -34,15 +34,15 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         try {
             cn = ds.getConnection();
             st = cn.prepareStatement(SELECT_ATTACHMENTS_FOR_CONTACT_QUERY);
-            st.setInt(1, id);
+            st.setLong(1, id);
             rs = st.executeQuery();
             rs.next();
             Date uploadDate = new Date(rs.getTimestamp("uploadDate").getTime());
             String attach_name = rs.getString("attachName");
-            int attach_id = rs.getInt("attachId");
+            long attach_id = rs.getLong("attachId");
             String comment = rs.getString("comment");
             String file = rs.getString("file");
-            int contact = rs.getInt("contact");
+            long contact = rs.getLong("contact");
             Attachment attachment = new Attachment(attach_id, attach_name, uploadDate, comment, file, contact);
             attachments.add(attachment);
 
@@ -70,7 +70,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
     }
 
     @Override
-    public Attachment getAttachmentById(int id) {
+    public Attachment getAttachmentById(long id) {
 
         Connection cn = null;
         PreparedStatement st = null;
@@ -79,14 +79,14 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         try {
             cn = ds.getConnection();
             st = cn.prepareStatement(SELECT_ATTACHMENTS_BY_ID_QUERY);
-            st.setInt(1, id);
+            st.setLong(1, id);
             rs = st.executeQuery();
             Date uploadDate = new Date(rs.getTimestamp("uploadDate").getTime());
             String attach_name = rs.getString("attachName");
-            int attach_id = rs.getInt("attachId");
+            long attach_id = rs.getLong("attachId");
             String comment = rs.getString("comment");
             String file = rs.getString("file");
-            int contact = rs.getInt("contact");
+            long contact = rs.getLong("contact");
             attachment = new Attachment(attach_id, attach_name, uploadDate, comment, file, contact);
 
         } catch (SQLException e) {
@@ -113,12 +113,12 @@ public class JdbcAttachmentDao implements IAttachmentDao {
     }
 
     @Override
-    public void save(Attachment attachment) {
-
+    public long save(Attachment attachment) {
+        return 0;
     }
 
     @Override
-    public void delete(Attachment attachment) {
+    public void delete(long id) {
 
     }
 
