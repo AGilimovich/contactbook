@@ -7,7 +7,6 @@
     height: 45px;
 }
 
-
 /*Container for contact's photo*/
 .photo-container {
     height: 150px;
@@ -74,4 +73,17 @@
 .controls-group > button {
     margin: 0 5px;
 }
+
+/*!*input without border for phones and attachments*!*/
+/*.borderless-input {*/
+    /*outline: none; !important;*/
+    /*border: none; !important;*/
+    /*width: 100%; !important;*/
+/*}*/
+/*.no-padding{*/
+    /*padding: 0 !important;*/
+    /*margin: 0 !important;*/
+/*}*/
+
+
 

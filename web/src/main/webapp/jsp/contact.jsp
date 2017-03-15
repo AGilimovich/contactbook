@@ -6,13 +6,14 @@
     <title>Title</title>
     <link rel="stylesheet" href="/resources/css/contact.css">
     <link rel="stylesheet" href="/resources/css/bootstrap/bootstrap.css">
-    <script src="../resources/js/contact.js" defer></script>
+    <script src="/resources/js/contact_phones.js" defer></script>
+    <script src="/resources/js/contact_attach.js" defer></script>
 </head>
 <body>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a href="" class="navbar-brand">Справочник контактов</a>
+            <a href="${pageContext.request.contextPath}/" class="navbar-brand">Справочник контактов</a>
         </div>
         <div class="navbar-header">
             <span href="" class="navbar-brand">> Создание/редактирование контакта</span>
@@ -53,7 +54,9 @@
                         <p>Пол:</p>
 
 
-                        <input type="radio" name="gender" value="male" ${contact.gender.name() =='MALE'?'checked':''} ${contact == null ?'checked':''}> м
+                        <input type="radio" name="gender"
+                               value="male" ${contact.gender.name() =='MALE'?'checked':''} ${contact == null ?'checked':''}>
+                        м
 
                         <input type="radio" name="gender"
                                value="female" ${contact.gender.name() =='FEMALE'?'checked':''}> ж
@@ -112,25 +115,30 @@
                 <h3>Список контактных телефонов</h3>
 
                 <div class="table-btns">
-                    <button type="button" id="btn-delete-phone" class="btn">Удалить</button>
+                    <button type="button" id="btn-delete-phones" class="btn">Удалить</button>
                     <button type="button" id="btn-add-phone" class="btn">Добавить</button>
                     <button type="button" id="btn-edit-phone" class="btn">Редактировать</button>
 
                 </div>
 
-                <table class="tbl" width="100%">
+                <table id="phone-table" class="tbl" width="100%">
                     <c:forEach var="phone" items="${phones}">
                         <tr>
-                            <td width="6%"><input type="checkbox" name="phoneIsSelected"></td>
-                            <td width="20%">${phone.countryCode} (${phone.operatorCode}) ${phone.phoneNumber}</td>
-                            <td align="center" width="20%">${phone.phoneType.name()}</td>
-                            <td width="54%">${phone.comment}</td>
+                            <td width="6%"><input type="checkbox" value="${phone.id}" name="phoneIsSelected"></td>
+                            <td name="full-phone" width="20%">
+                                <span name="country-code">${phone.countryCode} </span> (<span
+                                    name="operator-code">${phone.operatorCode}</span>)
+                                <span name="phone-number"> ${phone.phoneNumber}</span>
+                            </td>
+                            <td name="phone-type" align="center" width="20%">${phone.phoneType.name()}</td>
+                            <td name="phoneComment" width="54%">${phone.comment}</td>
                         </tr>
                     </c:forEach>
 
                 </table>
 
 
+                <%----------------------------------Attachments---------------------------------------%>
                 <h3>Список присоединений</h3>
                 <div class="table-btns">
                     <button type="button" id="btn-delete-attach" class="btn">Удалить</button>
@@ -138,7 +146,7 @@
                     <button type="button" id="btn-edit-attach" class="btn">Редактировать</button>
 
                 </div>
-                <table class="tbl" width="100%">
+                <table id="attach-table" class="tbl" width="100%">
                     <c:forEach var="attachment" items="${attachments}">
                         <tr>
                             <td width="6%"><input type="checkbox" name="attachIsSelected"></td>
@@ -160,69 +168,97 @@
         <div class="row">
             <div class="controls-group">
                 <button class="btn" type="submit">Сохранить</button>
-                <button type="button" class="btn">Отменить</button>
+                <a href="${pageContext.request.contextPath}/">
+                    <button type="button" class="btn">Отменить</button>
+                </a>
             </div>
         </div>
 
-        <%--Add phone POPUP--%>
-        <div id="phone-popup" class="popup">
-            <div class="popup-content">
-                <p>Код страны:</p>
-                <input type="tel" class="form-control" name="countryCode">
 
-                <p>Код оператора:</p>
-                <input type="tel" class="form-control" name="operatorCode">
-
-                <p>Телефонный номер:</p>
-                <input type="tel" class="form-control" name="phoneNumber">
-
-                <input type="radio" name="phoneType" value="home"> Дом.
-                <input type="radio" name="phoneType" value="mobile"> Моб.
-
-                <p>Комментарий:</p>
-                <input type="text" class="form-control" name="phoneComment">
-
-                <div class="controls-group">
-                    <button id="btn-save-phone" type="button" class="btn">Сохранить</button>
-                    <button id="btn-undo-phone" class="btn">Отменить</button>
-                </div>
-            </div>
+        <%---------------------------------hidden inputs------------------------------------%>
+        <div id="hidden-div" class="hidden">
+            <%--cloning visible phone table but with inputs instead labels--%>
+            <table id="hidden-table">
+                <c:forEach var="phone" items="${phones}" varStatus="counter">
+                    <tr>
+                        <td><input type="text" name="phoneId" value="${phone.id}" ></td>
+                        <td>
+                            <input type="text" name="countryCode(${phone.id})" value="${phone.countryCode}">
+                            <input type="text" name="operatorCode(${phone.id})" value="${phone.operatorCode}">
+                            <input type="text" name="phoneNumber(${phone.id})" value="${phone.phoneNumber}">
+                        </td>
+                        <td>
+                            <input type="text" name="phoneType(${phone.id})" value="${phone.phoneType.name()}">
+                        </td>
+                        <td>
+                            <input type="text" name="phoneComment(${phone.id})" value="${phone.comment}">
+                        </td>
+                    </tr>
+                </c:forEach>
+            </table>
         </div>
-
-        <%--Add file POPUP--%>
-        <div id="attach-popup" class="popup">
-            <div class="popup-content">
-
-                <input type="file" name="file">
-
-                <p>Имя файла:</p>
-                <input type="text" class="form-control" name="fileName">
-
-                <p>Комментарий:</p>
-                <input type="text" class="form-control" name="attachComment">
-
-                <div class="row controls-group">
-                    <button id="btn-save-attach" class="btn" type="button">Сохранить</button>
-                    <button id="btn-undo-attach" class="btn">Отменить</button>
-                </div>
-            </div>
-        </div>
-
-        <%--Add photo POPUP--%>
-        <div id="photo-popup" class="popup">
-            <div class="popup-content">
-                <p>Путь к картинке:</p>
-                <input type="file" accept="image/*,image/jpeg" name="photoFile" class="form-control">
-
-                <div class="row controls-group">
-                    <button class="btn" type="button">Найти</button>
-                    <button id="btn-save-photo" class="btn" type="button">Сохранить</button>
-                    <button id="btn-undo-photo" class="btn">Отменить</button>
-                </div>
-            </div>
-        </div>
+        <%--------------------------------------------------------------------------------%>
 
     </form>
+
+    <%--Add phone POPUP--%>
+    <div id="phone-popup" class="popup">
+        <div class="popup-content">
+            <p>Код страны:</p>
+            <input type="tel" class="form-control" name="input-country-code">
+
+            <p>Код оператора:</p>
+            <input type="tel" class="form-control" name="input-operator-code">
+
+            <p>Телефонный номер:</p>
+            <input type="tel" class="form-control" name="input-phone-number">
+
+            <input type="radio" id="input-phone-type-home" name="input-phone-type" value="home" checked> Дом.
+            <input type="radio" id="input-phone-type-mobile" name="input-phone-type" value="mobile"> Моб.
+
+            <p>Комментарий:</p>
+            <input type="text" class="form-control" name="input-phone-comment">
+
+            <div class="controls-group">
+                <button id="btn-save-phone" type="button" class="btn">Сохранить</button>
+                <button id="btn-undo-phone" type="button" class="btn">Отменить</button>
+            </div>
+        </div>
+    </div>
+
+    <%--Add file POPUP--%>
+    <div id="attach-popup" class="popup">
+        <div class="popup-content">
+
+            <input type="file" name="file">
+
+            <p>Имя файла:</p>
+            <input type="text" class="form-control" name="fileName">
+
+            <p>Комментарий:</p>
+            <input type="text" class="form-control" name="attachComment">
+
+            <div class="row controls-group">
+                <button id="btn-save-attach" class="btn" type="button">Сохранить</button>
+                <button id="btn-undo-attach" class="btn">Отменить</button>
+            </div>
+        </div>
+    </div>
+
+    <%--Add photo POPUP--%>
+    <div id="photo-popup" class="popup">
+        <div class="popup-content">
+            <p>Путь к картинке:</p>
+            <input type="file" accept="image/*,image/jpeg" name="photoFile" class="form-control">
+
+            <div class="row controls-group">
+                <button class="btn" type="button">Найти</button>
+                <button id="btn-save-photo" class="btn" type="button">Сохранить</button>
+                <button id="btn-undo-photo" type="button" class="btn">Отменить</button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 

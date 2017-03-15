@@ -28,12 +28,12 @@ public class DeleteContactCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         String[] selectedContactsId = request.getParameterValues("isSelected");
-
-        for (String c: selectedContactsId){
-            contactDao.delete(Long.valueOf(c));
-
+        if (selectedContactsId != null) {
+            for (String c : selectedContactsId) {
+                contactDao.delete(Long.valueOf(c));
+                return (new ShowContactsViewCommand(contactDao, addressDao)).execute(request, response);
+            }
         }
-
         return (new ShowContactsViewCommand(contactDao, addressDao)).execute(request, response);
     }
 }
