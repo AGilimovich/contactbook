@@ -125,12 +125,12 @@
                     <c:forEach var="phone" items="${phones}">
                         <tr>
                             <td width="6%"><input type="checkbox" value="${phone.id}" name="phoneIsSelected"></td>
-                            <td name="full-phone" width="20%">
-                                <span name="country-code">${phone.countryCode} </span> (<span
-                                    name="operator-code">${phone.operatorCode}</span>)
-                                <span name="phone-number"> ${phone.phoneNumber}</span>
-                            </td>
-                            <td name="phone-type" align="center" width="20%">${phone.phoneType.name()}</td>
+                            <td name="countryCode" width="5%">${phone.countryCode}</td>
+                            <td width="1%" align="right" >(</td>
+                            <td name="operatorCode" width="3%" align="center">${phone.operatorCode}</td>
+                            <td width="1%" align="left" >)</td>
+                            <td name="phoneNumber"  width="10%">${phone.phoneNumber} </td>
+                            <td name="phoneType" align="center" width="20%">${phone.phoneType.name()}</td>
                             <td name="phoneComment" width="54%">${phone.comment}</td>
                         </tr>
                     </c:forEach>
@@ -177,23 +177,11 @@
 
         <%---------------------------------hidden inputs------------------------------------%>
         <div id="hidden-div" class="hidden">
-            <%--cloning visible phone table but with inputs instead labels--%>
+            <%--cloning visible phone table but with input instead of labels--%>
             <table id="hidden-table">
                 <c:forEach var="phone" items="${phones}" varStatus="counter">
-                    <tr>
-                        <td><input type="text" name="phoneId" value="${phone.id}" ></td>
-                        <td>
-                            <input type="text" name="countryCode(${phone.id})" value="${phone.countryCode}">
-                            <input type="text" name="operatorCode(${phone.id})" value="${phone.operatorCode}">
-                            <input type="text" name="phoneNumber(${phone.id})" value="${phone.phoneNumber}">
-                        </td>
-                        <td>
-                            <input type="text" name="phoneType(${phone.id})" value="${phone.phoneType.name()}">
-                        </td>
-                        <td>
-                            <input type="text" name="phoneComment(${phone.id})" value="${phone.comment}">
-                        </td>
-                    </tr>
+                    <input type="text" name="phone[]"
+                           value="countryCode=${phone.countryCode}&operatorCode=${phone.operatorCode}&number=${phone.phoneNumber}&type=${phone.phoneType.name()}&comment=${phone.comment}">
                 </c:forEach>
             </table>
         </div>
@@ -205,19 +193,19 @@
     <div id="phone-popup" class="popup">
         <div class="popup-content">
             <p>Код страны:</p>
-            <input type="tel" class="form-control" name="input-country-code">
+            <input type="tel" class="form-control" name="inputCountryCode">
 
             <p>Код оператора:</p>
-            <input type="tel" class="form-control" name="input-operator-code">
+            <input type="tel" class="form-control" name="inputOperatorCode">
 
             <p>Телефонный номер:</p>
-            <input type="tel" class="form-control" name="input-phone-number">
+            <input type="tel" class="form-control" name="inputPhoneNumber">
 
-            <input type="radio" id="input-phone-type-home" name="input-phone-type" value="home" checked> Дом.
-            <input type="radio" id="input-phone-type-mobile" name="input-phone-type" value="mobile"> Моб.
+            <input type="radio" id="input-phone-type-home" name="inputPhoneType" value="home" checked> Дом.
+            <input type="radio" id="input-phone-type-mobile" name="inputPhoneType" value="mobile"> Моб.
 
             <p>Комментарий:</p>
-            <input type="text" class="form-control" name="input-phone-comment">
+            <input type="text" class="form-control" name="inputPhoneComment">
 
             <div class="controls-group">
                 <button id="btn-save-phone" type="button" class="btn">Сохранить</button>

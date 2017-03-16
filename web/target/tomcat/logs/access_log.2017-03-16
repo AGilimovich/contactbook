@@ -1,0 +1,8 @@
+0:0:0:0:0:0:0:1 - - [16/Mar/2017:17:49:20 +0300] "GET / HTTP/1.1" 200 12915 http-bio-8080-exec-1 1110
+0:0:0:0:0:0:0:1 - - [16/Mar/2017:17:49:20 +0300] "GET / HTTP/1.1" 200 12915 http-bio-8080-exec-2 1110
+0:0:0:0:0:0:0:1 - - [16/Mar/2017:17:49:20 +0300] "GET /resources/css/bootstrap/bootstrap.css.map HTTP/1.1" 404 1033 http-bio-8080-exec-3 2
+0:0:0:0:0:0:0:1 - - [16/Mar/2017:17:49:21 +0300] "GET /edit?id=1 HTTP/1.1" 200 12260 http-bio-8080-exec-5 195
+0:0:0:0:0:0:0:1 - - [16/Mar/2017:17:49:21 +0300] "GET /resources/js/contact_phones.js HTTP/1.1" 200 10571 http-bio-8080-exec-6 6
+0:0:0:0:0:0:0:1 - - [16/Mar/2017:17:49:21 +0300] "GET /resources/css/bootstrap/bootstrap.css.map HTTP/1.1" 404 1033 http-bio-8080-exec-7 1
+0:0:0:0:0:0:0:1 - - [16/Mar/2017:17:49:48 +0300] "POST /update HTTP/1.1" 200 12915 http-bio-8080-exec-8 48
+0:0:0:0:0:0:0:1 - - [16/Mar/2017:17:49:48 +0300] "GET /resources/css/bootstrap/bootstrap.css.map HTTP/1.1" 404 1033 http-bio-8080-exec-9 1

@@ -6,6 +6,8 @@ import com.itechart.data.dao.JdbcContactDao;
 import com.itechart.data.dao.JdbcPhoneDao;
 import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Contact;
+import com.itechart.data.entity.Phone;
+import com.itechart.web.parser.PhoneRequestParamParser;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +33,8 @@ public class CreateContactCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+
+        //create address object and persisting it into database
         Address address = new Address();
         address.setCountry(request.getParameter("country"));
         address.setCity(request.getParameter("city"));
@@ -39,7 +43,7 @@ public class CreateContactCommand implements Command {
         address.setApartment(request.getParameter("apartment"));
         address.setZipCode(request.getParameter("zipCode"));
         long addressId = addressDao.save(address);
-
+        //create contact object and persisting it into database
         Contact contact = new Contact();
         contact.setName(request.getParameter("name"));
         contact.setSurname(request.getParameter("surname"));
@@ -67,6 +71,13 @@ public class CreateContactCommand implements Command {
         contact.setAddress(addressId);
         contact.setPhoto(request.getParameter("photo"));
         long contactId = contactDao.save(contact);
+
+        //create phone object and persisting it into database
+        try {
+            Phone phone = PhoneRequestParamParser.parseRequest(request.getParameter("phone"));
+        } catch (com.itechart.web.parser.ParseException e) {
+            e.printStackTrace();
+        }
 
         request.getSession().removeAttribute("action");
 

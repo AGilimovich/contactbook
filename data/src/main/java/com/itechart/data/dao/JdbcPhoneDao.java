@@ -3,10 +3,7 @@ package com.itechart.data.dao;
 import com.itechart.data.db.JdbcDataSource;
 import com.itechart.data.entity.Phone;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 /**
@@ -18,6 +15,14 @@ public class JdbcPhoneDao implements IPhoneDao {
             " WHERE p.contact = ?;";
 
     private final String SELECT_PHONE_FOR_ID_QUERY = "SELECT * FROM phones WHERE contact = ?";
+
+    private final String INSERT_PHONE_QUERY = "INSERT INTO phones(countryCode, operatorCode,phoneNumber, phoneType, comment, contact)" +
+            " SELECT ?, ?, ?,  p_t.phoneTypeId, ?, ? FROM  phone_type AS p_t WHERE p_t.phoneTypeValue = ?";
+
+    private final String UPDATE_PHONE_QUERY = "UPDATE phones INNER JOIN phone_type AS p_t ON p_t.phoneTypeValue = ?" +
+            "  SET countryCode=?, operatorCode=?,phoneNumber=?,phoneType = p_t.phoneTypeId, comment=? WHERE phoneId = ?";
+
+    private final String DELETE_PHONE_QUERY = "DELETE FROM phones WHERE phoneId = ?";
 
     public JdbcPhoneDao(JdbcDataSource ds) {
         this.ds = ds;
@@ -117,17 +122,103 @@ public class JdbcPhoneDao implements IPhoneDao {
 
     @Override
     public long save(Phone phone) {
+        Connection cn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            cn = ds.getConnection();
+            st = cn.prepareStatement(INSERT_PHONE_QUERY, Statement.RETURN_GENERATED_KEYS);
+            st.setString(1, phone.getCountryCode());
+            st.setString(2, phone.getOperatorCode());
+            st.setString(3, phone.getPhoneNumber());
+            st.setString(4, phone.getComment());
+            st.setLong(5, phone.getContact());
+            st.setString(6, phone.getPhoneType().name());
+            st.executeUpdate();
+            rs = st.getGeneratedKeys();
+            if (rs.next())
+                return rs.getLong(1);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (st != null) try {
+                st.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (cn != null) try {
+                cn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+
         return 0;
     }
 
     @Override
     public void delete(long id) {
-
+        Connection cn = null;
+        PreparedStatement st = null;
+        try {
+            cn = ds.getConnection();
+            st = cn.prepareStatement(DELETE_PHONE_QUERY);
+            st.setLong(1, id);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (st != null) try {
+                st.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (cn != null) try {
+                cn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
     public void update(Phone phone) {
+        Connection cn = null;
+        PreparedStatement st = null;
+        try {
+            cn = ds.getConnection();
+            st = cn.prepareStatement(UPDATE_PHONE_QUERY);
+            st.setString(1, phone.getPhoneType().name());
+            st.setString(2, phone.getCountryCode());
+            st.setString(3, phone.getOperatorCode());
+            st.setString(4, phone.getPhoneNumber());
+            st.setString(5, phone.getComment());
+            st.setLong(6, phone.getId());
+            st.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+
+            if (st != null) try {
+                st.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (cn != null) try {
+                cn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
-
 }
