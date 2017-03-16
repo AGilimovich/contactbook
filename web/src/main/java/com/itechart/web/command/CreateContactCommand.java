@@ -73,11 +73,20 @@ public class CreateContactCommand implements Command {
         long contactId = contactDao.save(contact);
 
         //create phone object and persisting it into database
-        try {
-            Phone phone = PhoneRequestParamParser.parseRequest(request.getParameter("phone"));
-        } catch (com.itechart.web.parser.ParseException e) {
-            e.printStackTrace();
+        //todo delete old attaches
+        phoneDao.deleteForUser(contactId);
+
+        String[] phoneParameterValues = request.getParameterValues("phone[]");
+        for (String phoneParameter : phoneParameterValues) {
+            try {
+                Phone phone = PhoneRequestParamParser.parseRequest(phoneParameter);
+                phone.setContact(contactId);
+                phoneDao.save(phone);
+            } catch (com.itechart.web.parser.ParseException e) {
+                e.printStackTrace();
+            }
         }
+
 
         request.getSession().removeAttribute("action");
 

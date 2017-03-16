@@ -19,4 +19,6 @@ public interface IPhoneDao {
 
     void update(Phone phone);
 
+    void deleteForUser(long userId);
+
 }

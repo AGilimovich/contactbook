@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  * Class for creating phone object out of request parameters.
  */
 public class PhoneRequestParamParser {
-    private static final String regex = "(\\w+)=(\\w+)&?";
+    private static final String regex = "(\\w+)=(\\+*\\w*)&?";
     private static final Pattern pattern = Pattern.compile(regex);
 
     public static Phone parseRequest(String request) throws ParseException {

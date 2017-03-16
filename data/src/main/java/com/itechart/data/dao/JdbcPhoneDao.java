@@ -23,6 +23,7 @@ public class JdbcPhoneDao implements IPhoneDao {
             "  SET countryCode=?, operatorCode=?,phoneNumber=?,phoneType = p_t.phoneTypeId, comment=? WHERE phoneId = ?";
 
     private final String DELETE_PHONE_QUERY = "DELETE FROM phones WHERE phoneId = ?";
+    private final String DELETE_FOR_USER_QUERY = "DELETE FROM phones WHERE contact = ?";
 
     public JdbcPhoneDao(JdbcDataSource ds) {
         this.ds = ds;
@@ -220,5 +221,30 @@ public class JdbcPhoneDao implements IPhoneDao {
             }
         }
 
+    }
+
+    @Override
+    public void deleteForUser(long userId) {
+        Connection cn = null;
+        PreparedStatement st = null;
+        try {
+            cn = ds.getConnection();
+            st = cn.prepareStatement(DELETE_FOR_USER_QUERY);
+            st.setLong(1, userId);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (st != null) try {
+                st.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (cn != null) try {
+                cn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

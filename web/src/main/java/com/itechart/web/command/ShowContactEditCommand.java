@@ -38,8 +38,8 @@ public class ShowContactEditCommand implements Command {
         Contact contact = contactDao.getContactById(id);
         Address address = addressDao.getAddressById(contact.getAddress());
         ArrayList<Phone> phones = phoneDao.getAllForContact(id);
-        ArrayList<Attachment> attachments = attachmentDao.getAllForContact(id);
-
+//        ArrayList<Attachment> attachments = attachmentDao.getAllForContact(id);
+        ArrayList<Attachment> attachments = null;
         request.getSession().setAttribute("action", "update");
         request.getSession().setAttribute("id", id);
         request.setAttribute("contact", contact);

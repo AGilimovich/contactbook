@@ -30,8 +30,9 @@ public class DeleteContactCommand implements Command {
         String[] selectedContactsId = request.getParameterValues("isSelected");
         if (selectedContactsId != null) {
             for (String c : selectedContactsId) {
+                phoneDao.deleteForUser(Long.valueOf(c));
+                //todo delete attaches
                 contactDao.delete(Long.valueOf(c));
-                return (new ShowContactsViewCommand(contactDao, addressDao)).execute(request, response);
             }
         }
         return (new ShowContactsViewCommand(contactDao, addressDao)).execute(request, response);

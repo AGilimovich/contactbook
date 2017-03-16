@@ -6,6 +6,8 @@ import com.itechart.data.dao.JdbcContactDao;
 import com.itechart.data.dao.JdbcPhoneDao;
 import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Contact;
+import com.itechart.data.entity.Phone;
+import com.itechart.web.parser.PhoneRequestParamParser;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -71,8 +73,22 @@ public class UpdateContactCommand implements Command {
         contact.setPhoto(request.getParameter("photo"));
 
         contactDao.update(contact);
+        phoneDao.deleteForUser(contact.getId());
 
-        // TODO: 14.03.2017 update phones and attachments
+        String[] phoneParameterValues = request.getParameterValues("phone[]");
+        for (String phoneParameter : phoneParameterValues) {
+            try {
+                Phone phone = PhoneRequestParamParser.parseRequest(phoneParameter);
+                phone.setContact(contact.getId());
+                phoneDao.save(phone);
+            } catch (com.itechart.web.parser.ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // TODO: 14.03.2017 update attachments
+
+
 
         request.getSession().removeAttribute("action");
         request.getSession().removeAttribute("id");

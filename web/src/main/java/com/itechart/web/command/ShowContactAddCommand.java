@@ -33,14 +33,7 @@ public class ShowContactAddCommand implements Command{
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-//        Contact contact = new Contact();
-//        Address address = new Address();
-//        ArrayList<Phone> phones = new ArrayList<>();
-//        ArrayList<Attachment> attachments = new ArrayList<>();
-//        request.setAttribute("contact", contact);
-//        request.setAttribute("address", address);
-//        request.setAttribute("phones", phones);
-//        request.setAttribute("attachments", attachments);
+
         request.getSession().setAttribute("action", "save");
 
 
