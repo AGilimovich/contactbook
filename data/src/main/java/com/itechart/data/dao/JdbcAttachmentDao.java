@@ -17,7 +17,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
 
     private final String SELECT_ATTACHMENTS_FOR_CONTACT_QUERY = "SELECT attachId, attachName, uploadDate, comment, file, contact FROM attachments WHERE contact = ?";
     private final String SELECT_ATTACHMENTS_BY_ID_QUERY = "SELECT attachId, attachName, uploadDate, comment, file, contact FROM attachments WHERE attachId = ?";
-
+    private final String DELETE_FOR_USER = "DELETE FROM attachments WHERE contact = ?";
     private JdbcDataSource ds;
 
     public JdbcAttachmentDao(JdbcDataSource ds) {
@@ -127,5 +127,31 @@ public class JdbcAttachmentDao implements IAttachmentDao {
 
     }
 
-
+    @Override
+    public void deleteForUser(long userId) {
+        Connection cn = null;
+        PreparedStatement st = null;
+        try {
+            cn = ds.getConnection();
+            st = cn.prepareStatement(DELETE_FOR_USER);
+            st.setLong(1, userId);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (st != null) try {
+                st.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (cn != null) try {
+                cn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
+
+
+

@@ -77,7 +77,7 @@ btnDeletePhones.onclick = function () {
 }
 //function for deleting hidden input with specified index
 function deleteHiddenInput(index) {
-    var hiddenInput = document.getElementsByName("phone[]");
+    var hiddenInput = document.getElementsByName("phone");
     hiddenInput[index].parentNode.removeChild(hiddenInput[index]);
 
 }
@@ -210,7 +210,7 @@ function Appendable(val) {
 function createHiddenInputForPhone(countryCode, operatorCode, phoneNumber, phoneType, phoneComment) {
     var value = new Appendable("countryCode=" + countryCode).append("operatorCode", operatorCode).append("number", phoneNumber).append("type", phoneType).append("comment", phoneComment).value();
     var phoneHiddenInput = document.createElement("input");
-    phoneHiddenInput.setAttribute("name", "phone[]");
+    phoneHiddenInput.setAttribute("name", "phone");
     phoneHiddenInput.setAttribute("value", value);
     hiddenDiv.appendChild(phoneHiddenInput);
 }
@@ -255,24 +255,28 @@ function editExisting() {
 
 //function for setting new value to hidden input
 function editHiddenInput(index, countryCode, operatorCode, phoneNumber, phoneType, phoneComment) {
-    var hiddenInput = document.getElementsByName("phone[]");
+    var hiddenInput = document.getElementsByName("phone");
     var value = new Appendable("countryCode=" + countryCode).append("operatorCode", operatorCode).append("number", phoneNumber).append("type", phoneType).append("comment", phoneComment).value();
     hiddenInput[index].setAttribute("value", value);
 }
 
 
-//callback function - either saveNew or editExisting function
-btnSavePhone.onclick = function () {
+//function on submitting popup form.Calls either saveNew or editExisting function
+var savePhone = function () {
     if (currentMode === MODE.ADD) {
         saveNew();
     } else if (currentMode === MODE.EDIT) {
         editExisting();
+
+
     } else {
         //error
+
+
     }
+    return false;
+
 }
-
-
 
 
 

@@ -7,6 +7,7 @@ import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Contact;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -14,17 +15,17 @@ import java.util.ArrayList;
 /**
  * Implementation of command which shows contacts according to request.
  */
-public class ShowContactsViewCommand implements Command {
+public class ShowContacts implements Command {
     private JdbcContactDao contactDao;
     private JdbcAddressDao addressDao;
 
-    public ShowContactsViewCommand(JdbcContactDao contactDao, JdbcAddressDao addressDao) {
+    public ShowContacts(JdbcContactDao contactDao, JdbcAddressDao addressDao) {
         this.contactDao = contactDao;
         this.addressDao = addressDao;
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+    public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         ArrayList<Contact> contactsDTOs = contactDao.getAll();
         ArrayList<ContactWithAddressDTO> contactWithAddressDTOs = new ArrayList<>();
         for (Contact c : contactsDTOs) {

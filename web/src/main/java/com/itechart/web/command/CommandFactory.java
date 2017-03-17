@@ -45,22 +45,22 @@ public class CommandFactory {
 
         switch (path) {
             case "/":
-                return new ShowContactsViewCommand(contactDao, addressDao);
+                return new ShowContacts(contactDao, addressDao);
             case "/email":
-                return new ShowEmailViewCommand();
+                return new ShowEmailSend();
             case "/search":
-                return new ShowSearchViewCommand();
+                return new ShowSearchContacts();
             case "/add":
-                return new ShowContactAddCommand(contactDao, addressDao, phoneDao, attachmentDao);
+                return new ShowContactAdd(contactDao, addressDao, phoneDao, attachmentDao);
             case "/edit":
-                return new ShowContactEditCommand(contactDao, addressDao, phoneDao, attachmentDao);
+                return new ShowContactEdit(contactDao, addressDao, phoneDao, attachmentDao);
             case "/save":
-                return new CreateContactCommand(contactDao, phoneDao, attachmentDao, addressDao);
+                return new DoCreateContact(contactDao, phoneDao, attachmentDao, addressDao);
             case "/update":
-                return new UpdateContactCommand(contactDao, addressDao, phoneDao, attachmentDao);
+                return new DoUpdateContact(contactDao, addressDao, phoneDao, attachmentDao);
 
             case "/delete":
-                return new DeleteContactCommand(contactDao, phoneDao, attachmentDao, addressDao);
+                return new DoDeleteContact(contactDao, phoneDao, attachmentDao, addressDao);
             default:
                 throw new ServletException("no such path");
         }

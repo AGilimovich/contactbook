@@ -97,7 +97,40 @@ public class JdbcAddressDao implements IAddressDao {
 
     @Override
     public void update(Address address) {
+        Connection cn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            cn = ds.getConnection();
+            st = cn.prepareStatement(UPDATE_ADDRESS_QUERY);
+            st.setString(1, address.getCountry());
+            st.setString(2, address.getCity());
+            st.setString(3, address.getStreet());
+            st.setString(4, address.getHouse());
+            st.setString(5, address.getApartment());
+            st.setString(6, address.getZipCode());
+            st.setLong(7, address.getId());
+            st.executeUpdate();
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (st != null) try {
+                st.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (cn != null) try {
+                cn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

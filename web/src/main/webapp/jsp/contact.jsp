@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="/resources/css/bootstrap/bootstrap.css">
     <script src="/resources/js/contact_phones.js" defer></script>
     <script src="/resources/js/contact_attach.js" defer></script>
+    <script src="/resources/js/contact_photo.js" defer></script>
+
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -16,14 +18,16 @@
             <a href="${pageContext.request.contextPath}/" class="navbar-brand">Справочник контактов</a>
         </div>
         <div class="navbar-header">
-            <span href="" class="navbar-brand">> Создание/редактирование контакта</span>
+            <span class="navbar-brand">> Создание/редактирование контакта</span>
         </div>
     </div>
 </nav>
 
 
 <div class="container-fluid">
-    <form action="${pageContext.request.contextPath}/${action}" method="post" class="form-horizontal">
+    <%--<form action="${pageContext.request.contextPath}/${action}" method="post" enctype="multipart/form-data"--%>
+        <form action="${pageContext.request.contextPath}/${action}" method="post"
+              class="form-horizontal">
         <div class="row">
 
             <!--Photo-->
@@ -74,8 +78,8 @@
                             <div class="col-md-1"><input type="radio" name="familyStatus"
                                                          value="single" ${contact.familyStatus.name() =='SINGLE'?'checked':''} >
                             </div>
-                            <div class="col-md-6">
-                                <span>холост / не замужем</span>
+                            <div class="col-md-5">
+                                холост / не замужем
                             </div>
                         </div>
                         <p>Веб-сайт:</p>
@@ -126,10 +130,10 @@
                         <tr>
                             <td width="6%"><input type="checkbox" value="${phone.id}" name="phoneIsSelected"></td>
                             <td name="countryCode" width="5%">${phone.countryCode}</td>
-                            <td width="1%" align="right" >(</td>
+                            <td width="1%" align="right">(</td>
                             <td name="operatorCode" width="3%" align="center">${phone.operatorCode}</td>
-                            <td width="1%" align="left" >)</td>
-                            <td name="phoneNumber"  width="10%">${phone.phoneNumber} </td>
+                            <td width="1%" align="left">)</td>
+                            <td name="phoneNumber" width="10%">${phone.phoneNumber} </td>
                             <td name="phoneType" align="center" width="20%">${phone.phoneType.name()}</td>
                             <td name="phoneComment" width="54%">${phone.comment}</td>
                         </tr>
@@ -150,7 +154,9 @@
                     <c:forEach var="attachment" items="${attachments}">
                         <tr>
                             <td width="6%"><input type="checkbox" name="attachIsSelected"></td>
-                            <td width="20%" name="attachName"><a href="${pageContext.request.contextPath}/${attachment.link}">${attachment.name}</a></td>
+                            <td width="20%" name="attachName"><a
+                                    href="${pageContext.request.contextPath}/${attachment.link}">${attachment.name}</a>
+                            </td>
 
                             <td align="center" width="20%" name="attachUploadDate">
                                 <fmt:formatDate value="${attachment.uploadDate}" var="formattedDate"
@@ -180,75 +186,83 @@
             <%--cloning visible phone table but with input instead of labels--%>
             <table id="hidden-table">
                 <c:forEach var="phone" items="${phones}" varStatus="counter">
-                    <input type="text" name="phone[]"
+                    <input type="text" name="phone"
                            value="countryCode=${phone.countryCode}&operatorCode=${phone.operatorCode}&number=${phone.phoneNumber}&type=${phone.phoneType.name()}&comment=${phone.comment}">
                 </c:forEach>
             </table>
-                <%--hidden input for attachment--%>
+            <%--hidden input for attachment--%>
             <table id="attach-hidden-table">
-                <input type="text" name="attachment[]" value="file=&name=${attachment.name}&date=${attachment.uploadDate}&comment=${attachment.comment}">
+                <c:forEach var="attachment" items="${attachments}" varStatus="counter">
+                    <input type="text" name="attachment"
+                           value="file=&name=${attachment.name}&date=${attachment.uploadDate}&comment=${attachment.comment}">
+                </c:forEach>
             </table>
         </div>
         <%--------------------------------------------------------------------------------%>
+
+        <%--Add photo POPUP--%>
+        <div id="photo-popup" class="popup">
+            <div class="popup-content">
+                <p>Путь к картинке:</p>
+                <input type="file" accept="image/*,image/jpeg" name="photoFile" class="form-control">
+
+                <div class="row controls-group">
+                    <button class="btn" id="btn-find-photo" type="button">Найти</button>
+                    <button id="btn-save-photo" class="btn" type="button">Сохранить</button>
+                    <button id="btn-undo-photo" type="button" class="btn">Отменить</button>
+                </div>
+            </div>
+        </div>
 
     </form>
 
     <%--Add phone POPUP--%>
     <div id="phone-popup" class="popup">
         <div class="popup-content">
-            <p>Код страны:</p>
-            <input type="tel" class="form-control" name="inputCountryCode">
+            <form onsubmit="return savePhone()">
+                <p>Код страны в формате +XXX:</p>
+                <input type="tel" pattern="[\+]\d{3}" class="form-control" name="inputCountryCode" required>
 
-            <p>Код оператора:</p>
-            <input type="tel" class="form-control" name="inputOperatorCode">
+                <p>Код оператора в формате XX:</p>
+                <input type="tel" pattern="\d{2}" class="form-control" name="inputOperatorCode" required>
 
-            <p>Телефонный номер:</p>
-            <input type="tel" class="form-control" name="inputPhoneNumber">
+                <p>Телефонный номер в формате XXXXXXX:</p>
+                <input type="tel" pattern="\d{7}" class="form-control" name="inputPhoneNumber" required>
 
-            <input type="radio" id="input-phone-type-home" name="inputPhoneType" value="home" checked> Дом.
-            <input type="radio" id="input-phone-type-mobile" name="inputPhoneType" value="mobile"> Моб.
+                <input type="radio" id="input-phone-type-home" name="inputPhoneType" value="home" checked> Дом.
+                <input type="radio" id="input-phone-type-mobile" name="inputPhoneType" value="mobile"> Моб.
 
-            <p>Комментарий:</p>
-            <input type="text" class="form-control" name="inputPhoneComment">
+                <p>Комментарий:</p>
+                <input type="text" class="form-control" name="inputPhoneComment">
 
-            <div class="controls-group">
-                <button id="btn-save-phone" type="button" class="btn">Сохранить</button>
-                <button id="btn-undo-phone" type="button" class="btn">Отменить</button>
-            </div>
+                <div class="controls-group">
+                    <button id="btn-save-phone" type="submit" class="btn">Сохранить</button>
+                    <button id="btn-undo-phone" type="button" class="btn">Отменить</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <%--Add file POPUP--%>
+    <%--Add attach POPUP--%>
     <div id="attach-popup" class="popup">
         <div class="popup-content">
-            <input type="file" name="inputFile">
+            <form onsubmit="return saveAttach()">
+                <input type="file" name="inputFile" required>
 
-            <p>Имя файла:</p>
-            <input type="text" class="form-control" name="inputAttachName">
+                <p>Имя файла:</p>
+                <input type="text" class="form-control" name="inputAttachName" required>
 
-            <p>Комментарий:</p>
-            <input type="text" class="form-control" name="inputAttachComment">
+                <p>Комментарий:</p>
+                <input type="text" class="form-control" name="inputAttachComment">
 
-            <div class="row controls-group">
-                <button id="btn-save-attach" class="btn" type="button">Сохранить</button>
-                <button id="btn-undo-attach" class="btn">Отменить</button>
-            </div>
+                <div class="row controls-group">
+                    <button id="btn-save-attach" class="btn" type="submit">Сохранить</button>
+                    <button id="btn-undo-attach" class="btn">Отменить</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <%--Add photo POPUP--%>
-    <div id="photo-popup" class="popup">
-        <div class="popup-content">
-            <p>Путь к картинке:</p>
-            <input type="file" accept="image/*,image/jpeg" name="photoFile" class="form-control">
-
-            <div class="row controls-group">
-                <button class="btn" type="button">Найти</button>
-                <button id="btn-save-photo" class="btn" type="button">Сохранить</button>
-                <button id="btn-undo-photo" type="button" class="btn">Отменить</button>
-            </div>
-        </div>
-    </div>
 
 </div>
 

@@ -10,6 +10,7 @@ import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.Phone;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,13 +19,13 @@ import java.util.ArrayList;
 /**
  * Created by Aleksandr on 14.03.2017.
  */
-public class ShowContactAddCommand implements Command{
+public class ShowContactAdd implements Command{
     private JdbcContactDao contactDao;
     private JdbcPhoneDao phoneDao;
     private JdbcAttachmentDao attachmentDao;
     private JdbcAddressDao addressDao;
 
-    public ShowContactAddCommand(JdbcContactDao contactDao, JdbcAddressDao addressDao, JdbcPhoneDao phoneDao, JdbcAttachmentDao attachmentDao) {
+    public ShowContactAdd(JdbcContactDao contactDao, JdbcAddressDao addressDao, JdbcPhoneDao phoneDao, JdbcAttachmentDao attachmentDao) {
         this.contactDao = contactDao;
         this.phoneDao = phoneDao;
         this.attachmentDao = attachmentDao;
@@ -32,7 +33,7 @@ public class ShowContactAddCommand implements Command{
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+    public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
 
         request.getSession().setAttribute("action", "save");
 

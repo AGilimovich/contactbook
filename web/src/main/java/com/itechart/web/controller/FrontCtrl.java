@@ -23,7 +23,7 @@ public class FrontCtrl extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         CommandFactory factory = new CommandFactory();
         Command command = factory.getCommand(request);
-        String page = command.execute(request, response);
+        String page = command.execute(this, request, response);
         dispatch(request, response, page);
     }
 

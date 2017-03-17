@@ -74,7 +74,7 @@ btnDeleteAttaches.onclick = function () {
 
 //function for deleting hidden input with specified index
 function deleteHiddenAttachInput(index) {
-    var hiddenAttachInput = document.getElementsByName("attachment[]");
+    var hiddenAttachInput = document.getElementsByName("attachment");
     hiddenAttachInput[index].parentNode.removeChild(hiddenAttachInput[index]);
 
 }
@@ -129,6 +129,7 @@ function createAttachRow(table, attachName, attachDate, attachComment) {
     cellName.setAttribute("width", "20%")
     var cellUploadDate = row.insertCell(2);
     cellUploadDate.setAttribute("width", "20%")
+    cellUploadDate.setAttribute("align", "center");
     var cellComment = row.insertCell(3);
     cellComment.setAttribute("width", "54%")
 
@@ -158,20 +159,30 @@ function createAttachRow(table, attachName, attachDate, attachComment) {
 function createHiddenInputForAttach(attachFile, attachName, attachUploadDate, attachComment) {
     var value = new Appendable("file=" + attachFile).append("name", attachName).append("date", attachUploadDate).append("comment", attachComment).value();
     var attachHiddenInput = document.createElement("input");
-    attachHiddenInput.setAttribute("name", "attachment[]");
+    attachHiddenInput.setAttribute("name", "attachment");
     attachHiddenInput.setAttribute("value", value);
     hiddenDiv.appendChild(attachHiddenInput);
 }
 
+//utility function for converting date to string in the format "dd.MM.YYYY HH:mm:ss"
+function dateToString(date) {
+    //function adds zeros to hours, minutes or seconds if value < 10
+    function addZero(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+
+    return date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + " " + addZero(date.getHours()) + ":" + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds());
+}
 
 //function for adding new attachment to table and hidden input using data from inputs
 function saveNewAttach() {
     //get data from inputs of popup window
     var attachFile = inputFile[0].value;//todo how to get file input value&??
     attachName = inputAttachName[0].value;
-    //get uploading date in format "dd.MM.YYYY HH:mm:ss"
-    var now = new Date();
-    var attachUploadDate = now.getDate() + "." + (now.getMonth() + 1) + "." + now.getFullYear() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+    var attachUploadDate = dateToString(new Date());
     attachComment = inputAttachComment[0].value;
 
     createAttachRow(attachTable, attachName, attachUploadDate, attachComment);
@@ -186,29 +197,29 @@ function editExistingAttach() {
     //edit data in the attach table
     var row = attachTable.rows[currentMode.index];
     var cellAttachName = row.cells[1];
-    // var cellAttachUploadDate = row.cells[2];
-    var CellAttachComment = row.cells[3];
+    var cellAttachUploadDate = row.cells[2];
+    var cellAttachComment = row.cells[3];
+
 
     var attachName = cellAttachName.innerHTML = inputAttachName[0].value;
-    var attachComment = CellAttachComment.innerHTML = inputAttachComment[0].value;
-    //todo what about changing upload date?
-
+    var attachComment = cellAttachComment.innerHTML = inputAttachComment[0].value;
+    var attachUploadDate = cellAttachUploadDate.innerHTML;
     //close popup
     attachPopup.className = "popup";
-    editHiddenAttachInput(currentMode.index, attachName, attachComment);
+    editHiddenAttachInput(currentMode.index, attachUploadDate, attachName, attachComment);
 }
 
 
-//function for setting new value to hidden input
-function editHiddenAttachInput(index, attachName, attachComment) {
-    var hiddenAttachInput = document.getElementsByName("attachment[]");
+//function for setting new value to the hidden input
+function editHiddenAttachInput(index, attachUploadDate, attachName, attachComment) {
+    var hiddenAttachInput = document.getElementsByName("attachment");
     //todo what about editing attach file and upload date
-    var value = new Appendable("name=" + attachName).append("comment", attachComment).value();
+    var value = new Appendable("name=" + attachName).append(attachUploadDate).append("comment", attachComment).value();
     hiddenAttachInput[index].setAttribute("value", value);
 }
 
-//callback function - either saveNew or editExisting function
-btnSaveAttach.onclick = function () {
+//function - calls either saveNew or editExisting function
+var saveAttach = function () {
     if (currentMode === ATTACH_MODE.ADD) {
         saveNewAttach();
     } else if (currentMode === ATTACH_MODE.EDIT) {
@@ -216,4 +227,5 @@ btnSaveAttach.onclick = function () {
     } else {
         //error
     }
+    return false;
 }

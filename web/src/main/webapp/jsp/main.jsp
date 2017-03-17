@@ -80,7 +80,7 @@
                                     <p>${contact.dateOfBirth}</p>
                                 </div>
                                 <div class="col-md-2">
-                                    <p>${contact.country}, ул. ${contact.street},
+                                    <p>${contact.country}, ${contact.city}, ул. ${contact.street},
                                         д.${contact.house}-${contact.apartment}</p>
                                 </div>
                                 <div class="col-md-2">

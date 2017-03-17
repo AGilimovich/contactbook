@@ -6,19 +6,20 @@ import com.itechart.data.dao.JdbcContactDao;
 import com.itechart.data.dao.JdbcPhoneDao;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  * Command for deleting selected contacts.
  */
-public class DeleteContactCommand implements Command {
+public class DoDeleteContact implements Command {
     private JdbcContactDao contactDao;
     private JdbcPhoneDao phoneDao;
     private JdbcAttachmentDao attachmentDao;
     private JdbcAddressDao addressDao;
 
-    public DeleteContactCommand(JdbcContactDao contactDao, JdbcPhoneDao phoneDao, JdbcAttachmentDao attachmentDao, JdbcAddressDao addressDao) {
+    public DoDeleteContact(JdbcContactDao contactDao, JdbcPhoneDao phoneDao, JdbcAttachmentDao attachmentDao, JdbcAddressDao addressDao) {
         this.contactDao = contactDao;
         this.phoneDao = phoneDao;
         this.attachmentDao = attachmentDao;
@@ -26,15 +27,16 @@ public class DeleteContactCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+    public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         String[] selectedContactsId = request.getParameterValues("isSelected");
         if (selectedContactsId != null) {
             for (String c : selectedContactsId) {
                 phoneDao.deleteForUser(Long.valueOf(c));
+                attachmentDao.deleteForUser(Long.valueOf(c));
                 //todo delete attaches
                 contactDao.delete(Long.valueOf(c));
             }
         }
-        return (new ShowContactsViewCommand(contactDao, addressDao)).execute(request, response);
+        return (new ShowContacts(contactDao, addressDao)).execute(servlet, request, response);
     }
 }

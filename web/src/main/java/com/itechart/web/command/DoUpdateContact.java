@@ -10,23 +10,23 @@ import com.itechart.data.entity.Phone;
 import com.itechart.web.parser.PhoneRequestParamParser;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 /**
  * Created by Aleksandr on 14.03.2017.
  */
-public class UpdateContactCommand implements Command {
+public class DoUpdateContact implements Command {
     private JdbcContactDao contactDao;
     private JdbcPhoneDao phoneDao;
     private JdbcAttachmentDao attachmentDao;
     private JdbcAddressDao addressDao;
 
 
-    public UpdateContactCommand(JdbcContactDao contactDao, JdbcAddressDao addressDao, JdbcPhoneDao phoneDao, JdbcAttachmentDao attachmentDao) {
+    public DoUpdateContact(JdbcContactDao contactDao, JdbcAddressDao addressDao, JdbcPhoneDao phoneDao, JdbcAttachmentDao attachmentDao) {
         this.contactDao = contactDao;
         this.addressDao = addressDao;
         this.phoneDao = phoneDao;
@@ -34,25 +34,42 @@ public class UpdateContactCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+    public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         long id = (long) request.getSession().getAttribute("id");
-
         Contact contact = contactDao.getContactById(id);
         Address address = addressDao.getAddressById(contact.getAddress());
-        address.setCountry(request.getParameter("country"));
-        address.setCity(request.getParameter("city"));
-        address.setStreet(request.getParameter("street"));
-        address.setHouse(request.getParameter("house"));
-        address.setApartment(request.getParameter("apartment"));
-        address.setZipCode(request.getParameter("zipCode"));
-        addressDao.update(address);
-
+        String country = request.getParameter("country");
+        String city = request.getParameter("city");
+        String street = request.getParameter("street");
+        String house = request.getParameter("house");
+        String apartment = request.getParameter("apartment");
+        String zipCode = request.getParameter("zipCode");
+        //if address was not created for contact. In this implementation address created every time new contact created even when address fields is empty
+        if (address == null) {
+            address = new Address();
+            address.setCountry(country);
+            address.setCity(city);
+            address.setStreet(street);
+            address.setHouse(house);
+            address.setApartment(apartment);
+            address.setZipCode(zipCode);
+            long addressId = addressDao.save(address);
+            contact.setAddress(addressId);
+        } else {
+            address.setCountry(request.getParameter("country"));
+            address.setCity(request.getParameter("city"));
+            address.setStreet(request.getParameter("street"));
+            address.setHouse(request.getParameter("house"));
+            address.setApartment(request.getParameter("apartment"));
+            address.setZipCode(request.getParameter("zipCode"));
+            addressDao.update(address);
+        }
 
         contact.setName(request.getParameter("name"));
         contact.setSurname(request.getParameter("surname"));
         contact.setPatronymic(request.getParameter("patronymic"));
         String dateOfBirth = null;
-        if (!(dateOfBirth = request.getParameter("dateOfBirth")).isEmpty()) {
+        if ((dateOfBirth = request.getParameter("dateOfBirth")) != null) {
             SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd");
             try {
                 contact.setDateOfBirth(format.parse(dateOfBirth));
@@ -75,25 +92,26 @@ public class UpdateContactCommand implements Command {
         contactDao.update(contact);
         phoneDao.deleteForUser(contact.getId());
 
-        String[] phoneParameterValues = request.getParameterValues("phone[]");
-        for (String phoneParameter : phoneParameterValues) {
-            try {
-                Phone phone = PhoneRequestParamParser.parseRequest(phoneParameter);
-                phone.setContact(contact.getId());
-                phoneDao.save(phone);
-            } catch (com.itechart.web.parser.ParseException e) {
-                e.printStackTrace();
+        String[] phoneParameterValues = request.getParameterValues("phone");
+        if (phoneParameterValues != null) {
+            for (String phoneParameter : phoneParameterValues) {
+                try {
+                    Phone phone = PhoneRequestParamParser.parseRequest(phoneParameter);
+                    phone.setContact(contact.getId());
+                    phoneDao.save(phone);
+                } catch (com.itechart.web.parser.ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
         // TODO: 14.03.2017 update attachments
 
 
-
         request.getSession().removeAttribute("action");
         request.getSession().removeAttribute("id");
 
-        return (new ShowContactsViewCommand(contactDao, addressDao)).execute(request, response);
+        return (new ShowContacts(contactDao, addressDao)).execute(servlet, request, response);
     }
 }
 
