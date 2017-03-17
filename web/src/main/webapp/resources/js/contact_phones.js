@@ -8,7 +8,7 @@ var btnEditPhone = document.getElementById("btn-edit-phone");
 var btnDeletePhones = document.getElementById("btn-delete-phones");
 //table with phones
 var phoneTable = document.getElementById("phone-table");
-// hidden table with phones
+// hidden div with hidden phone inputs which then are submitted to server
 var hiddenDiv = document.getElementById("hidden-div");
 
 //table columns
@@ -37,15 +37,14 @@ var inputPhoneComment = document.getElementsByName("inputPhoneComment");
 //-------------------------------
 
 
-
-//Variable represents mode: either editing existing phone or adding new one. It influences behaviour of the Save button
+//represents mode: either editing existing phone or adding new one. It determines behaviour of the Save button
 const MODE = {
     EDIT: {name: "edit"},
     ADD: {name: "add"}
 };
 var currentMode;
 
-// action - show phone creating popup
+// action - show phone creating popup window
 btnAddPhone.onclick = function () {
     //reset input values of popup form
     inputCountryCode[0].value = "+";
@@ -57,15 +56,14 @@ btnAddPhone.onclick = function () {
     phonePopup.className += " show";
 }
 
-//action - hide phone editing popup
+//action - hide phone creating or editing popup
 btnUndoPhone.onclick = function () {
     phonePopup.className = "popup";
 }
 
 //action - delete selected phones
 btnDeletePhones.onclick = function () {
-
-    for (var i = 0; i < phonesCheckBoxes.length; i++) {
+    for (var i = 0; i < phonesCheckBoxes.length;) {
         if (phonesCheckBoxes[i].checked) {
             //todo popup acknowledge deleting
             // deleteHiddenInput(phonesCheckBoxes[i].value);
@@ -73,11 +71,11 @@ btnDeletePhones.onclick = function () {
             phoneTable.deleteRow(i);
             i = 0;
             //todo deleting hidden inputs
-        }
+        } else i++;
     }
 
 }
-//function for deleting hidden input
+//function for deleting hidden input with specified index
 function deleteHiddenInput(index) {
     var hiddenInput = document.getElementsByName("phone[]");
     hiddenInput[index].parentNode.removeChild(hiddenInput[index]);
@@ -163,7 +161,6 @@ function createRow(table, countryCode, operatorCode, phoneNumber, phoneType, pho
     // ------------------add checkbox into cell[0]
     var checkbox = document.createElement("input");
     checkbox.setAttribute("type", "checkbox");
-    checkbox.setAttribute("type", "checkbox");
     cellCheckbox.appendChild(checkbox);
     checkbox.value = rows.length;
     checkbox.setAttribute("name", "phoneIsSelected");
@@ -195,10 +192,10 @@ function createRow(table, countryCode, operatorCode, phoneNumber, phoneType, pho
 
 }
 
-//object for formatting string of request parameter value.
+//object for appending parameters with its values to string of request.
 // contains to methods: 1) append parameter to string;
-//                      2)return formatted string
-function appendable(val) {
+//                      2)return result string
+function Appendable(val) {
     var val = val;
     this.append = function (name, value) {
         val += ("&" + name + "=" + value);
@@ -209,25 +206,24 @@ function appendable(val) {
     }
 }
 
-//function for creating hidden input
+//function for creating hidden input element
 function createHiddenInputForPhone(countryCode, operatorCode, phoneNumber, phoneType, phoneComment) {
-    var value = new appendable("countryCode=" + countryCode).append("operatorCode", operatorCode).append("number", phoneNumber).append("type", phoneType).append("comment", phoneComment).value();
+    var value = new Appendable("countryCode=" + countryCode).append("operatorCode", operatorCode).append("number", phoneNumber).append("type", phoneType).append("comment", phoneComment).value();
     var phoneHiddenInput = document.createElement("input");
     phoneHiddenInput.setAttribute("name", "phone[]");
     phoneHiddenInput.setAttribute("value", value);
     hiddenDiv.appendChild(phoneHiddenInput);
 }
 
-//function for adding new phone to table using data from inputs
+//function for adding new phone to table and hidden input using data from inputs
 function saveNew() {
-    //insert row into table
+    //get data from inputs of popup window
     countryCode = inputCountryCode[0].value;
     operatorCode = inputOperatorCode[0].value;
     phoneNumber = inputPhoneNumber[0].value;
     if (inputPhoneTypes[1].checked) {
         phoneType = "MOBILE";
     } else phoneType = "HOME";
-
     phoneComment = inputPhoneComment[0].value;
     createRow(phoneTable, countryCode, operatorCode, phoneNumber, phoneType, phoneComment);
     createHiddenInputForPhone(countryCode, operatorCode, phoneNumber, phoneType, phoneComment);
@@ -237,6 +233,7 @@ function saveNew() {
 
 //function for editing existing phone
 function editExisting() {
+    //edit data in the phone table
     var row = phoneTable.rows[currentMode.index];
     var cellCountryCode = row.cells[1];
     var cellOperatorCode = row.cells[3];
@@ -249,23 +246,21 @@ function editExisting() {
 
     if (inputPhoneTypes[1].checked) {
         var phoneType = cellPhoneType.innerHTML = "MOBILE";
-    } else var phoneType =cellPhoneType.innerHTML = "HOME";
+    } else var phoneType = cellPhoneType.innerHTML = "HOME";
     var phoneComment = cellPhoneComment.innerHTML = inputPhoneComment[0].value;
     //close popup
     phonePopup.className = "popup";
-    //todo create hidden input to submit data
     editHiddenInput(currentMode.index, countryCode, operatorCode, phoneNumber, phoneType, phoneComment)
 }
 
 //function for setting new value to hidden input
 function editHiddenInput(index, countryCode, operatorCode, phoneNumber, phoneType, phoneComment) {
     var hiddenInput = document.getElementsByName("phone[]");
-    var value = new appendable("countryCode=" + countryCode).append("operatorCode", operatorCode).append("number", phoneNumber).append("type", phoneType).append("comment", phoneComment).value();
+    var value = new Appendable("countryCode=" + countryCode).append("operatorCode", operatorCode).append("number", phoneNumber).append("type", phoneType).append("comment", phoneComment).value();
     hiddenInput[index].setAttribute("value", value);
 }
 
 
-//Save inserted data about phone
 //callback function - either saveNew or editExisting function
 btnSavePhone.onclick = function () {
     if (currentMode === MODE.ADD) {

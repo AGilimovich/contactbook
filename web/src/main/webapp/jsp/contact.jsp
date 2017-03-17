@@ -150,14 +150,14 @@
                     <c:forEach var="attachment" items="${attachments}">
                         <tr>
                             <td width="6%"><input type="checkbox" name="attachIsSelected"></td>
-                            <td width="20%">${attachment.name}</td>
+                            <td width="20%" name="attachName"><a href="${pageContext.request.contextPath}/${attachment.link}">${attachment.name}</a></td>
 
-                            <td align="center" width="20%">
+                            <td align="center" width="20%" name="attachUploadDate">
                                 <fmt:formatDate value="${attachment.uploadDate}" var="formattedDate"
                                                 type="date" pattern="MM-dd-yyyy HH:mm:ss"/>
                                     ${formattedDate}
                             </td>
-                            <td width="54%">${attachment.comment}</td>
+                            <td width="54%" name="attachComment">${attachment.comment}</td>
                         </tr>
                     </c:forEach>
                 </table>
@@ -183,6 +183,10 @@
                     <input type="text" name="phone[]"
                            value="countryCode=${phone.countryCode}&operatorCode=${phone.operatorCode}&number=${phone.phoneNumber}&type=${phone.phoneType.name()}&comment=${phone.comment}">
                 </c:forEach>
+            </table>
+                <%--hidden input for attachment--%>
+            <table id="attach-hidden-table">
+                <input type="text" name="attachment[]" value="file=&name=${attachment.name}&date=${attachment.uploadDate}&comment=${attachment.comment}">
             </table>
         </div>
         <%--------------------------------------------------------------------------------%>
@@ -217,14 +221,13 @@
     <%--Add file POPUP--%>
     <div id="attach-popup" class="popup">
         <div class="popup-content">
-
-            <input type="file" name="file">
+            <input type="file" name="inputFile">
 
             <p>Имя файла:</p>
-            <input type="text" class="form-control" name="fileName">
+            <input type="text" class="form-control" name="inputAttachName">
 
             <p>Комментарий:</p>
-            <input type="text" class="form-control" name="attachComment">
+            <input type="text" class="form-control" name="inputAttachComment">
 
             <div class="row controls-group">
                 <button id="btn-save-attach" class="btn" type="button">Сохранить</button>
