@@ -11,7 +11,6 @@ photo.onclick = function () {
 }
 
 btnSavePhoto.onclick = function () {
-    inputPhotoFile[0].value = "";
     photoPopup.className = "popup";
 }
 

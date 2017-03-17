@@ -30,6 +30,12 @@ public class Attachment {
     public Attachment() {
     }
 
+    public void set(Attachment attachment){
+        this.name = attachment.getName();
+        this.uploadDate = attachment.getUploadDate();
+        this.comment = attachment.getComment();
+    }
+
     public long getId() {
         return id;
     }

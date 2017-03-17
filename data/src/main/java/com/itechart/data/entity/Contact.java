@@ -53,8 +53,20 @@ public class Contact {
         SINGLE, MARRIED;
     }
 
+    public void set(Contact contact) {
+        this.name = contact.getName();
+        this.surname = contact.getSurname();
+        this.patronymic = contact.getPatronymic();
+        this.dateOfBirth = contact.getDateOfBirth();
+        this.gender = contact.getGender();
+        this.citizenship = contact.getCitizenship();
+        this.familyStatus = contact.getFamilyStatus();
+        this.website = contact.getWebsite();
+        this.email = contact.getEmail();
+        this.placeOfWork = contact.getPlaceOfWork();
+    }
 
-    public long getId() {
+        public long getId() {
         return contactId;
     }
 

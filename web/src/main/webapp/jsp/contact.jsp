@@ -25,18 +25,17 @@
 
 
 <div class="container-fluid">
-    <%--<form action="${pageContext.request.contextPath}/${action}" method="post" enctype="multipart/form-data"--%>
-        <form action="${pageContext.request.contextPath}/${action}" method="post"
-              class="form-horizontal">
+    <form action="${pageContext.request.contextPath}/${action}" method="post" enctype="multipart/form-data"
+          accept-charset="UTF-8" class="form-horizontal">
         <div class="row">
 
             <!--Photo-->
             <div class="col-md-1">
-                <div class="row">
-                    <div class="photo-container">
-                        <img src="/resources/images/male.jpg" alt="photo" height="100%" id="photo">
-                    </div>
+
+                <div class="photo-container">
+                    <img src="/file?id=${contact.photo}" height="100%" alt="photo" id="photo">
                 </div>
+
             </div>
             <!--Form-->
             <div class="col-md-4">
@@ -133,7 +132,7 @@
                             <td width="1%" align="right">(</td>
                             <td name="operatorCode" width="3%" align="center">${phone.operatorCode}</td>
                             <td width="1%" align="left">)</td>
-                            <td name="phoneNumber" width="10%">${phone.phoneNumber} </td>
+                            <td name="phoneNumber" width="10%">${phone.phoneNumber}</td>
                             <td name="phoneType" align="center" width="20%">${phone.phoneType.name()}</td>
                             <td name="phoneComment" width="54%">${phone.comment}</td>
                         </tr>
@@ -204,7 +203,8 @@
         <div id="photo-popup" class="popup">
             <div class="popup-content">
                 <p>Путь к картинке:</p>
-                <input type="file" accept="image/*,image/jpeg" name="photoFile" class="form-control">
+                <%--<input type="file" accept="image/*,image/jpeg" name="photoFile" class="form-control">--%>
+                <input type="file" name="photoFile" accept="image/jpeg,image/png,image/gif" class="form-control">
 
                 <div class="row controls-group">
                     <button class="btn" id="btn-find-photo" type="button">Найти</button>

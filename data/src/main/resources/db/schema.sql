@@ -37,9 +37,9 @@ PRIMARY KEY (phoneTypeId)
 
 CREATE TABLE addresses(
 addressId INT UNSIGNED NOT NULL AUTO_INCREMENT,
-country VARCHAR(15),
+country VARCHAR(30),
 city VARCHAR(15),
-street VARCHAR(15),
+street VARCHAR(30),
 house VARCHAR(10),
 apartment VARCHAR(10),
 zipCode VARCHAR(10),

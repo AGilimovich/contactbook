@@ -25,6 +25,14 @@ public class Address {
 
     public Address() {
     }
+    public void set(Address address){
+        this.country = address.getCountry();
+        this.city = address.getCity();
+        this.street = address.getStreet();
+        this.house = address.getHouse();
+        this.apartment = address.getApartment();
+        this.zipCode = address.getZipCode();
+    }
 
     public long getId() {
         return id;

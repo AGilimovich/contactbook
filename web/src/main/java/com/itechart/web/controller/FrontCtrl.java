@@ -21,10 +21,13 @@ public class FrontCtrl extends HttpServlet {
 
     public void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
         CommandFactory factory = new CommandFactory();
         Command command = factory.getCommand(request);
         String page = command.execute(this, request, response);
-        dispatch(request, response, page);
+        if (page != null)
+            dispatch(request, response, page);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

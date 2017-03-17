@@ -14,7 +14,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 /**
  * Command for creating new contact.
@@ -47,6 +52,7 @@ public class ShowContactEdit implements Command {
         request.setAttribute("address", address);
         request.setAttribute("phones", phones);
         request.setAttribute("attachments", attachments);
+//-------------------------------------------------------------------
 
         return "/jsp/contact.jsp";
 

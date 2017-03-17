@@ -29,6 +29,13 @@ public class Phone {
         HOME, MOBILE;
     }
 
+    public void set(Phone phone){
+        this.countryCode = phone.getCountryCode();
+        this.operatorCode = phone.getOperatorCode();
+        this.phoneNumber = phone.getPhoneNumber();
+        this.phoneType = phone.getPhoneType();
+        this.comment = phone.getComment();
+    }
     public long getId() {
         return id;
     }

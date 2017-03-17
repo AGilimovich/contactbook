@@ -61,6 +61,8 @@ public class CommandFactory {
 
             case "/delete":
                 return new DoDeleteContact(contactDao, phoneDao, attachmentDao, addressDao);
+            case "/file":
+                return new DoSendFile();
             default:
                 throw new ServletException("no such path");
         }

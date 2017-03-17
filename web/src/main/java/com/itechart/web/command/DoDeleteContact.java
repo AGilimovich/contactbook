@@ -33,7 +33,6 @@ public class DoDeleteContact implements Command {
             for (String c : selectedContactsId) {
                 phoneDao.deleteForUser(Long.valueOf(c));
                 attachmentDao.deleteForUser(Long.valueOf(c));
-                //todo delete attaches
                 contactDao.delete(Long.valueOf(c));
             }
         }

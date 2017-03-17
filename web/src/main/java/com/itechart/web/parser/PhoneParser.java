@@ -2,19 +2,39 @@ package com.itechart.web.parser;
 
 import com.itechart.data.entity.Phone;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Class for creating phone object out of request parameters.
+ * Parses phone objects from request parameters.
  */
-public class PhoneRequestParamParser {
+public class PhoneParser {
     private static final String regex = "(\\w+)=(\\+*\\w*)&?";
     private static final Pattern pattern = Pattern.compile(regex);
 
-    public static Phone parseRequest(String request) throws ParseException {
+
+
+
+    public ArrayList<Phone> parsePhones(ArrayList<String> phoneRequestParameters) {
+        ArrayList<Phone> phones = new ArrayList<>();
+
+        if (!phoneRequestParameters.isEmpty()) {
+            for (String phoneParameter : phoneRequestParameters) {
+                try {
+                    Phone phone = parseRequest(phoneParameter);
+                    phones.add(phone);
+                } catch (com.itechart.web.parser.ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return phones;
+    }
+
+    private static Phone parseRequest(String request) throws ParseException {
         Phone phone = new Phone();
         Matcher matcher = pattern.matcher(request);
         Map<String, String> parameters = new HashMap<>();
@@ -43,6 +63,4 @@ public class PhoneRequestParamParser {
 
 
     }
-
-
 }

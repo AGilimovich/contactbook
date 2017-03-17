@@ -9,6 +9,7 @@
 
 /*Container for contact's photo*/
 .photo-container {
+    margin-left: 20px;
     height: 150px;
     width: 150px;
     max-width: 100%;
@@ -76,13 +77,13 @@
 
 /*!*input without border for phones and attachments*!*/
 /*.borderless-input {*/
-    /*outline: none; !important;*/
-    /*border: none; !important;*/
-    /*width: 100%; !important;*/
+/*outline: none; !important;*/
+/*border: none; !important;*/
+/*width: 100%; !important;*/
 /*}*/
 /*.no-padding{*/
-    /*padding: 0 !important;*/
-    /*margin: 0 !important;*/
+/*padding: 0 !important;*/
+/*margin: 0 !important;*/
 /*}*/
 
 
