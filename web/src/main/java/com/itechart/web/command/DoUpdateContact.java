@@ -8,7 +8,7 @@ import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Attachment;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.Phone;
-import com.itechart.web.MultipartDataHandler;
+import com.itechart.web.MultipartRequestParamHandler;
 import org.apache.commons.fileupload.FileItem;
 
 import javax.servlet.ServletException;
@@ -41,7 +41,7 @@ public class DoUpdateContact implements Command {
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
 
-        MultipartDataHandler handler = new MultipartDataHandler();
+        MultipartRequestParamHandler handler = new MultipartRequestParamHandler();
         long id = (long) request.getSession().getAttribute("id");
         Contact contact = contactDao.getContactById(id);
         Address address = addressDao.getAddressById(contact.getAddress());

@@ -30,6 +30,13 @@ public class JdbcContactDao implements IContactDao {
 
     private final String DELETE_CONTACT_QUERY = "DELETE FROM contacts WHERE contactId = ?";
 
+    private final String SELECT_BY_FIELDS_QUERY = "SELECT c.*, gender.genderValue, family_status.familyStatusValue, a.* FROM contacts AS c " +
+            "INNER JOIN addresses AS a ON c.address = a.addressId " +
+            "INNER JOIN family_status ON c.familyStatus = family_status.familyStatusId " +
+            "INNER JOIN gender ON c.gender = gender.genderId " +
+            "WHERE (c.surname LIKE ?) AND (c.name LIKE ?) AND (c.patronymic LIKE ?) AND (c.dateOfBirth BETWEEN ? AND ?) AND (gender.genderValue LIKE ?) AND (family_status.familyStatusValue LIKE ?) " +
+            "AND (c.citizenship LIKE ?) AND (a.country LIKE ?) AND (a.city LIKE ?) AND (a.street LIKE ?) AND (a.house LIKE ?) AND (a.apartment LIKE ?) AND (a.zipCode LIKE ?)";
+
     public JdbcContactDao(JdbcDataSource ds) {
         this.ds = ds;
     }
@@ -133,8 +140,6 @@ public class JdbcContactDao implements IContactDao {
             else {
                 st.setString(2, "NULL");
             }
-
-
             st.setString(3, contact.getSurname());
             st.setString(4, contact.getName());
             st.setString(5, contact.getPatronymic());
@@ -189,7 +194,7 @@ public class JdbcContactDao implements IContactDao {
                 Contact.Gender gender = Contact.Gender.valueOf(rs.getString("genderValue").toUpperCase());
                 String citizenship = rs.getString("citizenship");
                 Contact.FamilyStatus familyStatus = Contact.FamilyStatus.valueOf(rs.getString("familyStatusValue").toUpperCase());
-                String website = rs.getString("webSite");
+                String website = rs.getString("website");
                 String email = rs.getString("email");
                 String placeOfWork = rs.getString("placeOfWork");
                 String photo = rs.getString("photo");
@@ -240,12 +245,12 @@ public class JdbcContactDao implements IContactDao {
             Contact.Gender gender = Contact.Gender.valueOf(rs.getString("genderValue").toUpperCase());
             String citizenship = rs.getString("citizenship");
             Contact.FamilyStatus familyStatus = Contact.FamilyStatus.valueOf(rs.getString("familyStatusValue").toUpperCase());
-            String webSite = rs.getString("webSite");
+            String website = rs.getString("website");
             String email = rs.getString("email");
             String placeOfWork = rs.getString("placeOfWork");
             String photo = rs.getString("photo");
             long addressId = rs.getLong("address");
-            contact = new Contact(contactId, name, surname, patronymic, dateOfBirth, gender, citizenship, familyStatus, webSite, email, placeOfWork, addressId, photo);
+            contact = new Contact(contactId, name, surname, patronymic, dateOfBirth, gender, citizenship, familyStatus, website, email, placeOfWork, addressId, photo);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -267,6 +272,110 @@ public class JdbcContactDao implements IContactDao {
         }
 
         return contact;
+    }
+
+    @Override
+    public ArrayList<Contact> findContactsByFields(String surname, String name, String patronymic, Date fromDate, Date toDate, Contact.Gender gender, Contact.FamilyStatus familyStatus, String citizenship, String country, String city, String street, String house, String apartment, String zipCode) {
+        ArrayList<Contact> contacts = new ArrayList<>();
+        Connection cn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            cn = ds.getConnection();
+            st = cn.prepareStatement(SELECT_BY_FIELDS_QUERY);
+            if (!surname.isEmpty())
+                st.setString(1, surname);
+            else st.setString(1, "%");
+
+            if (!name.isEmpty())
+                st.setString(2, name);
+            else st.setString(2, "%");
+
+            if (!patronymic.isEmpty())
+                st.setString(3, patronymic);
+            else st.setString(3, "%");
+
+            if (fromDate != null)
+                st.setDate(4, new java.sql.Date(fromDate.getTime()));
+            else st.setDate(4, new java.sql.Date(0));//todo ?????
+
+            if (toDate != null)
+                st.setDate(5, new java.sql.Date(toDate.getTime()));
+            else st.setDate(5, new java.sql.Date(new Date().getTime()));
+
+            if (gender != null)
+                st.setString(6, gender.name());
+            else st.setString(6, "%");
+            if (familyStatus != null)
+                st.setString(7, familyStatus.name());
+            else st.setString(7, "%");
+            if (!citizenship.isEmpty())
+                st.setString(8, citizenship);
+            else st.setString(8, "%");
+            if (!country.isEmpty())
+                st.setString(9, country);
+            else st.setString(9, "%");
+
+            if (!city.isEmpty())
+                st.setString(10, city);
+            else st.setString(10, "%");
+
+            if (!street.isEmpty())
+                st.setString(11, street);
+            else st.setString(11, "%");
+
+            if (!house.isEmpty())
+                st.setString(12, house);
+            else st.setString(12, "%");
+
+            if (!apartment.isEmpty())
+                st.setString(13, apartment);
+            else st.setString(13, "%");
+
+            if (zipCode != null)
+                st.setString(14, zipCode);
+            else st.setString(14, "%");
+
+
+            rs = st.executeQuery();
+            while (rs.next()) {
+                long foundContactId = rs.getLong("contactId");
+                String foundName = rs.getString("name");
+                String foundSurname = rs.getString("surname");
+                String foundPatronymic = rs.getString("patronymic");
+                Date foundDateOfBirth = rs.getDate("dateOfBirth");
+                Contact.Gender foundGender = Contact.Gender.valueOf(rs.getString("genderValue").toUpperCase());
+                String foundCitizenship = rs.getString("citizenship");
+                Contact.FamilyStatus foundFamilyStatus = Contact.FamilyStatus.valueOf(rs.getString("familyStatusValue").toUpperCase());
+                String foundWebsite = rs.getString("website");
+                String foundEmail = rs.getString("email");
+                String foundPlaceOfWork = rs.getString("placeOfWork");
+                String foundPhoto = rs.getString("photo");
+                long foundAddressId = rs.getLong("address");
+                Contact contact = new Contact(foundContactId, foundName, foundSurname, foundPatronymic, foundDateOfBirth, foundGender, foundCitizenship, foundFamilyStatus, foundWebsite, foundEmail, foundPlaceOfWork, foundAddressId, foundPhoto);
+                contacts.add(contact);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (st != null) try {
+                st.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (cn != null) try {
+                cn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return contacts;
     }
 
 

@@ -10,7 +10,7 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a href="" class="navbar-brand">Справочник контактов</a>
+            <a href="${pageContext.request.contextPath}/" class="navbar-brand">Справочник контактов</a>
         </div>
         <div class="navbar-header">
             <span class="navbar-brand">> Поиск контакта</span>
@@ -20,7 +20,7 @@
 
 <div class="container-fluid">
 
-    <form action="/search" method="post">
+    <form action="/find" method="post">
         <div class="top-buffer row">
             <div class="col-md-8">
                 <div class="row well">
@@ -57,7 +57,7 @@
                     </div>
                     <div class="col-md-2">
                         <p>Семейное положение:</p>
-                        <select name="family" class="family form-control">
+                        <select name="familyStatus" class="family form-control">
                             <option value="single">холост/не замужем</option>
                             <option value="married">женат/замужем</option>
                         </select>
@@ -83,7 +83,7 @@
                         <p>Город:</p>
                         <input type="text" name="city" class="form-control">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <p>Улица:</p>
                         <input type="text" name="street" class="form-control">
                     </div>
@@ -96,6 +96,11 @@
 
                         <p>Квартира:</p>
                         <input type="text" name="apartment" class="form-control">
+                    </div>
+                    <div class="col-md-1">
+
+                        <p>Почтовый индекс:</p>
+                        <input type="text" name="zipCOde" class="form-control">
                     </div>
                 </div>
             </div>

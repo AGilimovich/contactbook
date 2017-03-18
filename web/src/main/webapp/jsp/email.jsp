@@ -12,7 +12,7 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a href="" class="navbar-brand">Справочник контактов</a>
+            <a href="${pageContext.request.contextPath}/" class="navbar-brand">Справочник контактов</a>
         </div>
         <div class="navbar-header">
             <span class="navbar-brand">> Отправка email</span>

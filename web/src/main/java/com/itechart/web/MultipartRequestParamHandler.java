@@ -22,12 +22,12 @@ import java.util.*;
  * Created by Aleksandr on 17.03.2017.
  */
 
-public class MultipartDataHandler {
+public class MultipartRequestParamHandler {
     private DiskFileItemFactory factory;
     private ServletFileUpload upload;
     private String FILE_PATH;
 
-    public MultipartDataHandler() {
+    public MultipartRequestParamHandler() {
         this.factory = new DiskFileItemFactory();
         this.upload = new ServletFileUpload(factory);
         ResourceBundle properties = ResourceBundle.getBundle("application");
@@ -44,7 +44,7 @@ public class MultipartDataHandler {
             List<FileItem> items = upload.parseRequest(request);
             for (FileItem item : items) {
                 if (item.isFormField()) {
-                    //putting all single request parameters into map: name - values, collective request params (phone, attachment) into ArrayLists
+                    //putting all single request parameters into Map<name, values>, collective request params (phone, attachment) into ArrayLists
                     if (item.getFieldName().equals("phone")) {
                         try {
                             formPhoneParameters.add(item.getString("UTF-8"));
@@ -95,6 +95,7 @@ public class MultipartDataHandler {
             attachments.add(a);
         }
         attachments = attachmentParser.parseAttachments(formAttachmentsParameters);
+        //set name of saved photo to contact's field
         if (savedPhotoName != null)
             contact.setPhoto(savedPhotoName);
     }
@@ -110,6 +111,7 @@ public class MultipartDataHandler {
      * @return
      */
     private String processFileInputs(FileItem item, String path) {
+
         String fileName = String.valueOf(new Date().getTime());
         File uploadedFile = new File(path + "\\" + fileName);
         try {

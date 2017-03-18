@@ -4,6 +4,7 @@ import com.itechart.data.dto.ContactDTO;
 import com.itechart.data.entity.Contact;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Interface for contacts data access object.
@@ -20,7 +21,6 @@ public interface IContactDao {
 
     Contact getContactById(long id);
 
-//    ArrayList<ContactDTO> getAllDto();
-
+    ArrayList<Contact> findContactsByFields(String surname, String name, String patronymic, Date fromDate, Date toDate, Contact.Gender gender, Contact.FamilyStatus familyStatus, String Citizenship, String country, String city, String street, String house, String apartment, String zipCode);
 
 }

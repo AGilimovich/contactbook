@@ -28,14 +28,28 @@ public class ShowContacts implements Command {
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         ArrayList<Contact> contactsDTOs = contactDao.getAll();
         ArrayList<ContactWithAddressDTO> contactWithAddressDTOs = new ArrayList<>();
-        for (Contact c : contactsDTOs) {
-            Address a = addressDao.getAddressById(c.getAddress());
-            ContactWithAddressDTO contactWithAddressDTO = new ContactWithAddressDTO(c, a);
+        for (Contact contact : contactsDTOs) {
+            Address address = addressDao.getAddressById(contact.getAddress());
+            ContactWithAddressDTO contactWithAddressDTO = new ContactWithAddressDTO(contact, address);
             contactWithAddressDTOs.add(contactWithAddressDTO);
         }
 
         request.setAttribute("contacts", contactWithAddressDTOs);
 
+        return "/jsp/main.jsp";
+    }
+
+    //method for displaying result of search
+    public String executeSearchResult(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response, ArrayList<Contact> contacts) throws ServletException {
+        ArrayList<ContactWithAddressDTO> contactWithAddressDTOs = new ArrayList<>();
+
+        for (Contact contact : contacts) {
+            Address address = addressDao.getAddressById(contact.getAddress());
+            ContactWithAddressDTO contactWithAddressDTO = new ContactWithAddressDTO(contact, address);
+            contactWithAddressDTOs.add(contactWithAddressDTO);
+        }
+
+        request.setAttribute("contacts", contactWithAddressDTOs);
         return "/jsp/main.jsp";
     }
 }

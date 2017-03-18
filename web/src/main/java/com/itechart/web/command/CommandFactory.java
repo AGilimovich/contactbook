@@ -58,7 +58,8 @@ public class CommandFactory {
                 return new DoCreateContact(contactDao, phoneDao, attachmentDao, addressDao);
             case "/update":
                 return new DoUpdateContact(contactDao, addressDao, phoneDao, attachmentDao);
-
+            case "/find":
+                return new DoSearch(contactDao, addressDao);
             case "/delete":
                 return new DoDeleteContact(contactDao, phoneDao, attachmentDao, addressDao);
             case "/file":

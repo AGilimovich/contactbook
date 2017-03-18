@@ -8,7 +8,7 @@ import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Attachment;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.Phone;
-import com.itechart.web.MultipartDataHandler;
+import com.itechart.web.MultipartRequestParamHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,11 +35,12 @@ public class DoCreateContact implements Command {
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        MultipartDataHandler handler = new MultipartDataHandler();
+        MultipartRequestParamHandler handler = new MultipartRequestParamHandler();
         Contact contact = new Contact();
         Address address = new Address();
         ArrayList<Phone> phones = new ArrayList<>();
         ArrayList<Attachment> attachments = new ArrayList<>();
+        //fills objects with data retrieved from request
         handler.handle(request, contact, address, phones, attachments);
 
 
