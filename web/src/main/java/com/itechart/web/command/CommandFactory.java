@@ -47,9 +47,11 @@ public class CommandFactory {
             case "/":
                 return new ShowContacts(contactDao, addressDao);
             case "/email":
-                return new ShowEmailSend();
+                return new ShowEmail(contactDao);
+            case "/send":
+                return new DoSendEmail(contactDao, addressDao);
             case "/search":
-                return new ShowSearchContacts();
+                return new ShowSearch();
             case "/add":
                 return new ShowContactAdd(contactDao, addressDao, phoneDao, attachmentDao);
             case "/edit":

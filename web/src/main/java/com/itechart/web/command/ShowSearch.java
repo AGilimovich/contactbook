@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * Invokes contact searching view.
  */
-public class ShowSearchContacts implements Command {
+public class ShowSearch implements Command {
 
 
     @Override

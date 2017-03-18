@@ -20,29 +20,31 @@
     </div>
 </nav>
 <div class="container-fluid ">
-    <form action="/email" method="post">
+    <form action="/send" method="post">
         <div class="row">
             <div class="col-md-6 well offset20px">
                 <div class="row buffer-top">
                     <p>Кому:</p>
-                    <input type="text" name="addressee" class="form-control" required>
+                    <input type="text" name="emailAddresses" value="${email.emailAddresses}" class="form-control" required>
                 </div>
                 <div class="row">
                     <p>Тема:</p>
-                    <input type="text" name="theme" class="form-control">
+                    <input type="text" name="subject" value="${email.subject}" class="form-control">
                 </div>
                 <div class="row">
                     <p>Шаблон:</p>
-                    <select name="template" class="form-control"></select>
+                    <c:forEach var="template" items="${templates}">
+                    <select name="template" value="${template.name}" class="form-control"></select>
+                    </c:forEach>
                 </div>
                 <div class="row">
                     <p>Текст:</p>
-                    <input id="text-field" name="text" type="text" class="form-control" required>
+                    <input id="text-field" name="body" value="${email.body}" type="text" class="form-control" required>
                 </div>
                 <div class="row">
                     <div class="control-group buffer-top">
-                        <button class="btn btn-success">Отправить</button>
-                        <button class="btn btn-danger">Отменить</button>
+                        <button class="btn btn-success" type="submit">Отправить</button>
+                        <a href="${pageContext.request.contextPath}/"><button class="btn btn-danger" type="button">Отменить</button></a>
                     </div>
                 </div>
             </div>
