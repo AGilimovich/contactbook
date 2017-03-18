@@ -6,6 +6,7 @@
     <title>Title</title>
     <link rel="stylesheet" href="/resources/css/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="/resources/css/email.css">
+    <script src="/resources/js/email.js" defer></script>
 
 </head>
 <body>
@@ -20,12 +21,13 @@
     </div>
 </nav>
 <div class="container-fluid ">
-    <form action="/send" method="post">
+    <form id="form" onsubmit="moveDataToInput()" action="/send" method="post">
         <div class="row">
             <div class="col-md-6 well offset20px">
                 <div class="row buffer-top">
                     <p>Кому:</p>
-                    <input type="text" name="emailAddresses" value="${email.emailAddresses}" class="form-control" required>
+                    <input type="text" name="emailAddresses" value="${email.emailAddresses}" class="form-control"
+                           required>
                 </div>
                 <div class="row">
                     <p>Тема:</p>
@@ -34,17 +36,20 @@
                 <div class="row">
                     <p>Шаблон:</p>
                     <c:forEach var="template" items="${templates}">
-                    <select name="template" value="${template.name}" class="form-control"></select>
+                        <select name="template" value="${template.name}" class="form-control"></select>
                     </c:forEach>
                 </div>
                 <div class="row">
                     <p>Текст:</p>
-                    <input id="text-field" name="body" value="${email.body}" type="text" class="form-control" required>
+                    <input name="bodyInput" type="text" class="hidden">
+                    <div id="body-div" class="text-field" contenteditable="true" value="${email.body}"></div>
                 </div>
                 <div class="row">
                     <div class="control-group buffer-top">
                         <button class="btn btn-success" type="submit">Отправить</button>
-                        <a href="${pageContext.request.contextPath}/"><button class="btn btn-danger" type="button">Отменить</button></a>
+                        <a href="${pageContext.request.contextPath}/">
+                            <button class="btn btn-danger" type="button">Отменить</button>
+                        </a>
                     </div>
                 </div>
             </div>

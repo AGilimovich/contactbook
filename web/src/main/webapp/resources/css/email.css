@@ -2,8 +2,12 @@
     margin-top: 15px;
 }
 
-#text-field {
+.text-field {
+    background-color: white;
     min-height: 500px;
+    width: 100%;
+    border: 1px solid #e3e3e3;
+    padding: 5px;
 }
 
 .offset20px {

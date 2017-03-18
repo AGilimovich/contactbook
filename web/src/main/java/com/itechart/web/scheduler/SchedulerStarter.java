@@ -15,7 +15,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
  */
 public class SchedulerStarter {
 
-    public void startSchedule() {
+    public void startSchedule(int hours, int minutes) {
         try {
             // Grab the Scheduler instance from the Factory
             Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
@@ -28,7 +28,7 @@ public class SchedulerStarter {
             Trigger trigger = newTrigger()
                     .withIdentity("dailyTrigger", "group1")
                     .startNow()
-                    .withSchedule(dailyAtHourAndMinute(20, 19))
+                    .withSchedule(dailyAtHourAndMinute(hours, minutes))
                     .build();
 
             // Tell quartz to schedule the job using trigger

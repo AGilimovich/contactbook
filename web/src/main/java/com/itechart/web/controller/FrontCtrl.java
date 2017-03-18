@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 /**
  * This is controller of all requests on the main form.
@@ -18,7 +19,10 @@ import java.io.IOException;
 public class FrontCtrl extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        new SchedulerStarter().startSchedule();
+        ResourceBundle bundle = ResourceBundle.getBundle("application");
+        int scheduledHours = Integer.valueOf(bundle.getString("SCHEDULED_HOURS"));
+        int scheduledMinutes = Integer.valueOf(bundle.getString("SCHEDULED_MINUTES"));
+        new SchedulerStarter().startSchedule(scheduledHours, scheduledMinutes);
 
     }
 
