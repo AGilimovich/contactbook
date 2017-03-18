@@ -25,4 +25,15 @@ btnFindPhoto.onclick = function () {
 
 //----------------------------------------------------------------------
 
+var photo = document.getElementById('photo');
+var photoInput= document.getElementsByName("photoFile");
+function loadImg(){
+    var reader = new FileReader();
+    reader.readAsDataURL(photoInput[0].files[0]);
+    reader.onload = function (e) {
+        photo.setAttribute("src", e.target.result);
 
+    }
+
+
+}
