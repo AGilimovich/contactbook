@@ -2,6 +2,7 @@ package com.itechart.web.controller;
 
 import com.itechart.web.command.Command;
 import com.itechart.web.command.CommandFactory;
+import com.itechart.web.scheduler.SchedulerStarter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -17,6 +18,8 @@ import java.io.IOException;
 public class FrontCtrl extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+        new SchedulerStarter().startSchedule();
+
     }
 
     public void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
