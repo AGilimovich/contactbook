@@ -48,9 +48,10 @@
                                                                                                             type="date"
                                                                                                             class="date form-control">
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <p>Пол:</p>
                         <select name="gender" class="gender form-control">
+                            <option value="any">любой</option>
                             <option value="male">м</option>
                             <option value="female">ж</option>
                         </select>
@@ -58,6 +59,7 @@
                     <div class="col-md-2">
                         <p>Семейное положение:</p>
                         <select name="familyStatus" class="family form-control">
+                            <option value="any" selected>любое</option>
                             <option value="single">холост/не замужем</option>
                             <option value="married">женат/замужем</option>
                         </select>
@@ -97,10 +99,10 @@
                         <p>Квартира:</p>
                         <input type="text" name="apartment" class="form-control">
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
 
                         <p>Почтовый индекс:</p>
-                        <input type="text" name="zipCOde" class="form-control">
+                        <input type="text" name="zipCode" class="form-control">
                     </div>
                 </div>
             </div>

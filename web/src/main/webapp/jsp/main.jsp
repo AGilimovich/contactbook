@@ -12,7 +12,7 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <span class="navbar-brand">Справочник контактов</span>
+            <a href="${pageContext.request.contextPath}/" class="navbar-brand">Справочник контактов</a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">

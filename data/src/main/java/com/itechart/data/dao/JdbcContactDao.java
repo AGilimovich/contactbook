@@ -4,6 +4,8 @@ import com.itechart.data.db.JdbcDataSource;
 import com.itechart.data.entity.Contact;
 
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -23,7 +25,7 @@ public class JdbcContactDao implements IContactDao {
             "INNER JOIN family_status ON c.familyStatus = family_status.familyStatusId " +
             "INNER JOIN addresses AS a ON c.address = a.addressId WHERE c.contactId = ?";
 
-    private final String UPDATE_CONTACT_QUERY = "UPDATE contacts INNER JOIN gender ON gender.genderValue = ? INNER JOIN family_status ON family_status.familyStatusValue = ? SET surname = ?, name = ?, patronymic = ?, dateOfBirth = ?, gender = gender.genderId, citizenship = ?, familyStatus = family_status.familyStatusId, website = ?, email = ?, placeOfWork = ?, photo = ?  WHERE contactId = ?";// TODO: 14.03.2017 дополнить
+    private final String UPDATE_CONTACT_QUERY = "UPDATE contacts INNER JOIN gender ON gender.genderValue = ? INNER JOIN family_status ON family_status.familyStatusValue = ? SET surname = ?, name = ?, patronymic = ?, dateOfBirth = ?, gender = gender.genderId, citizenship = ?, familyStatus = family_status.familyStatusId, website = ?, email = ?, placeOfWork = ?, photo = ?  WHERE contactId = ?";
 
     private final String INSERT_CONTACT_QUERY = "INSERT INTO contacts(surname, name, patronymic, dateOfBirth, gender, citizenship, familyStatus, website, email, placeOfWork, address, photo)" +
             " SELECT ?,?,?,?,gender.genderId,?,family_status.familyStatusId,?,?,?,?,? FROM gender,family_status WHERE gender.genderValue = ? AND family_status.familyStatusValue = ?";
@@ -34,7 +36,7 @@ public class JdbcContactDao implements IContactDao {
             "INNER JOIN addresses AS a ON c.address = a.addressId " +
             "INNER JOIN family_status ON c.familyStatus = family_status.familyStatusId " +
             "INNER JOIN gender ON c.gender = gender.genderId " +
-            "WHERE (c.surname LIKE ?) AND (c.name LIKE ?) AND (c.patronymic LIKE ?) AND (c.dateOfBirth BETWEEN ? AND ?) AND (gender.genderValue LIKE ?) AND (family_status.familyStatusValue LIKE ?) " +
+            "WHERE (c.surname LIKE ?) AND (c.name LIKE ?) AND (c.patronymic LIKE ?) AND ((c.dateOfBirth BETWEEN ? AND ?) OR (COALESCE(c.dateOfBirth,'NULL') LIKE ?)) AND (gender.genderValue LIKE ?) AND (family_status.familyStatusValue LIKE ?) " +
             "AND (c.citizenship LIKE ?) AND (a.country LIKE ?) AND (a.city LIKE ?) AND (a.street LIKE ?) AND (a.house LIKE ?) AND (a.apartment LIKE ?) AND (a.zipCode LIKE ?)";
 
     public JdbcContactDao(JdbcDataSource ds) {
@@ -133,12 +135,12 @@ public class JdbcContactDao implements IContactDao {
             if (contact.getGender() != null)
                 st.setString(1, contact.getGender().name().toUpperCase());
             else {
-                st.setString(1, "NULL");
+                st.setString(1, null);
             }
             if (contact.getFamilyStatus() != null)
                 st.setString(2, contact.getFamilyStatus().name().toUpperCase());
             else {
-                st.setString(2, "NULL");
+                st.setString(2, null);
             }
             st.setString(3, contact.getSurname());
             st.setString(4, contact.getName());
@@ -297,44 +299,53 @@ public class JdbcContactDao implements IContactDao {
 
             if (fromDate != null)
                 st.setDate(4, new java.sql.Date(fromDate.getTime()));
-            else st.setDate(4, new java.sql.Date(0));//todo ?????
+            else
+                try {
+                    st.setDate(4, new java.sql.Date(DateFormat.getDateInstance().parse("01.01.1900").getTime()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
             if (toDate != null)
                 st.setDate(5, new java.sql.Date(toDate.getTime()));
             else st.setDate(5, new java.sql.Date(new Date().getTime()));
+            // if dates are specified then do not look for rows with NULL dateOfBirth values
+            if (toDate != null || fromDate != null) {
+                st.setString(6, "NOT NULL");
+            } else  st.setString(6, "NULL");
 
             if (gender != null)
-                st.setString(6, gender.name());
-            else st.setString(6, "%");
-            if (familyStatus != null)
-                st.setString(7, familyStatus.name());
+                st.setString(7, gender.name());
             else st.setString(7, "%");
-            if (!citizenship.isEmpty())
-                st.setString(8, citizenship);
+            if (familyStatus != null)
+                st.setString(8, familyStatus.name());
             else st.setString(8, "%");
-            if (!country.isEmpty())
-                st.setString(9, country);
+            if (!citizenship.isEmpty())
+                st.setString(9, citizenship);
             else st.setString(9, "%");
-
-            if (!city.isEmpty())
-                st.setString(10, city);
+            if (!country.isEmpty())
+                st.setString(10, country);
             else st.setString(10, "%");
 
-            if (!street.isEmpty())
-                st.setString(11, street);
+            if (!city.isEmpty())
+                st.setString(11, city);
             else st.setString(11, "%");
 
-            if (!house.isEmpty())
-                st.setString(12, house);
+            if (!street.isEmpty())
+                st.setString(12, street);
             else st.setString(12, "%");
 
-            if (!apartment.isEmpty())
-                st.setString(13, apartment);
+            if (!house.isEmpty())
+                st.setString(13, house);
             else st.setString(13, "%");
 
-            if (zipCode != null)
-                st.setString(14, zipCode);
+            if (!apartment.isEmpty())
+                st.setString(14, apartment);
             else st.setString(14, "%");
+
+            if (!zipCode.isEmpty())
+                st.setString(15, zipCode);
+            else st.setString(15, "%");
 
 
             rs = st.executeQuery();

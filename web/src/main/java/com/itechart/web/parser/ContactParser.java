@@ -14,7 +14,7 @@ public class ContactParser {
         contact.setSurname(requestParameters.get("surname"));
         contact.setPatronymic(requestParameters.get("patronymic"));
         String dateOfBirth = requestParameters.get("dateOfBirth");
-        contact.setDateOfBirth(DateTimeParser.parseDate(dateOfBirth, "YYYY-MM-dd"));
+        contact.setDateOfBirth(DateTimeParser.parseDate(dateOfBirth, "yyyy-MM-dd"));
         if (requestParameters.get("gender") != null) {
             contact.setGender(Contact.Gender.valueOf(requestParameters.get("gender").toUpperCase()));
         }

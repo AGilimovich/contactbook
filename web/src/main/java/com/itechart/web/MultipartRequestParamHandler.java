@@ -96,8 +96,10 @@ public class MultipartRequestParamHandler {
         }
         attachments = attachmentParser.parseAttachments(formAttachmentsParameters);
         //set name of saved photo to contact's field
-        if (savedPhotoName != null)
+        if (savedPhotoName != null) {
             contact.setPhoto(savedPhotoName);
+            //todo delete old photo from disk
+        }
     }
 
 

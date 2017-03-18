@@ -32,20 +32,20 @@ public class DoSearch implements Command {
         String patronymic = request.getParameter("patronymic");
         String genderParam = request.getParameter("gender");
         Contact.Gender gender = null;
-        if (genderParam != null)
+        if (genderParam != null && !genderParam.equals("any"))
             gender = Contact.Gender.valueOf(genderParam.toUpperCase());
         else gender = null;
 
         String familyStatusParam = request.getParameter("familyStatus");
         Contact.FamilyStatus familyStatus = null;
-        if (familyStatusParam != null)
+        if (familyStatusParam != null && !familyStatusParam.equals("any"))
             familyStatus = Contact.FamilyStatus.valueOf(familyStatusParam.toUpperCase());
         else familyStatus = null;
         String fromDateParam = request.getParameter("fromDate");
-        Date fromDateOfBirth = DateTimeParser.parseDate(fromDateParam, "YYYY-MM-dd");
+        Date fromDateOfBirth = DateTimeParser.parseDate(fromDateParam, "yyyy-MM-dd");
 
         String toDateParam = request.getParameter("toDate");
-        Date toDateOfBirth = DateTimeParser.parseDate(toDateParam, "YYYY-MM-dd");
+        Date toDateOfBirth = DateTimeParser.parseDate(toDateParam, "yyyy-MM-dd");
 
         String citizenship = request.getParameter("citizenship");
 
