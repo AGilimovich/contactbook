@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Aleksandr on 17.03.2017.
@@ -26,6 +28,11 @@ public class MultipartRequestParamHandler {
     private DiskFileItemFactory factory;
     private ServletFileUpload upload;
     private String FILE_PATH;
+    private final String attachFileRegex = "attachFile\\[(\\d+)\\]";
+    private final String attachMetaRegex = "attachMeta\\[(\\d+)\\]";
+    private Pattern attachMetaPattern = Pattern.compile(attachMetaRegex);
+    private Pattern attachFilePattern = Pattern.compile(attachFileRegex);
+
 
     public MultipartRequestParamHandler() {
         this.factory = new DiskFileItemFactory();
@@ -38,10 +45,13 @@ public class MultipartRequestParamHandler {
         //structures for storing request parameters
         Map<String, String> formParameters = new HashMap<>();
         ArrayList<String> formPhoneParameters = new ArrayList<>();
-        ArrayList<String> formAttachmentsParameters = new ArrayList<>();
+        Map<Long, String> formAttachmentsParameters = new HashMap<>();
+        Map<Long, String> attachmentFiles = new HashMap<>();
+
         String savedPhotoName = null;
         try {
             List<FileItem> items = upload.parseRequest(request);
+            Matcher matcher = null;
             for (FileItem item : items) {
                 if (item.isFormField()) {
                     //putting all single request parameters into Map<name, values>, collective request params (phone, attachment) into ArrayLists
@@ -51,9 +61,10 @@ public class MultipartRequestParamHandler {
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
-                    } else if (item.getString() == "attachment") {
+                    } else if ((matcher = attachMetaPattern.matcher(item.getFieldName())).matches()) {
                         try {
-                            formAttachmentsParameters.add(item.getString("UTF-8"));
+                            Long id = Long.valueOf(matcher.group(1));
+                            formAttachmentsParameters.put(id, item.getString("UTF-8"));
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
@@ -66,7 +77,13 @@ public class MultipartRequestParamHandler {
                 } else {
                     //processing input with type = file: saving it into file on disk
                     if (item.getSize() != 0) {
-                        savedPhotoName = processFileField(item, FILE_PATH);
+                        matcher = attachFilePattern.matcher(item.getFieldName());
+                        if (matcher.matches()) {
+                            Long id = Long.valueOf(matcher.group(1));
+                            attachmentFiles.put(id, processFileField(item, FILE_PATH));
+                        } else if (item.getFieldName().equals("photoFile"))
+                            savedPhotoName = processFileField(item, FILE_PATH);
+
                     }
 
                 }
@@ -89,12 +106,11 @@ public class MultipartRequestParamHandler {
             p.set(phone);
             phones.add(p);
         }
-        for (Attachment attachment : attachmentParser.parseAttachments(formAttachmentsParameters)) {
+        for (Attachment attachment : attachmentParser.parseAttachments(formAttachmentsParameters, attachmentFiles)) {
             Attachment a = new Attachment();
             a.set(attachment);
             attachments.add(a);
         }
-        attachments = attachmentParser.parseAttachments(formAttachmentsParameters);
         //set name of saved photo to contact's field
         if (savedPhotoName != null) {
             contact.setPhoto(savedPhotoName);
@@ -105,15 +121,16 @@ public class MultipartRequestParamHandler {
 
     /**
      * Function processes request parameters with type file.
-     * Stores file on file system and returns unique name given to file.
+     * Stores file on file system.
      * Name given to file is the number of milliseconds since January 1, 1970, 00:00:00 GMT.
      *
      * @param item
      * @param path
-     * @return
+     * @return unique name given to file.
      */
     private String processFileField(FileItem item, String path) {
 
+        Map<Long, String> map = new HashMap<>();
         String fileName = String.valueOf(new Date().getTime());
         File uploadedFile = new File(path + "\\" + fileName);
         try {
