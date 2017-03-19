@@ -34,6 +34,12 @@ public class PhoneParser {
         return phones;
     }
 
+    /**
+     * Parse phone object from received in request string.
+     * @param request
+     * @return
+     * @throws ParseException
+     */
     private static Phone parseRequest(String request) throws ParseException {
         Phone phone = new Phone();
         Matcher matcher = pattern.matcher(request);

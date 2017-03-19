@@ -66,7 +66,7 @@ public class MultipartRequestParamHandler {
                 } else {
                     //processing input with type = file: saving it into file on disk
                     if (item.getSize() != 0) {
-                        savedPhotoName = processFileInputs(item, FILE_PATH);
+                        savedPhotoName = processFileField(item, FILE_PATH);
                     }
 
                 }
@@ -78,9 +78,9 @@ public class MultipartRequestParamHandler {
         ContactParser contactParser = new ContactParser();
         PhoneParser phoneParser = new PhoneParser();
         AttachmentParser attachmentParser = new AttachmentParser();
-        //set to address parameters from request except for id
+        //set address object parameters with values from request except for id
         address.set(addressParser.parseAddress(formParameters));
-        //set to contact parameters from request except for id's
+        //set contact object parameters with values from request except for id's
         contact.set(contactParser.parseContact(formParameters));
 
 
@@ -112,7 +112,7 @@ public class MultipartRequestParamHandler {
      * @param path
      * @return
      */
-    private String processFileInputs(FileItem item, String path) {
+    private String processFileField(FileItem item, String path) {
 
         String fileName = String.valueOf(new Date().getTime());
         File uploadedFile = new File(path + "\\" + fileName);

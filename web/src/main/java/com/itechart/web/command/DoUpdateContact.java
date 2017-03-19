@@ -51,10 +51,11 @@ public class DoUpdateContact implements Command {
 
         addressDao.update(address);
         contactDao.update(contact);
+
         //delete old phones and attachments
         phoneDao.deleteForUser(contact.getId());
         attachmentDao.deleteForUser(contact.getId());
-
+        //persist into db new phones and attachments
         for (Phone phone : phones) {
             phone.setContact(id);
             phoneDao.save(phone);

@@ -6,9 +6,9 @@
     <title>Title</title>
     <link rel="stylesheet" href="/resources/css/contact.css">
     <link rel="stylesheet" href="/resources/css/bootstrap/bootstrap.css">
-    <script src="/resources/js/contact_phones.js" defer></script>
-    <script src="/resources/js/contact_attach.js" defer></script>
-    <script src="/resources/js/contact_photo.js" defer></script>
+    <script src="/resources/js/contact_phones.js" charset="utf-8" defer></script>
+    <script src="/resources/js/attaches.js" charset="utf-8" defer></script>
+    <script src="/resources/js/contact_photo.js" charset="utf-8" defer></script>
 
 </head>
 <body>
@@ -25,7 +25,7 @@
 
 
 <div class="container-fluid">
-    <form action="${pageContext.request.contextPath}/${action}" method="post" enctype="multipart/form-data"
+    <form id="main-form" action="${pageContext.request.contextPath}/${action}" method="post" enctype="multipart/form-data"
           accept-charset="UTF-8" class="form-horizontal">
         <div class="row">
 
@@ -33,7 +33,7 @@
             <div class="col-md-1">
 
                 <div class="photo-container">
-                    <img src="/file?id=${contact.photo}" height="100%" alt="photo" id="photo" >
+                    <img src="/file?id=${contact.photo}" height="100%" alt="photo" id="photo">
                 </div>
 
             </div>
@@ -150,11 +150,11 @@
 
                 </div>
                 <table id="attach-table" class="tbl" width="100%">
-                    <c:forEach var="attachment" items="${attachments}">
+                    <c:forEach var="attachment" items="${attachments}" varStatus="counter">
                         <tr>
                             <td width="6%"><input type="checkbox" name="attachIsSelected"></td>
-                            <td width="20%" name="attachName"><a
-                                    href="${pageContext.request.contextPath}/${attachment.link}">${attachment.name}</a>
+                            <td width="20%" name="attachName"><a name="attachLink"
+                                                                 href="/file/${attachment.file}">${attachment.name}</a>
                             </td>
 
                             <td align="center" width="20%" name="attachUploadDate">
@@ -189,11 +189,11 @@
                            value="countryCode=${phone.countryCode}&operatorCode=${phone.operatorCode}&number=${phone.phoneNumber}&type=${phone.phoneType.name()}&comment=${phone.comment}">
                 </c:forEach>
             </table>
-            <%--hidden input for attachment--%>
+            <%--hidden input for attachments metadata--%>
             <table id="attach-hidden-table">
                 <c:forEach var="attachment" items="${attachments}" varStatus="counter">
-                    <input type="text" name="attachment"
-                           value="file=&name=${attachment.name}&date=${attachment.uploadDate}&comment=${attachment.comment}">
+                    <input type="text" name="attachMeta[${attachment.id}]"
+                           value="id=${attachment.id}&name=${attachment.name}&date=${attachment.uploadDate}&comment=${attachment.comment}&flag=none">
                 </c:forEach>
             </table>
         </div>
@@ -204,7 +204,8 @@
             <div class="popup-content">
                 <p>Путь к картинке:</p>
                 <%--<input type="file" accept="image/*,image/jpeg" name="photoFile" class="form-control">--%>
-                <input type="file" name="photoFile" accept="image/jpeg,image/png,image/gif" class="form-control" onchange="loadImg()">
+                <input type="file" name="photoFile" accept="image/jpeg,image/png,image/gif" class="form-control"
+                       onchange="loadImg()">
 
                 <div class="row controls-group">
                     <button class="btn" id="btn-find-photo" type="button">Найти</button>
@@ -247,17 +248,18 @@
     <div id="attach-popup" class="popup">
         <div class="popup-content">
             <form onsubmit="return saveAttach()">
-                <input type="file" name="inputFile" required>
-
+                <div id="file-container">
+                    <%--<input type="file" name="attachFile" class="" form="main-form">--%>
+                </div>
                 <p>Имя файла:</p>
-                <input type="text" class="form-control" name="inputAttachName" required>
+                <input type="text" class="form-control" name="inputAttachName">
 
                 <p>Комментарий:</p>
                 <input type="text" class="form-control" name="inputAttachComment">
 
                 <div class="row controls-group">
-                    <button id="btn-save-attach" class="btn" type="submit">Сохранить</button>
-                    <button id="btn-undo-attach" class="btn">Отменить</button>
+                    <button id="btn-save-attach" class="btn" type="button">Сохранить</button>
+                    <button id="btn-undo-attach" class="btn" type="button">Отменить</button>
                 </div>
             </form>
         </div>

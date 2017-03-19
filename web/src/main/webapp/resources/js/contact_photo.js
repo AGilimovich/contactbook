@@ -18,7 +18,7 @@ btnUndoPhoto.onclick = function () {
     inputPhotoFile[0].value = "";
     photoPopup.className = "popup";
 }
-
+//todo wtf???????????????????
 btnFindPhoto.onclick = function () {
 
 }

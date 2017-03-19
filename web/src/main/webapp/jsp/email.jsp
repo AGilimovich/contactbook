@@ -6,7 +6,7 @@
     <title>Title</title>
     <link rel="stylesheet" href="/resources/css/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="/resources/css/email.css">
-    <script src="/resources/js/email.js" defer></script>
+    <script src="/resources/js/email.js" charset="utf-8" defer></script>
 
 </head>
 <body>

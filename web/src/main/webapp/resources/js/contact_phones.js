@@ -69,7 +69,7 @@ btnDeletePhones.onclick = function () {
             // deleteHiddenInput(phonesCheckBoxes[i].value);
             deleteHiddenInput(i);
             phoneTable.deleteRow(i);
-            i = 0;
+            // i = 0;
             //todo deleting hidden inputs
         } else i++;
     }
@@ -195,8 +195,8 @@ function createRow(table, countryCode, operatorCode, phoneNumber, phoneType, pho
 //object for appending parameters with its values to string of request.
 // contains to methods: 1) append parameter to string;
 //                      2)return result string
-function Appendable(val) {
-    var val = val;
+function Appendable(n, v) {
+    var val = n + "=" + v;
     this.append = function (name, value) {
         val += ("&" + name + "=" + value);
         return this;
@@ -208,7 +208,7 @@ function Appendable(val) {
 
 //function for creating hidden input element
 function createHiddenInputForPhone(countryCode, operatorCode, phoneNumber, phoneType, phoneComment) {
-    var value = new Appendable("countryCode=" + countryCode).append("operatorCode", operatorCode).append("number", phoneNumber).append("type", phoneType).append("comment", phoneComment).value();
+    var value = new Appendable("countryCode", countryCode).append("operatorCode", operatorCode).append("number", phoneNumber).append("type", phoneType).append("comment", phoneComment).value();
     var phoneHiddenInput = document.createElement("input");
     phoneHiddenInput.setAttribute("name", "phone");
     phoneHiddenInput.setAttribute("value", value);
@@ -256,7 +256,7 @@ function editExisting() {
 //function for setting new value to hidden input
 function editHiddenInput(index, countryCode, operatorCode, phoneNumber, phoneType, phoneComment) {
     var hiddenInput = document.getElementsByName("phone");
-    var value = new Appendable("countryCode=" + countryCode).append("operatorCode", operatorCode).append("number", phoneNumber).append("type", phoneType).append("comment", phoneComment).value();
+    var value = new Appendable("countryCode", countryCode).append("operatorCode", operatorCode).append("number", phoneNumber).append("type", phoneType).append("comment", phoneComment).value();
     hiddenInput[index].setAttribute("value", value);
 }
 

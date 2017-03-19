@@ -44,7 +44,7 @@ public class DoCreateContact implements Command {
         handler.handle(request, contact, address, phones, attachments);
 
 
-        //persisting into db and assigning id's
+        //assigning id's and persisting into db
         long addressId = addressDao.save(address);
         contact.setAddress(addressId);
         long contactId = contactDao.save(contact);
