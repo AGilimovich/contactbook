@@ -22,7 +22,7 @@ public class FrontCtrl extends HttpServlet {
         ResourceBundle bundle = ResourceBundle.getBundle("application");
         int scheduledHours = Integer.valueOf(bundle.getString("SCHEDULED_HOURS"));
         int scheduledMinutes = Integer.valueOf(bundle.getString("SCHEDULED_MINUTES"));
-        new SchedulerStarter().startSchedule(scheduledHours, scheduledMinutes);
+        new SchedulerStarter().startScheduler(scheduledHours, scheduledMinutes);
 
     }
 

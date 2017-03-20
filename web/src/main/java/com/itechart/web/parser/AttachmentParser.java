@@ -2,6 +2,8 @@ package com.itechart.web.parser;
 
 import com.itechart.data.entity.Attachment;
 import com.itechart.data.entity.Phone;
+import com.itechart.web.Action;
+import org.stringtemplate.v4.ST;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,18 +15,21 @@ import java.util.regex.Pattern;
  * Created by Aleksandr on 17.03.2017.
  */
 public class AttachmentParser {
-    private static final String regex = "(\\w+)=([\\w\\d\\s:\\.]*)&?&?";
+    private static final String regex = "(\\w+)=([\\w\\d\\s\\.\\-:]*)&?";
     private static final Pattern pattern = Pattern.compile(regex);
 
-    public ArrayList<Attachment> parseAttachments(Map<Long, String> formAttachmentParameters, Map<Long, String> attachmentFiles) {
+    public Map<Attachment, Action> parseAttachments(Map<String, String> formAttachmentParameters, Map<String, String> attachmentFiles) {
 
 
-        ArrayList<Attachment> attachments = new ArrayList<>();
-        for (Map.Entry<Long, String> formParameters : formAttachmentParameters.entrySet()) {
+        Map<Attachment, Action> attachments = new HashMap<>();
+        for (Map.Entry<String, String> formParameters : formAttachmentParameters.entrySet()) {
             try {
-                Attachment attachment = parseRequest(formParameters.getValue());
-                attachment.setFile(attachmentFiles.get(formParameters.getKey()));
-                attachments.add(attachment);
+                Map<Attachment, Action> attachmentMap = parseRequest(formParameters.getValue());
+                for (Map.Entry<Attachment, Action> entry : attachmentMap.entrySet()) {
+                    entry.getKey().setFile(attachmentFiles.get(formParameters.getKey()));
+                    attachments.put(entry.getKey(), entry.getValue());
+                }
+
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -34,28 +39,46 @@ public class AttachmentParser {
         return attachments;
     }
 
-    private static Attachment parseRequest(String request) throws ParseException {
+    private static Map<Attachment, Action> parseRequest(String request) throws ParseException {
         Attachment attachment = new Attachment();
         Matcher matcher = pattern.matcher(request);
         Map<String, String> parameters = new HashMap<>();
         while (matcher.find()) {
             parameters.put(matcher.group(1), matcher.group(2));
         }
+
+        Map<Attachment, Action> map = new HashMap<>();
+        Action action = null;
+        String status = parameters.get("status");
+        switch (status) {
+            case "NEW":
+                action = Action.ADD;
+                break;
+            case "EDITED":
+                action = Action.UPDATE;
+                break;
+            case "NONE":
+                action = Action.NONE;
+                break;
+            case "DELETED":
+                action = Action.DELETE;
+                break;
+            default:
+                action = Action.NONE;
+        }
+        String id = parameters.get("id");
         String name = parameters.get("name");
         String uploadDate = parameters.get("uploadDate");
         String comment = parameters.get("comment");
 
-
-        if (name == null || comment == null || uploadDate == null) {
-            throw new ParseException();
-        }
 
 
         attachment.setName(name);
         attachment.setComment(comment);
         attachment.setUploadDate(DateTimeParser.parseDate(uploadDate, "dd.MM.yyyy HH:mm:ss"));
 
-        return attachment;
+        map.put(attachment, action);
+        return map;
 
 
     }

@@ -25,7 +25,7 @@ public class Address {
 
     public Address() {
     }
-    public void set(Address address){
+    public void update(Address address){
         this.country = address.getCountry();
         this.city = address.getCity();
         this.street = address.getStreet();

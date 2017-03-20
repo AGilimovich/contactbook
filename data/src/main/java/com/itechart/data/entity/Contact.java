@@ -53,7 +53,7 @@ public class Contact {
         SINGLE, MARRIED;
     }
 
-    public void set(Contact contact) {
+    public void update(Contact contact) {
         this.name = contact.getName();
         this.surname = contact.getSurname();
         this.patronymic = contact.getPatronymic();

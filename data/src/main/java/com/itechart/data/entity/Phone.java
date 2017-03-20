@@ -29,7 +29,7 @@ public class Phone {
         HOME, MOBILE;
     }
 
-    public void set(Phone phone){
+    public void update(Phone phone){
         this.countryCode = phone.getCountryCode();
         this.operatorCode = phone.getOperatorCode();
         this.phoneNumber = phone.getPhoneNumber();

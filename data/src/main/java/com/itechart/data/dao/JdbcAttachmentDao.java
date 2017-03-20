@@ -14,8 +14,10 @@ public class JdbcAttachmentDao implements IAttachmentDao {
 
     private final String SELECT_ATTACHMENTS_FOR_CONTACT_QUERY = "SELECT attachId, attachName, uploadDate, comment, file, contact FROM attachments WHERE contact = ?";
     private final String SELECT_ATTACHMENTS_BY_ID_QUERY = "SELECT attachId, attachName, uploadDate, comment, file, contact FROM attachments WHERE attachId = ?";
-    private final String DELETE_FOR_USER = "DELETE FROM attachments WHERE contact = ?";
+    private final String DELETE_FOR_USER_QUERY = "DELETE FROM attachments WHERE contact = ?";
     private final String INSERT_ATTACHMENT_QUERY = "INSERT INTO attachments(attachName,uploadDate,comment,file,contact) VALUES (?,?,?,?,?)";
+    private final String UPDATE_ATTACHMENT_QUERY = "UPDATE attachments SET attachName=?,comment=?,file=? WHERE attachId=?";
+    private final String DELETE_ATTACHMENT_QUERY = "DELETE FROM attachments WHERE attachId = ?";
     private JdbcDataSource ds;
 
     public JdbcAttachmentDao(JdbcDataSource ds) {
@@ -34,7 +36,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
             st = cn.prepareStatement(SELECT_ATTACHMENTS_FOR_CONTACT_QUERY);
             st.setLong(1, id);
             rs = st.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
                 Date uploadDate = new Date(rs.getTimestamp("uploadDate").getTime());
                 String attach_name = rs.getString("attachName");
                 long attach_id = rs.getLong("attachId");
@@ -159,12 +161,59 @@ public class JdbcAttachmentDao implements IAttachmentDao {
 
     @Override
     public void delete(long id) {
+        Connection cn = null;
+        PreparedStatement st = null;
+        try {
+            cn = ds.getConnection();
+            st = cn.prepareStatement(DELETE_ATTACHMENT_QUERY);
+            st.setLong(1, id);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (st != null) try {
+                st.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (cn != null) try {
+                cn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
     @Override
     public void update(Attachment attachment) {
+        Connection cn = null;
+        PreparedStatement st = null;
+        try {
+            cn = ds.getConnection();
+            st = cn.prepareStatement(UPDATE_ATTACHMENT_QUERY);
+            st.setString(1, attachment.getName());
+            st.setString(2, attachment.getComment());
+            st.setString(3, attachment.getFile());
+            st.setLong(4, attachment.getId());
+            st.executeUpdate();
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+
+
+            if (st != null) try {
+                st.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (cn != null) try {
+                cn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -173,7 +222,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         PreparedStatement st = null;
         try {
             cn = ds.getConnection();
-            st = cn.prepareStatement(DELETE_FOR_USER);
+            st = cn.prepareStatement(DELETE_FOR_USER_QUERY);
             st.setLong(1, userId);
             st.executeUpdate();
         } catch (SQLException e) {

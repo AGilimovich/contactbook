@@ -35,29 +35,42 @@ var inputAttachComment = document.getElementsByName("inputAttachComment");
 //-------------------------------
 
 
-var currentId = 0;
-function generateId() {
-    return currentId++;
-}
+// var currentId;
+// function generateId() {
+//     return currentId++;
+// }
 var attachments = [];
 
+var STATUS = {
+    NONE: "NONE",
+    NEW: "NEW",
+    EDITED: "EDITED",
+    DELETED: "DELETED"
+}
+
+//Create array of attachments received from server
 window.onload = function () {
-    //get attachments
-    for (var i = 0; i < attachCheckBoxes.length; i++) {
-        var attachment = new Attachment(attachCheckBoxes[i].value, attachName[i].innerHTML, uploadDate[i].innerHTML, attachComment[i].innerHTML);
-        attachment.setAttachMetaInput(document.getElementsByName("attachMeta[" + i + "]")[0]);
-        attachments.push(attachment);
-        currentId++;
+    if (typeof attachCheckBoxes !== "undefined" && attachCheckBoxes.length > 0) {
+        //get attachments
+        for (var i = 0; i < attachCheckBoxes.length; i++) {
+            var attachment = new Attachment(attachCheckBoxes[i].value, attachName[i].innerHTML, uploadDate[i].innerHTML, attachComment[i].innerHTML, STATUS.NONE);
+            attachment.setIndex(i);
+            attachment.setAttachMetaInput(document.getElementsByName("attachMeta[" + i + "]")[0]);
+            attachments.push(attachment);
+
+        }
     }
 }
 
-function Attachment(id, name, uploadDate, comment) {
+function Attachment(id, name, uploadDate, comment, status) {
     this.id = id;
     this.name = name;
     this.uploadDate = uploadDate;
     this.comment = comment;
+    this.status = status;
     var attachMetaInput;
     var attachFileInput;
+    var index;
     return {
         setAttachMetaInput: function (input) {
             attachMetaInput = input;
@@ -83,17 +96,31 @@ function Attachment(id, name, uploadDate, comment) {
         getUploadDate: function () {
             return uploadDate;
         },
+        getStatus: function () {
+            return status;
+        },
         setName: function (n) {
             name = n;
         },
+        getIndex: function () {
+            return index;
+        },
         setComment: function (c) {
             comment = c;
+        },
+        setStatus: function (s) {
+            status = s;
+        },
+
+        setIndex: function (i) {
+            index = i;
         }
+
     }
 }
-function findAttachmentById(id) {
+function findAttachmentByIndex(index) {
     for (var i = 0; i < attachments.length; i++) {
-        if (attachments[i].getId() === id) return attachments[i];
+        if (attachments[i].getIndex() === index) return attachments[i];
     }
     return null;
 }
@@ -119,6 +146,7 @@ btnDeleteAttaches.onclick = function () {
         if (attachCheckBoxes[i].checked) {
             var attachment = attachments[i];
             //todo popup acknowledge deleting
+            attachment.setStatus(STATUS.DELETED);
             deleteAttachTableRow(i);
             deleteAttachMetaInput(attachment);
             deleteAttachFile(attachment);
@@ -149,7 +177,7 @@ btnEditAttach.onclick = function () {
         //fill inputs with values
         inputAttachName[0].value = attachName[checkedIndex].innerHTML;
         inputAttachComment[0].value = attachComment[checkedIndex].innerHTML;
-        var attachment = findAttachmentById(checkedIndex);
+        var attachment = findAttachmentByIndex(checkedIndex);
         var fileInput = attachment.getAttachFileInput();
         fileInput.className = "";
         btnSaveAttach.onclick = function () {
@@ -178,9 +206,9 @@ function saveNewAttach(input) {
     var attachmentName = inputAttachName[0].value;
     var attachmentUploadDate = dateToString(new Date());
     var attachmentComment = inputAttachComment[0].value;
-    var attachmentId = generateId();
+    var attachmentId = new Date().getTime();
     input.setAttribute("name", "attachFile[" + attachmentId + "]");
-    var attachment = new Attachment(attachmentId, attachmentName, attachmentUploadDate, attachmentComment);
+    var attachment = new Attachment(attachmentId, attachmentName, attachmentUploadDate, attachmentComment, STATUS.NEW);
     attachment.setAttachFileInput(input);
     newAttachTableRow(attachment);
     newAttachMetaInput(attachment);
@@ -191,7 +219,7 @@ function saveNewAttach(input) {
 }
 
 function editExistingAttach(attachment) {
-
+    Attachment.setStatus(STATUS.EDITED);
     var attachmentName = inputAttachName[0].value;
     var attachmentComment = inputAttachComment[0].value;
     attachment.setName(attachmentName);
@@ -242,7 +270,7 @@ function newAttachTableRow(attachment) {
 
 
 function newAttachMetaInput(attachment) {
-    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).value();
+    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
     var attachHiddenMetaInput = document.createElement("input");
     attachHiddenMetaInput.setAttribute("name", "attachMeta[" + attachment.getId() + "]");
     attachHiddenMetaInput.setAttribute("value", value);
@@ -272,7 +300,7 @@ function editAttachTableRow(attachment) {
 
 function editAttachMetaInput(attachment) {
     var attachMetaInput = attachment.getAttachMetaInput();
-    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append(attachment.getUploadDate()).append("comment", attachment.getComment()).append("flag", "edited").value();
+    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append(attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
     attachment.getAttachMetaInput().setAttribute("value", value);
 }
 
@@ -281,11 +309,13 @@ function deleteAttachTableRow(row) {
 }
 
 function deleteAttachMetaInput(attachment) {
-    var attachMetaInput = attachment.getAttachMetaInput();
-    attachMetaInput.parentNode.removeChild(attachMetaInput);
+
+    // attachMetaInput.parentNode.removeChild(attachMetaInput);
+    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append(attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
+    attachment.getAttachMetaInput().setAttribute("value", value);
 }
 
-function deleteAttachFile(attachment){
+function deleteAttachFile(attachment) {
     attachment.getAttachFileInput().parentNode.removeChild(attachment.getAttachFileInput());
 }
 

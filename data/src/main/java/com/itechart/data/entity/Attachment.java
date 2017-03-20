@@ -30,7 +30,7 @@ public class Attachment {
     public Attachment() {
     }
 
-    public void set(Attachment attachment){
+    public void update(Attachment attachment){
         this.name = attachment.getName();
         this.uploadDate = attachment.getUploadDate();
         this.comment = attachment.getComment();

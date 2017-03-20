@@ -15,7 +15,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
  */
 public class SchedulerStarter {
 
-    public void startSchedule(int hours, int minutes) {
+    public void startScheduler(int hours, int minutes) {
         try {
             // Grab the Scheduler instance from the Factory
             Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();

@@ -41,12 +41,12 @@ public class MultipartRequestParamHandler {
         FILE_PATH = properties.getString("FILE_PATH");
     }
 
-    public void handle(HttpServletRequest request, Contact contact, Address address, ArrayList<Phone> phones, ArrayList<Attachment> attachments) {
+    public void handle(HttpServletRequest request, Contact contact, Address address, ArrayList<Phone> phones, Map<Attachment,Action> attachments) {
         //structures for storing request parameters
         Map<String, String> formParameters = new HashMap<>();
         ArrayList<String> formPhoneParameters = new ArrayList<>();
-        Map<Long, String> formAttachmentsParameters = new HashMap<>();
-        Map<Long, String> attachmentFiles = new HashMap<>();
+        Map<String, String> formAttachmentsParameters = new HashMap<>();
+        Map<String, String> attachmentFiles = new HashMap<>();
 
         String savedPhotoName = null;
         try {
@@ -63,7 +63,7 @@ public class MultipartRequestParamHandler {
                         }
                     } else if ((matcher = attachMetaPattern.matcher(item.getFieldName())).matches()) {
                         try {
-                            Long id = Long.valueOf(matcher.group(1));
+                            String id = matcher.group(1);
                             formAttachmentsParameters.put(id, item.getString("UTF-8"));
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
@@ -79,7 +79,7 @@ public class MultipartRequestParamHandler {
                     if (item.getSize() != 0) {
                         matcher = attachFilePattern.matcher(item.getFieldName());
                         if (matcher.matches()) {
-                            Long id = Long.valueOf(matcher.group(1));
+                            String id = matcher.group(1);
                             attachmentFiles.put(id, processFileField(item, FILE_PATH));
                         } else if (item.getFieldName().equals("photoFile"))
                             savedPhotoName = processFileField(item, FILE_PATH);
@@ -95,23 +95,21 @@ public class MultipartRequestParamHandler {
         ContactParser contactParser = new ContactParser();
         PhoneParser phoneParser = new PhoneParser();
         AttachmentParser attachmentParser = new AttachmentParser();
-        //set address object parameters with values from request except for id
-        address.set(addressParser.parseAddress(formParameters));
-        //set contact object parameters with values from request except for id's
-        contact.set(contactParser.parseContact(formParameters));
+        //update address object parameters with values from request except for id
+        address.update(addressParser.parseAddress(formParameters));
+        //update contact object parameters with values from request except for id's
+        contact.update(contactParser.parseContact(formParameters));
 
 
         for (Phone phone : phoneParser.parsePhones(formPhoneParameters)) {
             Phone p = new Phone();
-            p.set(phone);
+            p.update(phone);
             phones.add(p);
         }
-        for (Attachment attachment : attachmentParser.parseAttachments(formAttachmentsParameters, attachmentFiles)) {
-            Attachment a = new Attachment();
-            a.set(attachment);
-            attachments.add(a);
-        }
-        //set name of saved photo to contact's field
+        attachments.putAll(attachmentParser.parseAttachments(formAttachmentsParameters, attachmentFiles));
+
+
+        //update name of saved photo to contact's field
         if (savedPhotoName != null) {
             contact.setPhoto(savedPhotoName);
             //todo delete old photo from disk

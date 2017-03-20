@@ -8,6 +8,7 @@ import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Attachment;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.Phone;
+import com.itechart.web.Action;
 import com.itechart.web.MultipartRequestParamHandler;
 import org.apache.commons.fileupload.FileItem;
 
@@ -46,7 +47,7 @@ public class DoUpdateContact implements Command {
         Contact contact = contactDao.getContactById(id);
         Address address = addressDao.getAddressById(contact.getAddress());
         ArrayList<Phone> phones = new ArrayList<>();
-        ArrayList<Attachment> attachments = new ArrayList<>();
+        Map<Attachment, Action> attachments = new HashMap<>();
         handler.handle(request, contact, address, phones, attachments);
 
         addressDao.update(address);
@@ -54,15 +55,30 @@ public class DoUpdateContact implements Command {
 
         //delete old phones and attachments
         phoneDao.deleteForUser(contact.getId());
-        attachmentDao.deleteForUser(contact.getId());
         //persist into db new phones and attachments
         for (Phone phone : phones) {
             phone.setContact(id);
             phoneDao.save(phone);
         }
-        for (Attachment attachment : attachments) {
-            attachment.setContact(id);
-            attachmentDao.save(attachment);
+
+        for (Map.Entry<Attachment, Action> attachment : attachments.entrySet()) {
+
+            switch (attachment.getValue()) {
+                case UPDATE:
+                    attachmentDao.update(attachment.getKey());
+                    break;
+                case DELETE:
+                    attachmentDao.delete(attachment.getKey().getId());
+                    break;
+                case ADD:
+                    attachment.getKey().setContact(id);
+                    attachmentDao.save(attachment.getKey());
+                    break;
+                case NONE:
+                default:
+
+
+            }
         }
 
         //remove session attributes
