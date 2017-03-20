@@ -39,7 +39,18 @@ var inputAttachComment = document.getElementsByName("inputAttachComment");
 // function generateId() {
 //     return currentId++;
 // }
+
+
 var attachments = [];
+
+function findIndexOfAttachment(attachment) {
+    for (var i = 0; i < attachments.length; i++) {
+        if (attachments[i] === attachment) return i;
+
+    }
+
+}
+
 
 var STATUS = {
     NONE: "NONE",
@@ -53,9 +64,9 @@ window.onload = function () {
     if (typeof attachCheckBoxes !== "undefined" && attachCheckBoxes.length > 0) {
         //get attachments
         for (var i = 0; i < attachCheckBoxes.length; i++) {
-            var attachment = new Attachment(attachCheckBoxes[i].value, attachName[i].innerHTML, uploadDate[i].innerHTML, attachComment[i].innerHTML, STATUS.NONE);
-            attachment.setIndex(i);
+            var attachment = new Attachment(attachCheckBoxes[i].value, attachName[i].innerText, uploadDate[i].innerText, attachComment[i].innerText, STATUS.NONE);
             attachment.setAttachMetaInput(document.getElementsByName("attachMeta[" + i + "]")[0]);
+            attachment.setAttachCheckBox(attachCheckBoxes[i]);
             attachments.push(attachment);
 
         }
@@ -70,7 +81,8 @@ function Attachment(id, name, uploadDate, comment, status) {
     this.status = status;
     var attachMetaInput;
     var attachFileInput;
-    var index;
+    var attachCheckBox;
+
     return {
         setAttachMetaInput: function (input) {
             attachMetaInput = input;
@@ -99,11 +111,11 @@ function Attachment(id, name, uploadDate, comment, status) {
         getStatus: function () {
             return status;
         },
+        getAttachCheckBox: function () {
+            return attachCheckBox;
+        },
         setName: function (n) {
             name = n;
-        },
-        getIndex: function () {
-            return index;
         },
         setComment: function (c) {
             comment = c;
@@ -111,16 +123,18 @@ function Attachment(id, name, uploadDate, comment, status) {
         setStatus: function (s) {
             status = s;
         },
-
-        setIndex: function (i) {
-            index = i;
+        setAttachCheckBox: function (checkBox) {
+            attachCheckBox = checkBox;
         }
+
 
     }
 }
-function findAttachmentByIndex(index) {
+
+
+function geIndexOfAttachment(attachment) {
     for (var i = 0; i < attachments.length; i++) {
-        if (attachments[i].getIndex() === index) return attachments[i];
+        if (attachments[i].getId() === id) return attachments[i];
     }
     return null;
 }
@@ -148,7 +162,7 @@ btnDeleteAttaches.onclick = function () {
             //todo popup acknowledge deleting
             attachment.setStatus(STATUS.DELETED);
             deleteAttachTableRow(i);
-            deleteAttachMetaInput(attachment);
+            setDeleteAttachMetaInput(attachment);
             deleteAttachFile(attachment);
             attachments.splice(i, 1);
         } else i++;
@@ -159,13 +173,15 @@ btnEditAttach.onclick = function () {
 
     var countSelected = 0;
     var checkedIndex;
-    //iterate through checkboxes to find checked one
+    // iterate through checkboxes to find checked one
     for (var i = 0; i < attachCheckBoxes.length; i++) {
         if (attachCheckBoxes[i].checked) {
             countSelected++;
             checkedIndex = i;
         }
     }
+
+
     //if no checked checkboxes
     if (countSelected == 0) {
         //todo popup: select one item
@@ -175,11 +191,12 @@ btnEditAttach.onclick = function () {
     }
     else {
         //fill inputs with values
-        inputAttachName[0].value = attachName[checkedIndex].innerHTML;
-        inputAttachComment[0].value = attachComment[checkedIndex].innerHTML;
-        var attachment = findAttachmentByIndex(checkedIndex);
+        inputAttachName[0].value = attachName[checkedIndex].innerText;
+        inputAttachComment[0].value = attachComment[checkedIndex].innerText;
+        var attachment = attachments[checkedIndex];
         var fileInput = attachment.getAttachFileInput();
-        fileInput.className = "";
+        if (typeof fileInput !== "undefined")
+            fileInput.className = "";
         btnSaveAttach.onclick = function () {
             editExistingAttach(attachment);
         }
@@ -198,7 +215,9 @@ cancelAttachCreation = function (input) {
 }
 
 cancelAttachEditing = function (attachment) {
-    attachment.getAttachFileInput().className = "hidden";
+    var fileInput = attachment.getAttachFileInput();
+    if (typeof fileInput !== "undefined")
+        fileInput.className = "hidden";
     attachPopup.className = "popup";
 }
 
@@ -219,14 +238,16 @@ function saveNewAttach(input) {
 }
 
 function editExistingAttach(attachment) {
-    Attachment.setStatus(STATUS.EDITED);
+    attachment.setStatus(STATUS.EDITED);
     var attachmentName = inputAttachName[0].value;
     var attachmentComment = inputAttachComment[0].value;
     attachment.setName(attachmentName);
     attachment.setComment(attachmentComment);
-    editAttachTableRow(attachment);
     editAttachMetaInput(attachment);
-    attachment.getAttachFileInput().className = "hidden";
+    editAttachTableRow(attachment);
+    var fileInput = attachment.getAttachFileInput();
+    if (typeof fileInput !== "undefined")
+        fileInput.className = "hidden";
     attachPopup.className = "popup";
 }
 
@@ -255,16 +276,18 @@ function newAttachTableRow(attachment) {
     checkbox.value = rows.length;
     checkbox.setAttribute("name", "attachIsSelected");
 
+    attachment.setAttachCheckBox(checkbox);
+
     cellName.setAttribute("name", "attachName");
     // var attachmentLink = document.createElement("a");
     // attachmentLink.setAttribute("name", "attachLink");
     // cellName.appendChild(attachmentLink);
-    cellName.innerHTML = attachment.getName();
+    cellName.innerText = attachment.getName();
 
-    cellUploadDate.innerHTML = attachment.getUploadDate();
+    cellUploadDate.innerText = attachment.getUploadDate();
     cellUploadDate.setAttribute("name", "attachUploadDate");
 
-    cellComment.innerHTML = attachment.getComment();
+    cellComment.innerText = attachment.getComment();
     cellComment.setAttribute("name", "attachComment");
 }
 
@@ -288,14 +311,15 @@ function newAttachFileInput() {
 
 function editAttachTableRow(attachment) {
     //edit data in the attach table
-    var row = attachTable.rows[attachment.getId()];
+
+    var row = attachTable.rows[findIndexOfAttachment(attachment)];
     var cellAttachName = row.cells[1];
     var cellAttachUploadDate = row.cells[2];
     var cellAttachComment = row.cells[3];
 
-    cellAttachName.innerHTML = inputAttachName[0].value;
-    cellAttachComment.innerHTML = inputAttachComment[0].value;
-    cellAttachUploadDate.innerHTML;
+    cellAttachName.innerText = inputAttachName[0].value;
+    cellAttachComment.innerText = inputAttachComment[0].value;
+    cellAttachUploadDate.innerText;
 }
 
 function editAttachMetaInput(attachment) {
@@ -308,15 +332,16 @@ function deleteAttachTableRow(row) {
     attachTable.deleteRow(row);
 }
 
-function deleteAttachMetaInput(attachment) {
-
+function setDeleteAttachMetaInput(attachment) {
     // attachMetaInput.parentNode.removeChild(attachMetaInput);
     var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append(attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
     attachment.getAttachMetaInput().setAttribute("value", value);
 }
 
 function deleteAttachFile(attachment) {
-    attachment.getAttachFileInput().parentNode.removeChild(attachment.getAttachFileInput());
+    var fileInput = attachment.getAttachFileInput();
+    if (typeof fileInput !== "undefined")
+        fileInput.parentNode.removeChild(attachment.getAttachFileInput());
 }
 
 //utility function for converting date to string in the format "dd.MM.YYYY HH:mm:ss"

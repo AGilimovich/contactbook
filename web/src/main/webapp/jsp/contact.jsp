@@ -152,7 +152,7 @@
                 <table id="attach-table" class="tbl" width="100%">
                     <c:forEach var="attachment" items="${attachments}" varStatus="counter">
                         <tr>
-                            <td width="6%"><input type="checkbox" name="attachIsSelected"></td>
+                            <td width="6%"><input type="checkbox" name="attachIsSelected" value="${attachment.id}"></td>
                             <td width="20%" name="attachName"><a name="attachLink"
                                                                  href="/file?id=${attachment.file}">${attachment.name}</a>
                             </td>
@@ -194,7 +194,7 @@
                 <c:forEach var="attachment" items="${attachments}" varStatus="counter">
                     <fmt:formatDate value="${attachment.uploadDate}" var="formattedDate"
                                     type="date" pattern="MM.dd.yyyy HH:mm:ss"/>
-                    <input type="text" name="attachMeta[${attachment.id}]"
+                    <input type="text" name="attachMeta[${counter.index}]"
                            value="id=${attachment.id}&name=${attachment.name}&uploadDate=${formattedDate}&comment=${attachment.comment}&status=NONE">
                 </c:forEach>
             </table>
