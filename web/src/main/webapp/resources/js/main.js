@@ -8,11 +8,22 @@ var displayItemsSelector = document.getElementById("display-items");
 var pageItems = document.getElementsByClassName("page-item");
 var pageItemNext = document.getElementsByClassName("page-item-next");
 var pageItemPrev = document.getElementsByClassName("page-item-prev");
-
+var selectAllCheckbox = document.getElementById("selectAll");
+var checkboxes = document.getElementsByName("isSelected");
 
 var currentPage = 1;
 var step = 10;
 var lastPage = Math.ceil(rows.length / 10);
+
+function selectAllContacts() {
+    if (selectAllCheckbox.checked == true) {
+        for (var i = step * (currentPage - 1); i < step * (currentPage - 1) + step; i++)
+            checkboxes[i].checked = true;
+    } else {
+        for (var i = step * (currentPage - 1); i < step * (currentPage - 1) + step; i++)
+            checkboxes[i].checked = false;
+    }
+}
 
 function goToPage(page) {
     if (page <= lastPage) {
@@ -73,3 +84,4 @@ function goToNextPage() {
 
     }
 }
+

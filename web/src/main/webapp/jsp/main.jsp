@@ -37,19 +37,25 @@
 <div class="container-fluid">
     <form id="main-form" action="${pageContext.request.contextPath}/email">
         <div class="row">
-            <button type="submit" formaction="${pageContext.request.contextPath}/delete" formmethod="post"
-                    class="btn btn-danger btn-delete">
-                Удалить
-            </button>
+
             <button type="submit" formaction="${pageContext.request.contextPath}/add" formmethod="get"
                     class="btn btn-primary btn-add">
                 Добавить <span
                     class="glyphicon glyphicon-plus"></span></button>
+            <button type="submit" formaction="${pageContext.request.contextPath}/delete" formmethod="post"
+                    class="btn btn-danger btn-delete">
+                Удалить
+            </button>
 
         </div>
 
         <div class="row">
             <table class="table">
+                <tr>
+                    <td class="table-checkbox" width="5%" align="middle">
+                        <input type="checkbox" id="selectAll" onchange="selectAllContacts()">
+                    </td>
+                </tr>
                 <c:forEach var="contact" items="${contacts}" varStatus="status">
 
                     <tr valign="middle" class="${status.index<10? 'contact-entry':'contact-entry hidden'}">
@@ -72,7 +78,7 @@
                                 <div class="col-md-2">
                                     <p><b>Дата рождения:</b></p>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <p><b>Домашний адрес:</b></p>
                                 </div>
                                 <div class="col-md-2">
@@ -84,10 +90,46 @@
                                         <%--<p>12.11.1990 г.</p>--%>
                                     <p>${contact.dateOfBirth}</p>
                                 </div>
-                                <div class="col-md-2">
-                                    <p>${contact.country}, ${contact.city}, ул. ${contact.street},
-                                        д.${contact.house}-${contact.apartment}</p>
+                                <div class="col-md-3">
+                                    <%--<div class="row">--%>
+                                        <%--Страна:${contact.country}--%>
+                                    <%--</div>--%>
+                                    <%--<div class="row">--%>
+                                        <%--Город:${contact.city}--%>
+                                    <%--</div>--%>
+                                    <%--<div class="row">--%>
+                                        <%--Улица:${contact.street}--%>
+                                    <%--</div>--%>
+                                    <%--<div class="row">--%>
+                                        <%--Дом:${contact.house}--%>
+                                    <%--</div>--%>
+                                    <%--<div class="row">--%>
+                                        <%--Квартира:${contact.apartment}--%>
+                                    <%--</div>--%>
+
+                                    <div class="row">
+                                        <div class="col-md-3">Страна:</div>
+                                        <div class="col-md-9">${contact.country}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">Город:</div>
+                                        <div class="col-md-9">${contact.city}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">Улица:</div>
+                                        <div class="col-md-9">${contact.street}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">Дом:</div>
+                                        <div class="col-md-9">${contact.house}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">Квартира:</div>
+                                        <div class="col-md-9">${contact.apartment}</div>
+                                    </div>
+
                                 </div>
+
                                 <div class="col-md-2">
                                     <p>${contact.placeOfWork}</p>
 
@@ -121,6 +163,8 @@
                     <select id="display-items" class="form-control" onchange="changeDisplayingItemsCount()">
                         <option value="10">10</option>
                         <option value="20">20</option>
+                        <option value="50">50</option>
+
                     </select>
                 </div>
             </div>

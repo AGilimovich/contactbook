@@ -38,10 +38,12 @@ body {
 
 .btn-delete {
     margin-left: 30px;
+    min-width: 110px;
 }
 
 .btn-add {
-    margin-left: 30px;
+    margin-left: 200px;
+    min-width: 110px;
 }
 
 
