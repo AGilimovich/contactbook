@@ -5,6 +5,7 @@ import com.itechart.data.dao.JdbcAttachmentDao;
 import com.itechart.data.dao.JdbcContactDao;
 import com.itechart.data.dao.JdbcPhoneDao;
 import com.itechart.data.db.JdbcDataSource;
+import com.itechart.web.properties.PropertiesManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,11 +21,11 @@ public class CommandFactory {
     private JdbcAddressDao addressDao;
 
     public CommandFactory() {
-        ResourceBundle properties = ResourceBundle.getBundle("db/database");
-        String JDBC_DRIVER = properties.getString("JDBC_DRIVER");
-        String DB_URL = properties.getString("DB_URL");
-        String DB_USER = properties.getString("DB_USER");
-        String DB_PASSWORD = properties.getString("DB_PASSWORD");
+
+        String JDBC_DRIVER = PropertiesManager.JDBC_DRIVER();
+        String DB_URL = PropertiesManager.DB_URL();
+        String DB_USER = PropertiesManager.DB_USER();
+        String DB_PASSWORD = PropertiesManager.DB_PASSWORD();
         try {
             JdbcDataSource ds = new JdbcDataSource(JDBC_DRIVER, DB_URL, DB_USER, DB_PASSWORD);
             contactDao = new JdbcContactDao(ds);

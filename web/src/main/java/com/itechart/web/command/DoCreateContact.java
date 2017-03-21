@@ -8,13 +8,16 @@ import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Attachment;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.Phone;
-import com.itechart.web.MultipartRequestParamHandler;
+import com.itechart.web.handler.Action;
+import com.itechart.web.handler.MultipartRequestParamHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Aleksandr on 14.03.2017.
@@ -39,7 +42,7 @@ public class DoCreateContact implements Command {
         Contact contact = new Contact();
         Address address = new Address();
         ArrayList<Phone> phones = new ArrayList<>();
-        ArrayList<Attachment> attachments = new ArrayList<>();
+        Map<Attachment, Action> attachments = new HashMap<>();
         //fills objects with data retrieved from request
         handler.handle(request, contact, address, phones, attachments);
 
@@ -52,9 +55,17 @@ public class DoCreateContact implements Command {
             phone.setContact(contactId);
             phoneDao.save(phone);
         }
-        for (Attachment attachment : attachments) {
-            attachment.setContact(contactId);
-            attachmentDao.save(attachment);
+        for (Map.Entry<Attachment, Action> attachment : attachments.entrySet()) {
+            switch (attachment.getValue()) {
+                case ADD:
+                case UPDATE:
+                    attachment.getKey().setContact(contactId);
+                    attachmentDao.save(attachment.getKey());
+                    break;
+                default:
+
+
+            }
         }
 
 //------------------------------------------------------------------------------

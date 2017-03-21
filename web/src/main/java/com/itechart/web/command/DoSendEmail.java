@@ -29,8 +29,7 @@ public class DoSendEmail implements Command {
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         String emailAddressesString = request.getParameter("emailAddresses");
         String subject = request.getParameter("subject");
-        String template = request.getParameter("template");
-        String body = request.getParameter("body");
+        String body = request.getParameter("emailBody");
 //        Email configuration
         ResourceBundle bundle = ResourceBundle.getBundle("application");
         String hostName = bundle.getString("HOST_NAME");

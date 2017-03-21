@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
  * Class for parsing list of emails from string.
  */
 public class EmailParser {
-    private final String emailRegex = "([\\w\\.]+@\\w+\\.\\w+),*";
+    private final String emailRegex = "([\\w\\.]+@\\w+\\.\\w+),?\\s*";
     private Pattern pattern = Pattern.compile(emailRegex);
 
     public ArrayList<String> getEmailAddresses(String emailAddresses) {

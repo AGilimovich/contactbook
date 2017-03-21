@@ -16,7 +16,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
     private final String SELECT_ATTACHMENTS_BY_ID_QUERY = "SELECT attachId, attachName, uploadDate, comment, file, contact FROM attachments WHERE attachId = ?";
     private final String DELETE_FOR_USER_QUERY = "DELETE FROM attachments WHERE contact = ?";
     private final String INSERT_ATTACHMENT_QUERY = "INSERT INTO attachments(attachName,uploadDate,comment,file,contact) VALUES (?,?,?,?,?)";
-    private final String UPDATE_ATTACHMENT_QUERY = "UPDATE attachments SET attachName=?,comment=?,file=? WHERE attachId=?";
+    private final String UPDATE_ATTACHMENT_QUERY = "UPDATE attachments SET attachName=?,comment=? WHERE attachId=?";
     private final String DELETE_ATTACHMENT_QUERY = "DELETE FROM attachments WHERE attachId = ?";
     private JdbcDataSource ds;
 
@@ -194,8 +194,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
             st = cn.prepareStatement(UPDATE_ATTACHMENT_QUERY);
             st.setString(1, attachment.getName());
             st.setString(2, attachment.getComment());
-            st.setString(3, attachment.getFile());
-            st.setLong(4, attachment.getId());
+            st.setLong(3, attachment.getId());
             st.executeUpdate();
 
         } catch (SQLException e) {

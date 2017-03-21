@@ -13,7 +13,6 @@ var attachTable = document.getElementById("attach-table");
 var hiddenMetaDiv = document.getElementById("hidden-div");
 
 //--------------------------------------------------------
-
 //table columns
 //-------------------------------
 //checkbox in table representing selected attachments
@@ -33,88 +32,156 @@ var btnUndoAttach = document.getElementById("btn-undo-attach");
 var inputFile = document.getElementsByName("attachFile");
 var inputAttachName = document.getElementsByName("inputAttachName");
 var inputAttachComment = document.getElementsByName("inputAttachComment");
-
 //-------------------------------
 
-//represents mode: either editing existing attachment or adding new one. It determines behaviour of the Save button
-const ATTACH_MODE = {
-    EDIT: {name: "edit"},
-    ADD: {name: "add"}
-};
-var currentMode;
 
-var currentId = 1;
-function generateId() {
-    return "gen" + currentId++;
+// var currentId;
+// function generateId() {
+//     return currentId++;
+// }
+
+
+var attachments = [];
+
+function findIndexOfAttachment(attachment) {
+    for (var i = 0; i < attachments.length; i++) {
+        if (attachments[i] === attachment) return i;
+
+    }
+
 }
 
 
-function Attachment(id, name, uploadDate, comment) {
+var STATUS = {
+    NONE: "NONE",
+    NEW: "NEW",
+    EDITED: "EDITED",
+    DELETED: "DELETED"
+}
+
+//Create array of attachments received from server
+window.onload = function () {
+    if (typeof attachCheckBoxes !== "undefined" && attachCheckBoxes.length > 0) {
+        //get attachments
+        for (var i = 0; i < attachCheckBoxes.length; i++) {
+            var attachment = new Attachment(attachCheckBoxes[i].value, attachName[i].innerText, uploadDate[i].innerText, attachComment[i].innerText, STATUS.NONE);
+            attachment.setAttachMetaInput(document.getElementsByName("attachMeta[" + i + "]")[0]);
+            attachment.setAttachCheckBox(attachCheckBoxes[i]);
+            attachments.push(attachment);
+
+        }
+    }
+}
+
+function Attachment(id, name, uploadDate, comment, status) {
     this.id = id;
-    this.name= name;
-    this.uploadDate = uploadDate
+    this.name = name;
+    this.uploadDate = uploadDate;
+    this.comment = comment;
+    this.status = status;
+    var attachMetaInput;
+    var attachFileInput;
+    var attachCheckBox;
+
+    return {
+        setAttachMetaInput: function (input) {
+            attachMetaInput = input;
+        },
+        setAttachFileInput: function (input) {
+            attachFileInput = input;
+        },
+        getAttachMetaInput: function () {
+            return attachMetaInput;
+        },
+        getAttachFileInput: function () {
+            return attachFileInput;
+        },
+        getId: function () {
+            return id;
+        },
+        getName: function () {
+            return name;
+        },
+        getComment: function () {
+            return comment;
+        },
+        getUploadDate: function () {
+            return uploadDate;
+        },
+        getStatus: function () {
+            return status;
+        },
+        getAttachCheckBox: function () {
+            return attachCheckBox;
+        },
+        setName: function (n) {
+            name = n;
+        },
+        setComment: function (c) {
+            comment = c;
+        },
+        setStatus: function (s) {
+            status = s;
+        },
+        setAttachCheckBox: function (checkBox) {
+            attachCheckBox = checkBox;
+        }
+
+
+    }
 }
 
 
-// action - show attach creating popup window
-btnAddAttach.onclick = function () {
-    //reset input values of popup form
+function geIndexOfAttachment(attachment) {
+    for (var i = 0; i < attachments.length; i++) {
+        if (attachments[i].getId() === id) return attachments[i];
+    }
+    return null;
+}
 
+
+btnAddAttach.onclick = function () {
+    var newInput = newAttachFileInput();
+    //reset values of of popup form inputs
     inputAttachName[0].value = "";
     inputAttachComment[0].value = "";
-    currentMode = ATTACH_MODE.ADD;
     attachPopup.className += " show";
+    btnSaveAttach.onclick = function () {
+        saveNewAttach(newInput);
+    }
+    btnUndoAttach.onclick = function () {
+        cancelAttachCreation(newInput);
+    }
+
 }
 
-//action - hide attach creating or editing popup
-btnUndoAttach.onclick = function () {
-    attachPopup.className = "popup";
-}
-
-
-//action - delete selected attachments
 btnDeleteAttaches.onclick = function () {
     for (var i = 0; i < attachCheckBoxes.length;) {
         if (attachCheckBoxes[i].checked) {
+            var attachment = attachments[i];
             //todo popup acknowledge deleting
-            deleteHiddenAttachInput(i);
-            attachTable.deleteRow(i);
-            i = 0;
-            //todo deleting hidden inputs
+            attachment.setStatus(STATUS.DELETED);
+            deleteAttachTableRow(i);
+            setDeleteAttachMetaInput(attachment);
+            deleteAttachFile(attachment);
+            attachments.splice(i, 1);
         } else i++;
     }
 }
 
-//function for deleting hidden input with specified index
-function deleteHiddenAttachInput(index) {
-    var attachMetaInput = document.getElementsByName("attachMeta");
-    attachMetaInput[index].parentNode.removeChild(attachMetaInput[index]);
-    // var hiddenAttachInput = document.getElementsByName("attachment");
-    // var value = new Appendable("flag","deleted").value();
-    // hiddenAttachInput[index].setAttribute("value", value);
-    // var inputFile = document.getElementsByName("inputAttachFile");
-    //todo delete input type file
-}
-
-//action - show attach editing popup; fills inputs with values
 btnEditAttach.onclick = function () {
-
-    //reload arrays containing attachments data
-    var attachCheckBoxes = document.getElementsByName("attachIsSelected");
-    var attachName = document.getElementsByName("attachName");
-    var attachComment = document.getElementsByName("attachComment");
-
-    currentMode = ATTACH_MODE.EDIT;
 
     var countSelected = 0;
     var checkedIndex;
-    //iterate through checkboxes to find checked one
+    // iterate through checkboxes to find checked one
     for (var i = 0; i < attachCheckBoxes.length; i++) {
         if (attachCheckBoxes[i].checked) {
             countSelected++;
-            currentMode.index = checkedIndex = i;
+            checkedIndex = i;
         }
     }
+
+
     //if no checked checkboxes
     if (countSelected == 0) {
         //todo popup: select one item
@@ -123,21 +190,72 @@ btnEditAttach.onclick = function () {
         //todo popup: select one item
     }
     else {
-
         //fill inputs with values
-        inputAttachName[0].value = attachName[checkedIndex].innerHTML;
-        inputAttachComment[0].value = attachComment[checkedIndex].innerHTML;
-
-
+        inputAttachName[0].value = attachName[checkedIndex].innerText;
+        inputAttachComment[0].value = attachComment[checkedIndex].innerText;
+        var attachment = attachments[checkedIndex];
+        var fileInput = attachment.getAttachFileInput();
+        if (typeof fileInput !== "undefined")
+            fileInput.className = "";
+        btnSaveAttach.onclick = function () {
+            editExistingAttach(attachment);
+        }
+        btnUndoAttach.onclick = function () {
+            cancelAttachEditing(attachment);
+        }
         attachPopup.className += " show";
     }
+
+
 }
 
+cancelAttachCreation = function (input) {
+    input.parentNode.removeChild(input);
+    attachPopup.className = "popup";
+}
 
-//function for creation of a new row in attachments table and filling it with data
-function createAttachRow(table, attachName, attachDate, attachComment) {
-    var rows = table.rows;
-    var row = table.insertRow(rows);
+cancelAttachEditing = function (attachment) {
+    var fileInput = attachment.getAttachFileInput();
+    if (typeof fileInput !== "undefined")
+        fileInput.className = "hidden";
+    attachPopup.className = "popup";
+}
+
+function saveNewAttach(input) {
+    var attachmentName = inputAttachName[0].value;
+    var attachmentUploadDate = dateToString(new Date());
+    var attachmentComment = inputAttachComment[0].value;
+    var attachmentId = new Date().getTime();
+    input.setAttribute("name", "attachFile[" + attachmentId + "]");
+    var attachment = new Attachment(attachmentId, attachmentName, attachmentUploadDate, attachmentComment, STATUS.NEW);
+    attachment.setAttachFileInput(input);
+    newAttachTableRow(attachment);
+    newAttachMetaInput(attachment);
+    attachments.push(attachment);
+    attachment.getAttachFileInput().className = "hidden";
+    attachPopup.className = "popup";
+
+}
+
+function editExistingAttach(attachment) {
+    attachment.setStatus(STATUS.EDITED);
+    var attachmentName = inputAttachName[0].value;
+    var attachmentComment = inputAttachComment[0].value;
+    attachment.setName(attachmentName);
+    attachment.setComment(attachmentComment);
+    editAttachMetaInput(attachment);
+    editAttachTableRow(attachment);
+    var fileInput = attachment.getAttachFileInput();
+    if (typeof fileInput !== "undefined")
+        fileInput.className = "hidden";
+    attachPopup.className = "popup";
+}
+
+//--------------------------------------------------------
+
+function newAttachTableRow(attachment) {
+    var rows = attachTable.rows;
+    var row = attachTable.insertRow(-1);
 
     // insert cells into inserted row
     var cellCheckbox = row.insertCell(0);
@@ -151,7 +269,6 @@ function createAttachRow(table, attachName, attachDate, attachComment) {
     var cellComment = row.insertCell(3);
     cellComment.setAttribute("width", "54%")
 
-
     // ------------------add checkbox into cell[0]
     var checkbox = document.createElement("input");
     checkbox.setAttribute("type", "checkbox");
@@ -159,31 +276,72 @@ function createAttachRow(table, attachName, attachDate, attachComment) {
     checkbox.value = rows.length;
     checkbox.setAttribute("name", "attachIsSelected");
 
+    attachment.setAttachCheckBox(checkbox);
+
     cellName.setAttribute("name", "attachName");
     // var attachmentLink = document.createElement("a");
     // attachmentLink.setAttribute("name", "attachLink");
     // cellName.appendChild(attachmentLink);
-    cellName.innerHTML = attachName;
+    cellName.innerText = attachment.getName();
 
-
-    cellUploadDate.innerHTML = attachDate;
+    cellUploadDate.innerText = attachment.getUploadDate();
     cellUploadDate.setAttribute("name", "attachUploadDate");
 
-
-    cellComment.innerHTML = attachComment;
+    cellComment.innerText = attachment.getComment();
     cellComment.setAttribute("name", "attachComment");
-
-
 }
 
 
-//function for creating hidden input element
-function createHiddenMetaInputForAttach(id, attachName, attachUploadDate, attachComment) {
-    var value = new Appendable("id", id).append("name", attachName).append("uploadDate", attachUploadDate).append("comment", attachComment).value();
+function newAttachMetaInput(attachment) {
+    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
     var attachHiddenMetaInput = document.createElement("input");
-    attachHiddenMetaInput.setAttribute("name", "attachMeta");
+    attachHiddenMetaInput.setAttribute("name", "attachMeta[" + attachment.getId() + "]");
     attachHiddenMetaInput.setAttribute("value", value);
     hiddenMetaDiv.appendChild(attachHiddenMetaInput);
+    attachment.setAttachMetaInput(attachHiddenMetaInput);
+}
+
+function newAttachFileInput() {
+    var newInput = document.createElement("input");
+    newInput.setAttribute("type", "file");
+    newInput.setAttribute("form", "main-form");
+    divInputFileContainer.appendChild(newInput);
+    return newInput;
+}
+
+function editAttachTableRow(attachment) {
+    //edit data in the attach table
+
+    var row = attachTable.rows[findIndexOfAttachment(attachment)];
+    var cellAttachName = row.cells[1];
+    var cellAttachUploadDate = row.cells[2];
+    var cellAttachComment = row.cells[3];
+
+    cellAttachName.innerText = inputAttachName[0].value;
+    cellAttachComment.innerText = inputAttachComment[0].value;
+    cellAttachUploadDate.innerText;
+}
+
+function editAttachMetaInput(attachment) {
+    var attachMetaInput = attachment.getAttachMetaInput();
+    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append(attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
+    attachment.getAttachMetaInput().setAttribute("value", value);
+}
+
+function deleteAttachTableRow(row) {
+    attachTable.deleteRow(row);
+}
+
+function setDeleteAttachMetaInput(attachment) {
+    // attachMetaInput.parentNode.removeChild(attachMetaInput);
+    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append(attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
+    attachment.getAttachMetaInput().setAttribute("value", value);
+}
+
+function deleteAttachFile(attachment) {
+    var fileInput = attachment.getAttachFileInput();
+    if (typeof fileInput !== "undefined")
+        fileInput.parentNode.removeChild(attachment.getAttachFileInput());
 }
 
 //utility function for converting date to string in the format "dd.MM.YYYY HH:mm:ss"
@@ -198,69 +356,3 @@ function dateToString(date) {
 
     return addZero(date.getDate()) + "." + (addZero(date.getMonth() + 1)) + "." + date.getFullYear() + " " + addZero(date.getHours()) + ":" + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds());
 }
-
-// function for adding new attachment to table and hidden input using data from inputs
-function saveNewAttach() {
-    //get data from inputs of popup window
-
-    attachName = inputAttachName[0].value;
-    var attachUploadDate = dateToString(new Date());
-    attachComment = inputAttachComment[0].value;
-
-    createAttachRow(attachTable, attachName, attachUploadDate, attachComment);
-
-    var id = generateId();
-
-    inputFile[0].className = "hidden";
-    //set new name to input after file was selected and attach saved
-    inputFile[0].setAttribute("name", "attachFile[" + id + "]");
-    //create hidden input for attachment metadata(name, upload date, comment)
-    createHiddenMetaInputForAttach(id, attachName, attachUploadDate, attachComment);
-    //create new input for file in place of old one
-    var newInput = document.createElement("input");
-    newInput.setAttribute("type", "file");
-    newInput.setAttribute("name", "attachFile");
-
-    divInputFileContainer.appendChild(newInput);
-
-    //close popup
-    attachPopup.className = "popup";
-}
-
-
-//function for editing existing attach
-function editExistingAttach() {
-    //edit data in the attach table
-    var row = attachTable.rows[currentMode.index];
-    var cellAttachName = row.cells[1];
-    var cellAttachUploadDate = row.cells[2];
-    var cellAttachComment = row.cells[3];
-
-    var attachName = cellAttachName.innerHTML = inputAttachName[0].value;
-    var attachComment = cellAttachComment.innerHTML = inputAttachComment[0].value;
-    var attachUploadDate = cellAttachUploadDate.innerHTML;
-    //close popup
-    attachPopup.className = "popup";
-    editHiddenAttachMetaInput(currentMode.index, attachUploadDate, attachName, attachComment);
-}
-
-
-// function for setting new value to the hidden input
-function editHiddenAttachMetaInput(index, attachUploadDate, attachName, attachComment) {
-    var hiddenAttachMetaInput = document.getElementsByName("attachment");
-    var value = new Appendable("name", attachName).append(attachUploadDate).append("comment", attachComment).append("flag", "edited").value();
-    hiddenAttachMetaInput[index].setAttribute("value", value);
-}
-
-//function - calls either saveNew or editExisting function
-var saveAttach = function () {
-    if (currentMode === ATTACH_MODE.ADD) {
-        saveNewAttach();
-    } else if (currentMode === ATTACH_MODE.EDIT) {
-        editExistingAttach();
-    } else {
-        //error
-    }
-    return false;
-}
-

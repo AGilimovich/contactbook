@@ -1,4 +1,4 @@
-package com.itechart.web;
+package com.itechart.web.handler;
 
 import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Attachment;
@@ -8,6 +8,7 @@ import com.itechart.web.parser.AddressParser;
 import com.itechart.web.parser.AttachmentParser;
 import com.itechart.web.parser.ContactParser;
 import com.itechart.web.parser.PhoneParser;
+import com.itechart.web.properties.PropertiesManager;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -27,7 +28,7 @@ import java.util.regex.Pattern;
 public class MultipartRequestParamHandler {
     private DiskFileItemFactory factory;
     private ServletFileUpload upload;
-    private String FILE_PATH;
+    private String FILE_PATH = PropertiesManager.FILE_PATH();
     private final String attachFileRegex = "attachFile\\[(\\d+)\\]";
     private final String attachMetaRegex = "attachMeta\\[(\\d+)\\]";
     private Pattern attachMetaPattern = Pattern.compile(attachMetaRegex);
@@ -37,8 +38,6 @@ public class MultipartRequestParamHandler {
     public MultipartRequestParamHandler() {
         this.factory = new DiskFileItemFactory();
         this.upload = new ServletFileUpload(factory);
-        ResourceBundle properties = ResourceBundle.getBundle("application");
-        FILE_PATH = properties.getString("FILE_PATH");
     }
 
     public void handle(HttpServletRequest request, Contact contact, Address address, ArrayList<Phone> phones, Map<Attachment,Action> attachments) {

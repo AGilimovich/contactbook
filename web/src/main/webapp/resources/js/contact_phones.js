@@ -37,12 +37,6 @@ var inputPhoneComment = document.getElementsByName("inputPhoneComment");
 //-------------------------------
 
 
-//represents mode: either editing existing phone or adding new one. It determines behaviour of the Save button
-const MODE = {
-    EDIT: {name: "edit"},
-    ADD: {name: "add"}
-};
-var currentMode;
 
 // action - show phone creating popup window
 btnAddPhone.onclick = function () {
@@ -52,7 +46,9 @@ btnAddPhone.onclick = function () {
     inputPhoneNumber[0].value = "";
     inputPhoneComment[0].value = "";
     inputPhoneTypeHome.checked = true;
-    currentMode = MODE.ADD;
+    btnSavePhone.onclick = function () {
+        saveNew();
+    }
     phonePopup.className += " show";
 }
 
@@ -94,8 +90,7 @@ btnEditPhone.onclick = function () {
     var phoneType = document.getElementsByName("phoneType");
     var phoneComment = document.getElementsByName("phoneComment");
 
-    // phonesCheckBoxes = document.getElementsByName("phoneIsSelected");
-    currentMode = MODE.EDIT;
+
 
     var countSelected = 0;
     var checkedIndex;
@@ -103,7 +98,7 @@ btnEditPhone.onclick = function () {
     for (var i = 0; i < phonesCheckBoxes.length; i++) {
         if (phonesCheckBoxes[i].checked) {
             countSelected++;
-            currentMode.index = checkedIndex = i;
+            checkedIndex = i;
         }
     }
     //if no checked checkboxes
@@ -123,6 +118,9 @@ btnEditPhone.onclick = function () {
             inputPhoneTypeMobile.checked = true;
         } else inputPhoneTypeHome.checked = true;
         inputPhoneComment[0].value = phoneComment[checkedIndex].innerHTML;
+        btnSavePhone.onclick = function () {
+            editExisting(checkedIndex);
+        }
 
         phonePopup.className += " show";
     }
@@ -232,9 +230,9 @@ function saveNew() {
 }
 
 //function for editing existing phone
-function editExisting() {
+function editExisting(index) {
     //edit data in the phone table
-    var row = phoneTable.rows[currentMode.index];
+    var row = phoneTable.rows[index];
     var cellCountryCode = row.cells[1];
     var cellOperatorCode = row.cells[3];
     var cellPhoneNumber = row.cells[5];
@@ -250,7 +248,7 @@ function editExisting() {
     var phoneComment = cellPhoneComment.innerHTML = inputPhoneComment[0].value;
     //close popup
     phonePopup.className = "popup";
-    editHiddenInput(currentMode.index, countryCode, operatorCode, phoneNumber, phoneType, phoneComment)
+    editHiddenInput(index, countryCode, operatorCode, phoneNumber, phoneType, phoneComment)
 }
 
 //function for setting new value to hidden input
@@ -261,22 +259,7 @@ function editHiddenInput(index, countryCode, operatorCode, phoneNumber, phoneTyp
 }
 
 
-//function on submitting popup form.Calls either saveNew or editExisting function
-var savePhone = function () {
-    if (currentMode === MODE.ADD) {
-        saveNew();
-    } else if (currentMode === MODE.EDIT) {
-        editExisting();
 
-
-    } else {
-        //error
-
-
-    }
-    return false;
-
-}
 
 
 

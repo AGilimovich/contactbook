@@ -1,11 +1,8 @@
 package com.itechart.web.parser;
 
 import com.itechart.data.entity.Attachment;
-import com.itechart.data.entity.Phone;
-import com.itechart.web.Action;
-import org.stringtemplate.v4.ST;
+import com.itechart.web.handler.Action;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -26,6 +23,7 @@ public class AttachmentParser {
             try {
                 Map<Attachment, Action> attachmentMap = parseRequest(formParameters.getValue());
                 for (Map.Entry<Attachment, Action> entry : attachmentMap.entrySet()) {
+                    //set the name of file
                     entry.getKey().setFile(attachmentFiles.get(formParameters.getKey()));
                     attachments.put(entry.getKey(), entry.getValue());
                 }
@@ -72,7 +70,7 @@ public class AttachmentParser {
         String comment = parameters.get("comment");
 
 
-
+        attachment.setId(Long.valueOf(id));
         attachment.setName(name);
         attachment.setComment(comment);
         attachment.setUploadDate(DateTimeParser.parseDate(uploadDate, "dd.MM.yyyy HH:mm:ss"));

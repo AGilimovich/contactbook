@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/resources/css/contact.css">
     <link rel="stylesheet" href="/resources/css/bootstrap/bootstrap.css">
     <script src="/resources/js/contact_phones.js" charset="utf-8" defer></script>
-    <script src="/resources/js/attaches.js" charset="utf-8" defer></script>
+    <script src="/resources/js/contact_attach.js" charset="utf-8" defer></script>
     <script src="/resources/js/contact_photo.js" charset="utf-8" defer></script>
 
 </head>
@@ -222,7 +222,7 @@
     <%--Add phone POPUP--%>
     <div id="phone-popup" class="popup">
         <div class="popup-content">
-            <form onsubmit="return savePhone()">
+            <form >
                 <p>Код страны в формате +XXX:</p>
                 <input type="tel" pattern="[\+]\d{3}" class="form-control" name="inputCountryCode" required>
 
@@ -239,7 +239,7 @@
                 <input type="text" class="form-control" name="inputPhoneComment">
 
                 <div class="controls-group">
-                    <button id="btn-save-phone" type="submit" class="btn">Сохранить</button>
+                    <button id="btn-save-phone" type="button" class="btn">Сохранить</button>
                     <button id="btn-undo-phone" type="button" class="btn">Отменить</button>
                 </div>
             </form>

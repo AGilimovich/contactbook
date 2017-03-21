@@ -8,8 +8,9 @@ import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Attachment;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.Phone;
-import com.itechart.web.Action;
-import com.itechart.web.MultipartRequestParamHandler;
+import com.itechart.web.handler.Action;
+import com.itechart.web.handler.MultipartRequestParamHandler;
+import com.itechart.web.properties.PropertiesManager;
 import org.apache.commons.fileupload.FileItem;
 
 import javax.servlet.ServletException;
@@ -27,7 +28,7 @@ public class DoUpdateContact implements Command {
     private JdbcPhoneDao phoneDao;
     private JdbcAttachmentDao attachmentDao;
     private JdbcAddressDao addressDao;
-    private String FILE_PATH;
+    private String FILE_PATH = PropertiesManager.FILE_PATH();
 
 
     public DoUpdateContact(JdbcContactDao contactDao, JdbcAddressDao addressDao, JdbcPhoneDao phoneDao, JdbcAttachmentDao attachmentDao) {
@@ -35,8 +36,6 @@ public class DoUpdateContact implements Command {
         this.addressDao = addressDao;
         this.phoneDao = phoneDao;
         this.attachmentDao = attachmentDao;
-        ResourceBundle properties = ResourceBundle.getBundle("application");
-        String FILE_PATH = properties.getString("FILE_PATH");
     }
 
     @Override
@@ -53,16 +52,15 @@ public class DoUpdateContact implements Command {
         addressDao.update(address);
         contactDao.update(contact);
 
-        //delete old phones and attachments
+        //delete old phones
         phoneDao.deleteForUser(contact.getId());
-        //persist into db new phones and attachments
+        //persist into db new phones
         for (Phone phone : phones) {
             phone.setContact(id);
             phoneDao.save(phone);
         }
 
         for (Map.Entry<Attachment, Action> attachment : attachments.entrySet()) {
-
             switch (attachment.getValue()) {
                 case UPDATE:
                     attachmentDao.update(attachment.getKey());

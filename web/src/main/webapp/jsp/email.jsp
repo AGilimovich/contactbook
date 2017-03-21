@@ -21,12 +21,12 @@
     </div>
 </nav>
 <div class="container-fluid ">
-    <form id="form" onsubmit="moveDataToInput()" action="/send" method="post">
+    <form id="form" action="/send" method="post">
         <div class="row">
             <div class="col-md-6 well offset20px">
                 <div class="row buffer-top">
                     <p>Кому:</p>
-                    <input type="text" name="emailAddresses" value="${email.emailAddresses}" class="form-control"
+                    <input type="text" name="emailAddresses" value="${emailListTemplate.render()}" class="form-control"
                            required>
                 </div>
                 <div class="row">
@@ -35,14 +35,23 @@
                 </div>
                 <div class="row">
                     <p>Шаблон:</p>
-                    <c:forEach var="template" items="${templates}">
-                        <select name="template" value="${template.name}" class="form-control"></select>
-                    </c:forEach>
+                    <select name="template" value="${template.getName()}" class="form-control" onchange="showTemplate(this.selectedIndex);">
+                        <c:forEach var="template" items="${templates}" varStatus="status">
+                            <option value="${status.index}">${template.getName()}</option>
+                        </c:forEach>
+                    </select>
                 </div>
+                <input name="emailBody" value="${templates[0].render()}" type="text" class="hidden">
+
                 <div class="row">
                     <p>Текст:</p>
-                    <input name="bodyInput" type="text" class="hidden">
-                    <div id="body-div" class="text-field" contenteditable="true" value="${email.body}"></div>
+                    <c:forEach var="template" items="${templates}" varStatus="status">
+                        <div id="body-div[${status.index}]"
+                             contenteditable="true"
+                             class="${status.index == 0?'text-field white-space-pre' : 'text-field white-space-pre hidden'}">${template.render()}</div>
+                    </c:forEach>
+
+
                 </div>
                 <div class="row">
                     <div class="control-group buffer-top">

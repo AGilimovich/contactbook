@@ -16,8 +16,6 @@ public class PhoneParser {
     private static final Pattern pattern = Pattern.compile(regex);
 
 
-
-
     public ArrayList<Phone> parsePhones(ArrayList<String> phoneRequestParameters) {
         ArrayList<Phone> phones = new ArrayList<>();
 

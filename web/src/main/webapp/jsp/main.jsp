@@ -19,8 +19,11 @@
                 <li class="active"><a href="${pageContext.request.contextPath}/search"><span
                         class="glyphicon glyphicon-search"></span> Поиск
                     контактов</a></li>
-                <li><a href="${pageContext.request.contextPath}/email"><span
-                        class="glyphicon glyphicon-envelope"></span> Отправка Email</a></li>
+                <li>
+                    <a href="javascript:{}" onclick="document.getElementById('main-form').submit();" >
+                        <span class="glyphicon glyphicon-envelope"></span> Отправка Email
+                    </a>
+                </li>
 
             </ul>
 
@@ -30,7 +33,7 @@
 
 
 <div class="container-fluid">
-    <form action="">
+    <form id="main-form" action="${pageContext.request.contextPath}/email">
         <div class="row">
             <button type="submit" formaction="${pageContext.request.contextPath}/delete" formmethod="post"
                     class="btn btn-danger btn-delete">

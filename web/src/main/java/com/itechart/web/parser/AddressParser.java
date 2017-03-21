@@ -9,8 +9,8 @@ import java.util.Map;
  */
 public class AddressParser {
     public Address parseAddress(Map<String, String> requestParameters) {
-        //create address object and persisting it into database
-//        -----------------------------------------------------
+        //create address object from request
+        //-----------------------------------------------------
         Address address = new Address();
         address.setCountry(requestParameters.get("country"));
         address.setCity(requestParameters.get("city"));

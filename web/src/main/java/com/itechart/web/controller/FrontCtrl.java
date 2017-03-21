@@ -2,6 +2,7 @@ package com.itechart.web.controller;
 
 import com.itechart.web.command.Command;
 import com.itechart.web.command.CommandFactory;
+import com.itechart.web.properties.PropertiesManager;
 import com.itechart.web.scheduler.SchedulerStarter;
 
 import javax.servlet.RequestDispatcher;
@@ -19,9 +20,8 @@ import java.util.ResourceBundle;
 public class FrontCtrl extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        ResourceBundle bundle = ResourceBundle.getBundle("application");
-        int scheduledHours = Integer.valueOf(bundle.getString("SCHEDULED_HOURS"));
-        int scheduledMinutes = Integer.valueOf(bundle.getString("SCHEDULED_MINUTES"));
+        int scheduledHours = Integer.valueOf(PropertiesManager.scheduledHours());
+        int scheduledMinutes = Integer.valueOf(PropertiesManager.scheduledMinutes());
         new SchedulerStarter().startScheduler(scheduledHours, scheduledMinutes);
 
     }
