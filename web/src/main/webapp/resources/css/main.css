@@ -29,9 +29,9 @@ body {
 }
 
 /*Checkbox inside table for selecting contact*/
-#table-checkbox {
-    vertical-align: middle;
-    font-size: 4em;
+.table-checkbox {
+    vertical-align: middle !important;
+    font-size: 4em !important;
 }
 
 

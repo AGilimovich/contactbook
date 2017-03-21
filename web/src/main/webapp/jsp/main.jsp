@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
 <head>
@@ -7,6 +8,7 @@
 
     <link rel="stylesheet" href="/resources/css/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="/resources/css/main.css">
+    <script src="/resources/js/main.js" defer></script>
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -20,7 +22,7 @@
                         class="glyphicon glyphicon-search"></span> Поиск
                     контактов</a></li>
                 <li>
-                    <a href="javascript:{}" onclick="document.getElementById('main-form').submit();" >
+                    <a href="javascript:{}" onclick="document.getElementById('main-form').submit();">
                         <span class="glyphicon glyphicon-envelope"></span> Отправка Email
                     </a>
                 </li>
@@ -50,17 +52,14 @@
             <table class="table">
                 <c:forEach var="contact" items="${contacts}" varStatus="status">
 
-                    <tr valign="middle">
-                        <td id="table-checkbox" width="5%" align="middle">
+                    <tr valign="middle" class="${status.index<10? 'contact-entry':'contact-entry hidden'}">
+                        <td class="table-checkbox" width="5%" align="middle">
                             <input type="checkbox" name="isSelected" value="${contact.contactId}">
                         </td>
 
                         <td width="110px">
                             <div class="photo-container">
                                 <img src="/file?id=${contact.photo}" alt="" height="100%" class="photo">
-                                    <%--<img src="/file?id=${contact.photo}" alt="" height="100%" class="photo">--%>
-
-
                             </div>
                         </td>
                         <td>
@@ -104,20 +103,24 @@
             <div class="col-md-10">
                 <div class="pages">
                     <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        <li class="page-item-prev hidden"><a class="page-link" href="javascript:{}"
+                                                             onclick="goToPrevPage();">Previous</a>
+                        </li>
+                        <c:forEach begin="1" end="${fn:length(contacts)}" varStatus="status" step="10">
+                            <li class="page-item"><a class="page-link" href="javascript:{}"
+                                                     onclick="goToPage(${status.count});">${status.count}</a></li>
+                        </c:forEach>
+                        <li class="${fn:length(contacts)>10? 'page-item-next': 'page-item-next hidden'}"><a
+                                class="page-link" href="javascript:{}" onclick="goToNextPage();">Next</a></li>
                     </ul>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="items-display">
                     <span>Отображать контактов:</span>
-                    <select name="display-items" class="form-control">
-                        <option value="ten">10</option>
-                        <option value="twenty">20</option>
+                    <select id="display-items" class="form-control" onchange="changeDisplayingItemsCount()">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
                     </select>
                 </div>
             </div>

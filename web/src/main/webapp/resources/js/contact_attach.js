@@ -35,11 +35,6 @@ var inputAttachComment = document.getElementsByName("inputAttachComment");
 //-------------------------------
 
 
-// var currentId;
-// function generateId() {
-//     return currentId++;
-// }
-
 
 var attachments = [];
 
