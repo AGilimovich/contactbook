@@ -2,6 +2,7 @@ package com.itechart.web.command;
 
 import com.itechart.data.dao.JdbcAddressDao;
 import com.itechart.data.dao.JdbcContactDao;
+import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Contact;
 import com.itechart.web.parser.DateTimeParser;
 
@@ -56,8 +57,24 @@ public class DoSearch implements Command {
         String apartment = request.getParameter("apartment");
         String zipCode = request.getParameter("zipCode");
 
+        SearchDTO dto = new SearchDTO();
+        dto.setSurname(surname);
+        dto.setName(name);
+        dto.setPatronymic(patronymic);
+        dto.setFromDate(fromDateOfBirth);
+        dto.setToDate(toDateOfBirth);
+        dto.setGender(gender);
+        dto.setFamilyStatus(familyStatus);
+        dto.setCitizenship(citizenship);
+        dto.setCountry(country);
+        dto.setCity(city);
+        dto.setStreet(street);
+        dto.setHouse(house);
+        dto.setApartment(apartment);
+        dto.setZipCOde(zipCode);
 
-        ArrayList<Contact> contacts = contactDao.findContactsByFields(surname, name, patronymic, fromDateOfBirth, toDateOfBirth, gender, familyStatus, citizenship, country, city, street, house, apartment, zipCode);
+
+        ArrayList<Contact> contacts = contactDao.findContactsByFields(dto);
         return new ShowContacts(contactDao, addressDao).executeSearchResult(servlet, request, response, contacts);
     }
 }

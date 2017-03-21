@@ -1,6 +1,7 @@
 package com.itechart.data.dao;
 
 import com.itechart.data.db.JdbcDataSource;
+import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Contact;
 
 import java.sql.*;
@@ -277,7 +278,9 @@ public class JdbcContactDao implements IContactDao {
     }
 
     @Override
-    public ArrayList<Contact> findContactsByFields(String surname, String name, String patronymic, Date fromDate, Date toDate, Contact.Gender gender, Contact.FamilyStatus familyStatus, String citizenship, String country, String city, String street, String house, String apartment, String zipCode) {
+//    public ArrayList<Contact> findContactsByFields(String surname, String name, String patronymic, Date fromDate, Date toDate, Contact.Gender gender, Contact.FamilyStatus familyStatus, String citizenship, String country, String city, String street, String house, String apartment, String zipCode) {
+    public ArrayList<Contact> findContactsByFields(SearchDTO dto) {
+
         ArrayList<Contact> contacts = new ArrayList<>();
         Connection cn = null;
         PreparedStatement st = null;
@@ -285,20 +288,20 @@ public class JdbcContactDao implements IContactDao {
         try {
             cn = ds.getConnection();
             st = cn.prepareStatement(SELECT_BY_FIELDS_QUERY);
-            if (!surname.isEmpty())
-                st.setString(1, surname);
+            if (!dto.getSurname().isEmpty())
+                st.setString(1, dto.getSurname());
             else st.setString(1, "%");
 
-            if (!name.isEmpty())
-                st.setString(2, name);
+            if (!dto.getName().isEmpty())
+                st.setString(2, dto.getName());
             else st.setString(2, "%");
 
-            if (!patronymic.isEmpty())
-                st.setString(3, patronymic);
+            if (!dto.getPatronymic().isEmpty())
+                st.setString(3, dto.getPatronymic());
             else st.setString(3, "%");
 
-            if (fromDate != null)
-                st.setDate(4, new java.sql.Date(fromDate.getTime()));
+            if (dto.getFromDate() != null)
+                st.setDate(4, new java.sql.Date(dto.getFromDate().getTime()));
             else
                 try {
                     st.setDate(4, new java.sql.Date(DateFormat.getDateInstance().parse("01.01.1900").getTime()));
@@ -306,45 +309,45 @@ public class JdbcContactDao implements IContactDao {
                     e.printStackTrace();
                 }
 
-            if (toDate != null)
-                st.setDate(5, new java.sql.Date(toDate.getTime()));
+            if (dto.getToDate() != null)
+                st.setDate(5, new java.sql.Date(dto.getToDate().getTime()));
             else st.setDate(5, new java.sql.Date(new Date().getTime()));
             // if dates are specified then do not look for rows with NULL dateOfBirth values
-            if (toDate != null || fromDate != null) {
+            if (dto.getToDate() != null || dto.getFromDate() != null) {
                 st.setString(6, "NOT NULL");
-            } else  st.setString(6, "NULL");
+            } else st.setString(6, "NULL");
 
-            if (gender != null)
-                st.setString(7, gender.name());
+            if (dto.getGender() != null)
+                st.setString(7, dto.getGender().name());
             else st.setString(7, "%");
-            if (familyStatus != null)
-                st.setString(8, familyStatus.name());
+            if (dto.getFamilyStatus() != null)
+                st.setString(8, dto.getFamilyStatus().name());
             else st.setString(8, "%");
-            if (!citizenship.isEmpty())
-                st.setString(9, citizenship);
+            if (!dto.getCitizenship().isEmpty())
+                st.setString(9, dto.getCitizenship());
             else st.setString(9, "%");
-            if (!country.isEmpty())
-                st.setString(10, country);
+            if (!dto.getCountry().isEmpty())
+                st.setString(10, dto.getCountry());
             else st.setString(10, "%");
 
-            if (!city.isEmpty())
-                st.setString(11, city);
+            if (!dto.getCity().isEmpty())
+                st.setString(11, dto.getCity());
             else st.setString(11, "%");
 
-            if (!street.isEmpty())
-                st.setString(12, street);
+            if (!dto.getStreet().isEmpty())
+                st.setString(12, dto.getStreet());
             else st.setString(12, "%");
 
-            if (!house.isEmpty())
-                st.setString(13, house);
+            if (!dto.getHouse().isEmpty())
+                st.setString(13, dto.getHouse());
             else st.setString(13, "%");
 
-            if (!apartment.isEmpty())
-                st.setString(14, apartment);
+            if (!dto.getApartment().isEmpty())
+                st.setString(14, dto.getApartment());
             else st.setString(14, "%");
 
-            if (!zipCode.isEmpty())
-                st.setString(15, zipCode);
+            if (!dto.getZipCOde().isEmpty())
+                st.setString(15, dto.getZipCOde());
             else st.setString(15, "%");
 
 
