@@ -38,8 +38,17 @@ public class FormFieldsParser {
 
 
     private void parseContact(Map<String, String> formFields, Map<String, String> storedFiles) {
+
         ContactBuilder contactBuilder = new ContactBuilder();
-        contact = contactBuilder.buildContact(formFields, storedFiles);
+        //set photo
+        for (Map.Entry<String, String> entry : storedFiles.entrySet()) {
+            if (entry.getKey().equals("photoFile")) {
+                String name = entry.getValue();
+                if (name != null)
+                    formFields.put("photo", name);
+            }
+        }
+        contact = contactBuilder.buildContact(formFields);
     }
 
     private void parseAddress(Map<String, String> formFields) {
@@ -89,16 +98,16 @@ public class FormFieldsParser {
         String fieldNameRegex = "attachMeta\\[(\\d+)\\]";
         Pattern fieldNamePattern = Pattern.compile(fieldNameRegex);
         Matcher matcher = null;
-        ArrayList<Attachment> attachments = new ArrayList<>();
         for (Map.Entry<String, String> formParameter : formFields.entrySet()) {
             //if it is attachment field
             if ((matcher = fieldNamePattern.matcher(formParameter.getKey())).matches()) {
+                String fileFieldNumber = matcher.group(1);
                 matcher = formFieldpattern.matcher(formParameter.getValue());
                 Map<String, String> parameters = new HashMap<>();
                 while (matcher.find()) {
                     parameters.put(matcher.group(1), matcher.group(2));
                 }
-                parameters.put("fileName", storedFiles.get(formParameter.getKey()));// TODO: 22.03.2017
+                parameters.put("fileName", storedFiles.get("attachFile[" + fileFieldNumber + "]"));// TODO: 22.03.2017
                 Attachment attachment = attachmentBuilder.buildAttachment(parameters);
                 String status = parameters.get("status");
                 switch (status) {
@@ -122,6 +131,7 @@ public class FormFieldsParser {
     public Contact getContact() {
         return contact;
     }
+
     public Address getAddress() {
         return address;
     }

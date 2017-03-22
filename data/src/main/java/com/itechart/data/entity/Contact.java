@@ -64,9 +64,11 @@ public class Contact {
         this.website = contact.getWebsite();
         this.email = contact.getEmail();
         this.placeOfWork = contact.getPlaceOfWork();
+        if (contact.getPhoto() != null)
+            this.photo = contact.getPhoto();
     }
 
-        public long getId() {
+    public long getId() {
         return contactId;
     }
 

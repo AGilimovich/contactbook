@@ -50,14 +50,13 @@ public class DoUpdateContact implements Command {
         //store file parts and get map of field names and file names
         Map<String, String> storedFiles = writer.writeFileParts(fileParts);
 
-        long contactId = (long) request.getSession().getAttribute("id");
-        long addressId = contactDao.getContactById(contactId).getAddress();
         FormFieldsParser parser = new FormFieldsParser(formFields, storedFiles);
-        Contact contact = parser.getContact();
-        contact.setContactId(contactId);
-        contact.setAddress(addressId);
-        Address address = parser.getAddress();
-        address.setId(addressId);
+        long contactId = (long) request.getSession().getAttribute("id");
+        Contact contactToUpdate = contactDao.getContactById(contactId);
+        Address addressToUpdate = addressDao.getAddressById(contactToUpdate.getAddress());
+        contactToUpdate.update(parser.getContact());
+        addressToUpdate.update(parser.getAddress());
+
 
         ArrayList<Phone> newPhones = parser.getNewPhones();
         ArrayList<Phone> updatedPhones = parser.getUpdatedPhones();
@@ -69,7 +68,7 @@ public class DoUpdateContact implements Command {
 
 
         DBManager dbManager = new DBManager(contactDao, phoneDao, attachmentDao, addressDao);
-        dbManager.updateContact(contact, address, newPhones, newAttachments, updatedPhones, updatedAttachments, deletedPhones, deletedAttachments);
+        dbManager.updateContact(contactToUpdate, addressToUpdate, newPhones, newAttachments, updatedPhones, updatedAttachments, deletedPhones, deletedAttachments);
 
 
         //remove session attributes

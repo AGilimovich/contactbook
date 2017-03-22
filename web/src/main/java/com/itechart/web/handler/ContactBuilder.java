@@ -8,7 +8,7 @@ import java.util.Map;
  * Created by Aleksandr on 17.03.2017.
  */
 public class ContactBuilder {
-    public Contact buildContact(Map<String, String> requestParameters, Map<String, String> storedFiles) {
+    public Contact buildContact(Map<String, String> requestParameters) {
         Contact contact = new Contact();
         contact.setName(requestParameters.get("name"));
         contact.setSurname(requestParameters.get("surname"));
@@ -25,14 +25,9 @@ public class ContactBuilder {
         contact.setWebsite(requestParameters.get("website"));
         contact.setEmail(requestParameters.get("email"));
         contact.setPlaceOfWork(requestParameters.get("placeOfWork"));
-        //set photo
-        for (Map.Entry<String, String> entry : storedFiles.entrySet()) {
-            if (entry.getKey().equals("photoFile")) {
-                contact.setPhoto(entry.getValue());
-            }
-        }
-
-
+//        //set photo
+        if (requestParameters.get("photo") != null)
+            contact.setPhoto(requestParameters.get("photo"));
         return contact;
     }
 }
