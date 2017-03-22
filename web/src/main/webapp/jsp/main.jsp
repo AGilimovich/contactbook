@@ -69,71 +69,59 @@
                             </div>
                         </td>
                         <td>
-                            <p><a href="${pageContext.request.contextPath}/edit?id=${contact.contactId}"
-                                  class="name">${contact.surname} ${contact.name} ${contact.patronymic}
-                            </a>
-                            </p>
-
                             <div class="row">
-                                <div class="col-md-2">
-                                    <p><b>Дата рождения:</b></p>
-                                </div>
-                                <div class="col-md-3">
-                                    <p><b>Домашний адрес:</b></p>
-                                </div>
-                                <div class="col-md-2">
-                                    <p><b>Место работы:</b></p>
-                                </div>
+                                <p><a href="${pageContext.request.contextPath}/edit?id=${contact.contactId}"
+                                      class="name">${contact.surname} ${contact.name} ${contact.patronymic}
+                                </a>
+                                </p>
                             </div>
                             <div class="row">
                                 <div class="col-md-2">
-                                        <%--<p>12.11.1990 г.</p>--%>
-                                    <p>${contact.dateOfBirth}</p>
+                                    <div class="row">
+                                        <p><b>Дата рождения:</b></p>
+                                    </div>
+                                    <div class="row">
+                                        <p>${contact.dateOfBirth}</p>
+                                    </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <%--<div class="row">--%>
-                                        <%--Страна:${contact.country}--%>
-                                    <%--</div>--%>
-                                    <%--<div class="row">--%>
-                                        <%--Город:${contact.city}--%>
-                                    <%--</div>--%>
-                                    <%--<div class="row">--%>
-                                        <%--Улица:${contact.street}--%>
-                                    <%--</div>--%>
-                                    <%--<div class="row">--%>
-                                        <%--Дом:${contact.house}--%>
-                                    <%--</div>--%>
-                                    <%--<div class="row">--%>
-                                        <%--Квартира:${contact.apartment}--%>
-                                    <%--</div>--%>
+                                    <div class="row">
+                                        <p><b>Домашний адрес:</b></p>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="row">Страна:</div>
+                                            <div class="row">Город:</div>
+                                            <div class="row">Улица:</div>
+                                            <div class="row">Дом:</div>
+                                            <div class="row">Квартира:</div>
+                                        </div>
 
-                                    <div class="row">
-                                        <div class="col-md-3">Страна:</div>
-                                        <div class="col-md-9">${contact.country}</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3">Город:</div>
-                                        <div class="col-md-9">${contact.city}</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3">Улица:</div>
-                                        <div class="col-md-9">${contact.street}</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3">Дом:</div>
-                                        <div class="col-md-9">${contact.house}</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3">Квартира:</div>
-                                        <div class="col-md-9">${contact.apartment}</div>
-                                    </div>
 
+                                        <div class="col-md-7">
+                                            <div class="row">${contact.country}</div>
+                                            <div class="row">${contact.city}</div>
+                                            <div class="row">${contact.street}</div>
+                                            <div class="row">${contact.house}</div>
+                                            <div class="row">${contact.apartment}</div>
+
+                                        </div>
+
+
+                                    </div>
                                 </div>
-
                                 <div class="col-md-2">
-                                    <p>${contact.placeOfWork}</p>
+                                    <div class="row">
+                                        <p><b>Место работы:</b></p>
+                                    </div>
+                                    <div class="row">
+                                        <p>${contact.placeOfWork}</p>
+
+                                    </div>
 
                                 </div>
+
+
                             </div>
                         </td>
                     </tr>

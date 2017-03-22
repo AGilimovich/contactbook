@@ -43,30 +43,51 @@
             <div class="col-md-8">
                 <div class="row well">
                     <div class="col-md-4">
-                        <p>Дата рождения:</p>
-                        <span>с </span><input type="date" name="fromDate" class="date form-control"> <span>по</span> <input id='toDate' name="toDate"
-                                                                                                            type="date"
-                                                                                                            class="date form-control">
+                        <div class="row">
+                            <p>Дата рождения:</p>
+                        </div>
+                        <div class="row">
+                            <span>с </span><input type="date" name="fromDate" class="date form-control"> <span>по</span>
+                            <input id='toDate' name="toDate"
+                                   type="date"
+                                   class="date form-control">
+                        </div>
                     </div>
                     <div class="col-md-2">
-                        <p>Пол:</p>
-                        <select name="gender" class="gender form-control">
-                            <option value="any">любой</option>
-                            <option value="male">м</option>
-                            <option value="female">ж</option>
-                        </select>
+                        <div class="row">
+                            <p>Пол:</p>
+                        </div>
+                        <div class="row">
+                            <select name="gender" class="gender form-control">
+                                <option value="any">любой</option>
+                                <option value="male">м</option>
+                                <option value="female">ж</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="col-md-2">
-                        <p>Семейное положение:</p>
-                        <select name="familyStatus" class="family form-control">
-                            <option value="any" selected>любое</option>
-                            <option value="single">холост/не замужем</option>
-                            <option value="married">женат/замужем</option>
-                        </select>
+                        <div class="row">
+                            <p>Семейное положение:</p>
+                        </div>
+                        <div class="row">
+
+                            <select name="familyStatus" class="family form-control">
+                                <option value="any" selected>любое</option>
+                                <option value="single">холост/не замужем</option>
+                                <option value="married">женат/замужем</option>
+                            </select>
+                        </div>
+
                     </div>
                     <div class="col-md-3">
-                        <p>Гражданство:</p>
-                        <input type="text" name="citizenship" class="form-control">
+                        <div class="row">
+                            <p>Гражданство:</p>
+                        </div>
+                        <div class="row">
+
+                            <input type="text" name="citizenship" class="form-control">
+                        </div>
+
                     </div>
                 </div>
 
