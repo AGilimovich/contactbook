@@ -38,6 +38,9 @@ var inputPhoneComment = document.getElementsByName("inputPhoneComment");
 
 
 
+
+
+
 // action - show phone creating popup window
 btnAddPhone.onclick = function () {
     //reset input values of popup form
@@ -89,7 +92,6 @@ btnEditPhone.onclick = function () {
     var phoneNumber = document.getElementsByName("phoneNumber");
     var phoneType = document.getElementsByName("phoneType");
     var phoneComment = document.getElementsByName("phoneComment");
-
 
 
     var countSelected = 0;
@@ -208,7 +210,9 @@ function Appendable(n, v) {
 function createHiddenInputForPhone(countryCode, operatorCode, phoneNumber, phoneType, phoneComment) {
     var value = new Appendable("countryCode", countryCode).append("operatorCode", operatorCode).append("number", phoneNumber).append("type", phoneType).append("comment", phoneComment).value();
     var phoneHiddenInput = document.createElement("input");
-    phoneHiddenInput.setAttribute("name", "phone");
+    var id = new Date().getTime();
+    phones.push(new Phone(id));
+    phoneHiddenInput.setAttribute("name", "phone[" + id + "]");
     phoneHiddenInput.setAttribute("value", value);
     hiddenDiv.appendChild(phoneHiddenInput);
 }
@@ -253,9 +257,10 @@ function editExisting(index) {
 
 //function for setting new value to hidden input
 function editHiddenInput(index, countryCode, operatorCode, phoneNumber, phoneType, phoneComment) {
-    var hiddenInput = document.getElementsByName("phone");
+    var id = phones[index].getId();
+    var hiddenInput = document.getElementsByName("phone[" + id + "]");
     var value = new Appendable("countryCode", countryCode).append("operatorCode", operatorCode).append("number", phoneNumber).append("type", phoneType).append("comment", phoneComment).value();
-    hiddenInput[index].setAttribute("value", value);
+    hiddenInput[0].setAttribute("value", value);
 }
 
 

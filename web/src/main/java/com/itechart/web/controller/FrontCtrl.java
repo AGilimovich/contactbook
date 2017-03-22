@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 /**
  * This is controller of all requests on the main form.
@@ -31,8 +30,8 @@ public class FrontCtrl extends HttpServlet {
     }
 
     public void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("UTF-8");// TODO: 22.03.2017 remove into filter
+        response.setCharacterEncoding("UTF-8");// TODO: 22.03.2017 remove into filter
 
         CommandFactory factory = new CommandFactory();
         Command command = factory.getCommand(request);

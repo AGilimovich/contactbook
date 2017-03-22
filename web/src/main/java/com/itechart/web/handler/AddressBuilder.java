@@ -1,4 +1,4 @@
-package com.itechart.web.parser;
+package com.itechart.web.handler;
 
 import com.itechart.data.entity.Address;
 
@@ -7,10 +7,8 @@ import java.util.Map;
 /**
  * Created by Aleksandr on 17.03.2017.
  */
-public class AddressParser {
-    public Address parseAddress(Map<String, String> requestParameters) {
-        //create address object from request
-        //-----------------------------------------------------
+public class AddressBuilder {
+    public Address buildAddress(Map<String, String> requestParameters) {
         Address address = new Address();
         address.setCountry(requestParameters.get("country"));
         address.setCity(requestParameters.get("city"));

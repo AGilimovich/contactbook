@@ -1,4 +1,4 @@
-package com.itechart.web.parser;
+package com.itechart.web.email;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 /**
  * Class for parsing list of emails from string.
  */
-public class EmailParser {
+public class EmailAddressesParser {
     private final String emailRegex = "([\\w\\.]+@\\w+\\.\\w+),?\\s*";
     private Pattern pattern = Pattern.compile(emailRegex);
 

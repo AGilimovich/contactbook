@@ -1,6 +1,5 @@
 package com.itechart.data.dao;
 
-import com.itechart.data.dto.AddressDTO;
 import com.itechart.data.entity.Address;
 
 /**

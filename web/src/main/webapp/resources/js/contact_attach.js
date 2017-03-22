@@ -46,6 +46,16 @@ function findIndexOfAttachment(attachment) {
 
 }
 
+var phones = [];
+function Phone(id) {
+    this.id = id;
+    this.getId = function () {
+        return id;
+    }
+
+
+}
+
 
 var STATUS = {
     NONE: "NONE",
@@ -64,6 +74,13 @@ window.onload = function () {
             attachment.setAttachCheckBox(attachCheckBoxes[i]);
             attachments.push(attachment);
 
+        }
+    }
+
+    if (typeof phonesCheckBoxes !== "undefined" && phonesCheckBoxes.length > 0) {
+        for (var i = 0; i < phonesCheckBoxes.length; i++) {
+            var phone = new Phone(phonesCheckBoxes[i].value);
+            phones.push(phone);
         }
     }
 }

@@ -8,8 +8,9 @@ import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Attachment;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.Phone;
-import com.itechart.web.handler.Action;
-import com.itechart.web.handler.MultipartRequestParamHandler;
+import com.itechart.web.handler.*;
+import com.itechart.web.properties.PropertiesManager;
+import org.apache.commons.fileupload.FileItem;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,40 +34,29 @@ public class DoCreateContact implements Command {
         this.phoneDao = phoneDao;
         this.attachmentDao = attachmentDao;
         this.addressDao = addressDao;
-
     }
 
-    @Override
+
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        MultipartRequestParamHandler handler = new MultipartRequestParamHandler();
-        Contact contact = new Contact();
-        Address address = new Address();
-        ArrayList<Phone> phones = new ArrayList<>();
-        Map<Attachment, Action> attachments = new HashMap<>();
-        //fills objects with data retrieved from request
-        handler.handle(request, contact, address, phones, attachments);
+        RequestHandler handler = new RequestHandler();
+        handler.handle(request);
+        //get map of form field names and corresponding values
+        Map<String, String> formFields = handler.getFormFields();
+        //get map of field names and corresponding file parts
+        Map<String, FileItem> fileParts = handler.getFileParts();
 
+        FilePartWriter writer = new FilePartWriter(PropertiesManager.FILE_PATH());
+        //store file parts and get map of field names and file names
+        Map<String, String> storedFiles = writer.writeFileParts(fileParts);
 
-        //assigning id's and persisting into db
-        long addressId = addressDao.save(address);
-        contact.setAddress(addressId);
-        long contactId = contactDao.save(contact);
-        for (Phone phone : phones) {
-            phone.setContact(contactId);
-            phoneDao.save(phone);
-        }
-        for (Map.Entry<Attachment, Action> attachment : attachments.entrySet()) {
-            switch (attachment.getValue()) {
-                case ADD:
-                case UPDATE:
-                    attachment.getKey().setContact(contactId);
-                    attachmentDao.save(attachment.getKey());
-                    break;
-                default:
+        FormFieldsParser parser = new FormFieldsParser(formFields, storedFiles);
+        Contact contact = parser.getContact();
+        Address address = parser.getAddress();
+        ArrayList<Phone> phones = parser.getNewPhones();
+        ArrayList<Attachment> attachments = parser.getNewAttachments();
+        DBManager dbManager = new DBManager(contactDao, phoneDao, attachmentDao, addressDao);
+        dbManager.saveNewContact(contact, address, phones, attachments);
 
-
-            }
-        }
 
 //------------------------------------------------------------------------------
         request.getSession().removeAttribute("action");

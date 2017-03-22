@@ -1,4 +1,4 @@
-package com.itechart.web.parser;
+package com.itechart.web.handler;
 
 import java.text.*;
 import java.util.Date;
@@ -9,14 +9,14 @@ import java.util.Date;
 public class DateTimeParser {
 
     /**
-     * function for parsing date from format in which it is received from jsp;
+     * Function for parsing date from String using provided pattern.
      *
      * @param date in String format.
-     * @return Date object or null if parsing has failed
+     * @return Date object or null if parsing has failed.
      */
     public static Date parseDate(String date, String pattern) {
         SimpleDateFormat format = new SimpleDateFormat(pattern);
-        if (date != null && (!date.isEmpty())) {
+        if (date != null) {
             try {
                 return format.parse(date);
             } catch (java.text.ParseException e) {

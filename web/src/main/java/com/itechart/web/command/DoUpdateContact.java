@@ -8,8 +8,7 @@ import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Attachment;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.Phone;
-import com.itechart.web.handler.Action;
-import com.itechart.web.handler.MultipartRequestParamHandler;
+import com.itechart.web.handler.*;
 import com.itechart.web.properties.PropertiesManager;
 import org.apache.commons.fileupload.FileItem;
 
@@ -38,73 +37,45 @@ public class DoUpdateContact implements Command {
         this.attachmentDao = attachmentDao;
     }
 
-    @Override
+
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        RequestHandler handler = new RequestHandler();
+        handler.handle(request);
+        //get map of form field names and corresponding values
+        Map<String, String> formFields = handler.getFormFields();
+        //get map of field names and corresponding file parts
+        Map<String, FileItem> fileParts = handler.getFileParts();
 
-        MultipartRequestParamHandler handler = new MultipartRequestParamHandler();
-        long id = (long) request.getSession().getAttribute("id");
-        Contact contact = contactDao.getContactById(id);
-        Address address = addressDao.getAddressById(contact.getAddress());
-        ArrayList<Phone> phones = new ArrayList<>();
-        Map<Attachment, Action> attachments = new HashMap<>();
-        handler.handle(request, contact, address, phones, attachments);
+        FilePartWriter writer = new FilePartWriter(PropertiesManager.FILE_PATH());
+        //store file parts and get map of field names and file names
+        Map<String, String> storedFiles = writer.writeFileParts(fileParts);
 
-        addressDao.update(address);
-        contactDao.update(contact);
+        long contactId = (long) request.getSession().getAttribute("id");
+        long addressId = contactDao.getContactById(contactId).getAddress();
+        FormFieldsParser parser = new FormFieldsParser(formFields, storedFiles);
+        Contact contact = parser.getContact();
+        contact.setContactId(contactId);
+        contact.setAddress(addressId);
+        Address address = parser.getAddress();
+        address.setId(addressId);
 
-        //delete old phones
-        phoneDao.deleteForUser(contact.getId());
-        //persist into db new phones
-        for (Phone phone : phones) {
-            phone.setContact(id);
-            phoneDao.save(phone);
-        }
+        ArrayList<Phone> newPhones = parser.getNewPhones();
+        ArrayList<Phone> updatedPhones = parser.getUpdatedPhones();
+        ArrayList<Phone> deletedPhones = parser.getDeletedPhones();
 
-        for (Map.Entry<Attachment, Action> attachment : attachments.entrySet()) {
-            switch (attachment.getValue()) {
-                case UPDATE:
-                    attachmentDao.update(attachment.getKey());
-                    break;
-                case DELETE:
-                    attachmentDao.delete(attachment.getKey().getId());
-                    break;
-                case ADD:
-                    attachment.getKey().setContact(id);
-                    attachmentDao.save(attachment.getKey());
-                    break;
-                case NONE:
-                default:
+        ArrayList<Attachment> newAttachments = parser.getNewAttachments();
+        ArrayList<Attachment> updatedAttachments = parser.getUpdatedAttachments();
+        ArrayList<Attachment> deletedAttachments = parser.getDeletedAttachments();
 
 
-            }
-        }
+        DBManager dbManager = new DBManager(contactDao, phoneDao, attachmentDao, addressDao);
+        dbManager.updateContact(contact, address, newPhones, newAttachments, updatedPhones, updatedAttachments, deletedPhones, deletedAttachments);
+
 
         //remove session attributes
         request.getSession().removeAttribute("action");
         request.getSession().removeAttribute("id");
         return (new ShowContacts(contactDao, addressDao)).execute(servlet, request, response);
-    }
-
-
-    /**
-     * Function processes request parameters with type file.
-     * Stores file on file system and returns unique name given to file.
-     * Name given to file is the number of milliseconds since January 1, 1970, 00:00:00 GMT.
-     *
-     * @param item
-     * @param path
-     * @return
-     */
-    private String processFileInputs(FileItem item, String path) {
-        String fileName = String.valueOf(new Date().getTime());
-        File uploadedFile = new File(path + "\\" + fileName);
-        try {
-            item.write(uploadedFile);
-            return fileName;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
 }

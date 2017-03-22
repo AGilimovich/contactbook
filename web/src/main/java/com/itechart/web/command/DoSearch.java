@@ -4,7 +4,7 @@ import com.itechart.data.dao.JdbcAddressDao;
 import com.itechart.data.dao.JdbcContactDao;
 import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Contact;
-import com.itechart.web.parser.DateTimeParser;
+import com.itechart.web.handler.DateTimeParser;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

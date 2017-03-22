@@ -3,7 +3,7 @@ package com.itechart.web.command;
 import com.itechart.data.dao.JdbcAddressDao;
 import com.itechart.data.dao.JdbcContactDao;
 import com.itechart.web.email.EmailSender;
-import com.itechart.web.parser.EmailParser;
+import com.itechart.web.email.EmailAddressesParser;
 import org.apache.commons.mail.EmailException;
 
 import javax.servlet.ServletException;
@@ -41,7 +41,7 @@ public class DoSendEmail implements Command {
 
         EmailSender sender = new EmailSender(hostName, SMTPPort, userName, password, emailFrom);
 
-        ArrayList<String> emailAddresses = new EmailParser().getEmailAddresses(emailAddressesString);
+        ArrayList<String> emailAddresses = new EmailAddressesParser().getEmailAddresses(emailAddressesString);
         for (String email : emailAddresses) {
             try {
                 sender.sendEmail(email, subject, body);

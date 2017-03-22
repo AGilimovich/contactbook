@@ -20,7 +20,6 @@ public interface IContactDao {
 
     Contact getContactById(long id);
 
-    //    ArrayList<Contact> findContactsByFields(String surname, String name, String patronymic, Date fromDate, Date toDate, Contact.Gender gender, Contact.FamilyStatus familyStatus, String Citizenship, String country, String city, String street, String house, String apartment, String zipCode);
     ArrayList<Contact> findContactsByFields(SearchDTO dto);
 
 

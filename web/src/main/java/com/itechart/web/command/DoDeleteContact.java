@@ -32,11 +32,6 @@ public class DoDeleteContact implements Command {
         if (selectedContactsId != null) {
             for (String c : selectedContactsId) {
                 long contactId = Long.valueOf(c);
-                phoneDao.deleteForUser(contactId);
-                attachmentDao.deleteForUser(contactId);
-                long addressId = contactDao.getContactById(contactId).getAddress();
-                contactDao.delete(contactId);
-                addressDao.delete(addressId);
             }
         }
         return (new ShowContacts(contactDao, addressDao)).execute(servlet, request, response);

@@ -9,7 +9,6 @@ import com.itechart.web.properties.PropertiesManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ResourceBundle;
 
 /**
  * Factory class for which produces command objects.
