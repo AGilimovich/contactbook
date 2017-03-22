@@ -137,3 +137,13 @@
 0:0:0:0:0:0:0:1 - - [22/Mar/2017:11:09:03 +0300] "GET /resources/css/bootstrap/bootstrap.css.map HTTP/1.1" 404 1033 http-bio-8080-exec-8 3
 0:0:0:0:0:0:0:1 - - [22/Mar/2017:11:09:13 +0300] "GET /resources/css/bootstrap/bootstrap.css.map HTTP/1.1" 404 1033 http-bio-8080-exec-9 1
 0:0:0:0:0:0:0:1 - - [22/Mar/2017:11:09:30 +0300] "GET /resources/css/bootstrap/bootstrap.css.map HTTP/1.1" 404 1033 http-bio-8080-exec-10 1
+0:0:0:0:0:0:0:1 - - [22/Mar/2017:11:10:18 +0300] "GET / HTTP/1.1" 200 40237 http-bio-8080-exec-2 357
+0:0:0:0:0:0:0:1 - - [22/Mar/2017:11:10:20 +0300] "GET /search HTTP/1.1" 200 5552 http-bio-8080-exec-7 529
+0:0:0:0:0:0:0:1 - - [22/Mar/2017:11:10:24 +0300] "GET /resources/css/bootstrap/bootstrap.css.map HTTP/1.1" 404 1033 http-bio-8080-exec-8 2
+0:0:0:0:0:0:0:1 - - [22/Mar/2017:11:12:15 +0300] "GET /search HTTP/1.1" 200 5549 http-bio-8080-exec-10 105
+0:0:0:0:0:0:0:1 - - [22/Mar/2017:14:05:48 +0300] "GET / HTTP/1.1" 200 40237 http-bio-8080-exec-6 82
+0:0:0:0:0:0:0:1 - - [22/Mar/2017:14:05:48 +0300] "GET /resources/css/main.css HTTP/1.1" 304 - http-bio-8080-exec-6 7
+0:0:0:0:0:0:0:1 - - [22/Mar/2017:14:05:48 +0300] "GET /resources/js/main.js HTTP/1.1" 304 - http-bio-8080-exec-6 2
+0:0:0:0:0:0:0:1 - - [22/Mar/2017:14:10:54 +0300] "GET / HTTP/1.1" 200 40237 http-bio-8080-exec-5 60
+0:0:0:0:0:0:0:1 - - [22/Mar/2017:14:15:09 +0300] "GET / HTTP/1.1" 200 40237 http-bio-8080-exec-4 53
+0:0:0:0:0:0:0:1 - - [22/Mar/2017:14:49:27 +0300] "GET / HTTP/1.1" 200 40237 http-bio-8080-exec-8 77

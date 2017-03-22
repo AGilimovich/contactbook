@@ -1,5 +1,7 @@
 package com.itechart.web.command;
 
+import com.itechart.web.properties.PropertiesManager;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,8 +20,7 @@ public class DoSendFile implements Command {
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        ResourceBundle properties = ResourceBundle.getBundle("application");
-        String FILE_PATH = properties.getString("FILE_PATH");
+        String FILE_PATH = PropertiesManager.FILE_PATH();
 
         String photoId = request.getParameter("id");
         if (!photoId.isEmpty()) {

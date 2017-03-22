@@ -42,7 +42,7 @@ public class CommandFactory {
     public Command getCommand(HttpServletRequest request) throws ServletException {
 
         String path = request.getServletPath();
-        System.out.println(path);//todo delete
+
 
         switch (path) {
             case "/":

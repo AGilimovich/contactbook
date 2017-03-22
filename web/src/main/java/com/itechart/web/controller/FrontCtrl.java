@@ -4,6 +4,7 @@ import com.itechart.web.command.Command;
 import com.itechart.web.command.CommandFactory;
 import com.itechart.web.properties.PropertiesManager;
 import com.itechart.web.scheduler.SchedulerStarter;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -18,6 +19,9 @@ import java.util.ResourceBundle;
  * This is controller of all requests on the main form.
  */
 public class FrontCtrl extends HttpServlet {
+
+    private static final Logger log = Logger.getLogger(FrontCtrl.class);
+
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         int scheduledHours = Integer.valueOf(PropertiesManager.scheduledHours());
@@ -38,10 +42,12 @@ public class FrontCtrl extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        log.info("HTTP GET запрос");
         processRequest(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        log.info("HTTP POST запрос");
         processRequest(request, response);
     }
 

@@ -117,7 +117,7 @@ public class MultipartRequestParamHandler {
 
 
     /**
-     * Function processes request parameters with type file.
+     * Function processes request parameters with file type.
      * Stores file on file system.
      * Name given to file is the number of milliseconds since January 1, 1970, 00:00:00 GMT.
      *
