@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Class for handling multipart requests.
  */
-public class RequestHandler {
+public class MultipartRequestHandler {
 
     private Map<String, String> formFields;
     private Map<String, FileItem> fileParts;

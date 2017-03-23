@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 /**
  * Class for parsing entity objects from request form fields.
  */
-public class FormFieldsParser {
+public class ObjectFactory {
 
 
     private Contact contact;
@@ -28,16 +28,16 @@ public class FormFieldsParser {
     private ArrayList<Attachment> deletedAttachments = new ArrayList<>();
 
 
-    public FormFieldsParser(Map<String, String> formFields, Map<String, String> storedFiles) {
-        parseContact(formFields, storedFiles);
-        parseAddress(formFields);
-        parsePhones(formFields);
-        parseAttachments(formFields, storedFiles);
+    public ObjectFactory(Map<String, String> formFields, Map<String, String> storedFiles) {
+        createContact(formFields, storedFiles);
+        createAddress(formFields);
+        createPhones(formFields);
+        createAttachments(formFields, storedFiles);
 
     }
 
 
-    private void parseContact(Map<String, String> formFields, Map<String, String> storedFiles) {
+    private void createContact(Map<String, String> formFields, Map<String, String> storedFiles) {
 
         ContactBuilder contactBuilder = new ContactBuilder();
         //set photo
@@ -51,12 +51,12 @@ public class FormFieldsParser {
         contact = contactBuilder.buildContact(formFields);
     }
 
-    private void parseAddress(Map<String, String> formFields) {
+    private void createAddress(Map<String, String> formFields) {
         AddressBuilder addressBuilder = new AddressBuilder();
         address = addressBuilder.buildAddress(formFields);
     }
 
-    private void parsePhones(Map<String, String> formFields) {
+    private void createPhones(Map<String, String> formFields) {
         String formFieldRegex = "(\\w+)=(\\+*\\w*)&?";
         Pattern formFieldpattern = Pattern.compile(formFieldRegex);
 
@@ -91,7 +91,7 @@ public class FormFieldsParser {
         }
     }
 
-    private void parseAttachments(Map<String, String> formFields, Map<String, String> storedFiles) {
+    private void createAttachments(Map<String, String> formFields, Map<String, String> storedFiles) {
         String formFieldRegex = "(\\w+)=([\\w\\d\\s\\.\\-:]*)&?";
         Pattern formFieldpattern = Pattern.compile(formFieldRegex);
         AttachmentBuilder attachmentBuilder = new AttachmentBuilder();
