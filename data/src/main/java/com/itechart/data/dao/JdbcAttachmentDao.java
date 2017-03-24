@@ -1,8 +1,10 @@
 package com.itechart.data.dao;
 
+import com.itechart.data.db.DBResourceManager;
 import com.itechart.data.db.JdbcDataSource;
 import com.itechart.data.entity.Attachment;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,9 +20,9 @@ public class JdbcAttachmentDao implements IAttachmentDao {
     private final String INSERT_ATTACHMENT_QUERY = "INSERT INTO attachments(attachName,uploadDate,comment,file,contact) VALUES (?,?,?,?,?)";
     private final String UPDATE_ATTACHMENT_QUERY = "UPDATE attachments SET attachName=?,comment=? WHERE attachId=?";
     private final String DELETE_ATTACHMENT_QUERY = "DELETE FROM attachments WHERE attachId = ?";
-    private JdbcDataSource ds;
+    private DataSource ds;
 
-    public JdbcAttachmentDao(JdbcDataSource ds) {
+    public JdbcAttachmentDao(DataSource ds) {
         this.ds = ds;
     }
 
@@ -50,21 +52,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, rs);
         }
         return attachments;
 
@@ -93,21 +81,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, rs);
         }
         return attachment;
 
@@ -137,23 +111,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null)
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, rs);
         }
         return id;
     }
@@ -171,16 +129,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, null);
         }
 
     }
@@ -200,18 +149,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-
-
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, null);
         }
     }
 
@@ -227,16 +165,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, null);
         }
     }
 }

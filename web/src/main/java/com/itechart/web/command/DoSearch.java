@@ -4,7 +4,7 @@ import com.itechart.data.dao.JdbcAddressDao;
 import com.itechart.data.dao.JdbcContactDao;
 import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Contact;
-import com.itechart.web.handler.DateTimeParser;
+import com.itechart.web.service.DateTimeParser;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,13 +35,13 @@ public class DoSearch implements Command {
         Contact.Gender gender = null;
         if (genderParam != null && !genderParam.equals("any"))
             gender = Contact.Gender.valueOf(genderParam.toUpperCase());
-        else gender = null;
+
 
         String familyStatusParam = request.getParameter("familyStatus");
         Contact.FamilyStatus familyStatus = null;
         if (familyStatusParam != null && !familyStatusParam.equals("any"))
             familyStatus = Contact.FamilyStatus.valueOf(familyStatusParam.toUpperCase());
-        else familyStatus = null;
+
         String fromDateParam = request.getParameter("fromDate");
         Date fromDateOfBirth = DateTimeParser.parseDate(fromDateParam, "yyyy-MM-dd");
 

@@ -9,6 +9,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,7 +35,7 @@ public class ScheduledJob implements Job {
         String DB_PASSWORD = properties.getString("DB_PASSWORD");
         try {
             JdbcDataSource ds = new JdbcDataSource(JDBC_DRIVER, DB_URL, DB_USER, DB_PASSWORD);
-            contactDao = new JdbcContactDao(ds);
+//            contactDao = new JdbcContactDao(ds); // TODO: 24.03.2017
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

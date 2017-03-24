@@ -20,9 +20,11 @@ import java.io.IOException;
 public class FrontCtrl extends HttpServlet {
 
     private static final Logger log = Logger.getLogger(FrontCtrl.class);
+    private CommandFactory commandFactory;
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+        commandFactory = new CommandFactory();
         int scheduledHours = Integer.valueOf(PropertiesManager.scheduledHours());
         int scheduledMinutes = Integer.valueOf(PropertiesManager.scheduledMinutes());
         new SchedulerStarter().startScheduler(scheduledHours, scheduledMinutes);
@@ -32,9 +34,7 @@ public class FrontCtrl extends HttpServlet {
     public void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");// TODO: 22.03.2017 remove into filter
         response.setCharacterEncoding("UTF-8");// TODO: 22.03.2017 remove into filter
-
-        CommandFactory factory = new CommandFactory();
-        Command command = factory.getCommand(request);
+        Command command = commandFactory.getCommand(request);
         String page = command.execute(this, request, response);
         if (page != null)
             dispatch(request, response, page);

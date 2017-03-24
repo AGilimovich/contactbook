@@ -3,8 +3,8 @@
 <html>
 <head>
     <title>Title</title>
-    <link rel="stylesheet" href="/resources/css/bootstrap/bootstrap.css">
-    <link rel="stylesheet" href="/resources/css/search.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search.css">
 </head>
 <body>
 <nav class="navbar navbar-default">

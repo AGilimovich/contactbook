@@ -8,7 +8,7 @@ import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Attachment;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.Phone;
-import com.itechart.web.handler.*;
+import com.itechart.web.service.*;
 import com.itechart.web.properties.PropertiesManager;
 import org.apache.commons.fileupload.FileItem;
 
@@ -48,13 +48,13 @@ public class DoCreateContact implements Command {
         //store file parts and get map of field names and file names
         Map<String, String> storedFiles = writer.writeFileParts(fileParts);
 
-        ObjectFactory parser = new ObjectFactory(formFields, storedFiles);
+        ObjectsFromRequestFactory parser = new ObjectsFromRequestFactory(formFields, storedFiles);
         Contact contact = parser.getContact();
         Address address = parser.getAddress();
         ArrayList<Phone> phones = parser.getNewPhones();
         ArrayList<Attachment> attachments = parser.getNewAttachments();
-        DBManager dbManager = new DBManager(contactDao, phoneDao, attachmentDao, addressDao);
-        dbManager.saveNewContact(contact, address, phones, attachments);
+        SessionManager sessionManager = new SessionManager(contactDao, phoneDao, attachmentDao, addressDao);
+        sessionManager.saveNewContact(contact, address, phones, attachments);
 
 
 //------------------------------------------------------------------------------

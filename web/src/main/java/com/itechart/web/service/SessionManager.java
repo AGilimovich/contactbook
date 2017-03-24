@@ -1,4 +1,4 @@
-package com.itechart.web.handler;
+package com.itechart.web.service;
 
 import com.itechart.data.dao.JdbcAddressDao;
 import com.itechart.data.dao.JdbcAttachmentDao;
@@ -14,13 +14,13 @@ import java.util.ArrayList;
 /**
  * Created by Aleksandr on 22.03.2017.
  */
-public class DBManager {
+public class SessionManager {
     private JdbcContactDao contactDao;
     private JdbcPhoneDao phoneDao;
     private JdbcAttachmentDao attachmentDao;
     private JdbcAddressDao addressDao;
 
-    public DBManager(JdbcContactDao contactDao, JdbcPhoneDao phoneDao, JdbcAttachmentDao attachmentDao, JdbcAddressDao addressDao) {
+    public SessionManager(JdbcContactDao contactDao, JdbcPhoneDao phoneDao, JdbcAttachmentDao attachmentDao, JdbcAddressDao addressDao) {
         this.contactDao = contactDao;
         this.phoneDao = phoneDao;
         this.attachmentDao = attachmentDao;
@@ -28,9 +28,10 @@ public class DBManager {
 
     }
 
-    public void deleteContact(long contactId){
+    public void deleteContact(long contactId) {
         phoneDao.deleteForUser(contactId);
         attachmentDao.deleteForUser(contactId);
+        // TODO: 23.03.2017 delete from disk
         long addressId = contactDao.getContactById(contactId).getAddress();
         contactDao.delete(contactId);
         addressDao.delete(addressId);
@@ -64,14 +65,15 @@ public class DBManager {
             phoneDao.save(phone);
         }
 
-        for (Attachment attachment: deletedAttachments){
+        for (Attachment attachment : deletedAttachments) {
             attachmentDao.delete(attachment.getId());
+            // TODO: 23.03.2017 delete from disk
         }
-        for (Attachment attachment: newAttachments){
+        for (Attachment attachment : newAttachments) {
             attachment.setContact(contact.getId());
             attachmentDao.save(attachment);
         }
-        for (Attachment attachment: updatedAttachments){
+        for (Attachment attachment : updatedAttachments) {
             attachmentDao.update(attachment);
         }
 

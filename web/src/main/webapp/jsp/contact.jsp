@@ -4,11 +4,11 @@
 <html>
 <head>
     <title>Title</title>
-    <link rel="stylesheet" href="/resources/css/contact.css">
-    <link rel="stylesheet" href="/resources/css/bootstrap/bootstrap.css">
-    <script src="/resources/js/contact_phones.js" charset="utf-8" defer></script>
-    <script src="/resources/js/contact_attach.js" charset="utf-8" defer></script>
-    <script src="/resources/js/contact_photo.js" charset="utf-8" defer></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/contact.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap.css">
+    <script src="${pageContext.request.contextPath}/resources/js/contact_phones.js" charset="utf-8" defer></script>
+    <script src="${pageContext.request.contextPath}/resources/js/contact_attach.js" charset="utf-8" defer></script>
+    <script src="${pageContext.request.contextPath}/resources/js/contact_photo.js" charset="utf-8" defer></script>
 
 </head>
 <body>
@@ -33,7 +33,7 @@
             <div class="col-md-1">
 
                 <div class="photo-container">
-                    <img src="/file?id=${contact.photo}" height="100%" alt="photo" id="photo">
+                    <img src="${pageContext.request.contextPath}/file?id=${contact.photo}" height="100%" alt="photo" id="photo">
                 </div>
 
             </div>

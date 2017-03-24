@@ -1,4 +1,4 @@
-package com.itechart.web.handler;
+package com.itechart.web.service;
 
 import com.itechart.data.entity.Phone;
 

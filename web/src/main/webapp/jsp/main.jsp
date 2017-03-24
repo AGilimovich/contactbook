@@ -6,9 +6,9 @@
 <head>
     <title>Title</title>
 
-    <link rel="stylesheet" href="/resources/css/bootstrap/bootstrap.css">
-    <link rel="stylesheet" href="/resources/css/main.css">
-    <script src="/resources/js/main.js" defer></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
+    <script src="${pageContext.request.contextPath}/resources/js/main.js" defer></script>
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -65,7 +65,7 @@
 
                         <td width="110px">
                             <div class="photo-container">
-                                <img src="/file?id=${contact.photo}" alt="" height="100%" class="photo">
+                                <img src="${pageContext.request.contextPath}/file?id=${contact.photo}" alt="" height="100%" class="photo">
                             </div>
                         </td>
                         <td>

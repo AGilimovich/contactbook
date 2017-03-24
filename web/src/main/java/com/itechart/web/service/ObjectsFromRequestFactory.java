@@ -1,4 +1,4 @@
-package com.itechart.web.handler;
+package com.itechart.web.service;
 
 import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Attachment;
@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 /**
  * Class for parsing entity objects from request form fields.
  */
-public class ObjectFactory {
+public class ObjectsFromRequestFactory {
 
 
     private Contact contact;
@@ -28,12 +28,11 @@ public class ObjectFactory {
     private ArrayList<Attachment> deletedAttachments = new ArrayList<>();
 
 
-    public ObjectFactory(Map<String, String> formFields, Map<String, String> storedFiles) {
+    public ObjectsFromRequestFactory(Map<String, String> formFields, Map<String, String> storedFiles) {
         createContact(formFields, storedFiles);
         createAddress(formFields);
         createPhones(formFields);
         createAttachments(formFields, storedFiles);
-
     }
 
 

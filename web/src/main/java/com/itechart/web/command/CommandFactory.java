@@ -7,8 +7,12 @@ import com.itechart.data.dao.JdbcPhoneDao;
 import com.itechart.data.db.JdbcDataSource;
 import com.itechart.web.properties.PropertiesManager;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 
 /**
  * Factory class for which produces command objects.
@@ -21,54 +25,57 @@ public class CommandFactory {
 
     public CommandFactory() {
 
-        String JDBC_DRIVER = PropertiesManager.JDBC_DRIVER();
-        String DB_URL = PropertiesManager.DB_URL();
-        String DB_USER = PropertiesManager.DB_USER();
-        String DB_PASSWORD = PropertiesManager.DB_PASSWORD();
+        DataSource ds = null;
         try {
-            JdbcDataSource ds = new JdbcDataSource(JDBC_DRIVER, DB_URL, DB_USER, DB_PASSWORD);
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            ds = (DataSource) envContext.lookup("jdbc/MySQLDatasource");
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
+
+        if (ds != null) {
             contactDao = new JdbcContactDao(ds);
             phoneDao = new JdbcPhoneDao(ds);
             attachmentDao = new JdbcAttachmentDao(ds);
             addressDao = new JdbcAddressDao(ds);
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
+
     }
 
 
     public Command getCommand(HttpServletRequest request) throws ServletException {
 
         String path = request.getServletPath();
-
-
-        switch (path) {
-            case "/":
-                return new ShowContacts(contactDao, addressDao);
-            case "/email":
-                return new ShowEmail(contactDao);
-            case "/send":
-                return new DoSendEmail(contactDao, addressDao);
-            case "/search":
-                return new ShowSearch();
-            case "/add":
-                return new ShowContactAdd(contactDao, addressDao, phoneDao, attachmentDao);
-            case "/edit":
-                return new ShowContactEdit(contactDao, addressDao, phoneDao, attachmentDao);
-            case "/save":
-                return new DoCreateContact(contactDao, phoneDao, attachmentDao, addressDao);
-            case "/update":
-                return new DoUpdateContact(contactDao, addressDao, phoneDao, attachmentDao);
-            case "/find":
-                return new DoSearch(contactDao, addressDao);
-            case "/delete":
-                return new DoDeleteContact(contactDao, phoneDao, attachmentDao, addressDao);
-            case "/file":
-                return new DoSendFile();
-            default:
-                throw new ServletException("no such path");
-        }
+        CommandType receivedCommand = CommandType.fromString(path);
+        if (receivedCommand != null)
+            switch (receivedCommand) {
+                case ROOT:
+                    return new ShowContacts(contactDao, addressDao);
+                case EMAIL:
+                    return new ShowEmail(contactDao);
+                case SEND:
+                    return new DoSendEmail(contactDao, addressDao);
+                case SEARCH:
+                    return new ShowSearch();
+                case ADD:
+                    return new ShowContactAdd(contactDao, addressDao, phoneDao, attachmentDao);
+                case EDIT:
+                    return new ShowContactEdit(contactDao, addressDao, phoneDao, attachmentDao);
+                case SAVE:
+                    return new DoCreateContact(contactDao, phoneDao, attachmentDao, addressDao);
+                case UPDATE:
+                    return new DoUpdateContact(contactDao, addressDao, phoneDao, attachmentDao);
+                case FIND:
+                    return new DoSearch(contactDao, addressDao);
+                case DELETE:
+                    return new DoDeleteContact(contactDao, phoneDao, attachmentDao, addressDao);
+                case FILE:
+                    return new DoSendFile();
+                default:
+                    throw new ServletException("Wrong path");
+            }
+        else throw new ServletException("Wrong path");
 
     }
 }

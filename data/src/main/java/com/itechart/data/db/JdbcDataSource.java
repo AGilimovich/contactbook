@@ -1,5 +1,6 @@
 package com.itechart.data.db;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -7,7 +8,7 @@ import java.sql.SQLException;
 /**
  * This class provides access to MySQL database.
  */
-public class JdbcDataSource implements IDataSource {
+public class JdbcDataSource {
 
     private String url;
     private String password;

@@ -1,9 +1,11 @@
 package com.itechart.data.dao;
 
+import com.itechart.data.db.DBResourceManager;
 import com.itechart.data.db.JdbcDataSource;
 import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Contact;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -14,7 +16,7 @@ import java.util.Date;
  * Class for persisting and modifying data in the database.
  */
 public class JdbcContactDao implements IContactDao {
-    private JdbcDataSource ds;
+    private DataSource ds;
 
     private final String SELECT_ALL_CONTACTS_QUERY = "SELECT c.*, gender.genderValue, family_status.familyStatusValue, a.* " +
             " FROM contacts AS c INNER JOIN gender ON c.gender = gender.genderId" +
@@ -40,7 +42,7 @@ public class JdbcContactDao implements IContactDao {
             "WHERE (c.surname LIKE ?) AND (c.name LIKE ?) AND (c.patronymic LIKE ?) AND ((c.dateOfBirth BETWEEN ? AND ?) OR (COALESCE(c.dateOfBirth,'NULL') LIKE ?)) AND (gender.genderValue LIKE ?) AND (family_status.familyStatusValue LIKE ?) " +
             "AND (c.citizenship LIKE ?) AND (a.country LIKE ?) AND (a.city LIKE ?) AND (a.street LIKE ?) AND (a.house LIKE ?) AND (a.apartment LIKE ?) AND (a.zipCode LIKE ?)";
 
-    public JdbcContactDao(JdbcDataSource ds) {
+    public JdbcContactDao(DataSource ds) {
         this.ds = ds;
     }
 
@@ -80,21 +82,7 @@ public class JdbcContactDao implements IContactDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, rs);
         }
 
         return id;
@@ -113,16 +101,7 @@ public class JdbcContactDao implements IContactDao {
             e.printStackTrace();
         } finally {
 
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, null);
 
         }
     }
@@ -162,16 +141,7 @@ public class JdbcContactDao implements IContactDao {
             e.printStackTrace();
         } finally {
 
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, null);
 
         }
     }
@@ -208,21 +178,7 @@ public class JdbcContactDao implements IContactDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, rs);
 
         }
         return contacts;
@@ -257,21 +213,7 @@ public class JdbcContactDao implements IContactDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, rs);
         }
 
         return contact;
@@ -372,21 +314,7 @@ public class JdbcContactDao implements IContactDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, rs);
         }
 
         return contacts;

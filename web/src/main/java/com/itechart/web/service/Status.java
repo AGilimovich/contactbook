@@ -1,4 +1,4 @@
-package com.itechart.web.handler;
+package com.itechart.web.service;
 
 /**
  * Created by Aleksandr on 20.03.2017.

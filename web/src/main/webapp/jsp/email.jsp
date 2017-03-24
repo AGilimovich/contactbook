@@ -4,9 +4,9 @@
 <head>
 
     <title>Title</title>
-    <link rel="stylesheet" href="/resources/css/bootstrap/bootstrap.css">
-    <link rel="stylesheet" href="/resources/css/email.css">
-    <script src="/resources/js/email.js" charset="utf-8" defer></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/email.css">
+    <script src="${pageContext.request.contextPath}/resources/js/email.js" charset="utf-8" defer></script>
 
 </head>
 <body>

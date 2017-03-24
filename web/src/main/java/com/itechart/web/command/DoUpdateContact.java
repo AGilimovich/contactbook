@@ -8,7 +8,7 @@ import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Attachment;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.Phone;
-import com.itechart.web.handler.*;
+import com.itechart.web.service.*;
 import com.itechart.web.properties.PropertiesManager;
 import org.apache.commons.fileupload.FileItem;
 
@@ -49,7 +49,7 @@ public class DoUpdateContact implements Command {
         //store file parts and get map of field names and file names
         Map<String, String> storedFiles = writer.writeFileParts(fileParts);
 
-        ObjectFactory parser = new ObjectFactory(formFields, storedFiles);
+        ObjectsFromRequestFactory parser = new ObjectsFromRequestFactory(formFields, storedFiles);
         long contactId = (long) request.getSession().getAttribute("id");
         Contact contactToUpdate = contactDao.getContactById(contactId);
         Address addressToUpdate = addressDao.getAddressById(contactToUpdate.getAddress());
@@ -66,8 +66,8 @@ public class DoUpdateContact implements Command {
         ArrayList<Attachment> deletedAttachments = parser.getDeletedAttachments();
 
 
-        DBManager dbManager = new DBManager(contactDao, phoneDao, attachmentDao, addressDao);
-        dbManager.updateContact(contactToUpdate, addressToUpdate, newPhones, newAttachments, updatedPhones, updatedAttachments, deletedPhones, deletedAttachments);
+        SessionManager sessionManager = new SessionManager(contactDao, phoneDao, attachmentDao, addressDao);
+        sessionManager.updateContact(contactToUpdate, addressToUpdate, newPhones, newAttachments, updatedPhones, updatedAttachments, deletedPhones, deletedAttachments);
 
 
         //remove session attributes

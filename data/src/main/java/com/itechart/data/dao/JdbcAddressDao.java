@@ -1,9 +1,11 @@
 package com.itechart.data.dao;
 
+import com.itechart.data.db.DBResourceManager;
 import com.itechart.data.db.JdbcDataSource;
 import com.itechart.data.entity.Address;
 import com.mysql.jdbc.Statement;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +15,7 @@ import java.sql.SQLException;
  * DAO class for address entity.
  */
 public class JdbcAddressDao implements IAddressDao {
-    private JdbcDataSource ds;
+    private DataSource ds;
 
     private final String SELECT_ADDRESS_BY_ID_QUERY = "SELECT * FROM addresses WHERE addressId = ?";
     private final String INSERT_ADDRESS_QUERY = "INSERT INTO addresses(country, city, street, house, apartment, zipCode) VALUES(?, ?, ?, ?, ?, ?)";
@@ -21,7 +23,7 @@ public class JdbcAddressDao implements IAddressDao {
     private final String DELETE_ADDRESS_QUERY = "DELETE FROM addresses WHERE addressId = ?";
 
 
-    public JdbcAddressDao(JdbcDataSource ds) {
+    public JdbcAddressDao(DataSource ds) {
         this.ds = ds;
     }
 
@@ -49,21 +51,7 @@ public class JdbcAddressDao implements IAddressDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, rs);
         }
         return id;
     }
@@ -80,18 +68,7 @@ public class JdbcAddressDao implements IAddressDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
+            DBResourceManager.closeResources(cn, st, null);
         }
     }
 
@@ -115,21 +92,7 @@ public class JdbcAddressDao implements IAddressDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, rs);
         }
     }
 
@@ -157,21 +120,7 @@ public class JdbcAddressDao implements IAddressDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, rs);
         }
 
 

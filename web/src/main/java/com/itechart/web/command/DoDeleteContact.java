@@ -4,6 +4,7 @@ import com.itechart.data.dao.JdbcAddressDao;
 import com.itechart.data.dao.JdbcAttachmentDao;
 import com.itechart.data.dao.JdbcContactDao;
 import com.itechart.data.dao.JdbcPhoneDao;
+import com.itechart.web.service.SessionManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,9 +30,11 @@ public class DoDeleteContact implements Command {
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         String[] selectedContactsId = request.getParameterValues("isSelected");
+        SessionManager manager = new SessionManager(contactDao, phoneDao, attachmentDao, addressDao);
         if (selectedContactsId != null) {
             for (String c : selectedContactsId) {
                 long contactId = Long.valueOf(c);
+                manager.deleteContact(contactId);
             }
         }
         return (new ShowContacts(contactDao, addressDao)).execute(servlet, request, response);

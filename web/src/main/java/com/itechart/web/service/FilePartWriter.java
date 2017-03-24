@@ -1,11 +1,11 @@
-package com.itechart.web.handler;
+package com.itechart.web.service;
 
 import org.apache.commons.fileupload.FileItem;
 
 import java.io.File;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Class for storing on disk file parts.
@@ -26,7 +26,7 @@ public class FilePartWriter {
     public Map<String, String> writeFileParts(Map<String, FileItem> fileParts) {
         Map<String, String> storedFiles = new HashMap<>();
         for (Map.Entry<String, FileItem> part : fileParts.entrySet()) {
-            storedFiles.put(part.getKey(), writeFileParts(part.getValue()));
+            storedFiles.put(part.getKey(), writeFilePart(part.getValue()));
         }
         return storedFiles;
     }
@@ -37,10 +37,10 @@ public class FilePartWriter {
      * @param item to store.
      * @return the name of stored file.
      */
-    private String writeFileParts(FileItem item) {
+    private String writeFilePart(FileItem item) {
         try {
             if (item.getSize() != 0) {
-                String fileName = String.valueOf(new Date().getTime());
+                String fileName = UUID.randomUUID().toString()+ item.getName();
                 File uploadedFile = new File(path + "\\" + fileName);
                 item.write(uploadedFile);
                 return fileName;

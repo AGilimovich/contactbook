@@ -29,6 +29,8 @@
                 <version>2.2</version>
                 <configuration>
                     <path>/</path>
+                    <mode>both</mode>
+                    <!--<contextFile>${project.basedir}\web\src\main\webapp\META_INF\context.xml</contextFile>-->
                 </configuration>
             </plugin>
 

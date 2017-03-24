@@ -1,4 +1,4 @@
-package com.itechart.web.handler;
+package com.itechart.web.service;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;

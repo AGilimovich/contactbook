@@ -1,8 +1,10 @@
 package com.itechart.data.dao;
 
+import com.itechart.data.db.DBResourceManager;
 import com.itechart.data.db.JdbcDataSource;
 import com.itechart.data.entity.Phone;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -25,11 +27,11 @@ public class JdbcPhoneDao implements IPhoneDao {
     private final String DELETE_PHONE_QUERY = "DELETE FROM phones WHERE phoneId = ?";
     private final String DELETE_FOR_USER_QUERY = "DELETE FROM phones WHERE contact = ?";
 
-    public JdbcPhoneDao(JdbcDataSource ds) {
+    public JdbcPhoneDao(DataSource ds) {
         this.ds = ds;
     }
 
-    private JdbcDataSource ds;
+    private DataSource ds;
 
 
     @Override
@@ -57,21 +59,7 @@ public class JdbcPhoneDao implements IPhoneDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, rs);
         }
         return phones;
     }
@@ -100,21 +88,7 @@ public class JdbcPhoneDao implements IPhoneDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, rs);
         }
 
         return phone;
@@ -144,21 +118,7 @@ public class JdbcPhoneDao implements IPhoneDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, rs);
         }
 
 
@@ -177,16 +137,7 @@ public class JdbcPhoneDao implements IPhoneDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, null);
         }
     }
 
@@ -209,16 +160,7 @@ public class JdbcPhoneDao implements IPhoneDao {
             e.printStackTrace();
         } finally {
 
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, null);
         }
 
     }
@@ -235,16 +177,7 @@ public class JdbcPhoneDao implements IPhoneDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (st != null) try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (cn != null) try {
-                cn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            DBResourceManager.closeResources(cn, st, null);
         }
     }
 }
