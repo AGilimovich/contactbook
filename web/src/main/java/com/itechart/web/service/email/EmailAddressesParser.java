@@ -1,4 +1,4 @@
-package com.itechart.web.email;
+package com.itechart.web.service.email;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;

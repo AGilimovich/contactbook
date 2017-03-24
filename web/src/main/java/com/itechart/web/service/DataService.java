@@ -4,6 +4,8 @@ import com.itechart.data.dao.JdbcAddressDao;
 import com.itechart.data.dao.JdbcAttachmentDao;
 import com.itechart.data.dao.JdbcContactDao;
 import com.itechart.data.dao.JdbcPhoneDao;
+import com.itechart.data.dto.ContactWithAddressDTO;
+import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Attachment;
 import com.itechart.data.entity.Contact;
@@ -14,13 +16,13 @@ import java.util.ArrayList;
 /**
  * Created by Aleksandr on 22.03.2017.
  */
-public class SessionManager {
+public class DataService {
     private JdbcContactDao contactDao;
     private JdbcPhoneDao phoneDao;
     private JdbcAttachmentDao attachmentDao;
     private JdbcAddressDao addressDao;
 
-    public SessionManager(JdbcContactDao contactDao, JdbcPhoneDao phoneDao, JdbcAttachmentDao attachmentDao, JdbcAddressDao addressDao) {
+    public DataService(JdbcContactDao contactDao, JdbcPhoneDao phoneDao, JdbcAttachmentDao attachmentDao, JdbcAddressDao addressDao) {
         this.contactDao = contactDao;
         this.phoneDao = phoneDao;
         this.attachmentDao = attachmentDao;
@@ -53,15 +55,14 @@ public class SessionManager {
 
     public void updateContact(Contact contact, Address address, ArrayList<Phone> newPhones, ArrayList<Attachment> newAttachments, ArrayList<Phone> updatedPhones, ArrayList<Attachment> updatedAttachments, ArrayList<Phone> deletedPhones, ArrayList<Attachment> deletedAttachments) {
 
-
         addressDao.update(address);
         contactDao.update(contact);
 
         //delete old phones
-        phoneDao.deleteForUser(contact.getId());
+        phoneDao.deleteForUser(contact.getContactId());
         //persist into db new phones
         for (Phone phone : newPhones) {
-            phone.setContact(contact.getId());
+            phone.setContact(contact.getContactId());
             phoneDao.save(phone);
         }
 
@@ -70,7 +71,7 @@ public class SessionManager {
             // TODO: 23.03.2017 delete from disk
         }
         for (Attachment attachment : newAttachments) {
-            attachment.setContact(contact.getId());
+            attachment.setContact(contact.getContactId());
             attachmentDao.save(attachment);
         }
         for (Attachment attachment : updatedAttachments) {
@@ -79,5 +80,43 @@ public class SessionManager {
 
     }
 
+
+    public ArrayList<Contact> getAllContacts() {
+
+        return contactDao.getAll();
+    }
+
+    public ArrayList<Contact> getContactsByFields(SearchDTO dto) {
+        return contactDao.findContactsByFields(dto);
+    }
+
+    public Contact getContactById(long contactId) {
+        return contactDao.getContactById(contactId);
+    }
+
+
+    public Address getAddressById(long addressId) {
+        return addressDao.getAddressById(addressId);
+    }
+
+    public ArrayList<Phone> getAllPhonesForContact(long contactId) {
+        return phoneDao.getAllForContact(contactId);
+    }
+
+    public ArrayList<Attachment> getAllAttachmentsForContact(long contactId) {
+        return attachmentDao.getAllForContact(contactId);
+    }
+
+    public ArrayList<ContactWithAddressDTO> getContactsWithAddressDTO() {
+        DataService dataService = ServiceFactory.getServiceFactory().getDataService();
+        ArrayList<Contact> contactsDTOs = dataService.getAllContacts();
+        ArrayList<ContactWithAddressDTO> contactWithAddressDTOs = new ArrayList<>();
+        for (Contact contact : contactsDTOs) {
+            Address address = dataService.getAddressById(contact.getAddress());
+            ContactWithAddressDTO contactWithAddressDTO = new ContactWithAddressDTO(contact, address);
+            contactWithAddressDTOs.add(contactWithAddressDTO);
+        }
+        return contactWithAddressDTOs;
+    }
 
 }

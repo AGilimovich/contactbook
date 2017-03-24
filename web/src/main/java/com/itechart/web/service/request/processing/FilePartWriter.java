@@ -1,4 +1,4 @@
-package com.itechart.web.service;
+package com.itechart.web.service.request.processing;
 
 import org.apache.commons.fileupload.FileItem;
 
@@ -40,7 +40,7 @@ public class FilePartWriter {
     private String writeFilePart(FileItem item) {
         try {
             if (item.getSize() != 0) {
-                String fileName = UUID.randomUUID().toString()+ item.getName();
+                String fileName = UUID.randomUUID().toString()+ new String(item.getName().getBytes("utf-8"),"utf-8");
                 File uploadedFile = new File(path + "\\" + fileName);
                 item.write(uploadedFile);
                 return fileName;

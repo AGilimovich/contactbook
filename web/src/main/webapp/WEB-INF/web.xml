@@ -28,6 +28,11 @@
         <url-pattern>/favicon.ico</url-pattern>
     </servlet-mapping>
 
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
     <resource-ref>
         <description>MySQL Datasource</description>
         <res-ref-name>jdbc/MySQLDatasource</res-ref-name>

@@ -1,4 +1,4 @@
-package com.itechart.web.email;
+package com.itechart.web.service.email;
 
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
@@ -8,14 +8,14 @@ import org.apache.commons.mail.SimpleEmail;
 /**
  * Created by Aleksandr on 18.03.2017.
  */
-public class EmailSender {
+public class EmailService {
     private String hostName;
     private int SMTPPort;
     private String userName;
     private String password;
     private String emailFrom;
 
-    public EmailSender(String hostName, int SMTPPort, String userName, String password, String emailFrom) {
+    public EmailService(String hostName, int SMTPPort, String userName, String password, String emailFrom) {
         this.hostName = hostName;
         this.SMTPPort = SMTPPort;
         this.userName = userName;

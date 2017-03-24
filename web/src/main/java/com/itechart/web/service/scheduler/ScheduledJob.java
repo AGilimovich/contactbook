@@ -1,52 +1,27 @@
-package com.itechart.web.scheduler;
+package com.itechart.web.service.scheduler;
 
-import com.itechart.data.dao.JdbcContactDao;
-import com.itechart.data.db.JdbcDataSource;
 import com.itechart.data.entity.Contact;
-import com.itechart.web.email.EmailSender;
+import com.itechart.web.service.ServiceFactory;
+import com.itechart.web.service.email.EmailService;
 import org.apache.commons.mail.EmailException;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.ResourceBundle;
 
 /**
  * Created by Aleksandr on 18.03.2017.
  */
 public class ScheduledJob implements Job {
-    private JdbcContactDao contactDao;
-    ResourceBundle bundle = ResourceBundle.getBundle("application");
-    String hostName = bundle.getString("HOST_NAME");
-    int SMTPPort = Integer.valueOf(bundle.getString("PORT"));
-    String userName = bundle.getString("USER_NAME");
-    String password = bundle.getString("PASSWORD");
-    String emailFrom = bundle.getString("EMAIL");
-
-    public ScheduledJob() {
-        ResourceBundle properties = ResourceBundle.getBundle("db/database");
-        String JDBC_DRIVER = properties.getString("JDBC_DRIVER");
-        String DB_URL = properties.getString("DB_URL");
-        String DB_USER = properties.getString("DB_USER");
-        String DB_PASSWORD = properties.getString("DB_PASSWORD");
-        try {
-            JdbcDataSource ds = new JdbcDataSource(JDBC_DRIVER, DB_URL, DB_USER, DB_PASSWORD);
-//            contactDao = new JdbcContactDao(ds); // TODO: 24.03.2017
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        ArrayList<Contact> contacts = contactDao.getAll();
-        EmailSender emailSender = new EmailSender(hostName, SMTPPort, userName, password, emailFrom);
+        ArrayList<Contact> contacts = ServiceFactory.getServiceFactory().getDataService().getAllContacts();
+        EmailService emailService = ServiceFactory.getServiceFactory().getEmailService();
 
         //todo template
         String subject = "C днем рождения!";
@@ -57,7 +32,7 @@ public class ScheduledJob implements Job {
                 Date dateOfBirth = con.getDateOfBirth();
                 if (removeTime(dateOfBirth).equals(removeTime(new Date()))) {
                     try {
-                        emailSender.sendEmail(con.getEmail(),subject, body);
+                        emailService.sendEmail(con.getEmail(), subject, body);
                     } catch (EmailException e) {
                         e.printStackTrace();
                     }
@@ -69,6 +44,7 @@ public class ScheduledJob implements Job {
 
     /**
      * Method removes years, hours, minutes ... from date object.
+     *
      * @param date
      * @return
      */

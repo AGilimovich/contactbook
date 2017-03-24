@@ -17,10 +17,10 @@ import java.sql.SQLException;
 public class JdbcAddressDao implements IAddressDao {
     private DataSource ds;
 
-    private final String SELECT_ADDRESS_BY_ID_QUERY = "SELECT * FROM addresses WHERE addressId = ?";
-    private final String INSERT_ADDRESS_QUERY = "INSERT INTO addresses(country, city, street, house, apartment, zipCode) VALUES(?, ?, ?, ?, ?, ?)";
-    private final String UPDATE_ADDRESS_QUERY = "UPDATE addresses SET country = ?, city = ?, street = ?, house = ?, apartment = ?, zipCode = ? WHERE addressId = ?";
-    private final String DELETE_ADDRESS_QUERY = "DELETE FROM addresses WHERE addressId = ?";
+    private final String SELECT_ADDRESS_BY_ID_QUERY = "SELECT * FROM address WHERE address_id = ?";
+    private final String INSERT_ADDRESS_QUERY = "INSERT INTO address(country, city, street, house, apartment, zip_code) VALUES(?, ?, ?, ?, ?, ?)";
+    private final String UPDATE_ADDRESS_QUERY = "UPDATE address SET country = ?, city = ?, street = ?, house = ?, apartment = ?, zip_code = ? WHERE address_id = ?";
+    private final String DELETE_ADDRESS_QUERY = "DELETE FROM address WHERE address_id = ?";
 
 
     public JdbcAddressDao(DataSource ds) {
@@ -109,13 +109,13 @@ public class JdbcAddressDao implements IAddressDao {
             st.setLong(1, id);
             rs = st.executeQuery();
             rs.next();
-            int addressId = rs.getInt("addressId");
+            int addressId = rs.getInt("address_id");
             String country = rs.getString("country");
             String city = rs.getString("city");
             String street = rs.getString("street");
             String house = rs.getString("house");
             String apartment = rs.getString("apartment");
-            String zipCode = rs.getString("zipCode");
+            String zipCode = rs.getString("zip_code");
             a = new Address(addressId, country, city, street, house, apartment, zipCode);
         } catch (SQLException e) {
             e.printStackTrace();

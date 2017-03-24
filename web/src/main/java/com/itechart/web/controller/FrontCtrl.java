@@ -3,7 +3,7 @@ package com.itechart.web.controller;
 import com.itechart.web.command.Command;
 import com.itechart.web.command.CommandFactory;
 import com.itechart.web.properties.PropertiesManager;
-import com.itechart.web.scheduler.SchedulerStarter;
+import com.itechart.web.service.scheduler.SchedulerStarter;
 import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
@@ -32,8 +32,6 @@ public class FrontCtrl extends HttpServlet {
     }
 
     public void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");// TODO: 22.03.2017 remove into filter
-        response.setCharacterEncoding("UTF-8");// TODO: 22.03.2017 remove into filter
         Command command = commandFactory.getCommand(request);
         String page = command.execute(this, request, response);
         if (page != null)

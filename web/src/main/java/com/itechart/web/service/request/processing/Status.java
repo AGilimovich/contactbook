@@ -1,4 +1,4 @@
-package com.itechart.web.service;
+package com.itechart.web.service.request.processing;
 
 /**
  * Created by Aleksandr on 20.03.2017.

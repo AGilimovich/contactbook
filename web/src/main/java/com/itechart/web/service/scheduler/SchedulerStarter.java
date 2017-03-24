@@ -1,4 +1,4 @@
-package com.itechart.web.scheduler;
+package com.itechart.web.service.scheduler;
 
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;

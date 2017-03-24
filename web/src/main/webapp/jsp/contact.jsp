@@ -42,10 +42,10 @@
                 <div class="row">
                     <div class="col-md-6">
                         <p>Имя:</p>
-                        <input type="text" name="name" value="${contact.name}" class="form-control">
+                        <input type="text" name="name" value="${contact.name}" class="form-control" required>
 
                         <p>Фамилия:</p>
-                        <input type="text" name="surname" value="${contact.surname}" class="form-control">
+                        <input type="text" name="surname" value="${contact.surname}" class="form-control" required>
 
                         <p>Отчество:</p>
                         <input type="text" name="patronymic" value="${contact.patronymic}" class="form-control"
@@ -205,12 +205,13 @@
         <div id="photo-popup" class="popup">
             <div class="popup-content">
                 <p>Путь к картинке:</p>
-                <%--<input type="file" accept="image/*,image/jpeg" name="photoFile" class="form-control">--%>
-                <input type="file" name="photoFile" accept="image/jpeg,image/png,image/gif" class="form-control"
+                <%--<input type="file" name="photoFile" accept="image/jpeg,image/png,image/gif" class="form-control"--%>
+                       <%--onchange="loadImg()">--%>
+              <input type="button" id="loadFile" class="btn" value="Найти" onclick="document.getElementById('inputPhotoFile').click();" />
+                <input id="inputPhotoFile" style="display:none;" type="file" name="photoFile" accept="image/jpeg,image/png,image/gif" class="form-control"
                        onchange="loadImg()">
-
                 <div class="row controls-group">
-                    <button class="btn" id="btn-find-photo" type="button">Найти</button>
+
                     <button id="btn-save-photo" class="btn" type="button">Сохранить</button>
                     <button id="btn-undo-photo" type="button" class="btn">Отменить</button>
                 </div>

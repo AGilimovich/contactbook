@@ -68,7 +68,7 @@ public class Contact {
             this.photo = contact.getPhoto();
     }
 
-    public long getId() {
+    public long getContactId() {
         return contactId;
     }
 

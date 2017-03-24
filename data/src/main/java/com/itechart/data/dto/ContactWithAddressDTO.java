@@ -24,7 +24,7 @@ public class ContactWithAddressDTO {
 
 
     public ContactWithAddressDTO(Contact c, Address a) {
-        this.contactId = c.getId();
+        this.contactId = c.getContactId();
         this.name = c.getName();
         this.surname = c.getSurname();
         this.patronymic = c.getPatronymic();

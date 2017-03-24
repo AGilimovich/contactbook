@@ -1,81 +1,44 @@
 package com.itechart.web.command;
 
-import com.itechart.data.dao.JdbcAddressDao;
-import com.itechart.data.dao.JdbcAttachmentDao;
-import com.itechart.data.dao.JdbcContactDao;
-import com.itechart.data.dao.JdbcPhoneDao;
-import com.itechart.data.db.JdbcDataSource;
-import com.itechart.web.properties.PropertiesManager;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Factory class for which produces command objects.
  */
 public class CommandFactory {
-    private JdbcContactDao contactDao;
-    private JdbcPhoneDao phoneDao;
-    private JdbcAttachmentDao attachmentDao;
-    private JdbcAddressDao addressDao;
 
-    public CommandFactory() {
+    private static Map<String, Object> commands = new HashMap();
 
-        DataSource ds = null;
-        try {
-            Context initContext = new InitialContext();
-            Context envContext = (Context) initContext.lookup("java:/comp/env");
-            ds = (DataSource) envContext.lookup("jdbc/MySQLDatasource");
-        } catch (NamingException e) {
-            e.printStackTrace();
-        }
-
-        if (ds != null) {
-            contactDao = new JdbcContactDao(ds);
-            phoneDao = new JdbcPhoneDao(ds);
-            attachmentDao = new JdbcAttachmentDao(ds);
-            addressDao = new JdbcAddressDao(ds);
-        }
-
+    static {
+        commands.put("/", ShowContacts.class);
+        commands.put("/email", ShowEmail.class);
+        commands.put("/send", DoSendEmail.class);
+        commands.put("/search", ShowSearch.class);
+        commands.put("/add", ShowContactAdd.class);
+        commands.put("/edit", ShowContactEdit.class);
+        commands.put("/save", DoCreateContact.class);
+        commands.put("/update", DoUpdateContact.class);
+        commands.put("/find", DoSearch.class);
+        commands.put("/delete", DoDeleteContact.class);
+        commands.put("/file", DoSendFile.class);
     }
 
 
-    public Command getCommand(HttpServletRequest request) throws ServletException {
-
+    public static Command getCommand(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
-        CommandType receivedCommand = CommandType.fromString(path);
-        if (receivedCommand != null)
-            switch (receivedCommand) {
-                case ROOT:
-                    return new ShowContacts(contactDao, addressDao);
-                case EMAIL:
-                    return new ShowEmail(contactDao);
-                case SEND:
-                    return new DoSendEmail(contactDao, addressDao);
-                case SEARCH:
-                    return new ShowSearch();
-                case ADD:
-                    return new ShowContactAdd(contactDao, addressDao, phoneDao, attachmentDao);
-                case EDIT:
-                    return new ShowContactEdit(contactDao, addressDao, phoneDao, attachmentDao);
-                case SAVE:
-                    return new DoCreateContact(contactDao, phoneDao, attachmentDao, addressDao);
-                case UPDATE:
-                    return new DoUpdateContact(contactDao, addressDao, phoneDao, attachmentDao);
-                case FIND:
-                    return new DoSearch(contactDao, addressDao);
-                case DELETE:
-                    return new DoDeleteContact(contactDao, phoneDao, attachmentDao, addressDao);
-                case FILE:
-                    return new DoSendFile();
-                default:
-                    throw new ServletException("Wrong path");
-            }
-        else throw new ServletException("Wrong path");
 
+        Class<Command> commandClass = (Class<Command>) commands.get(path);
+        if (commandClass != null)
+            try {
+                return commandClass.newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        return null;
     }
 }
