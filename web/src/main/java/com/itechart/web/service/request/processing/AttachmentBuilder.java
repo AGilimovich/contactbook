@@ -15,7 +15,6 @@ public class AttachmentBuilder {
         String uploadDate = parameters.get("uploadDate");
         String comment = parameters.get("comment");
         String fileName = parameters.get("fileName");
-        String status = parameters.get("status");
         Attachment attachment = new Attachment();
         attachment.setId(Long.valueOf(id));
         attachment.setName(name);

@@ -1,5 +1,6 @@
 package com.itechart.web.service.request.processing;
 
+import com.itechart.data.dto.FullContact;
 import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Attachment;
 import com.itechart.data.entity.Contact;
@@ -14,7 +15,7 @@ import java.util.regex.Pattern;
 /**
  * Class for parsing entity objects from request form fields.
  */
-public class ObjectsFromRequestFactory {
+public class FullContactFactory {
 
 
     private Contact contact;
@@ -28,7 +29,7 @@ public class ObjectsFromRequestFactory {
     private ArrayList<Attachment> deletedAttachments = new ArrayList<>();
 
 
-    public ObjectsFromRequestFactory(Map<String, String> formFields, Map<String, String> storedFiles) {
+    public FullContactFactory(Map<String, String> formFields, Map<String, String> storedFiles) {
         createContact(formFields, storedFiles);
         createAddress(formFields);
         createPhones(formFields);
@@ -56,21 +57,14 @@ public class ObjectsFromRequestFactory {
     }
 
     private void createPhones(Map<String, String> formFields) {
-        String formFieldRegex = "(\\w+)=(\\+*\\w*)&?";
-        Pattern formFieldpattern = Pattern.compile(formFieldRegex);
-
+        PhoneFormFieldParser parser = new PhoneFormFieldParser();
         String fieldNameRegex = "phone\\[(\\d+)\\]";
         Pattern fieldNamePattern = Pattern.compile(fieldNameRegex);
         PhoneBuilder phoneBuilder = new PhoneBuilder();
         for (Map.Entry<String, String> requestParam : formFields.entrySet()) {
             //if phone parameters received in request
-            Matcher matcher = fieldNamePattern.matcher(requestParam.getKey());
-            if (matcher.matches()) {
-                matcher = formFieldpattern.matcher(requestParam.getValue());
-                Map<String, String> parameters = new HashMap<>();
-                while (matcher.find()) {
-                    parameters.put(matcher.group(1), matcher.group(2));
-                }
+            if (fieldNamePattern.matcher(requestParam.getKey()).matches()) {
+                Map<String, String> parameters = parser.parse(requestParam.getValue());
 //                switch (status) {
 //                    case "NEW":
 //                        newPhones.add(phone);
@@ -91,21 +85,18 @@ public class ObjectsFromRequestFactory {
     }
 
     private void createAttachments(Map<String, String> formFields, Map<String, String> storedFiles) {
-        String formFieldRegex = "(\\w+)=([\\w\\d\\s\\.\\-:]*)&?";
-        Pattern formFieldpattern = Pattern.compile(formFieldRegex);
+
         AttachmentBuilder attachmentBuilder = new AttachmentBuilder();
         String fieldNameRegex = "attachMeta\\[(\\d+)\\]";
         Pattern fieldNamePattern = Pattern.compile(fieldNameRegex);
+        AttachmentFormFieldParser parser = new AttachmentFormFieldParser();
         Matcher matcher = null;
         for (Map.Entry<String, String> formParameter : formFields.entrySet()) {
             //if it is attachment field
             if ((matcher = fieldNamePattern.matcher(formParameter.getKey())).matches()) {
+                Map<String, String> parameters = parser.parse(formParameter.getValue());
                 String fileFieldNumber = matcher.group(1);
-                matcher = formFieldpattern.matcher(formParameter.getValue());
-                Map<String, String> parameters = new HashMap<>();
-                while (matcher.find()) {
-                    parameters.put(matcher.group(1), matcher.group(2));
-                }
+                //add to parameters file name
                 parameters.put("fileName", storedFiles.get("attachFile[" + fileFieldNumber + "]"));// TODO: 22.03.2017
                 Attachment attachment = attachmentBuilder.buildAttachment(parameters);
                 String status = parameters.get("status");
@@ -127,36 +118,14 @@ public class ObjectsFromRequestFactory {
         }
     }
 
-    public Contact getContact() {
-        return contact;
-    }
+    public FullContact getFullContact() {
+        FullContact fullContact = new FullContact(contact, address, newPhones, newAttachments);
+        fullContact.setDeletedPhones(deletedPhones);
+        fullContact.setUpdatedPhones(updatedPhones);
+        fullContact.setDeletedAttachments(deletedAttachments);
+        fullContact.setUpdatedAttachments(updatedAttachments);
+        return fullContact;
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public ArrayList<Phone> getNewPhones() {
-        return newPhones;
-    }
-
-    public ArrayList<Attachment> getNewAttachments() {
-        return newAttachments;
-    }
-
-    public ArrayList<Phone> getUpdatedPhones() {
-        return updatedPhones;
-    }
-
-    public ArrayList<Attachment> getUpdatedAttachments() {
-        return updatedAttachments;
-    }
-
-    public ArrayList<Phone> getDeletedPhones() {
-        return deletedPhones;
-    }
-
-    public ArrayList<Attachment> getDeletedAttachments() {
-        return deletedAttachments;
     }
 
 

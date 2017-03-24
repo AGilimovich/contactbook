@@ -5,6 +5,7 @@ import com.itechart.data.dao.JdbcAttachmentDao;
 import com.itechart.data.dao.JdbcContactDao;
 import com.itechart.data.dao.JdbcPhoneDao;
 import com.itechart.data.dto.ContactWithAddressDTO;
+import com.itechart.data.dto.FullContact;
 import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Attachment;
@@ -39,7 +40,13 @@ public class DataService {
         addressDao.delete(addressId);
     }
 
-    public void saveNewContact(Contact contact, Address address, ArrayList<Phone> phones, ArrayList<Attachment> attachments) {
+
+    public void saveNewContact(FullContact fullContact) {
+        Address address = fullContact.getAddress();
+        ArrayList<Phone> phones = fullContact.getNewPhones();
+        ArrayList<Attachment> attachments = fullContact.getNewAttachments();
+        Contact contact = fullContact.getContact();
+
         long addressId = addressDao.save(address);
         contact.setAddress(addressId);
         long contactId = contactDao.save(contact);
@@ -53,28 +60,30 @@ public class DataService {
         }
     }
 
-    public void updateContact(Contact contact, Address address, ArrayList<Phone> newPhones, ArrayList<Attachment> newAttachments, ArrayList<Phone> updatedPhones, ArrayList<Attachment> updatedAttachments, ArrayList<Phone> deletedPhones, ArrayList<Attachment> deletedAttachments) {
 
-        addressDao.update(address);
-        contactDao.update(contact);
+
+    public void updateContact(FullContact fullContact) {
+
+        addressDao.update(fullContact.getAddress());
+        contactDao.update(fullContact.getContact());
 
         //delete old phones
-        phoneDao.deleteForUser(contact.getContactId());
+        phoneDao.deleteForUser(fullContact.getContact().getContactId());
         //persist into db new phones
-        for (Phone phone : newPhones) {
-            phone.setContact(contact.getContactId());
+        for (Phone phone : fullContact.getNewPhones()) {
+            phone.setContact(fullContact.getContact().getContactId());
             phoneDao.save(phone);
         }
 
-        for (Attachment attachment : deletedAttachments) {
+        for (Attachment attachment : fullContact.getDeletedAttachments()) {
             attachmentDao.delete(attachment.getId());
             // TODO: 23.03.2017 delete from disk
         }
-        for (Attachment attachment : newAttachments) {
-            attachment.setContact(contact.getContactId());
+        for (Attachment attachment : fullContact.getNewAttachments()) {
+            attachment.setContact(fullContact.getContact().getContactId());
             attachmentDao.save(attachment);
         }
-        for (Attachment attachment : updatedAttachments) {
+        for (Attachment attachment : fullContact.getUpdatedAttachments()) {
             attachmentDao.update(attachment);
         }
 

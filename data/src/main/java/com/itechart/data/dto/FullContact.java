@@ -6,118 +6,45 @@ import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.Phone;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
- * Created by Aleksandr on 24.03.2017.
+ * Contact DTO with all relevant fields including address, phones (new, updated and deleted),
+ * attachments (new, updated and deleted).
+ *
  */
 public class FullContact {
 
-    private long contactId;
-    private String name;
-    private String surname;
-    private String patronymic;
-    private Date dateOfBirth;
-    private Contact.Gender gender;
-    private String citizenship;
-    private Contact.FamilyStatus familyStatus;
-    private String website;
-    private String email;
-    private String placeOfWork;
+    private Contact contact;
     private Address address;
-    private String photo;
-    private ArrayList<Phone> phones;
-    private ArrayList<Attachment> attachments;
+    private ArrayList<Phone> newPhones;
+    private ArrayList<Attachment> newAttachments;
+    private ArrayList<Phone> updatedPhones;
+    private ArrayList<Attachment> updatedAttachments;
+    private ArrayList<Phone> deletedPhones;
+    private ArrayList<Attachment> deletedAttachments;
 
     public FullContact() {
     }
 
-    public long getContactId() {
-        return contactId;
+    public FullContact(Contact contact, Address address, ArrayList<Phone> newPhones, ArrayList<Attachment> newAttachments) {
+        this.contact = contact;
+        this.address = address;
+        this.newPhones = newPhones;
+        this.newAttachments = newAttachments;
     }
 
-    public void setContactId(long contactId) {
-        this.contactId = contactId;
+    public ArrayList<Phone> getPhones() {
+        return newPhones;
+    }
+    public ArrayList<Attachment> getAttachments() {
+        return newAttachments;
+    }
+    public Contact getContact() {
+        return contact;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public Contact.Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Contact.Gender gender) {
-        this.gender = gender;
-    }
-
-    public String getCitizenship() {
-        return citizenship;
-    }
-
-    public void setCitizenship(String citizenship) {
-        this.citizenship = citizenship;
-    }
-
-    public Contact.FamilyStatus getFamilyStatus() {
-        return familyStatus;
-    }
-
-    public void setFamilyStatus(Contact.FamilyStatus familyStatus) {
-        this.familyStatus = familyStatus;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPlaceOfWork() {
-        return placeOfWork;
-    }
-
-    public void setPlaceOfWork(String placeOfWork) {
-        this.placeOfWork = placeOfWork;
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 
     public Address getAddress() {
@@ -128,27 +55,51 @@ public class FullContact {
         this.address = address;
     }
 
-    public String getPhoto() {
-        return photo;
+    public ArrayList<Phone> getNewPhones() {
+        return newPhones;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setNewPhones(ArrayList<Phone> newPhones) {
+        this.newPhones = newPhones;
     }
 
-    public ArrayList<Phone> getPhones() {
-        return phones;
+    public ArrayList<Attachment> getNewAttachments() {
+        return newAttachments;
     }
 
-    public void setPhones(ArrayList<Phone> phones) {
-        this.phones = phones;
+    public void setNewAttachments(ArrayList<Attachment> newAttachments) {
+        this.newAttachments = newAttachments;
     }
 
-    public ArrayList<Attachment> getAttachments() {
-        return attachments;
+    public ArrayList<Phone> getUpdatedPhones() {
+        return updatedPhones;
     }
 
-    public void setAttachments(ArrayList<Attachment> attachments) {
-        this.attachments = attachments;
+    public void setUpdatedPhones(ArrayList<Phone> updatedPhones) {
+        this.updatedPhones = updatedPhones;
+    }
+
+    public ArrayList<Attachment> getUpdatedAttachments() {
+        return updatedAttachments;
+    }
+
+    public void setUpdatedAttachments(ArrayList<Attachment> updatedAttachments) {
+        this.updatedAttachments = updatedAttachments;
+    }
+
+    public ArrayList<Phone> getDeletedPhones() {
+        return deletedPhones;
+    }
+
+    public void setDeletedPhones(ArrayList<Phone> deletedPhones) {
+        this.deletedPhones = deletedPhones;
+    }
+
+    public ArrayList<Attachment> getDeletedAttachments() {
+        return deletedAttachments;
+    }
+
+    public void setDeletedAttachments(ArrayList<Attachment> deletedAttachments) {
+        this.deletedAttachments = deletedAttachments;
     }
 }

@@ -40,7 +40,7 @@ public class FilePartWriter {
     private String writeFilePart(FileItem item) {
         try {
             if (item.getSize() != 0) {
-                String fileName = UUID.randomUUID().toString()+ new String(item.getName().getBytes("utf-8"),"utf-8");
+                String fileName = UUID.randomUUID().toString()+ item.getName();
                 File uploadedFile = new File(path + "\\" + fileName);
                 item.write(uploadedFile);
                 return fileName;

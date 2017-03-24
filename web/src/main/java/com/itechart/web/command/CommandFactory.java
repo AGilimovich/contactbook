@@ -13,12 +13,12 @@ public class CommandFactory {
     private static Map<String, Object> commands = new HashMap();
 
     static {
-        commands.put("/", ShowContacts.class);
-        commands.put("/email", ShowEmail.class);
+        commands.put("/", ShowContactsView.class);
+        commands.put("/email", ShowEmailView.class);
         commands.put("/send", DoSendEmail.class);
-        commands.put("/search", ShowSearch.class);
-        commands.put("/add", ShowContactAdd.class);
-        commands.put("/edit", ShowContactEdit.class);
+        commands.put("/search", ShowSearchView.class);
+        commands.put("/add", ShowContactAddView.class);
+        commands.put("/edit", ShowContactEditView.class);
         commands.put("/save", DoCreateContact.class);
         commands.put("/update", DoUpdateContact.class);
         commands.put("/find", DoSearch.class);

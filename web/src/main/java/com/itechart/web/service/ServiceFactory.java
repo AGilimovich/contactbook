@@ -4,8 +4,9 @@ import com.itechart.data.dao.JdbcAddressDao;
 import com.itechart.data.dao.JdbcAttachmentDao;
 import com.itechart.data.dao.JdbcContactDao;
 import com.itechart.data.dao.JdbcPhoneDao;
-import com.itechart.web.service.email.EmailService;
+import com.itechart.web.service.email.EmailingService;
 import com.itechart.web.service.request.processing.RequestProcessingService;
+import com.itechart.web.service.template.EmailTemplatesProvidingService;
 import com.itechart.web.service.validation.ValidationService;
 
 import javax.naming.Context;
@@ -32,7 +33,7 @@ public class ServiceFactory {
     private String emailFrom;
 
 
-    public ServiceFactory() {
+    private ServiceFactory() {
         DataSource ds = null;
         try {
             Context initContext = new InitialContext();
@@ -56,7 +57,8 @@ public class ServiceFactory {
     }
 
     /**
-     * Static factory method for service factory.
+     * Static factory method.
+     *
      * @return
      */
     public static ServiceFactory getServiceFactory() {
@@ -78,8 +80,12 @@ public class ServiceFactory {
         return new RequestProcessingService();
     }
 
-    public EmailService getEmailService() {
-        return new EmailService(hostName, SMTPPort, userName, password, emailFrom);
+    public EmailingService getEmailService() {
+        return new EmailingService(hostName, SMTPPort, userName, password, emailFrom);
+    }
+
+    public EmailTemplatesProvidingService getEmailTemplateService() {
+        return new EmailTemplatesProvidingService();
     }
 
 

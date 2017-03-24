@@ -2,7 +2,7 @@ package com.itechart.web.service.scheduler;
 
 import com.itechart.data.entity.Contact;
 import com.itechart.web.service.ServiceFactory;
-import com.itechart.web.service.email.EmailService;
+import com.itechart.web.service.email.EmailingService;
 import org.apache.commons.mail.EmailException;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -21,7 +21,7 @@ public class ScheduledJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         ArrayList<Contact> contacts = ServiceFactory.getServiceFactory().getDataService().getAllContacts();
-        EmailService emailService = ServiceFactory.getServiceFactory().getEmailService();
+        EmailingService emailingService = ServiceFactory.getServiceFactory().getEmailService();
 
         //todo template
         String subject = "C днем рождения!";
@@ -32,7 +32,7 @@ public class ScheduledJob implements Job {
                 Date dateOfBirth = con.getDateOfBirth();
                 if (removeTime(dateOfBirth).equals(removeTime(new Date()))) {
                     try {
-                        emailService.sendEmail(con.getEmail(), subject, body);
+                        emailingService.sendEmail(con.getEmail(), subject, body);
                     } catch (EmailException e) {
                         e.printStackTrace();
                     }

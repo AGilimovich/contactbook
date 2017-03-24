@@ -6,13 +6,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Invokes contact searching view.
+ * Created by Aleksandr on 14.03.2017.
  */
-public class ShowSearch implements Command {
+public class ShowContactAddView implements Command {
 
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        return "/jsp/search.jsp";
+        //string in session current action: creating new contact (can have another value - edit)
+        request.getSession().setAttribute("action", "save");
+
+        return "/jsp/contact.jsp";
+
     }
 }

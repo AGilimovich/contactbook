@@ -5,22 +5,26 @@ import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 
+import java.util.ResourceBundle;
+
 /**
  * Created by Aleksandr on 18.03.2017.
  */
-public class EmailService {
+public class EmailingService {
     private String hostName;
     private int SMTPPort;
     private String userName;
     private String password;
     private String emailFrom;
 
-    public EmailService(String hostName, int SMTPPort, String userName, String password, String emailFrom) {
+    public EmailingService(String hostName, int SMTPPort, String userName, String password, String emailFrom) {
         this.hostName = hostName;
         this.SMTPPort = SMTPPort;
         this.userName = userName;
         this.password = password;
         this.emailFrom = emailFrom;
+
+
     }
 
     public void sendEmail(String emailAddress, String subject, String body) throws EmailException {

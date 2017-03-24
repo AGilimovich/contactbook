@@ -3,7 +3,7 @@ package com.itechart.web.controller;
 import com.itechart.web.command.Command;
 import com.itechart.web.command.CommandFactory;
 import com.itechart.web.properties.PropertiesManager;
-import com.itechart.web.service.scheduler.SchedulerStarter;
+import com.itechart.web.service.scheduler.SchedulingService;
 import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
@@ -20,19 +20,17 @@ import java.io.IOException;
 public class FrontCtrl extends HttpServlet {
 
     private static final Logger log = Logger.getLogger(FrontCtrl.class);
-    private CommandFactory commandFactory;
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        commandFactory = new CommandFactory();
         int scheduledHours = Integer.valueOf(PropertiesManager.scheduledHours());
         int scheduledMinutes = Integer.valueOf(PropertiesManager.scheduledMinutes());
-        new SchedulerStarter().startScheduler(scheduledHours, scheduledMinutes);
+        new SchedulingService().startScheduler(scheduledHours, scheduledMinutes);
 
     }
 
     public void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Command command = commandFactory.getCommand(request);
+        Command command = CommandFactory.getCommand(request);
         String page = command.execute(this, request, response);
         if (page != null)
             dispatch(request, response, page);

@@ -1,12 +1,10 @@
 package com.itechart.web.command;
 
-import com.itechart.data.dao.JdbcContactDao;
 import com.itechart.data.entity.Contact;
 import com.itechart.web.service.DataService;
 import com.itechart.web.service.ServiceFactory;
+import com.itechart.web.service.template.EmailTemplatesProvidingService;
 import org.stringtemplate.v4.ST;
-import org.stringtemplate.v4.STGroup;
-import org.stringtemplate.v4.STGroupFile;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,11 +15,11 @@ import java.util.ArrayList;
 /**
  * Command for invoking emailing view.
  */
-public class ShowEmail implements Command {
+public class ShowEmailView implements Command {
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        String[] selectedContacts = request.getParameterValues("isSelected");
+        String[] selectedContacts = ServiceFactory.getServiceFactory().getRequestProcessingService().processShowEmailViewRequest(request);
         //create array list of email addresses of selected contacts
         ArrayList<Contact> contacts = new ArrayList<>();
         ArrayList<String> emailList = new ArrayList<>();
@@ -36,22 +34,12 @@ public class ShowEmail implements Command {
                 }
             }
         }
-        ArrayList<ST> templates = new ArrayList<>();
+        EmailTemplatesProvidingService templateService = ServiceFactory.getServiceFactory().getEmailTemplateService();
+        ArrayList<ST> templates = templateService.getEmailTemplates();
 
-
-        final STGroup stGroup = new STGroupFile("templates/template.stg");
-        final ST commonEmail = stGroup.getInstanceOf("commonEmail");
-
-        final ST birthdayEmail = stGroup.getInstanceOf("birthdayEmail");
-
-
-        templates.add(commonEmail);
-        templates.add(birthdayEmail);
-
-        ST emailListTemplate = new ST("<emails:{email | <email>}; separator=\", \">");
+        ST emailListTemplate = templateService.getEmailListTemplate();
 
         emailListTemplate.add("emails", emailList);
-
         request.setAttribute("templates", templates);
         request.setAttribute("contacts", contacts);
         request.setAttribute("emailListTemplate", emailListTemplate);

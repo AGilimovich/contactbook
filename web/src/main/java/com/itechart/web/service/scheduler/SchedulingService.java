@@ -13,7 +13,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
 /**
  * Class for initialization and starting scheduler.
  */
-public class SchedulerStarter {
+public class SchedulingService {
 
     public void startScheduler(int hours, int minutes) {
         try {
