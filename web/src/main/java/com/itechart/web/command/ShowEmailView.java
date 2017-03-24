@@ -35,11 +35,10 @@ public class ShowEmailView implements Command {
             }
         }
         EmailTemplatesProvidingService templateService = ServiceFactory.getServiceFactory().getEmailTemplateService();
-        ArrayList<ST> templates = templateService.getEmailTemplates();
+        ArrayList<ST> templates = templateService.getPredefinedEmailTemplates();
+        ST emailListTemplate = templateService.getEmailListTemplate(emailList);
 
-        ST emailListTemplate = templateService.getEmailListTemplate();
 
-        emailListTemplate.add("emails", emailList);
         request.setAttribute("templates", templates);
         request.setAttribute("contacts", contacts);
         request.setAttribute("emailListTemplate", emailListTemplate);

@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Created by Aleksandr on 24.03.2017.
  */
 public class EmailTemplatesProvidingService {
-    public ArrayList<ST> getEmailTemplates() {
+    public ArrayList<ST> getPredefinedEmailTemplates() {
         ArrayList<ST> templates = new ArrayList<>();
         STGroup stGroup = new STGroupFile("templates/template.stg");
         ST commonEmail = stGroup.getInstanceOf("commonEmail");
@@ -21,8 +21,10 @@ public class EmailTemplatesProvidingService {
 
     }
 
-    public ST getEmailListTemplate() {
-        return new ST("<emails:{email | <email>}; separator=\", \">");
+    public ST getEmailListTemplate(ArrayList<String> emailList) {
+        ST emailListTemplate = new ST("<emails:{email | <email>}; separator=\", \">");
+        emailListTemplate.add("emails", emailList);
+        return emailListTemplate;
     }
 
 }

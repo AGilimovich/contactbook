@@ -18,7 +18,6 @@ public class ShowContactEditView implements Command {
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         FullContact fullContact = ServiceFactory.getServiceFactory().getRequestProcessingService().processFetchSingleContactRequest(request);
 
-
         request.getSession().setAttribute("action", "update");
         request.getSession().setAttribute("id", fullContact.getContact().getContactId());
         request.setAttribute("contact", fullContact.getContact());

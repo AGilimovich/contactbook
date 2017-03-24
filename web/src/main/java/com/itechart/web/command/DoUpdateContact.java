@@ -23,21 +23,11 @@ public class DoUpdateContact implements Command {
 
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         FullContact receivedFullContact = ServiceFactory.getServiceFactory().getRequestProcessingService().processContactRequest(request);
-
+        //id of contacted retrieved from session
         long contactId = (long) request.getSession().getAttribute("id");
+        receivedFullContact.getContact().setContactId(contactId);
         DataService dataService = ServiceFactory.getServiceFactory().getDataService();
-        Contact contactToUpdate = dataService.getContactById(contactId);
-        Address addressToUpdate = dataService.getAddressById(contactToUpdate.getAddress());
-        contactToUpdate.update(receivedFullContact.getContact());
-        addressToUpdate.update(receivedFullContact.getAddress());
-
-        FullContact fullContact = new FullContact(contactToUpdate, addressToUpdate, receivedFullContact.getNewPhones(), receivedFullContact.getNewAttachments());
-        fullContact.setUpdatedPhones(receivedFullContact.getUpdatedPhones());
-        fullContact.setDeletedPhones(receivedFullContact.getDeletedPhones());
-        fullContact.setUpdatedAttachments(receivedFullContact.getUpdatedAttachments());
-        fullContact.setDeletedAttachments(receivedFullContact.getDeletedAttachments());
-        dataService.updateContact(fullContact);
-
+        dataService.updateContact(receivedFullContact);
 
         //remove session attributes
         request.getSession().removeAttribute("action");

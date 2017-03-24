@@ -61,11 +61,16 @@ public class DataService {
     }
 
 
-
     public void updateContact(FullContact fullContact) {
 
-        addressDao.update(fullContact.getAddress());
-        contactDao.update(fullContact.getContact());
+        Contact contactToUpdate = contactDao.getContactById(fullContact.getContact().getContactId());
+        Address addressToUpdate = addressDao.getAddressById(contactToUpdate.getAddress());
+        //update fields with new data
+        contactToUpdate.update(fullContact.getContact());
+        addressToUpdate.update(fullContact.getAddress());
+        //update in db
+        addressDao.update(addressToUpdate);
+        contactDao.update(contactToUpdate);
 
         //delete old phones
         phoneDao.deleteForUser(fullContact.getContact().getContactId());
