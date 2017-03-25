@@ -1,7 +1,7 @@
 package com.itechart.web.service;
 
-import com.itechart.data.dao.*;
 import com.itechart.data.transaction.TransactionManager;
+import com.itechart.web.service.data.DataService;
 import com.itechart.web.service.email.EmailingService;
 import com.itechart.web.service.files.FileService;
 import com.itechart.web.service.request.processing.RequestProcessingService;
@@ -10,10 +10,6 @@ import com.itechart.web.service.scheduler.SchedulingService;
 import com.itechart.web.service.template.EmailTemplatesProvidingService;
 import com.itechart.web.service.validation.ValidationService;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 import java.util.ResourceBundle;
 
 /**

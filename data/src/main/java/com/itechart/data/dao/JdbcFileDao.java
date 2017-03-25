@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Created by Aleksandr on 25.03.2017.
  */
-public class JdbcContactFileDao implements IContactFileDao {
+public class JdbcFileDao implements IContactFileDao {
     private Transaction transaction;
 
     private final String SELECT_BY_ID_QUERY = "SELECT * FROM file WHERE file_id = ?";
@@ -24,7 +24,7 @@ public class JdbcContactFileDao implements IContactFileDao {
     private final String DELETE_FILE_QUERY = "DELETE FROM file WHERE id = ?";
 
 
-    public JdbcContactFileDao(Transaction transaction) {
+    public JdbcFileDao(Transaction transaction) {
         this.transaction = transaction;
     }
 

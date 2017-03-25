@@ -1,4 +1,4 @@
-package com.itechart.web.service;
+package com.itechart.web.service.data;
 
 import com.itechart.data.dao.*;
 import com.itechart.data.dto.MainPageContactDTO;
@@ -8,6 +8,8 @@ import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.*;
 import com.itechart.data.transaction.Transaction;
 import com.itechart.data.transaction.TransactionManager;
+import com.itechart.web.service.ServiceFactory;
+import com.itechart.web.service.files.FileService;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,8 +23,6 @@ public class DataService {
 
     public DataService(TransactionManager tm) {
         this.tm = tm;
-
-
     }
 
     public void deleteContact(long contactId) {
@@ -31,9 +31,24 @@ public class DataService {
         JdbcAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
         JdbcContactDao contactDao = new JdbcContactDao(transaction);
         JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
+        JdbcFileDao fileDao = new JdbcFileDao(transaction);
+        FileService fileService = ServiceFactory.getServiceFactory().getFileService();
+
+        Contact contact = contactDao.getContactById(contactId);
+        File photo = fileDao.getFileById(contact.getPhoto());
+        ArrayList<Attachment> attachments = attachmentDao.getAllForContact(contactId);
+
+        for (Attachment attachment : attachments) {
+            File file = fileDao.getFileById(attachment.getFile());
+            fileDao.delete(file.getId());
+            fileService.deleteFile(file.getStoredName());
+        }
         phoneDao.deleteForUser(contactId);
         attachmentDao.deleteForUser(contactId);
-        // TODO: 23.03.2017 delete from disk
+
+        fileDao.delete(contact.getPhoto());
+        fileService.deleteFile(photo.getStoredName());
+
         long addressId = contactDao.getContactById(contactId).getAddress();
         contactDao.delete(contactId);
         addressDao.delete(addressId);
@@ -47,7 +62,7 @@ public class DataService {
         JdbcAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
         JdbcContactDao contactDao = new JdbcContactDao(transaction);
         JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
-        JdbcContactFileDao fileDao = new JdbcContactFileDao(transaction);
+        JdbcFileDao fileDao = new JdbcFileDao(transaction);
 
         Address address = fullContactDTO.getAddress();
         ArrayList<Phone> phones = fullContactDTO.getNewPhones();
@@ -84,7 +99,7 @@ public class DataService {
         JdbcAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
         JdbcContactDao contactDao = new JdbcContactDao(transaction);
         JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
-        JdbcContactFileDao fileDao = new JdbcContactFileDao(transaction);
+        JdbcFileDao fileDao = new JdbcFileDao(transaction);
         Contact contactToUpdate = contactDao.getContactById(fullContactDTO.getContact().getContactId());
         File photo = fullContactDTO.getPhoto();
         photo.setId(contactToUpdate.getPhoto());
@@ -166,9 +181,10 @@ public class DataService {
         transaction.commitTransaction();
         return address;
     }
+
     public File getPhotoById(long photoId) {
         Transaction transaction = tm.getTransaction();
-        JdbcContactFileDao fileDao = new JdbcContactFileDao(transaction);
+        JdbcFileDao fileDao = new JdbcFileDao(transaction);
         File photo = fileDao.getFileById(photoId);
         transaction.commitTransaction();
         return photo;
@@ -179,7 +195,7 @@ public class DataService {
         Transaction transaction = tm.getTransaction();
         JdbcContactDao contactDao = new JdbcContactDao(transaction);
         JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
-        JdbcContactFileDao fileDao = new JdbcContactFileDao(transaction);
+        JdbcFileDao fileDao = new JdbcFileDao(transaction);
         ArrayList<Contact> contacts = contactDao.getAll();
         ArrayList<MainPageContactDTO> mainPageContactDTOs = new ArrayList<>();
         for (Contact contact : contacts) {
@@ -197,7 +213,7 @@ public class DataService {
         Transaction transaction = tm.getTransaction();
         JdbcContactDao contactDao = new JdbcContactDao(transaction);
         JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
-        JdbcContactFileDao fileDao = new JdbcContactFileDao(transaction);
+        JdbcFileDao fileDao = new JdbcFileDao(transaction);
         JdbcPhoneDao phoneDao = new JdbcPhoneDao(transaction);
         JdbcAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
 

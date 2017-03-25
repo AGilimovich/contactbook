@@ -1,11 +1,11 @@
-package com.itechart.web.service.request.processing;
+package com.itechart.web.service.request.processing.builder;
 
 import com.itechart.data.entity.Address;
 
 import java.util.Map;
 
 /**
- * Created by Aleksandr on 17.03.2017.
+ * Class for building Address object from request parameters.
  */
 public class AddressBuilder {
     public Address buildAddress(Map<String, String> parameters) {

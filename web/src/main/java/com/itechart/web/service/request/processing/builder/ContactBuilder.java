@@ -1,6 +1,7 @@
-package com.itechart.web.service.request.processing;
+package com.itechart.web.service.request.processing.builder;
 
 import com.itechart.data.entity.Contact;
+import com.itechart.web.service.request.processing.parser.DateTimeParser;
 
 import java.util.Map;
 
@@ -25,9 +26,6 @@ public class ContactBuilder {
         contact.setWebsite(parameters.get("website"));
         contact.setEmail(parameters.get("email"));
         contact.setPlaceOfWork(parameters.get("placeOfWork"));
-        //set photo
-//        if (parameters.get("photo") != null)
-//            contact.setPhoto(parameters.get("photo_stored"));
         return contact;
     }
 }

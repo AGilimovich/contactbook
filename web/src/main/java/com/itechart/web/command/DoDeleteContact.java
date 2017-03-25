@@ -1,7 +1,7 @@
 package com.itechart.web.command;
 
 import com.itechart.data.dto.MainPageContactDTO;
-import com.itechart.web.service.DataService;
+import com.itechart.web.service.data.DataService;
 import com.itechart.web.service.ServiceFactory;
 
 import javax.servlet.ServletException;

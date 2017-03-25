@@ -6,13 +6,11 @@ import com.itechart.data.entity.Contact;
 import com.itechart.web.properties.PropertiesManager;
 import com.itechart.web.service.email.Email;
 import com.itechart.web.service.email.EmailAddressesParser;
+import com.itechart.web.service.request.processing.builder.FullContactDTOBuilder;
+import com.itechart.web.service.request.processing.parser.DateTimeParser;
 import org.apache.commons.fileupload.FileItem;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;

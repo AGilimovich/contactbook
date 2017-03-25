@@ -5,7 +5,7 @@ import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.File;
-import com.itechart.web.service.DataService;
+import com.itechart.web.service.data.DataService;
 import com.itechart.web.service.ServiceFactory;
 
 import javax.servlet.ServletException;

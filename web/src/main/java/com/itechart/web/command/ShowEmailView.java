@@ -1,7 +1,7 @@
 package com.itechart.web.command;
 
 import com.itechart.data.entity.Contact;
-import com.itechart.web.service.DataService;
+import com.itechart.web.service.data.DataService;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.template.Template;
 import com.itechart.web.service.template.EmailTemplatesProvidingService;

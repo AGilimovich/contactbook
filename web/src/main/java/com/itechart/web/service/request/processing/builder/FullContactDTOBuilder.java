@@ -1,8 +1,10 @@
-package com.itechart.web.service.request.processing;
+package com.itechart.web.service.request.processing.builder;
 
 import com.itechart.data.dto.FullAttachmentDTO;
 import com.itechart.data.dto.FullContactDTO;
 import com.itechart.data.entity.*;
+import com.itechart.web.service.request.processing.parser.AttachmentFormFieldParser;
+import com.itechart.web.service.request.processing.parser.PhoneFormFieldParser;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -10,14 +12,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Class for parsing entity objects from request form fields.
+ * Class for building DTO object.
  */
 public class FullContactDTOBuilder {
-
 
     private Contact contact;
     private Address address;
     private File photo;
+
     private ArrayList<Phone> newPhones = new ArrayList<>();
     private ArrayList<Phone> updatedPhones = new ArrayList<>();
     private ArrayList<Phone> deletedPhones = new ArrayList<>();
