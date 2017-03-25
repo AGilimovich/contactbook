@@ -1,14 +1,9 @@
 package com.itechart.web.service.request.processing;
 
-import com.itechart.data.dto.FullContact;
+import com.itechart.data.dto.FullContactDTO;
 import com.itechart.data.dto.SearchDTO;
-import com.itechart.data.entity.Address;
-import com.itechart.data.entity.Attachment;
 import com.itechart.data.entity.Contact;
-import com.itechart.data.entity.Phone;
 import com.itechart.web.properties.PropertiesManager;
-import com.itechart.web.service.DataService;
-import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.email.Email;
 import com.itechart.web.service.email.EmailAddressesParser;
 import org.apache.commons.fileupload.FileItem;
@@ -27,7 +22,7 @@ import java.util.Map;
  */
 public class RequestProcessingService {
 
-    public FullContact processContactRequest(HttpServletRequest request) {
+    public FullContactDTO processContactRequest(HttpServletRequest request) {
         MultipartRequestHandler handler = new MultipartRequestHandler();
         handler.handle(request);
         //get map of form field names and corresponding values
@@ -39,7 +34,7 @@ public class RequestProcessingService {
         //store file parts and get map of field names and file names
         Map<String, String> storedFiles = writer.writeFileParts(fileParts);
 
-        FullContactBuilder builder = new FullContactBuilder(formFields, storedFiles);
+        FullContactDTOBuilder builder = new FullContactDTOBuilder(formFields, storedFiles);
 
         return builder.getFullContact();
     }
@@ -119,23 +114,7 @@ public class RequestProcessingService {
 
     }
 
-    public byte[] processGetFileRequest(HttpServletRequest request) {
-        String FILE_PATH = PropertiesManager.FILE_PATH();
 
-        String photoId = request.getParameter("id");
-        if (!photoId.isEmpty()) {
-            Path path = Paths.get(FILE_PATH + "\\" + photoId);
-            byte[] file = null;
-            try {
-                file = Files.readAllBytes(path);
-                return file;
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
 
     public String[] processShowEmailViewRequest(HttpServletRequest request) {
         return request.getParameterValues("isSelected");

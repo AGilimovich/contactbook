@@ -1,9 +1,9 @@
 package com.itechart.web.service;
 
 import com.itechart.data.dao.*;
-import com.itechart.data.dto.ContactWithAddressDTO;
-import com.itechart.data.dto.FullAttachment;
-import com.itechart.data.dto.FullContact;
+import com.itechart.data.dto.MainPageContactDTO;
+import com.itechart.data.dto.FullAttachmentDTO;
+import com.itechart.data.dto.FullContactDTO;
 import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.*;
 import com.itechart.data.transaction.Transaction;
@@ -41,7 +41,7 @@ public class DataService {
     }
 
 
-    public void saveNewContact(FullContact fullContact) {
+    public void saveNewContact(FullContactDTO fullContactDTO) {
         Transaction transaction = tm.getTransaction();
         JdbcPhoneDao phoneDao = new JdbcPhoneDao(transaction);
         JdbcAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
@@ -49,11 +49,11 @@ public class DataService {
         JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
         JdbcContactFileDao fileDao = new JdbcContactFileDao(transaction);
 
-        Address address = fullContact.getAddress();
-        ArrayList<Phone> phones = fullContact.getNewPhones();
-        ArrayList<FullAttachment> attachments = fullContact.getNewAttachments();
-        ContactFile photo = fullContact.getPhoto();
-        Contact contact = fullContact.getContact();
+        Address address = fullContactDTO.getAddress();
+        ArrayList<Phone> phones = fullContactDTO.getNewPhones();
+        ArrayList<FullAttachmentDTO> attachments = fullContactDTO.getNewAttachments();
+        File photo = fullContactDTO.getPhoto();
+        Contact contact = fullContactDTO.getContact();
 
 //        if (photo != null) {
         long photoId = fileDao.save(photo);
@@ -66,10 +66,10 @@ public class DataService {
             phone.setContact(contactId);
             phoneDao.save(phone);
         }
-        for (FullAttachment fullAttachment : attachments) {
-            ContactFile file = fullAttachment.getFile();
+        for (FullAttachmentDTO fullAttachmentDTO : attachments) {
+            File file = fullAttachmentDTO.getFile();
             long fileId = fileDao.save(file);
-            Attachment attachment = fullAttachment.getAttachment();
+            Attachment attachment = fullAttachmentDTO.getAttachment();
             attachment.setContact(contactId);
             attachment.setFile(fileId);
             attachmentDao.save(attachment);
@@ -78,15 +78,15 @@ public class DataService {
     }
 
 
-    public void updateContact(FullContact fullContact) {
+    public void updateContact(FullContactDTO fullContactDTO) {
         Transaction transaction = tm.getTransaction();
         JdbcPhoneDao phoneDao = new JdbcPhoneDao(transaction);
         JdbcAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
         JdbcContactDao contactDao = new JdbcContactDao(transaction);
         JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
         JdbcContactFileDao fileDao = new JdbcContactFileDao(transaction);
-        Contact contactToUpdate = contactDao.getContactById(fullContact.getContact().getContactId());
-        ContactFile photo = fullContact.getPhoto();
+        Contact contactToUpdate = contactDao.getContactById(fullContactDTO.getContact().getContactId());
+        File photo = fullContactDTO.getPhoto();
         photo.setId(contactToUpdate.getPhoto());
         //if received new photo file
         if (photo.getStoredName() != null && photo.getName() != null) {
@@ -96,38 +96,38 @@ public class DataService {
 
         Address addressToUpdate = addressDao.getAddressById(contactToUpdate.getAddress());
         //update fields with new data
-        contactToUpdate.update(fullContact.getContact());
-        addressToUpdate.update(fullContact.getAddress());
+        contactToUpdate.update(fullContactDTO.getContact());
+        addressToUpdate.update(fullContactDTO.getAddress());
         //update in db
         addressDao.update(addressToUpdate);
         contactDao.update(contactToUpdate);
 
         //delete old phones
-        phoneDao.deleteForUser(fullContact.getContact().getContactId());
+        phoneDao.deleteForUser(fullContactDTO.getContact().getContactId());
         //persist into db new phones
-        for (Phone phone : fullContact.getNewPhones()) {
-            phone.setContact(fullContact.getContact().getContactId());
+        for (Phone phone : fullContactDTO.getNewPhones()) {
+            phone.setContact(fullContactDTO.getContact().getContactId());
             phoneDao.save(phone);
         }
 
-        for (FullAttachment fullAttachment : fullContact.getDeletedAttachments()) {
-            fileDao.delete(fullAttachment.getFile().getId());
-            attachmentDao.delete(fullAttachment.getAttachment().getId());
+        for (FullAttachmentDTO fullAttachmentDTO : fullContactDTO.getDeletedAttachments()) {
+            fileDao.delete(fullAttachmentDTO.getFile().getId());
+            attachmentDao.delete(fullAttachmentDTO.getAttachment().getId());
             // TODO: 23.03.2017 delete from disk
         }
-        for (FullAttachment fullAttachment : fullContact.getNewAttachments()) {
-            ContactFile file = fullAttachment.getFile();
+        for (FullAttachmentDTO fullAttachmentDTO : fullContactDTO.getNewAttachments()) {
+            File file = fullAttachmentDTO.getFile();
             long fileId = fileDao.save(file);
-            Attachment attachment = fullAttachment.getAttachment();
+            Attachment attachment = fullAttachmentDTO.getAttachment();
             attachment.setFile(fileId);
-            attachment.setContact(fullContact.getContact().getContactId());
+            attachment.setContact(fullContactDTO.getContact().getContactId());
             attachmentDao.save(attachment);
         }
-        for (FullAttachment fullAttachment : fullContact.getUpdatedAttachments()) {
-            ContactFile file = fullAttachment.getFile();
+        for (FullAttachmentDTO fullAttachmentDTO : fullContactDTO.getUpdatedAttachments()) {
+            File file = fullAttachmentDTO.getFile();
             if (file != null)
                 fileDao.update(file);
-            attachmentDao.update(fullAttachment.getAttachment());
+            attachmentDao.update(fullAttachmentDTO.getAttachment());
         }
         transaction.commitTransaction();
 
@@ -166,34 +166,34 @@ public class DataService {
         transaction.commitTransaction();
         return address;
     }
-    public ContactFile getPhotoById(long photoId) {
+    public File getPhotoById(long photoId) {
         Transaction transaction = tm.getTransaction();
         JdbcContactFileDao fileDao = new JdbcContactFileDao(transaction);
-        ContactFile photo = fileDao.getFileById(photoId);
+        File photo = fileDao.getFileById(photoId);
         transaction.commitTransaction();
         return photo;
     }
 
 
-    public ArrayList<ContactWithAddressDTO> getContactsWithAddressDTO() {
+    public ArrayList<MainPageContactDTO> getContactsWithAddressDTO() {
         Transaction transaction = tm.getTransaction();
         JdbcContactDao contactDao = new JdbcContactDao(transaction);
         JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
         JdbcContactFileDao fileDao = new JdbcContactFileDao(transaction);
         ArrayList<Contact> contacts = contactDao.getAll();
-        ArrayList<ContactWithAddressDTO> contactWithAddressDTOs = new ArrayList<>();
+        ArrayList<MainPageContactDTO> mainPageContactDTOs = new ArrayList<>();
         for (Contact contact : contacts) {
-            ContactFile photo = fileDao.getFileById(contact.getPhoto());
+            File photo = fileDao.getFileById(contact.getPhoto());
             Address address = addressDao.getAddressById(contact.getAddress());
-            ContactWithAddressDTO contactWithAddressDTO = new ContactWithAddressDTO(contact, address, photo);
-            contactWithAddressDTOs.add(contactWithAddressDTO);
+            MainPageContactDTO mainPageContactDTO = new MainPageContactDTO(contact, address, photo);
+            mainPageContactDTOs.add(mainPageContactDTO);
         }
         transaction.commitTransaction();
-        return contactWithAddressDTOs;
+        return mainPageContactDTOs;
     }
 
 
-    public FullContact getFullContactById(long contactId) {
+    public FullContactDTO getFullContactById(long contactId) {
         Transaction transaction = tm.getTransaction();
         JdbcContactDao contactDao = new JdbcContactDao(transaction);
         JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
@@ -203,25 +203,25 @@ public class DataService {
 
         Contact contact = contactDao.getContactById(contactId);
         Address address = addressDao.getAddressById(contactId);
-        ContactFile photo = fileDao.getFileById(contact.getPhoto());
+        File photo = fileDao.getFileById(contact.getPhoto());
         ArrayList<Phone> phones = phoneDao.getAllForContact(contactId);
 
-        ArrayList<FullAttachment> fullAttachments = new ArrayList<>();
+        ArrayList<FullAttachmentDTO> fullAttachmentDTOs = new ArrayList<>();
         ArrayList<Attachment> attachments = attachmentDao.getAllForContact(contactId);
         for (Attachment attachment : attachments) {
-            ContactFile file = fileDao.getFileById(attachment.getFile());
-            FullAttachment fullAttachment = new FullAttachment(attachment, file);
-            fullAttachments.add(fullAttachment);
+            File file = fileDao.getFileById(attachment.getFile());
+            FullAttachmentDTO fullAttachmentDTO = new FullAttachmentDTO(attachment, file);
+            fullAttachmentDTOs.add(fullAttachmentDTO);
         }
 
 
-        FullContact fullContact = new FullContact(contact, address, photo);
-        fullContact.setPhones(phones);
-        fullContact.setAttachments(fullAttachments);
+        FullContactDTO fullContactDTO = new FullContactDTO(contact, address, photo);
+        fullContactDTO.setPhones(phones);
+        fullContactDTO.setAttachments(fullAttachmentDTOs);
 
 
         transaction.commitTransaction();
-        return fullContact;
+        return fullContactDTO;
     }
 
 }

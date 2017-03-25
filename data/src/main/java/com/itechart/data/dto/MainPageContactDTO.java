@@ -2,14 +2,14 @@ package com.itechart.data.dto;
 
 import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Contact;
-import com.itechart.data.entity.ContactFile;
+import com.itechart.data.entity.File;
 
 import java.util.Date;
 
 /**
  * Created by Aleksandr on 14.03.2017.
  */
-public class ContactWithAddressDTO {
+public class MainPageContactDTO {
     private long contactId;
     private String name;
     private String surname;
@@ -24,7 +24,7 @@ public class ContactWithAddressDTO {
     private String photo;
 
 
-    public ContactWithAddressDTO(Contact c, Address a, ContactFile file) {
+    public MainPageContactDTO(Contact c, Address a, File file) {
         this.contactId = c.getContactId();
         this.name = c.getName();
         this.surname = c.getSurname();

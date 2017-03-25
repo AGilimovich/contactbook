@@ -1,7 +1,7 @@
 package com.itechart.data.dao;
 
 import com.itechart.data.db.DBResourceManager;
-import com.itechart.data.entity.ContactFile;
+import com.itechart.data.entity.File;
 import com.itechart.data.transaction.Transaction;
 
 import java.sql.*;
@@ -29,11 +29,11 @@ public class JdbcContactFileDao implements IContactFileDao {
     }
 
     @Override
-    public ContactFile getFileById(long id) {
+    public File getFileById(long id) {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
-        ContactFile file = null;
+        File file = null;
         try {
             cn = transaction.getConnection();
             st = cn.prepareStatement(SELECT_BY_ID_QUERY);
@@ -43,7 +43,7 @@ public class JdbcContactFileDao implements IContactFileDao {
                 long foundId = rs.getLong("file_id");
                 String fileName = rs.getString("name");
                 String storedName = rs.getString("stored_name");
-                file = new ContactFile(foundId, fileName, storedName);
+                file = new File(foundId, fileName, storedName);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -55,11 +55,11 @@ public class JdbcContactFileDao implements IContactFileDao {
     }
 
     @Override
-    public ArrayList<ContactFile> getFilesByName(String name) {
+    public ArrayList<File> getFilesByName(String name) {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
-        ArrayList<ContactFile> files = new ArrayList<>();
+        ArrayList<File> files = new ArrayList<>();
         try {
             cn = transaction.getConnection();
             st = cn.prepareStatement(SELECT_BY_NAME_QUERY);
@@ -69,7 +69,7 @@ public class JdbcContactFileDao implements IContactFileDao {
                 long id = rs.getLong("file_id");
                 String fileName = rs.getString("name");
                 String storedName = rs.getString("stored_name");
-                ContactFile file = new ContactFile(id, fileName, storedName);
+                File file = new File(id, fileName, storedName);
                 files.add(file);
             }
         } catch (SQLException e) {
@@ -82,7 +82,7 @@ public class JdbcContactFileDao implements IContactFileDao {
     }
 
     @Override
-    public void update(ContactFile file) {
+    public void update(File file) {
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -100,7 +100,7 @@ public class JdbcContactFileDao implements IContactFileDao {
     }
 
     @Override
-    public long save(ContactFile file) {
+    public long save(File file) {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;

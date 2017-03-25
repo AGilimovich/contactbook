@@ -1,6 +1,6 @@
 package com.itechart.web.command;
 
-import com.itechart.data.dto.ContactWithAddressDTO;
+import com.itechart.data.dto.MainPageContactDTO;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.email.Email;
 import com.itechart.web.service.email.EmailingService;
@@ -29,7 +29,7 @@ public class DoSendEmail implements Command {
                 e.printStackTrace();
             }
         }
-        ArrayList<ContactWithAddressDTO> contacts = ServiceFactory.getServiceFactory().getDataService().getContactsWithAddressDTO();
+        ArrayList<MainPageContactDTO> contacts = ServiceFactory.getServiceFactory().getDataService().getContactsWithAddressDTO();
         request.setAttribute("contacts", contacts);
         return "/jsp/main.jsp";
     }

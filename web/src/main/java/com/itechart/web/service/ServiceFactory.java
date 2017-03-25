@@ -3,6 +3,7 @@ package com.itechart.web.service;
 import com.itechart.data.dao.*;
 import com.itechart.data.transaction.TransactionManager;
 import com.itechart.web.service.email.EmailingService;
+import com.itechart.web.service.files.FileService;
 import com.itechart.web.service.request.processing.RequestProcessingService;
 import com.itechart.web.service.scheduler.EmailCongratsJob;
 import com.itechart.web.service.scheduler.SchedulingService;
@@ -81,6 +82,10 @@ public class ServiceFactory {
 
     public SchedulingService getEmailCongratsService() {
         return new SchedulingService(EmailCongratsJob.class);
+    }
+
+    public FileService getFileService() {
+        return new FileService();
     }
 
 

@@ -1,6 +1,6 @@
 package com.itechart.data.dao;
 
-import com.itechart.data.entity.ContactFile;
+import com.itechart.data.entity.File;
 
 import java.util.ArrayList;
 
@@ -8,13 +8,13 @@ import java.util.ArrayList;
  * Created by Aleksandr on 25.03.2017.
  */
 public interface IContactFileDao {
-    ContactFile getFileById(long id);
+    File getFileById(long id);
 
-    ArrayList<ContactFile> getFilesByName(String name);
+    ArrayList<File> getFilesByName(String name);
 
-    void update(ContactFile file);
+    void update(File file);
 
-    long save(ContactFile file);
+    long save(File file);
 
     void delete(long id);
 }

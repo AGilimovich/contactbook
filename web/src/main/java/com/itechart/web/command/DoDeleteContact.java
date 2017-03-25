@@ -1,6 +1,6 @@
 package com.itechart.web.command;
 
-import com.itechart.data.dto.ContactWithAddressDTO;
+import com.itechart.data.dto.MainPageContactDTO;
 import com.itechart.web.service.DataService;
 import com.itechart.web.service.ServiceFactory;
 
@@ -26,7 +26,7 @@ public class DoDeleteContact implements Command {
                 dataService.deleteContact(contactId);
             }
         }
-        ArrayList<ContactWithAddressDTO> contacts = ServiceFactory.getServiceFactory().getDataService().getContactsWithAddressDTO();
+        ArrayList<MainPageContactDTO> contacts = ServiceFactory.getServiceFactory().getDataService().getContactsWithAddressDTO();
         request.setAttribute("contacts",contacts);
         return "/jsp/main.jsp";
     }

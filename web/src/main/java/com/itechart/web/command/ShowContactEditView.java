@@ -1,6 +1,6 @@
 package com.itechart.web.command;
 
-import com.itechart.data.dto.FullContact;
+import com.itechart.data.dto.FullContactDTO;
 import com.itechart.web.service.ServiceFactory;
 
 import javax.servlet.ServletException;
@@ -18,15 +18,15 @@ public class ShowContactEditView implements Command {
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         long id = ServiceFactory.getServiceFactory().getRequestProcessingService().processFetchSingleContactRequest(request);
 
-        FullContact fullContact = ServiceFactory.getServiceFactory().getDataService().getFullContactById(id);
+        FullContactDTO fullContactDTO = ServiceFactory.getServiceFactory().getDataService().getFullContactById(id);
 
         request.getSession().setAttribute("action", "update");
-        request.getSession().setAttribute("id", fullContact.getContact().getContactId());
-        request.setAttribute("photo", fullContact.getPhoto());
-        request.setAttribute("contact", fullContact.getContact());
-        request.setAttribute("address", fullContact.getAddress());
-        request.setAttribute("phones", fullContact.getPhones());
-        request.setAttribute("attachments", fullContact.getAttachments());
+        request.getSession().setAttribute("id", fullContactDTO.getContact().getContactId());
+        request.setAttribute("photo", fullContactDTO.getPhoto());
+        request.setAttribute("contact", fullContactDTO.getContact());
+        request.setAttribute("address", fullContactDTO.getAddress());
+        request.setAttribute("phones", fullContactDTO.getPhones());
+        request.setAttribute("attachments", fullContactDTO.getAttachments());
         return "/jsp/contact.jsp";
 
     }

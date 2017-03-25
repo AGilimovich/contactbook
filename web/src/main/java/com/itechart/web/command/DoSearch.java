@@ -1,10 +1,10 @@
 package com.itechart.web.command;
 
-import com.itechart.data.dto.ContactWithAddressDTO;
+import com.itechart.data.dto.MainPageContactDTO;
 import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Contact;
-import com.itechart.data.entity.ContactFile;
+import com.itechart.data.entity.File;
 import com.itechart.web.service.DataService;
 import com.itechart.web.service.ServiceFactory;
 
@@ -25,14 +25,14 @@ public class DoSearch implements Command {
         SearchDTO dto = ServiceFactory.getServiceFactory().getRequestProcessingService().processSearchContactsRequest(request);
         DataService dataService = ServiceFactory.getServiceFactory().getDataService();
         ArrayList<Contact> contacts = dataService.getContactsByFields(dto);
-        ArrayList<ContactWithAddressDTO> contactWithAddressDTOs = new ArrayList<>();
+        ArrayList<MainPageContactDTO> mainPageContactDTOs = new ArrayList<>();
         for (Contact contact : contacts) {
             Address address = dataService.getAddressById(contact.getAddress());
-            ContactFile photo = dataService.getPhotoById(contact.getPhoto());
-            ContactWithAddressDTO contactWithAddressDTO = new ContactWithAddressDTO(contact, address, photo);
-            contactWithAddressDTOs.add(contactWithAddressDTO);
+            File photo = dataService.getPhotoById(contact.getPhoto());
+            MainPageContactDTO mainPageContactDTO = new MainPageContactDTO(contact, address, photo);
+            mainPageContactDTOs.add(mainPageContactDTO);
         }
-        request.setAttribute("contacts", contactWithAddressDTOs);
+        request.setAttribute("contacts", mainPageContactDTOs);
 
         return "/jsp/main.jsp";
     }

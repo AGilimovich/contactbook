@@ -3,15 +3,15 @@ package com.itechart.data.entity;
 /**
  * Created by Aleksandr on 25.03.2017.
  */
-public class ContactFile {
+public class File {
     private long id;
     private String name;
     private String storedName;
 
-    public ContactFile() {
+    public File() {
     }
 
-    public ContactFile(long id, String name, String storedName) {
+    public File(long id, String name, String storedName) {
         this.id = id;
         this.name = name;
         this.storedName = storedName;

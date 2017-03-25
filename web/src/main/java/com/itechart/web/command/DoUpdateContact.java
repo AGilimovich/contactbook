@@ -1,11 +1,7 @@
 package com.itechart.web.command;
 
-import com.itechart.data.dto.ContactWithAddressDTO;
-import com.itechart.data.dto.FullContact;
-import com.itechart.data.entity.Address;
-import com.itechart.data.entity.Attachment;
-import com.itechart.data.entity.Contact;
-import com.itechart.data.entity.Phone;
+import com.itechart.data.dto.MainPageContactDTO;
+import com.itechart.data.dto.FullContactDTO;
 import com.itechart.web.service.DataService;
 import com.itechart.web.service.ServiceFactory;
 
@@ -22,17 +18,17 @@ public class DoUpdateContact implements Command {
 
 
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        FullContact receivedFullContact = ServiceFactory.getServiceFactory().getRequestProcessingService().processContactRequest(request);
+        FullContactDTO receivedFullContactDTO = ServiceFactory.getServiceFactory().getRequestProcessingService().processContactRequest(request);
         //id of contacted retrieved from session
         long contactId = (long) request.getSession().getAttribute("id");
-        receivedFullContact.getContact().setContactId(contactId);
+        receivedFullContactDTO.getContact().setContactId(contactId);
         DataService dataService = ServiceFactory.getServiceFactory().getDataService();
-        dataService.updateContact(receivedFullContact);
+        dataService.updateContact(receivedFullContactDTO);
 
         //remove session attributes
         request.getSession().removeAttribute("action");
         request.getSession().removeAttribute("id");
-        ArrayList<ContactWithAddressDTO> contacts = ServiceFactory.getServiceFactory().getDataService().getContactsWithAddressDTO();
+        ArrayList<MainPageContactDTO> contacts = ServiceFactory.getServiceFactory().getDataService().getContactsWithAddressDTO();
         request.setAttribute("contacts", contacts);
         return "/jsp/main.jsp";
     }

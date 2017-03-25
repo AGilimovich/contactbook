@@ -16,7 +16,7 @@ public class DoSendFile implements Command {
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        byte[] file = ServiceFactory.getServiceFactory().getRequestProcessingService().processGetFileRequest(request);
+        byte[] file = ServiceFactory.getServiceFactory().getFileService().getFile(request.getParameter("id"));
         if (file != null) {
             try {
                 response.getOutputStream().write(file);

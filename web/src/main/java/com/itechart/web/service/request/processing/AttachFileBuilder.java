@@ -1,6 +1,6 @@
 package com.itechart.web.service.request.processing;
 
-import com.itechart.data.entity.ContactFile;
+import com.itechart.data.entity.File;
 
 import java.util.Map;
 
@@ -9,14 +9,14 @@ import java.util.Map;
  */
 
 public class AttachFileBuilder {
-    public ContactFile buildFile(Map<String, String> parameters, String id) {
+    public File buildFile(Map<String, String> parameters, String id) {
 
         String realName = parameters.get("attachFile[" + id + "]_real");
         String storedName = parameters.get("attachFile[" + id + "]_stored");
 
         if (realName == null)
             realName = storedName;
-        ContactFile file = new ContactFile();
+        File file = new File();
         file.setName(realName);
         file.setStoredName(storedName);
         return file;

@@ -1,16 +1,16 @@
 package com.itechart.data.dto;
 
 import com.itechart.data.entity.Attachment;
-import com.itechart.data.entity.ContactFile;
+import com.itechart.data.entity.File;
 
 /**
  * Created by Aleksandr on 25.03.2017.
  */
-public class FullAttachment {
+public class FullAttachmentDTO {
     private Attachment attachment;
-    private ContactFile file;
+    private File file;
 
-    public FullAttachment(Attachment attachment, ContactFile file) {
+    public FullAttachmentDTO(Attachment attachment, File file) {
         this.attachment = attachment;
         this.file = file;
     }
@@ -23,11 +23,11 @@ public class FullAttachment {
         this.attachment = attachment;
     }
 
-    public ContactFile getFile() {
+    public File getFile() {
         return file;
     }
 
-    public void setFile(ContactFile file) {
+    public void setFile(File file) {
         this.file = file;
     }
 }

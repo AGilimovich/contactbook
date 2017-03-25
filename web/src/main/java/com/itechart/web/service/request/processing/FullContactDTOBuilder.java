@@ -1,7 +1,7 @@
 package com.itechart.web.service.request.processing;
 
-import com.itechart.data.dto.FullAttachment;
-import com.itechart.data.dto.FullContact;
+import com.itechart.data.dto.FullAttachmentDTO;
+import com.itechart.data.dto.FullContactDTO;
 import com.itechart.data.entity.*;
 
 import java.util.ArrayList;
@@ -12,22 +12,22 @@ import java.util.regex.Pattern;
 /**
  * Class for parsing entity objects from request form fields.
  */
-public class FullContactBuilder {
+public class FullContactDTOBuilder {
 
 
     private Contact contact;
     private Address address;
-    private ContactFile photo;
+    private File photo;
     private ArrayList<Phone> newPhones = new ArrayList<>();
     private ArrayList<Phone> updatedPhones = new ArrayList<>();
     private ArrayList<Phone> deletedPhones = new ArrayList<>();
 
-    private ArrayList<FullAttachment> newAttachments = new ArrayList<>();
-    private ArrayList<FullAttachment> updatedAttachments = new ArrayList<>();
-    private ArrayList<FullAttachment> deletedAttachments = new ArrayList<>();
+    private ArrayList<FullAttachmentDTO> newAttachments = new ArrayList<>();
+    private ArrayList<FullAttachmentDTO> updatedAttachments = new ArrayList<>();
+    private ArrayList<FullAttachmentDTO> deletedAttachments = new ArrayList<>();
 
 
-    public FullContactBuilder(Map<String, String> formFields, Map<String, String> storedFiles) {
+    public FullContactDTOBuilder(Map<String, String> formFields, Map<String, String> storedFiles) {
         if (formFields != null && storedFiles != null) {
             buildPhoto(storedFiles);
             buildContact(formFields);
@@ -99,21 +99,21 @@ public class FullContactBuilder {
                 Map<String, String> parameters = parser.parse(formParameter.getValue());
                 String fileFieldNumber = matcher.group(1);
                 //add file name to parameters
-                ContactFile file = fileBuilder.buildFile(storedFiles, fileFieldNumber);
+                File file = fileBuilder.buildFile(storedFiles, fileFieldNumber);
                 Attachment attachment = attachmentBuilder.buildAttachment(parameters);
-                FullAttachment fullAttachment = new FullAttachment(attachment, file);
+                FullAttachmentDTO fullAttachmentDTO = new FullAttachmentDTO(attachment, file);
                 String status = parameters.get("status");
                 switch (status) {
                     case "NEW":
-                        newAttachments.add(fullAttachment);
+                        newAttachments.add(fullAttachmentDTO);
                         break;
                     case "EDITED":
-                        updatedAttachments.add(fullAttachment);
+                        updatedAttachments.add(fullAttachmentDTO);
                         break;
                     case "NONE":
                         break;
                     case "DELETED":
-                        deletedAttachments.add(fullAttachment);
+                        deletedAttachments.add(fullAttachmentDTO);
                         break;
                     default:
                 }
@@ -122,15 +122,15 @@ public class FullContactBuilder {
     }
 
 
-    public FullContact getFullContact() {
-        FullContact fullContact = new FullContact(contact, address, photo);
-        fullContact.setNewPhones(newPhones);
-        fullContact.setNewAttachments(newAttachments);
-        fullContact.setDeletedPhones(deletedPhones);
-        fullContact.setUpdatedPhones(updatedPhones);
-        fullContact.setDeletedAttachments(deletedAttachments);
-        fullContact.setUpdatedAttachments(updatedAttachments);
-        return fullContact;
+    public FullContactDTO getFullContact() {
+        FullContactDTO fullContactDTO = new FullContactDTO(contact, address, photo);
+        fullContactDTO.setNewPhones(newPhones);
+        fullContactDTO.setNewAttachments(newAttachments);
+        fullContactDTO.setDeletedPhones(deletedPhones);
+        fullContactDTO.setUpdatedPhones(updatedPhones);
+        fullContactDTO.setDeletedAttachments(deletedAttachments);
+        fullContactDTO.setUpdatedAttachments(updatedAttachments);
+        return fullContactDTO;
 
     }
 
