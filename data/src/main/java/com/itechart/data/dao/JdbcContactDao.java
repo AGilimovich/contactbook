@@ -353,13 +353,13 @@ public class JdbcContactDao implements IContactDao {
 
     @Override
     public ArrayList<Contact> getByBirthDate(Date date) {
-        ArrayList<Contact> contacts = null;
+        ArrayList<Contact> contacts = new ArrayList<>();
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
             cn = ds.getConnection();
-            st = cn.prepareStatement(SELECT_BY_ID_QUERY);
+            st = cn.prepareStatement(SELECT_CONTACTS_BY_BIRTHDATE);
             st.setDate(1, new java.sql.Date(date.getTime()));
             rs = st.executeQuery();
             while (rs.next()) {

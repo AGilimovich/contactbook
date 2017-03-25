@@ -1,9 +1,6 @@
 package com.itechart.web.service.scheduler;
 
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
+import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 import static org.quartz.CronScheduleBuilder.dailyAtHourAndMinute;
@@ -15,12 +12,18 @@ import static org.quartz.TriggerBuilder.newTrigger;
  */
 public class SchedulingService {
 
+    private Class<? extends Job> scheduledJob;
+
+    public SchedulingService(Class<? extends Job> scheduledJob) {
+        this.scheduledJob = scheduledJob;
+    }
+
     public void startScheduler(int hours, int minutes) {
         try {
             // Grab the Scheduler instance from the Factory
             Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
-            // define the job and tie it to ScheduledJob class
-            JobDetail job = newJob(ScheduledJob.class)
+            // define the job and tie it to EmailCongratsJob class
+            JobDetail job = newJob(scheduledJob)
                     .withIdentity("sendEmails", "group1")
                     .build();
 

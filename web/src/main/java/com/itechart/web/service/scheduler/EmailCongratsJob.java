@@ -18,7 +18,7 @@ import java.util.Date;
 /**
  * Created by Aleksandr on 18.03.2017.
  */
-public class ScheduledJob implements Job {
+public class EmailCongratsJob implements Job {
 
 
     @Override

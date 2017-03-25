@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class CommandFactory {
 
-    private static Map<String, Object> commands = new HashMap();
+    private static Map<String, Class<? extends Command>> commands = new HashMap();
 
     static {
         commands.put("/", ShowContactsView.class);
@@ -30,7 +30,7 @@ public class CommandFactory {
     public static Command getCommand(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
 
-        Class<Command> commandClass = (Class<Command>) commands.get(path);
+        Class<? extends Command> commandClass = commands.get(path);
         if (commandClass != null)
             try {
                 return commandClass.newInstance();

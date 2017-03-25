@@ -3,6 +3,7 @@ package com.itechart.web.controller;
 import com.itechart.web.command.Command;
 import com.itechart.web.command.CommandFactory;
 import com.itechart.web.properties.PropertiesManager;
+import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.scheduler.SchedulingService;
 import org.apache.log4j.Logger;
 
@@ -25,8 +26,8 @@ public class FrontCtrl extends HttpServlet {
         super.init(config);
         int scheduledHours = Integer.valueOf(PropertiesManager.scheduledHours());
         int scheduledMinutes = Integer.valueOf(PropertiesManager.scheduledMinutes());
-        new SchedulingService().startScheduler(scheduledHours, scheduledMinutes);
-
+        SchedulingService schedulingService = ServiceFactory.getServiceFactory().getEmailCongratsService();
+        schedulingService.startScheduler(scheduledHours, scheduledMinutes);
     }
 
     public void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
