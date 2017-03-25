@@ -5,13 +5,14 @@ import org.stringtemplate.v4.ST;
 /**
  * Created by Aleksandr on 25.03.2017.
  */
-public class BirthdayTemplate implements EmailTemplate {
+public class CommonEmailTemplate implements Template {
     private ST template;
-    private String description = "Поздравление с днем рождения";
+    private String description = "Стандартный email";
 
-    public BirthdayTemplate(ST template) {
+    public CommonEmailTemplate(ST template) {
         this.template = template;
     }
+
 
     @Override
     public String getDescription() {

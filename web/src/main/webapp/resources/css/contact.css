@@ -75,16 +75,14 @@
     margin: 0 5px;
 }
 
-/*!*input without border for phones and attachments*!*/
-/*.borderless-input {*/
-/*outline: none; !important;*/
-/*border: none; !important;*/
-/*width: 100%; !important;*/
-/*}*/
-/*.no-padding{*/
-/*padding: 0 !important;*/
-/*margin: 0 !important;*/
-/*}*/
+.notification {
+    color: red;
+    margin: 10px 0;
+}
 
+.form-text {
+    margin-top: 12px;
+    margin-bottom: 3px;
+}
 
 

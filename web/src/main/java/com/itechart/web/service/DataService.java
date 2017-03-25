@@ -8,6 +8,8 @@ import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Attachment;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.Phone;
+import com.itechart.data.transaction.Transaction;
+import com.itechart.data.transaction.TransactionManager;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,30 +18,38 @@ import java.util.Date;
  * Created by Aleksandr on 22.03.2017.
  */
 public class DataService {
-    private IContactDao contactDao;
-    private IPhoneDao phoneDao;
-    private IAttachmentDao attachmentDao;
-    private IAddressDao addressDao;
 
-    public DataService(IContactDao contactDao, IPhoneDao phoneDao, IAttachmentDao attachmentDao, IAddressDao addressDao) {
-        this.contactDao = contactDao;
-        this.phoneDao = phoneDao;
-        this.attachmentDao = attachmentDao;
-        this.addressDao = addressDao;
+    private TransactionManager tm;
+
+    public DataService(TransactionManager tm) {
+        this.tm = tm;
+
 
     }
 
     public void deleteContact(long contactId) {
+        Transaction transaction = tm.getTransaction();
+        JdbcPhoneDao phoneDao = new JdbcPhoneDao(transaction);
+        JdbcAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
+        JdbcContactDao contactDao = new JdbcContactDao(transaction);
+        JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
         phoneDao.deleteForUser(contactId);
         attachmentDao.deleteForUser(contactId);
         // TODO: 23.03.2017 delete from disk
         long addressId = contactDao.getContactById(contactId).getAddress();
         contactDao.delete(contactId);
         addressDao.delete(addressId);
+        transaction.commitTransaction();
     }
 
 
     public void saveNewContact(FullContact fullContact) {
+        Transaction transaction = tm.getTransaction();
+        JdbcPhoneDao phoneDao = new JdbcPhoneDao(transaction);
+        JdbcAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
+        JdbcContactDao contactDao = new JdbcContactDao(transaction);
+        JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
+
         Address address = fullContact.getAddress();
         ArrayList<Phone> phones = fullContact.getNewPhones();
         ArrayList<Attachment> attachments = fullContact.getNewAttachments();
@@ -56,10 +66,16 @@ public class DataService {
             attachment.setContact(contactId);
             attachmentDao.save(attachment);
         }
+        transaction.commitTransaction();
     }
 
 
     public void updateContact(FullContact fullContact) {
+        Transaction transaction = tm.getTransaction();
+        JdbcPhoneDao phoneDao = new JdbcPhoneDao(transaction);
+        JdbcAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
+        JdbcContactDao contactDao = new JdbcContactDao(transaction);
+        JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
 
         Contact contactToUpdate = contactDao.getContactById(fullContact.getContact().getContactId());
         Address addressToUpdate = addressDao.getAddressById(contactToUpdate.getAddress());
@@ -89,48 +105,80 @@ public class DataService {
         for (Attachment attachment : fullContact.getUpdatedAttachments()) {
             attachmentDao.update(attachment);
         }
+        transaction.commitTransaction();
 
     }
 
 
     public ArrayList<Contact> getAllContacts() {
-        return contactDao.getAll();
+        Transaction transaction = tm.getTransaction();
+        JdbcContactDao contactDao = new JdbcContactDao(transaction);
+        ArrayList<Contact> contacts = contactDao.getAll();
+        transaction.commitTransaction();
+        return contacts;
     }
 
     public ArrayList<Contact> getContactsWithBirthday(Date date) {
-        return contactDao.getByBirthDate(date);
+        Transaction transaction = tm.getTransaction();
+        JdbcContactDao contactDao = new JdbcContactDao(transaction);
+        ArrayList<Contact> contacts = contactDao.getByBirthDate(date);
+        transaction.commitTransaction();
+        return contacts;
     }
 
     public ArrayList<Contact> getContactsByFields(SearchDTO dto) {
-        return contactDao.findContactsByFields(dto);
+        Transaction transaction = tm.getTransaction();
+        JdbcContactDao contactDao = new JdbcContactDao(transaction);
+        ArrayList<Contact> contacts = contactDao.findContactsByFields(dto);
+        transaction.commitTransaction();
+        return contacts;
     }
 
     public Contact getContactById(long contactId) {
-        return contactDao.getContactById(contactId);
+        Transaction transaction = tm.getTransaction();
+        JdbcContactDao contactDao = new JdbcContactDao(transaction);
+        Contact contact = contactDao.getContactById(contactId);
+        transaction.commitTransaction();
+        return contact;
     }
 
 
     public Address getAddressById(long addressId) {
-        return addressDao.getAddressById(addressId);
+        Transaction transaction = tm.getTransaction();
+        JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
+        Address address = addressDao.getAddressById(addressId);
+        transaction.commitTransaction();
+        return address;
     }
 
     public ArrayList<Phone> getAllPhonesForContact(long contactId) {
-        return phoneDao.getAllForContact(contactId);
+        Transaction transaction = tm.getTransaction();
+        JdbcPhoneDao phoneDao = new JdbcPhoneDao(transaction);
+        ArrayList<Phone> phones = phoneDao.getAllForContact(contactId);
+        transaction.commitTransaction();
+        return phones;
     }
 
     public ArrayList<Attachment> getAllAttachmentsForContact(long contactId) {
-        return attachmentDao.getAllForContact(contactId);
+        Transaction transaction = tm.getTransaction();
+        JdbcAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
+        ArrayList<Attachment> attachments = attachmentDao.getAllForContact(contactId);
+        transaction.commitTransaction();
+        return attachments;
     }
 
     public ArrayList<ContactWithAddressDTO> getContactsWithAddressDTO() {
-        DataService dataService = ServiceFactory.getServiceFactory().getDataService();
-        ArrayList<Contact> contactsDTOs = dataService.getAllContacts();
+        Transaction transaction = tm.getTransaction();
+        JdbcContactDao contactDao = new JdbcContactDao(transaction);
+        JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
+        ArrayList<Contact> contacts = contactDao.getAll();
         ArrayList<ContactWithAddressDTO> contactWithAddressDTOs = new ArrayList<>();
-        for (Contact contact : contactsDTOs) {
-            Address address = dataService.getAddressById(contact.getAddress());
+        for (Contact contact : contacts) {
+            Address address = addressDao.getAddressById(contact.getAddress());
             ContactWithAddressDTO contactWithAddressDTO = new ContactWithAddressDTO(contact, address);
             contactWithAddressDTOs.add(contactWithAddressDTO);
         }
+        transaction.commitTransaction();
         return contactWithAddressDTOs;
     }
 

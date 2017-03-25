@@ -1,8 +1,8 @@
 package com.itechart.data.dao;
 
 import com.itechart.data.db.DBResourceManager;
-import com.itechart.data.db.JdbcDataSource;
 import com.itechart.data.entity.Attachment;
+import com.itechart.data.transaction.Transaction;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -20,10 +20,10 @@ public class JdbcAttachmentDao implements IAttachmentDao {
     private final String INSERT_ATTACHMENT_QUERY = "INSERT INTO attachment(attach_name,upload_date,comment,file,contact) VALUES (?,?,?,?,?)";
     private final String UPDATE_ATTACHMENT_QUERY = "UPDATE attachment SET attach_name=?,comment=? WHERE attach_id=?";
     private final String DELETE_ATTACHMENT_QUERY = "DELETE FROM attachment WHERE attach_id = ?";
-    private DataSource ds;
+    private Transaction transaction;
 
-    public JdbcAttachmentDao(DataSource ds) {
-        this.ds = ds;
+    public JdbcAttachmentDao(Transaction transaction) {
+        this.transaction = transaction;
     }
 
 
@@ -34,7 +34,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         ResultSet rs = null;
         ArrayList<Attachment> attachments = new ArrayList<Attachment>();
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(SELECT_ATTACHMENTS_FOR_CONTACT_QUERY);
             st.setLong(1, id);
             rs = st.executeQuery();
@@ -66,7 +66,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         ResultSet rs = null;
         Attachment attachment = null;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(SELECT_ATTACHMENTS_BY_ID_QUERY);
             st.setLong(1, id);
             rs = st.executeQuery();
@@ -94,7 +94,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         ResultSet rs = null;
         long id = 0;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(INSERT_ATTACHMENT_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, attachment.getName());
             st.setDate(2, new java.sql.Date(attachment.getUploadDate().getTime()));
@@ -122,7 +122,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         Connection cn = null;
         PreparedStatement st = null;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(DELETE_ATTACHMENT_QUERY);
             st.setLong(1, id);
             st.executeUpdate();
@@ -139,7 +139,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         Connection cn = null;
         PreparedStatement st = null;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(UPDATE_ATTACHMENT_QUERY);
             st.setString(1, attachment.getName());
             st.setString(2, attachment.getComment());
@@ -158,7 +158,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         Connection cn = null;
         PreparedStatement st = null;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(DELETE_FOR_USER_QUERY);
             st.setLong(1, userId);
             st.executeUpdate();

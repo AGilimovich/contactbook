@@ -5,7 +5,7 @@ import org.stringtemplate.v4.ST;
 /**
  * Created by Aleksandr on 25.03.2017.
  */
-public class EmailListTemplate implements EmailTemplate {
+public class EmailListTemplate implements Template {
     private ST template;
     private String description = "Перечень email адресов";
 

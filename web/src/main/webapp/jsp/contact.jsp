@@ -43,20 +43,24 @@
             <div class="col-md-4">
                 <div class="row">
                     <div class="col-md-6">
-                        <p>Имя:</p>
+
+                        <p class="form-text"><span>Имя</span><span style="color: red">*</span>:</p>
                         <input type="text" name="name" value="${contact.name}" class="form-control" required>
 
-                        <p>Фамилия:</p>
+
+                        <p class="form-text"><span>Фамилия</span><span style="color: red">*</span>:</p>
                         <input type="text" name="surname" value="${contact.surname}" class="form-control" required>
 
-                        <p>Отчество:</p>
-                        <input type="text" name="patronymic" value="${contact.patronymic}" class="form-control"
-                        >
+                        <p class="notification">* Поля, обязательные для заполнения</p>
 
-                        <p>Дата рождения:</p>
+                        <p class="form-text">Отчество:</p>
+                        <input type="text" name="patronymic" value="${contact.patronymic}" class="form-control">
+
+
+                        <p class="form-text">Дата рождения:</p>
                         <input type="date" name="dateOfBirth" value="${contact.dateOfBirth}" class="form-control">
 
-                        <p>Пол:</p>
+                        <p class="form-text">Пол:</p>
 
 
                         <input type="radio" name="gender"
@@ -66,10 +70,10 @@
                         <input type="radio" name="gender"
                                value="female" ${contact.gender.name() =='FEMALE'?'checked':''}> ж
 
-                        <p>Гражданство:</p>
+                        <p class="form-text">Гражданство:</p>
                         <input type="text" name="citizenship" value="${contact.citizenship}" class="form-control">
 
-                        <p>Семейное положение:</p>
+                        <p class="form-text">Семейное положение:</p>
 
                         <div class="row">
                             <div class="col-md-1"><input type="radio" name="familyStatus"
@@ -83,34 +87,34 @@
                                 холост / не замужем
                             </div>
                         </div>
-                        <p>Веб-сайт:</p>
+                        <p class="form-text">Веб-сайт:</p>
                         <input type="text" name="website" value="${contact.website}" class="form-control">
 
-                        <p>Email:</p>
+                        <p class="form-text">Email:</p>
                         <input type="email" name="email" value="${contact.email}" class="form-control">
 
-                        <p>Текущее место работы:</p>
+                        <p class="form-text">Текущее место работы:</p>
                         <input type="text" name="placeOfWork" value="${contact.placeOfWork}" class="form-control">
                     </div>
                     <div class="col-md-6">
                         <h3>Адрес</h3>
 
-                        <p>Страна:</p>
+                        <p class="form-text">Страна:</p>
                         <input type="text" name="country" value="${address.country}" class="form-control">
 
-                        <p>Город:</p>
+                        <p class="form-text">Город:</p>
                         <input type="text" name="city" value="${address.city}" class="form-control">
 
-                        <p>Улица:</p>
+                        <p class="form-text">Улица:</p>
                         <input type="text" name="street" value="${address.street}" class="form-control">
 
-                        <p>Дом:</p>
+                        <p class="form-text">Дом:</p>
                         <input type="text" name="house" value="${address.house}" class="form-control">
 
-                        <p>Квартира:</p>
+                        <p class="form-text">Квартира:</p>
                         <input type="text" name="apartment" value="${address.apartment}" class="form-control">
 
-                        <p>Почтовый индекс:</p>
+                        <p class="form-text">Почтовый индекс:</p>
                         <input type="text" name="zipCode" value="${address.zipCode}" class="form-control">
                     </div>
                 </div>

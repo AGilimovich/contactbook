@@ -3,6 +3,7 @@ package com.itechart.data.dao;
 import com.itechart.data.db.DBResourceManager;
 import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Contact;
+import com.itechart.data.transaction.Transaction;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -15,7 +16,7 @@ import java.util.Date;
  * Class for persisting and modifying data in the database.
  */
 public class JdbcContactDao implements IContactDao {
-    private DataSource ds;
+    private Transaction transaction;
 
     private final String SELECT_ALL_CONTACTS_QUERY = "SELECT c.*, gender.gender_value, family_status.family_status_value, a.* " +
             " FROM contact AS c INNER JOIN gender ON c.gender = gender.gender_id" +
@@ -43,8 +44,8 @@ public class JdbcContactDao implements IContactDao {
     private final String SELECT_CONTACTS_BY_BIRTHDATE = "SELECT name, email FROM contact WHERE date_of_birth = ?";
 
 
-    public JdbcContactDao(DataSource ds) {
-        this.ds = ds;
+    public JdbcContactDao(Transaction transaction) {
+        this.transaction = transaction;
     }
 
     public long save(Contact contact) {
@@ -53,7 +54,7 @@ public class JdbcContactDao implements IContactDao {
         ResultSet rs = null;
         long id = 0;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(INSERT_CONTACT_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, contact.getSurname());
             st.setString(2, contact.getName());
@@ -94,7 +95,7 @@ public class JdbcContactDao implements IContactDao {
         Connection cn = null;
         PreparedStatement st = null;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(DELETE_CONTACT_QUERY);
             st.setLong(1, id);
             st.executeUpdate();
@@ -111,7 +112,7 @@ public class JdbcContactDao implements IContactDao {
         Connection cn = null;
         PreparedStatement st = null;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(UPDATE_CONTACT_QUERY);
             if (contact.getGender() != null)
                 st.setString(1, contact.getGender().name().toUpperCase());
@@ -154,7 +155,7 @@ public class JdbcContactDao implements IContactDao {
         Statement st = null;
         ResultSet rs = null;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.createStatement();
             rs = st.executeQuery(SELECT_ALL_CONTACTS_QUERY);
             while (rs.next()) {
@@ -202,7 +203,7 @@ public class JdbcContactDao implements IContactDao {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(SELECT_BY_ID_QUERY);
             st.setLong(1, id);
             rs = st.executeQuery();
@@ -248,7 +249,7 @@ public class JdbcContactDao implements IContactDao {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(SELECT_BY_FIELDS_QUERY);
             if (!dto.getSurname().isEmpty())
                 st.setString(1, dto.getSurname());
@@ -358,7 +359,7 @@ public class JdbcContactDao implements IContactDao {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(SELECT_CONTACTS_BY_BIRTHDATE);
             st.setDate(1, new java.sql.Date(date.getTime()));
             rs = st.executeQuery();

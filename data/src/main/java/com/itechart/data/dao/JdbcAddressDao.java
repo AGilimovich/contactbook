@@ -1,8 +1,8 @@
 package com.itechart.data.dao;
 
 import com.itechart.data.db.DBResourceManager;
-import com.itechart.data.db.JdbcDataSource;
 import com.itechart.data.entity.Address;
+import com.itechart.data.transaction.Transaction;
 import com.mysql.jdbc.Statement;
 
 import javax.sql.DataSource;
@@ -15,7 +15,7 @@ import java.sql.SQLException;
  * DAO class for address entity.
  */
 public class JdbcAddressDao implements IAddressDao {
-    private DataSource ds;
+    private Transaction transaction;
 
     private final String SELECT_ADDRESS_BY_ID_QUERY = "SELECT * FROM address WHERE address_id = ?";
     private final String INSERT_ADDRESS_QUERY = "INSERT INTO address(country, city, street, house, apartment, zip_code) VALUES(?, ?, ?, ?, ?, ?)";
@@ -23,8 +23,8 @@ public class JdbcAddressDao implements IAddressDao {
     private final String DELETE_ADDRESS_QUERY = "DELETE FROM address WHERE address_id = ?";
 
 
-    public JdbcAddressDao(DataSource ds) {
-        this.ds = ds;
+    public JdbcAddressDao(Transaction transaction) {
+        this.transaction = transaction;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class JdbcAddressDao implements IAddressDao {
         ResultSet rs = null;
         long id = 0;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(INSERT_ADDRESS_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, address.getCountry());
             st.setString(2, address.getCity());
@@ -61,7 +61,7 @@ public class JdbcAddressDao implements IAddressDao {
         Connection cn = null;
         PreparedStatement st = null;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(DELETE_ADDRESS_QUERY);
             st.setLong(1, id);
             st.executeUpdate();
@@ -78,7 +78,7 @@ public class JdbcAddressDao implements IAddressDao {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(UPDATE_ADDRESS_QUERY);
             st.setString(1, address.getCountry());
             st.setString(2, address.getCity());
@@ -104,7 +104,7 @@ public class JdbcAddressDao implements IAddressDao {
         Address a = null;
 
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(SELECT_ADDRESS_BY_ID_QUERY);
             st.setLong(1, id);
             rs = st.executeQuery();

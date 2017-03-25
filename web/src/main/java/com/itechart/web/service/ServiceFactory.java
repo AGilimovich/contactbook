@@ -1,6 +1,7 @@
 package com.itechart.web.service;
 
 import com.itechart.data.dao.*;
+import com.itechart.data.transaction.TransactionManager;
 import com.itechart.web.service.email.EmailingService;
 import com.itechart.web.service.request.processing.RequestProcessingService;
 import com.itechart.web.service.scheduler.EmailCongratsJob;
@@ -19,10 +20,7 @@ import java.util.ResourceBundle;
  */
 public class ServiceFactory {
 
-    private IContactDao contactDao;
-    private IPhoneDao phoneDao;
-    private IAttachmentDao attachmentDao;
-    private IAddressDao addressDao;
+
     private static ServiceFactory instance;
 
     private String hostName;
@@ -30,29 +28,18 @@ public class ServiceFactory {
     private String userName;
     private String password;
     private String emailFrom;
+    private TransactionManager transactionManager;
 
 
     private ServiceFactory() {
-        DataSource ds = null;
-        try {
-            Context initContext = new InitialContext();
-            Context envContext = (Context) initContext.lookup("java:/comp/env");
-            ds = (DataSource) envContext.lookup("jdbc/MySQLDatasource");
-        } catch (NamingException e) {
-            e.printStackTrace();
-        }
-        if (ds != null) {
-            contactDao = new JdbcContactDao(ds);
-            phoneDao = new JdbcPhoneDao(ds);
-            attachmentDao = new JdbcAttachmentDao(ds);
-            addressDao = new JdbcAddressDao(ds);
-        }
+
         ResourceBundle bundle = ResourceBundle.getBundle("application");
         hostName = bundle.getString("HOST_NAME");
         SMTPPort = Integer.valueOf(bundle.getString("PORT"));
         userName = bundle.getString("USER_NAME");
         password = bundle.getString("PASSWORD");
         emailFrom = bundle.getString("EMAIL");
+        transactionManager = new TransactionManager();
     }
 
     /**
@@ -73,7 +60,7 @@ public class ServiceFactory {
 
 
     public DataService getDataService() {
-        return new DataService(contactDao, phoneDao, attachmentDao, addressDao);
+        return new DataService(transactionManager);
     }
 
     public ValidationService getValidationService() {

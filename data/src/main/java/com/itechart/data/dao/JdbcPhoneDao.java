@@ -2,6 +2,7 @@ package com.itechart.data.dao;
 
 import com.itechart.data.db.DBResourceManager;
 import com.itechart.data.entity.Phone;
+import com.itechart.data.transaction.Transaction;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -26,11 +27,11 @@ public class JdbcPhoneDao implements IPhoneDao {
     private final String DELETE_PHONE_QUERY = "DELETE FROM phone WHERE phone_id = ?";
     private final String DELETE_FOR_USER_QUERY = "DELETE FROM phone WHERE contact = ?";
 
-    public JdbcPhoneDao(DataSource ds) {
-        this.ds = ds;
+    public JdbcPhoneDao(Transaction transaction) {
+        this.transaction = transaction;
     }
 
-    private DataSource ds;
+    private Transaction transaction;
 
 
     @Override
@@ -40,7 +41,7 @@ public class JdbcPhoneDao implements IPhoneDao {
         ResultSet rs = null;
         ArrayList<Phone> phones = new ArrayList<Phone>();
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(SELECT_PHONES_FOR_CONTACT_QUERY);
             st.setLong(1, id);
             rs = st.executeQuery();
@@ -70,7 +71,7 @@ public class JdbcPhoneDao implements IPhoneDao {
         ResultSet rs = null;
         Phone phone = null;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(SELECT_PHONE_FOR_ID_QUERY);
             st.setLong(1, id);
             rs = st.executeQuery();
@@ -100,7 +101,7 @@ public class JdbcPhoneDao implements IPhoneDao {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(INSERT_PHONE_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, phone.getCountryCode());
             st.setString(2, phone.getOperatorCode());
@@ -129,7 +130,7 @@ public class JdbcPhoneDao implements IPhoneDao {
         Connection cn = null;
         PreparedStatement st = null;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(DELETE_PHONE_QUERY);
             st.setLong(1, id);
             st.executeUpdate();
@@ -145,7 +146,7 @@ public class JdbcPhoneDao implements IPhoneDao {
         Connection cn = null;
         PreparedStatement st = null;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(UPDATE_PHONE_QUERY);
             st.setString(1, phone.getPhoneType().name());
             st.setString(2, phone.getCountryCode());
@@ -169,7 +170,7 @@ public class JdbcPhoneDao implements IPhoneDao {
         Connection cn = null;
         PreparedStatement st = null;
         try {
-            cn = ds.getConnection();
+            cn = transaction.getConnection();
             st = cn.prepareStatement(DELETE_FOR_USER_QUERY);
             st.setLong(1, userId);
             st.executeUpdate();
