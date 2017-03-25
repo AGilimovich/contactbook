@@ -13,7 +13,7 @@ public class ShowContactAddView implements Command {
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        //string in session current action: creating new contact (can have another value - edit)
+        //current action: creating new contact (can have another value - edit)
         request.getSession().setAttribute("action", "save");
 
         return "/jsp/contact.jsp";

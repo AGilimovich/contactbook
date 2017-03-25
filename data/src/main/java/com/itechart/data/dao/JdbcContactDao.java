@@ -102,7 +102,6 @@ public class JdbcContactDao implements IContactDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-
             DBResourceManager.closeResources(cn, st, null);
 
         }

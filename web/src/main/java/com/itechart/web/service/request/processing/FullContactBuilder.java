@@ -47,6 +47,7 @@ public class FullContactBuilder {
                 String name = entry.getValue();
                 if (name != null)
                     formFields.put("photo", name);
+                break;
             }
         }
         contact = contactBuilder.buildContact(formFields);
@@ -100,7 +101,7 @@ public class FullContactBuilder {
             if ((matcher = fieldNamePattern.matcher(formParameter.getKey())).matches()) {
                 Map<String, String> parameters = parser.parse(formParameter.getValue());
                 String fileFieldNumber = matcher.group(1);
-                //add to parameters file name
+                //add file name to parameters
                 parameters.put("fileName", storedFiles.get("attachFile[" + fileFieldNumber + "]"));
                 Attachment attachment = attachmentBuilder.buildAttachment(parameters);
                 String status = parameters.get("status");
@@ -121,6 +122,8 @@ public class FullContactBuilder {
             }
         }
     }
+
+
 
     public FullContact getFullContact() {
         FullContact fullContact = new FullContact(contact, address, newPhones, newAttachments);
