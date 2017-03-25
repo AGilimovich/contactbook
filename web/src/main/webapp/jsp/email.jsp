@@ -26,7 +26,7 @@
             <div class="col-md-6 well offset20px">
                 <div class="row buffer-top">
                     <p>Кому:</p>
-                    <input type="text" name="emailAddresses" value="${emailListTemplate.render()}" class="form-control"
+                    <input type="text" name="emailAddresses" value="${emailListTemplate.getTemplate().render()}" class="form-control"
                            required>
                 </div>
                 <div class="row">
@@ -35,9 +35,9 @@
                 </div>
                 <div class="row">
                     <p>Шаблон:</p>
-                    <select name="template" value="${template.getKey().getDescription()}" class="form-control" onchange="showTemplate(this.selectedIndex);">
+                    <select name="template" value="${template.getValue().getDescription()}" class="form-control" onchange="showTemplate(this.selectedIndex);">
                         <c:forEach var="template" items="${templates}" varStatus="status">
-                            <option value="${status.index}">${template.getKey().getDescription()}</option>
+                            <option value="${status.index}">${template.getValue().getDescription()}</option>
                         </c:forEach>
                     </select>
                 </div>
@@ -48,7 +48,7 @@
                     <c:forEach var="template" items="${templates}" varStatus="status">
                         <textarea name="email-body" id="email-body[${status.index}]" ${status.index == 0?'' : 'disabled'}
 
-                             class="${status.index == 0?'text-field white-space-pre' : 'text-field white-space-pre hidden'}">${template.getValue().render()}</textarea>
+                             class="${status.index == 0?'text-field white-space-pre' : 'text-field white-space-pre hidden'}">${template.getValue().getTemplate().render()}</textarea>
                     </c:forEach>
 
 

@@ -1,15 +1,15 @@
 package com.itechart.web.service.scheduler;
 
 import com.itechart.data.entity.Contact;
-import static com.itechart.web.service.template.EmailTemplatesProvidingService.TemplateType;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.email.EmailingService;
+import com.itechart.web.service.template.BirthdayTemplate;
+import com.itechart.web.service.template.EmailTemplate;
 import com.itechart.web.service.template.EmailTemplatesProvidingService;
 import org.apache.commons.mail.EmailException;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.stringtemplate.v4.ST;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,9 +27,9 @@ public class EmailCongratsJob implements Job {
         EmailingService emailingService = ServiceFactory.getServiceFactory().getEmailService();
         EmailTemplatesProvidingService templateService = ServiceFactory.getServiceFactory().getEmailTemplateProvidingService();
 
-        ST template = templateService.getPredefinedEmailTemplates().get(TemplateType.BIRTHDAY);
+        EmailTemplate template = templateService.getPredefinedEmailTemplates().get(BirthdayTemplate.class);
         String subject = "C днем рождения!";
-        String body = template.render();
+        String body = template.getTemplate().render();
 
         if (contacts != null) {
             for (Contact con : contacts) {

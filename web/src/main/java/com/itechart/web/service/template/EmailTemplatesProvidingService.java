@@ -4,45 +4,32 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Aleksandr on 24.03.2017.
  */
 public class EmailTemplatesProvidingService {
-    private static Map<TemplateType, ST> templates = new HashMap<>();
+    private static Map<Class<? extends EmailTemplate>, EmailTemplate> emailBodyTemplates = new HashMap<>();
 
     static {
         STGroup stGroup = new STGroupFile("templates/template.stg");
-        ST commonEmail = stGroup.getInstanceOf("commonEmail");
-        ST birthdayEmail = stGroup.getInstanceOf("birthdayEmail");
-        templates.put(TemplateType.COMMON, commonEmail);
-        templates.put(TemplateType.BIRTHDAY, birthdayEmail);
-    }
-
-    public enum TemplateType {
-        COMMON("Стандартный email"), BIRTHDAY("Поздравление с днем рождения");
-        private String description;
-
-        TemplateType(String description) {
-            this.description = description;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-    }
-
-    public Map<TemplateType, ST> getPredefinedEmailTemplates() {
-        return templates;
+        EmailTemplate commonEmail = new CommonTemplate(stGroup.getInstanceOf("commonEmail"));
+        EmailTemplate birthdayEmail = new BirthdayTemplate(stGroup.getInstanceOf("birthdayEmail"));
+        emailBodyTemplates.put(commonEmail.getClass(), commonEmail);
+        emailBodyTemplates.put(birthdayEmail.getClass(), birthdayEmail);
 
     }
 
-    public ST getEmailListTemplate(ArrayList<String> emailList) {
-        ST emailListTemplate = new ST("<emails:{email | <email>}; separator=\", \">");
-        emailListTemplate.add("emails", emailList);
+
+    public Map<Class<? extends EmailTemplate>, EmailTemplate>  getPredefinedEmailTemplates() {
+        return emailBodyTemplates;
+
+    }
+
+    public EmailTemplate getEmailListTemplate(ArrayList<String> emailList) {
+        EmailTemplate emailListTemplate = new EmailListTemplate(new ST("<emails:{email | <email>}; separator=\", \">"));
+        emailListTemplate.getTemplate().add("emails", emailList);
         return emailListTemplate;
     }
 

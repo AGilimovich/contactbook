@@ -3,9 +3,8 @@ package com.itechart.web.command;
 import com.itechart.data.entity.Contact;
 import com.itechart.web.service.DataService;
 import com.itechart.web.service.ServiceFactory;
+import com.itechart.web.service.template.EmailTemplate;
 import com.itechart.web.service.template.EmailTemplatesProvidingService;
-import static com.itechart.web.service.template.EmailTemplatesProvidingService.TemplateType;
-import org.stringtemplate.v4.ST;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Command for invoking emailing view.
@@ -37,8 +37,8 @@ public class ShowEmailView implements Command {
             }
         }
         EmailTemplatesProvidingService templateService = ServiceFactory.getServiceFactory().getEmailTemplateProvidingService();
-        Map<TemplateType,ST> templates = templateService.getPredefinedEmailTemplates();
-        ST emailListTemplate = templateService.getEmailListTemplate(emailList);
+        Map<Class<? extends EmailTemplate>, EmailTemplate> templates = templateService.getPredefinedEmailTemplates();
+        EmailTemplate emailListTemplate = templateService.getEmailListTemplate(emailList);
 
 
         request.setAttribute("templates", templates.entrySet());
