@@ -67,7 +67,7 @@ public class JdbcContactDao implements IContactDao {
             st.setString(7, contact.getEmail());
             st.setString(8, contact.getPlaceOfWork());
             st.setLong(9, contact.getAddress());
-            st.setString(10, contact.getPhoto());
+            st.setLong(10, contact.getPhoto());
             if (contact.getGender() != null)
                 st.setString(11, contact.getGender().name());
             else st.setString(11, null);
@@ -133,7 +133,7 @@ public class JdbcContactDao implements IContactDao {
             st.setString(8, contact.getWebsite());
             st.setString(9, contact.getEmail());
             st.setString(10, contact.getPlaceOfWork());
-            st.setString(11, contact.getPhoto());
+            st.setLong(11, contact.getPhoto());
 
             st.setLong(12, contact.getContactId());
             st.executeUpdate();
@@ -171,7 +171,7 @@ public class JdbcContactDao implements IContactDao {
                 String website = rs.getString("website");
                 String email = rs.getString("email");
                 String placeOfWork = rs.getString("place_of_work");
-                String photo = rs.getString("photo");
+                long photo = rs.getLong("photo");
                 int addressId = rs.getInt("address_id");
                 Contact contact = new Contact(contactId, name, surname);
                 contact.setPatronymic(patronymic);
@@ -218,7 +218,7 @@ public class JdbcContactDao implements IContactDao {
             String website = rs.getString("website");
             String email = rs.getString("email");
             String placeOfWork = rs.getString("place_of_work");
-            String photo = rs.getString("photo");
+            long photo = rs.getLong("photo");
             long addressId = rs.getLong("address");
             contact = new Contact(contactId, name, surname);
             contact.setPatronymic(patronymic);
@@ -326,7 +326,7 @@ public class JdbcContactDao implements IContactDao {
                 String foundWebsite = rs.getString("website");
                 String foundEmail = rs.getString("email");
                 String foundPlaceOfWork = rs.getString("place_of_work");
-                String foundPhoto = rs.getString("photo");
+                long foundPhoto = rs.getLong("photo");
                 long foundAddressId = rs.getLong("address");
                 Contact contact = new Contact(foundContactId, foundName, foundSurname);
                 contact.setPatronymic(foundPatronymic);

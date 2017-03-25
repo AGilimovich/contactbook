@@ -6,13 +6,15 @@ package com.itechart.data.entity;
 public class ContactFile {
     private long id;
     private String name;
+    private String storedName;
 
     public ContactFile() {
     }
 
-    public ContactFile(long id, String name) {
+    public ContactFile(long id, String name, String storedName) {
         this.id = id;
         this.name = name;
+        this.storedName = storedName;
     }
 
     public long getId() {
@@ -29,5 +31,13 @@ public class ContactFile {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getStoredName() {
+        return storedName;
+    }
+
+    public void setStoredName(String storedName) {
+        this.storedName = storedName;
     }
 }

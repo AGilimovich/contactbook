@@ -43,7 +43,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
                 String attach_name = rs.getString("attach_name");
                 long attach_id = rs.getLong("attach_id");
                 String comment = rs.getString("comment");
-                String file = rs.getString("file");
+                long file = rs.getLong("file");
                 long contact = rs.getLong("contact");
                 Attachment attachment = new Attachment(attach_id, attach_name, uploadDate, comment, file, contact);
                 attachments.add(attachment);
@@ -74,7 +74,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
             String attach_name = rs.getString("attach_name");
             long attach_id = rs.getLong("attach_id");
             String comment = rs.getString("comment");
-            String file = rs.getString("file");
+            Long file = rs.getLong("file");
             long contact = rs.getLong("contact");
             attachment = new Attachment(attach_id, attach_name, uploadDate, comment, file, contact);
 
@@ -99,7 +99,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
             st.setString(1, attachment.getName());
             st.setDate(2, new java.sql.Date(attachment.getUploadDate().getTime()));
             st.setString(3, attachment.getComment());
-            st.setString(4, attachment.getFile());
+            st.setLong(4, attachment.getFile());
             st.setLong(5, attachment.getContact());
             st.executeUpdate();
             rs = st.getGeneratedKeys();

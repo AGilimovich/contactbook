@@ -14,14 +14,11 @@ public class AttachmentBuilder {
         String name = parameters.get("name");
         String uploadDate = parameters.get("uploadDate");
         String comment = parameters.get("comment");
-        String fileName = parameters.get("fileName");
         Attachment attachment = new Attachment();
         attachment.setId(Long.valueOf(id));
         attachment.setName(name);
         attachment.setComment(comment);
         attachment.setUploadDate(DateTimeParser.parseDate(uploadDate, "dd.MM.yyyy HH:mm:ss"));
-        if (fileName != null)
-            attachment.setFile(fileName);
         return attachment;
     }
 

@@ -34,7 +34,7 @@
             <div class="col-md-1">
 
                 <div class="photo-container">
-                    <img src="${pageContext.request.contextPath}/file?id=${contact.photo}" height="100%" alt="photo"
+                    <img src="${pageContext.request.contextPath}/file?id=${photo.storedName}" height="100%" alt="photo"
                          id="photo">
                 </div>
 
@@ -158,17 +158,17 @@
                 <table id="attach-table" class="tbl" width="100%">
                     <c:forEach var="attachment" items="${attachments}" varStatus="counter">
                         <tr>
-                            <td width="6%"><input type="checkbox" name="attachIsSelected" value="${attachment.id}"></td>
+                            <td width="6%"><input type="checkbox" name="attachIsSelected" value="${attachment.getAttachment().id}"></td>
                             <td width="20%" name="attachName"><a name="attachLink"
-                                                                 href="/file?id=${attachment.file}">${attachment.name}</a>
+                                                                 href="/file?id=${attachment.getFile().storedName}">${attachment.getAttachment().name}</a>
                             </td>
 
                             <td align="center" width="20%" name="attachUploadDate">
-                                <fmt:formatDate value="${attachment.uploadDate}" var="formattedDate"
+                                <fmt:formatDate value="${attachment.getAttachment().uploadDate}" var="formattedDate"
                                                 type="date" pattern="MM-dd-yyyy HH:mm:ss"/>
                                     ${formattedDate}
                             </td>
-                            <td width="54%" name="attachComment">${attachment.comment}</td>
+                            <td width="54%" name="attachComment">${attachment.getAttachment().comment}</td>
                         </tr>
                     </c:forEach>
                 </table>
@@ -198,10 +198,10 @@
             <%--hidden input for attachments metadata--%>
             <table id="attach-hidden-table">
                 <c:forEach var="attachment" items="${attachments}" varStatus="counter">
-                    <fmt:formatDate value="${attachment.uploadDate}" var="formattedDate"
+                    <fmt:formatDate value="${attachment.getAttachment().uploadDate}" var="formattedDate"
                                     type="date" pattern="MM.dd.yyyy HH:mm:ss"/>
                     <input type="text" name="attachMeta[${counter.index}]"
-                           value="id=${attachment.id}&name=${attachment.name}&uploadDate=${formattedDate}&comment=${attachment.comment}&status=NONE">
+                           value="id=${attachment.getAttachment().id}&name=${attachment.getAttachment().name}&uploadDate=${formattedDate}&comment=${attachment.getAttachment().comment}&status=NONE">
                 </c:forEach>
             </table>
         </div>

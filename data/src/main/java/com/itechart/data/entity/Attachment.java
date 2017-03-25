@@ -10,7 +10,7 @@ public class Attachment {
     private String name;
     private Date uploadDate;
     private String comment;
-    private String file;
+    private long file;
 
     public long getContact() {
         return contact;
@@ -18,7 +18,7 @@ public class Attachment {
 
     private long contact;
 
-    public Attachment(long id, String name, Date uploadDate, String comment, String file, long contact) {
+    public Attachment(long id, String name, Date uploadDate, String comment, long file, long contact) {
         this.id = id;
         this.name = name;
         this.uploadDate = uploadDate;
@@ -52,7 +52,7 @@ public class Attachment {
         return comment;
     }
 
-    public String getFile() {
+    public long getFile() {
         return file;
     }
 
@@ -72,7 +72,7 @@ public class Attachment {
         this.comment = comment;
     }
 
-    public void setFile(String file) {
+    public void setFile(long file) {
         this.file = file;
     }
 

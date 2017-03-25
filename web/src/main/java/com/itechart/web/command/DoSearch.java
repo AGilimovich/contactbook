@@ -4,6 +4,7 @@ import com.itechart.data.dto.ContactWithAddressDTO;
 import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Contact;
+import com.itechart.data.entity.ContactFile;
 import com.itechart.web.service.DataService;
 import com.itechart.web.service.ServiceFactory;
 
@@ -27,7 +28,8 @@ public class DoSearch implements Command {
         ArrayList<ContactWithAddressDTO> contactWithAddressDTOs = new ArrayList<>();
         for (Contact contact : contacts) {
             Address address = dataService.getAddressById(contact.getAddress());
-            ContactWithAddressDTO contactWithAddressDTO = new ContactWithAddressDTO(contact, address);
+            ContactFile photo = dataService.getPhotoById(contact.getPhoto());
+            ContactWithAddressDTO contactWithAddressDTO = new ContactWithAddressDTO(contact, address, photo);
             contactWithAddressDTOs.add(contactWithAddressDTO);
         }
         request.setAttribute("contacts", contactWithAddressDTOs);

@@ -25,9 +25,9 @@ public class ContactBuilder {
         contact.setWebsite(parameters.get("website"));
         contact.setEmail(parameters.get("email"));
         contact.setPlaceOfWork(parameters.get("placeOfWork"));
-//        //set photo
-        if (parameters.get("photo") != null)
-            contact.setPhoto(parameters.get("photo"));
+        //set photo
+//        if (parameters.get("photo") != null)
+//            contact.setPhoto(parameters.get("photo_stored"));
         return contact;
     }
 }

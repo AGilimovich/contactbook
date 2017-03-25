@@ -16,10 +16,13 @@ public class ShowContactEditView implements Command {
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        FullContact fullContact = ServiceFactory.getServiceFactory().getRequestProcessingService().processFetchSingleContactRequest(request);
+        long id = ServiceFactory.getServiceFactory().getRequestProcessingService().processFetchSingleContactRequest(request);
+
+        FullContact fullContact = ServiceFactory.getServiceFactory().getDataService().getFullContactById(id);
 
         request.getSession().setAttribute("action", "update");
         request.getSession().setAttribute("id", fullContact.getContact().getContactId());
+        request.setAttribute("photo", fullContact.getPhoto());
         request.setAttribute("contact", fullContact.getContact());
         request.setAttribute("address", fullContact.getAddress());
         request.setAttribute("phones", fullContact.getPhones());

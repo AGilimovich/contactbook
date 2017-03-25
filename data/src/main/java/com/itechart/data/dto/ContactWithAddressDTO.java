@@ -2,6 +2,7 @@ package com.itechart.data.dto;
 
 import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Contact;
+import com.itechart.data.entity.ContactFile;
 
 import java.util.Date;
 
@@ -23,7 +24,7 @@ public class ContactWithAddressDTO {
     private String photo;
 
 
-    public ContactWithAddressDTO(Contact c, Address a) {
+    public ContactWithAddressDTO(Contact c, Address a, ContactFile file) {
         this.contactId = c.getContactId();
         this.name = c.getName();
         this.surname = c.getSurname();
@@ -35,7 +36,7 @@ public class ContactWithAddressDTO {
         this.house = a.getHouse();
         this.apartment = a.getApartment();
         this.placeOfWork = c.getPlaceOfWork();
-        this.photo = c.getPhoto();
+        this.photo = file.getStoredName();
     }
 
     public long getContactId() {

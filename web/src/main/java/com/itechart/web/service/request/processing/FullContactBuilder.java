@@ -1,10 +1,8 @@
 package com.itechart.web.service.request.processing;
 
+import com.itechart.data.dto.FullAttachment;
 import com.itechart.data.dto.FullContact;
-import com.itechart.data.entity.Address;
-import com.itechart.data.entity.Attachment;
-import com.itechart.data.entity.Contact;
-import com.itechart.data.entity.Phone;
+import com.itechart.data.entity.*;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -19,37 +17,35 @@ public class FullContactBuilder {
 
     private Contact contact;
     private Address address;
+    private ContactFile photo;
     private ArrayList<Phone> newPhones = new ArrayList<>();
     private ArrayList<Phone> updatedPhones = new ArrayList<>();
     private ArrayList<Phone> deletedPhones = new ArrayList<>();
 
-    private ArrayList<Attachment> newAttachments = new ArrayList<>();
-    private ArrayList<Attachment> updatedAttachments = new ArrayList<>();
-    private ArrayList<Attachment> deletedAttachments = new ArrayList<>();
+    private ArrayList<FullAttachment> newAttachments = new ArrayList<>();
+    private ArrayList<FullAttachment> updatedAttachments = new ArrayList<>();
+    private ArrayList<FullAttachment> deletedAttachments = new ArrayList<>();
 
 
     public FullContactBuilder(Map<String, String> formFields, Map<String, String> storedFiles) {
         if (formFields != null && storedFiles != null) {
-            buildContact(formFields, storedFiles);
+            buildPhoto(storedFiles);
+            buildContact(formFields);
             buildAddress(formFields);
             buildPhones(formFields);
             buildAttachments(formFields, storedFiles);
         }
     }
 
+    private void buildPhoto(Map<String, String> storedFiles) {
+        if (storedFiles == null) return;
+        PhotoFileBuilder builder = new PhotoFileBuilder();
+        photo = builder.buildFile(storedFiles);
+    }
 
-    private void buildContact(Map<String, String> formFields, Map<String, String> storedFiles) {
-        if (formFields == null || storedFiles == null) return;
+    private void buildContact(Map<String, String> formFields) {
+        if (formFields == null) return;
         ContactBuilder contactBuilder = new ContactBuilder();
-        //set photo
-        for (Map.Entry<String, String> entry : storedFiles.entrySet()) {
-            if (entry.getKey().equals("photoFile")) {
-                String name = entry.getValue();
-                if (name != null)
-                    formFields.put("photo", name);
-                break;
-            }
-        }
         contact = contactBuilder.buildContact(formFields);
     }
 
@@ -92,6 +88,7 @@ public class FullContactBuilder {
     private void buildAttachments(Map<String, String> formFields, Map<String, String> storedFiles) {
         if (formFields == null || storedFiles == null) return;
         AttachmentBuilder attachmentBuilder = new AttachmentBuilder();
+        AttachFileBuilder fileBuilder = new AttachFileBuilder();
         String fieldNameRegex = "attachMeta\\[(\\d+)\\]";
         Pattern fieldNamePattern = Pattern.compile(fieldNameRegex);
         AttachmentFormFieldParser parser = new AttachmentFormFieldParser();
@@ -102,20 +99,21 @@ public class FullContactBuilder {
                 Map<String, String> parameters = parser.parse(formParameter.getValue());
                 String fileFieldNumber = matcher.group(1);
                 //add file name to parameters
-                parameters.put("fileName", storedFiles.get("attachFile[" + fileFieldNumber + "]"));
+                ContactFile file = fileBuilder.buildFile(storedFiles, fileFieldNumber);
                 Attachment attachment = attachmentBuilder.buildAttachment(parameters);
+                FullAttachment fullAttachment = new FullAttachment(attachment, file);
                 String status = parameters.get("status");
                 switch (status) {
                     case "NEW":
-                        newAttachments.add(attachment);
+                        newAttachments.add(fullAttachment);
                         break;
                     case "EDITED":
-                        updatedAttachments.add(attachment);
+                        updatedAttachments.add(fullAttachment);
                         break;
                     case "NONE":
                         break;
                     case "DELETED":
-                        deletedAttachments.add(attachment);
+                        deletedAttachments.add(fullAttachment);
                         break;
                     default:
                 }
@@ -124,9 +122,10 @@ public class FullContactBuilder {
     }
 
 
-
     public FullContact getFullContact() {
-        FullContact fullContact = new FullContact(contact, address, newPhones, newAttachments);
+        FullContact fullContact = new FullContact(contact, address, photo);
+        fullContact.setNewPhones(newPhones);
+        fullContact.setNewAttachments(newAttachments);
         fullContact.setDeletedPhones(deletedPhones);
         fullContact.setUpdatedPhones(updatedPhones);
         fullContact.setDeletedAttachments(deletedAttachments);

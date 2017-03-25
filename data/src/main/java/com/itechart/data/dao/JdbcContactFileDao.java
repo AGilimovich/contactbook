@@ -17,9 +17,9 @@ public class JdbcContactFileDao implements IContactFileDao {
 
     private final String SELECT_BY_NAME_QUERY = "SELECT * FROM file WHERE name = ?";
 
-    private final String INSERT_FILE_QUERY = "INSERT INTO file VALUES (?)";
+    private final String INSERT_FILE_QUERY = "INSERT INTO file(name,stored_name) VALUES (?, ?)";
 
-    private final String UPDATE_FILE_QUERY = "UPDATE file SET name = ? WHERE file_id = ?";
+    private final String UPDATE_FILE_QUERY = "UPDATE file SET name = ?, stored_name = ? WHERE file_id = ?";
 
     private final String DELETE_FILE_QUERY = "DELETE FROM file WHERE id = ?";
 
@@ -36,13 +36,14 @@ public class JdbcContactFileDao implements IContactFileDao {
         ContactFile file = null;
         try {
             cn = transaction.getConnection();
-            st = cn.prepareStatement(SELECT_BY_NAME_QUERY);
+            st = cn.prepareStatement(SELECT_BY_ID_QUERY);
             st.setLong(1, id);
             rs = st.executeQuery();
             while (rs.next()) {
                 long foundId = rs.getLong("file_id");
-                String foundName = rs.getString("name");
-                file = new ContactFile(foundId, foundName);
+                String fileName = rs.getString("name");
+                String storedName = rs.getString("stored_name");
+                file = new ContactFile(foundId, fileName, storedName);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,8 +67,9 @@ public class JdbcContactFileDao implements IContactFileDao {
             rs = st.executeQuery();
             while (rs.next()) {
                 long id = rs.getLong("file_id");
-                String foundName = rs.getString("name");
-                ContactFile file = new ContactFile(id, foundName);
+                String fileName = rs.getString("name");
+                String storedName = rs.getString("stored_name");
+                ContactFile file = new ContactFile(id, fileName, storedName);
                 files.add(file);
             }
         } catch (SQLException e) {
@@ -87,7 +89,8 @@ public class JdbcContactFileDao implements IContactFileDao {
             cn = transaction.getConnection();
             st = cn.prepareStatement(UPDATE_FILE_QUERY);
             st.setString(1, file.getName());
-            st.setLong(1, file.getId());
+            st.setString(2, file.getStoredName());
+            st.setLong(3, file.getId());
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -106,6 +109,7 @@ public class JdbcContactFileDao implements IContactFileDao {
             cn = transaction.getConnection();
             st = cn.prepareStatement(INSERT_FILE_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, file.getName());
+            st.setString(2, file.getStoredName());
             st.executeUpdate();
             rs = st.getGeneratedKeys();
             if (rs.next())

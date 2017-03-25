@@ -16,10 +16,10 @@ public class DoSendFile implements Command {
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        byte[] photo = ServiceFactory.getServiceFactory().getRequestProcessingService().processGetFileRequest(request);
-        if (photo != null) {
+        byte[] file = ServiceFactory.getServiceFactory().getRequestProcessingService().processGetFileRequest(request);
+        if (file != null) {
             try {
-                response.getOutputStream().write(photo);
+                response.getOutputStream().write(file);
                 response.getOutputStream().flush();
                 return null;
             } catch (IOException e) {

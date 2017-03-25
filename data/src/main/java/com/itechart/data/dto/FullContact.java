@@ -1,44 +1,34 @@
 package com.itechart.data.dto;
 
-import com.itechart.data.entity.Address;
-import com.itechart.data.entity.Attachment;
-import com.itechart.data.entity.Contact;
-import com.itechart.data.entity.Phone;
+import com.itechart.data.entity.*;
 
 import java.util.ArrayList;
 
 /**
  * Contact DTO with all relevant fields including address, phones (new, updated and deleted),
  * attachments (new, updated and deleted).
- *
  */
 public class FullContact {
 
     private Contact contact;
     private Address address;
+    private ContactFile photo;
     private ArrayList<Phone> newPhones;
-    private ArrayList<Attachment> newAttachments;
+    private ArrayList<FullAttachment> newAttachments;
     private ArrayList<Phone> updatedPhones;
-    private ArrayList<Attachment> updatedAttachments;
+    private ArrayList<FullAttachment> updatedAttachments;
     private ArrayList<Phone> deletedPhones;
-    private ArrayList<Attachment> deletedAttachments;
+    private ArrayList<FullAttachment> deletedAttachments;
 
     public FullContact() {
     }
 
-    public FullContact(Contact contact, Address address, ArrayList<Phone> newPhones, ArrayList<Attachment> newAttachments) {
+    public FullContact(Contact contact, Address address, ContactFile photo) {
         this.contact = contact;
         this.address = address;
-        this.newPhones = newPhones;
-        this.newAttachments = newAttachments;
+        this.photo = photo;
     }
 
-    public ArrayList<Phone> getPhones() {
-        return newPhones;
-    }
-    public ArrayList<Attachment> getAttachments() {
-        return newAttachments;
-    }
     public Contact getContact() {
         return contact;
     }
@@ -55,7 +45,19 @@ public class FullContact {
         this.address = address;
     }
 
+    public ContactFile getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(ContactFile photo) {
+        this.photo = photo;
+    }
+
     public ArrayList<Phone> getNewPhones() {
+        return newPhones;
+    }
+
+    public ArrayList<Phone> getPhones() {
         return newPhones;
     }
 
@@ -63,11 +65,24 @@ public class FullContact {
         this.newPhones = newPhones;
     }
 
-    public ArrayList<Attachment> getNewAttachments() {
+    public void setPhones(ArrayList<Phone> newPhones) {
+        this.newPhones = newPhones;
+    }
+
+
+    public ArrayList<FullAttachment> getNewAttachments() {
         return newAttachments;
     }
 
-    public void setNewAttachments(ArrayList<Attachment> newAttachments) {
+    public ArrayList<FullAttachment> getAttachments() {
+        return newAttachments;
+    }
+
+    public void setNewAttachments(ArrayList<FullAttachment> newAttachments) {
+        this.newAttachments = newAttachments;
+    }
+
+    public void setAttachments(ArrayList<FullAttachment> newAttachments) {
         this.newAttachments = newAttachments;
     }
 
@@ -79,11 +94,11 @@ public class FullContact {
         this.updatedPhones = updatedPhones;
     }
 
-    public ArrayList<Attachment> getUpdatedAttachments() {
+    public ArrayList<FullAttachment> getUpdatedAttachments() {
         return updatedAttachments;
     }
 
-    public void setUpdatedAttachments(ArrayList<Attachment> updatedAttachments) {
+    public void setUpdatedAttachments(ArrayList<FullAttachment> updatedAttachments) {
         this.updatedAttachments = updatedAttachments;
     }
 
@@ -95,11 +110,11 @@ public class FullContact {
         this.deletedPhones = deletedPhones;
     }
 
-    public ArrayList<Attachment> getDeletedAttachments() {
+    public ArrayList<FullAttachment> getDeletedAttachments() {
         return deletedAttachments;
     }
 
-    public void setDeletedAttachments(ArrayList<Attachment> deletedAttachments) {
+    public void setDeletedAttachments(ArrayList<FullAttachment> deletedAttachments) {
         this.deletedAttachments = deletedAttachments;
     }
 }

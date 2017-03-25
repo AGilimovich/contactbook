@@ -50,14 +50,10 @@ public class RequestProcessingService {
     }
 
 
-    public FullContact processFetchSingleContactRequest(HttpServletRequest request) {
-        DataService dataService = ServiceFactory.getServiceFactory().getDataService();
-        long id = Long.valueOf(request.getParameter("id"));
-        Contact contact = dataService.getContactById(id);
-        Address address = dataService.getAddressById(contact.getAddress());
-        ArrayList<Phone> phones = dataService.getAllPhonesForContact(id);
-        ArrayList<Attachment> attachments = dataService.getAllAttachmentsForContact(id);
-        return new FullContact(contact, address, phones, attachments);
+    public long processFetchSingleContactRequest(HttpServletRequest request) {
+
+        return Long.valueOf(request.getParameter("id"));
+
 
     }
 
@@ -129,10 +125,10 @@ public class RequestProcessingService {
         String photoId = request.getParameter("id");
         if (!photoId.isEmpty()) {
             Path path = Paths.get(FILE_PATH + "\\" + photoId);
-            byte[] photo = null;
+            byte[] file = null;
             try {
-                photo = Files.readAllBytes(path);
-                return photo;
+                file = Files.readAllBytes(path);
+                return file;
 
             } catch (IOException e) {
                 e.printStackTrace();

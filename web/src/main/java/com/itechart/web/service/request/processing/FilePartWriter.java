@@ -27,7 +27,10 @@ public class FilePartWriter {
         if (fileParts == null) return null;
         Map<String, String> storedFiles = new HashMap<>();
         for (Map.Entry<String, FileItem> part : fileParts.entrySet()) {
-            storedFiles.put(part.getKey(), writeFilePart(part.getValue()));
+            //stored name = name on disk
+            storedFiles.put(part.getKey()+"_stored", writeFilePart(part.getValue()));
+            //real file name
+            storedFiles.put(part.getKey() + "_real", part.getValue().getName());
         }
         return storedFiles;
     }
@@ -41,10 +44,10 @@ public class FilePartWriter {
     private String writeFilePart(FileItem item) {
         try {
             if (item.getSize() != 0) {
-                String fileName = UUID.randomUUID().toString() + item.getName();
-                File uploadedFile = new File(path + "\\" + fileName);
+                String storedFileName = UUID.randomUUID().toString();
+                File uploadedFile = new File(path + "\\" + storedFileName);
                 item.write(uploadedFile);
-                return fileName;
+                return storedFileName;
             }
         } catch (Exception e) {
             e.printStackTrace();
