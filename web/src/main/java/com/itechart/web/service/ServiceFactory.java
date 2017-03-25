@@ -1,9 +1,6 @@
 package com.itechart.web.service;
 
-import com.itechart.data.dao.JdbcAddressDao;
-import com.itechart.data.dao.JdbcAttachmentDao;
-import com.itechart.data.dao.JdbcContactDao;
-import com.itechart.data.dao.JdbcPhoneDao;
+import com.itechart.data.dao.*;
 import com.itechart.web.service.email.EmailingService;
 import com.itechart.web.service.request.processing.RequestProcessingService;
 import com.itechart.web.service.template.EmailTemplatesProvidingService;
@@ -20,10 +17,10 @@ import java.util.ResourceBundle;
  */
 public class ServiceFactory {
 
-    private JdbcContactDao contactDao;
-    private JdbcPhoneDao phoneDao;
-    private JdbcAttachmentDao attachmentDao;
-    private JdbcAddressDao addressDao;
+    private IContactDao contactDao;
+    private IPhoneDao phoneDao;
+    private IAttachmentDao attachmentDao;
+    private IAddressDao addressDao;
     private static ServiceFactory instance;
 
     private String hostName;
@@ -63,8 +60,13 @@ public class ServiceFactory {
      */
     public static ServiceFactory getServiceFactory() {
         if (instance == null) {
-            return instance = new ServiceFactory();
-        } else return instance;
+            synchronized (ServiceFactory.class) {
+                if (instance == null) {
+                    instance = new ServiceFactory();
+                }
+            }
+        }
+        return instance;
     }
 
 
@@ -84,7 +86,7 @@ public class ServiceFactory {
         return new EmailingService(hostName, SMTPPort, userName, password, emailFrom);
     }
 
-    public EmailTemplatesProvidingService getEmailTemplateService() {
+    public EmailTemplatesProvidingService getEmailTemplateProvidingService() {
         return new EmailTemplatesProvidingService();
     }
 

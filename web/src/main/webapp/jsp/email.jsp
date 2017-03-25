@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
@@ -35,20 +35,20 @@
                 </div>
                 <div class="row">
                     <p>Шаблон:</p>
-                    <select name="template" value="${template.getName()}" class="form-control" onchange="showTemplate(this.selectedIndex);">
+                    <select name="template" value="${template.getKey().getDescription()}" class="form-control" onchange="showTemplate(this.selectedIndex);">
                         <c:forEach var="template" items="${templates}" varStatus="status">
-                            <option value="${status.index}">${template.getName()}</option>
+                            <option value="${status.index}">${template.getKey().getDescription()}</option>
                         </c:forEach>
                     </select>
                 </div>
-                <input name="emailBody" value="${templates[0].render()}" type="text" class="hidden">
+                <%--<input name="emailBody" value="${templates[0].render()}" type="text" class="hidden">--%>
 
                 <div class="row">
                     <p>Текст:</p>
                     <c:forEach var="template" items="${templates}" varStatus="status">
-                        <div id="body-div[${status.index}]"
-                             contenteditable="true"
-                             class="${status.index == 0?'text-field white-space-pre' : 'text-field white-space-pre hidden'}">${template.render()}</div>
+                        <textarea name="email-body" id="email-body[${status.index}]" ${status.index == 0?'' : 'disabled'}
+
+                             class="${status.index == 0?'text-field white-space-pre' : 'text-field white-space-pre hidden'}">${template.getValue().render()}</textarea>
                     </c:forEach>
 
 

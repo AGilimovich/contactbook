@@ -1,9 +1,6 @@
 package com.itechart.web.service;
 
-import com.itechart.data.dao.JdbcAddressDao;
-import com.itechart.data.dao.JdbcAttachmentDao;
-import com.itechart.data.dao.JdbcContactDao;
-import com.itechart.data.dao.JdbcPhoneDao;
+import com.itechart.data.dao.*;
 import com.itechart.data.dto.ContactWithAddressDTO;
 import com.itechart.data.dto.FullContact;
 import com.itechart.data.dto.SearchDTO;
@@ -13,17 +10,18 @@ import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.Phone;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Aleksandr on 22.03.2017.
  */
 public class DataService {
-    private JdbcContactDao contactDao;
-    private JdbcPhoneDao phoneDao;
-    private JdbcAttachmentDao attachmentDao;
-    private JdbcAddressDao addressDao;
+    private IContactDao contactDao;
+    private IPhoneDao phoneDao;
+    private IAttachmentDao attachmentDao;
+    private IAddressDao addressDao;
 
-    public DataService(JdbcContactDao contactDao, JdbcPhoneDao phoneDao, JdbcAttachmentDao attachmentDao, JdbcAddressDao addressDao) {
+    public DataService(IContactDao contactDao, IPhoneDao phoneDao, IAttachmentDao attachmentDao, IAddressDao addressDao) {
         this.contactDao = contactDao;
         this.phoneDao = phoneDao;
         this.attachmentDao = attachmentDao;
@@ -96,8 +94,11 @@ public class DataService {
 
 
     public ArrayList<Contact> getAllContacts() {
-
         return contactDao.getAll();
+    }
+
+    public ArrayList<Contact> getContactsWithBirthday(Date date) {
+        return contactDao.getByBirthDate(date);
     }
 
     public ArrayList<Contact> getContactsByFields(SearchDTO dto) {

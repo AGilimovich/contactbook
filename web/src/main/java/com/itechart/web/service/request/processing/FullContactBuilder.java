@@ -7,7 +7,6 @@ import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.Phone;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +14,7 @@ import java.util.regex.Pattern;
 /**
  * Class for parsing entity objects from request form fields.
  */
-public class FullContactFactory {
+public class FullContactBuilder {
 
 
     private Contact contact;
@@ -29,16 +28,18 @@ public class FullContactFactory {
     private ArrayList<Attachment> deletedAttachments = new ArrayList<>();
 
 
-    public FullContactFactory(Map<String, String> formFields, Map<String, String> storedFiles) {
-        createContact(formFields, storedFiles);
-        createAddress(formFields);
-        createPhones(formFields);
-        createAttachments(formFields, storedFiles);
+    public FullContactBuilder(Map<String, String> formFields, Map<String, String> storedFiles) {
+        if (formFields != null && storedFiles != null) {
+            buildContact(formFields, storedFiles);
+            buildAddress(formFields);
+            buildPhones(formFields);
+            buildAttachments(formFields, storedFiles);
+        }
     }
 
 
-    private void createContact(Map<String, String> formFields, Map<String, String> storedFiles) {
-
+    private void buildContact(Map<String, String> formFields, Map<String, String> storedFiles) {
+        if (formFields == null || storedFiles == null) return;
         ContactBuilder contactBuilder = new ContactBuilder();
         //set photo
         for (Map.Entry<String, String> entry : storedFiles.entrySet()) {
@@ -51,12 +52,15 @@ public class FullContactFactory {
         contact = contactBuilder.buildContact(formFields);
     }
 
-    private void createAddress(Map<String, String> formFields) {
+    private void buildAddress(Map<String, String> formFields) {
+        if (formFields == null) return;
         AddressBuilder addressBuilder = new AddressBuilder();
         address = addressBuilder.buildAddress(formFields);
     }
 
-    private void createPhones(Map<String, String> formFields) {
+    private void buildPhones(Map<String, String> formFields) {
+        if (formFields == null) return;
+
         PhoneFormFieldParser parser = new PhoneFormFieldParser();
         String fieldNameRegex = "phone\\[(\\d+)\\]";
         Pattern fieldNamePattern = Pattern.compile(fieldNameRegex);
@@ -84,8 +88,8 @@ public class FullContactFactory {
         }
     }
 
-    private void createAttachments(Map<String, String> formFields, Map<String, String> storedFiles) {
-
+    private void buildAttachments(Map<String, String> formFields, Map<String, String> storedFiles) {
+        if (formFields == null || storedFiles == null) return;
         AttachmentBuilder attachmentBuilder = new AttachmentBuilder();
         String fieldNameRegex = "attachMeta\\[(\\d+)\\]";
         Pattern fieldNamePattern = Pattern.compile(fieldNameRegex);
@@ -97,7 +101,7 @@ public class FullContactFactory {
                 Map<String, String> parameters = parser.parse(formParameter.getValue());
                 String fileFieldNumber = matcher.group(1);
                 //add to parameters file name
-                parameters.put("fileName", storedFiles.get("attachFile[" + fileFieldNumber + "]"));// TODO: 22.03.2017
+                parameters.put("fileName", storedFiles.get("attachFile[" + fileFieldNumber + "]"));
                 Attachment attachment = attachmentBuilder.buildAttachment(parameters);
                 String status = parameters.get("status");
                 switch (status) {

@@ -39,9 +39,9 @@ public class RequestProcessingService {
         //store file parts and get map of field names and file names
         Map<String, String> storedFiles = writer.writeFileParts(fileParts);
 
-        FullContactFactory factory = new FullContactFactory(formFields, storedFiles);
+        FullContactBuilder builder = new FullContactBuilder(formFields, storedFiles);
 
-        return factory.getFullContact();
+        return builder.getFullContact();
     }
 
     public String[] processDeleteContactRequest(HttpServletRequest request) {
@@ -115,7 +115,7 @@ public class RequestProcessingService {
     public Email processSendEmailRequest(HttpServletRequest request) {
         String emailAddressesString = request.getParameter("emailAddresses");
         String subject = request.getParameter("subject");
-        String body = request.getParameter("emailBody");
+        String body = request.getParameter("email-body");
         ArrayList<String> emailAddresses = new EmailAddressesParser().getEmailAddresses(emailAddressesString);
 
         return new Email(emailAddresses, subject, body);

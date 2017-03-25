@@ -40,7 +40,6 @@ var inputPhoneComment = document.getElementsByName("inputPhoneComment");
 
 
 
-
 // action - show phone creating popup window
 btnAddPhone.onclick = function () {
     //reset input values of popup form
@@ -76,7 +75,9 @@ btnDeletePhones.onclick = function () {
 }
 //function for deleting hidden input with specified index
 function deleteHiddenInput(index) {
-    var hiddenInput = document.getElementsByName("phone");
+    var id = phones[index].getId();
+    var hiddenInput = document.getElementsByName("phone[" + id + "]");
+
     hiddenInput[index].parentNode.removeChild(hiddenInput[index]);
 
 }

@@ -21,21 +21,11 @@ public class Contact {
     private long address;
     private String photo;
 
-    public Contact(long contactId, String name, String surname, String patronymic, Date dateOfBirth, Gender gender, String citizenship, FamilyStatus familyStatus, String website, String email, String placeOfWork, long address, String photo) {
+    public Contact(long contactId, String name, String surname) {
         this.contactId = contactId;
         this.name = name;
         this.surname = surname;
-        this.patronymic = patronymic;
-        this.dateOfBirth = dateOfBirth;
-        this.gender = gender;
-        this.citizenship = citizenship;
-        this.familyStatus = familyStatus;
-        this.website = website;
-        this.email = email;
-        this.placeOfWork = placeOfWork;
-        this.address = address;
-        this.photo = photo;
-    }
+       }
 
     public Contact() {
     }

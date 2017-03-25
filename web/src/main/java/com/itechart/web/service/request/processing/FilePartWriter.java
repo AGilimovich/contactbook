@@ -24,6 +24,7 @@ public class FilePartWriter {
      * @return map of field names and names of files.
      */
     public Map<String, String> writeFileParts(Map<String, FileItem> fileParts) {
+        if (fileParts == null) return null;
         Map<String, String> storedFiles = new HashMap<>();
         for (Map.Entry<String, FileItem> part : fileParts.entrySet()) {
             storedFiles.put(part.getKey(), writeFilePart(part.getValue()));
@@ -40,7 +41,7 @@ public class FilePartWriter {
     private String writeFilePart(FileItem item) {
         try {
             if (item.getSize() != 0) {
-                String fileName = UUID.randomUUID().toString()+ item.getName();
+                String fileName = UUID.randomUUID().toString() + item.getName();
                 File uploadedFile = new File(path + "\\" + fileName);
                 item.write(uploadedFile);
                 return fileName;

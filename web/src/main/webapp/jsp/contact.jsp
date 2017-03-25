@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
@@ -25,7 +25,8 @@
 
 
 <div class="container-fluid">
-    <form id="main-form" action="${pageContext.request.contextPath}/${action}" method="post" enctype="multipart/form-data"
+    <form id="main-form" action="${pageContext.request.contextPath}/${action}" method="post"
+          enctype="multipart/form-data"
           accept-charset="UTF-8" class="form-horizontal">
         <div class="row">
 
@@ -33,7 +34,8 @@
             <div class="col-md-1">
 
                 <div class="photo-container">
-                    <img src="${pageContext.request.contextPath}/file?id=${contact.photo}" height="100%" alt="photo" id="photo">
+                    <img src="${pageContext.request.contextPath}/file?id=${contact.photo}" height="100%" alt="photo"
+                         id="photo">
                 </div>
 
             </div>
@@ -206,9 +208,11 @@
             <div class="popup-content">
                 <p>Путь к картинке:</p>
                 <%--<input type="file" name="photoFile" accept="image/jpeg,image/png,image/gif" class="form-control"--%>
-                       <%--onchange="loadImg()">--%>
-              <input type="button" id="loadFile" class="btn" value="Найти" onclick="document.getElementById('inputPhotoFile').click();" />
-                <input id="inputPhotoFile" style="display:none;" type="file" name="photoFile" accept="image/jpeg,image/png,image/gif" class="form-control"
+                <%--onchange="loadImg()">--%>
+                <input type="button" id="loadFile" class="btn" value="Найти"
+                       onclick="document.getElementById('inputPhotoFile').click();"/>
+                <input id="inputPhotoFile" style="display:none;" type="file" name="photoFile"
+                       accept="image/jpeg,image/png,image/gif" class="form-control"
                        onchange="loadImg()">
                 <div class="row controls-group">
 
@@ -223,7 +227,7 @@
     <%--Add phone POPUP--%>
     <div id="phone-popup" class="popup">
         <div class="popup-content">
-            <form >
+            <form>
                 <p>Код страны в формате +XXX:</p>
                 <input type="tel" pattern="[\+]\d{3}" class="form-control" name="inputCountryCode" required>
 

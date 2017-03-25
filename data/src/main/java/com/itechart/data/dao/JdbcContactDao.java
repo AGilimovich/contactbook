@@ -40,6 +40,8 @@ public class JdbcContactDao implements IContactDao {
             "INNER JOIN gender ON c.gender = gender.gender_id " +
             "WHERE (c.surname LIKE ?) AND (c.name LIKE ?) AND (c.patronymic LIKE ?) AND ((c.date_of_birth BETWEEN ? AND ?) OR (COALESCE(c.date_of_birth,'NULL') LIKE ?)) AND (gender.gender_value LIKE ?) AND (family_status.family_status_value LIKE ?) " +
             "AND (c.citizenship LIKE ?) AND (a.country LIKE ?) AND (a.city LIKE ?) AND (a.street LIKE ?) AND (a.house LIKE ?) AND (a.apartment LIKE ?) AND (a.zip_code LIKE ?)";
+    private final String SELECT_CONTACTS_BY_BIRTHDATE = "SELECT name, email FROM contact WHERE date_of_birth = ?";
+
 
     public JdbcContactDao(DataSource ds) {
         this.ds = ds;
@@ -171,8 +173,18 @@ public class JdbcContactDao implements IContactDao {
                 String placeOfWork = rs.getString("place_of_work");
                 String photo = rs.getString("photo");
                 int addressId = rs.getInt("address_id");
-
-                contacts.add(new Contact(contactId, name, surname, patronymic, dateOfBirth, gender, citizenship, familyStatus, website, email, placeOfWork, addressId, photo));
+                Contact contact = new Contact(contactId, name, surname);
+                contact.setPatronymic(patronymic);
+                contact.setDateOfBirth(dateOfBirth);
+                contact.setGender(gender);
+                contact.setCitizenship(citizenship);
+                contact.setFamilyStatus(familyStatus);
+                contact.setWebsite(website);
+                contact.setEmail(email);
+                contact.setPlaceOfWork(placeOfWork);
+                contact.setAddress(addressId);
+                contact.setPhoto(photo);
+                contacts.add(contact);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -208,7 +220,17 @@ public class JdbcContactDao implements IContactDao {
             String placeOfWork = rs.getString("place_of_work");
             String photo = rs.getString("photo");
             long addressId = rs.getLong("address");
-            contact = new Contact(contactId, name, surname, patronymic, dateOfBirth, gender, citizenship, familyStatus, website, email, placeOfWork, addressId, photo);
+            contact = new Contact(contactId, name, surname);
+            contact.setPatronymic(patronymic);
+            contact.setDateOfBirth(dateOfBirth);
+            contact.setGender(gender);
+            contact.setCitizenship(citizenship);
+            contact.setFamilyStatus(familyStatus);
+            contact.setWebsite(website);
+            contact.setEmail(email);
+            contact.setPlaceOfWork(placeOfWork);
+            contact.setAddress(addressId);
+            contact.setPhoto(photo);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -219,7 +241,6 @@ public class JdbcContactDao implements IContactDao {
     }
 
     @Override
-//    public ArrayList<Contact> findContactsByFields(String surname, String name, String patronymic, Date fromDate, Date toDate, Contact.Gender gender, Contact.FamilyStatus familyStatus, String citizenship, String country, String city, String street, String house, String apartment, String zipCode) {
     public ArrayList<Contact> findContactsByFields(SearchDTO dto) {
 
         ArrayList<Contact> contacts = new ArrayList<>();
@@ -307,7 +328,46 @@ public class JdbcContactDao implements IContactDao {
                 String foundPlaceOfWork = rs.getString("place_of_work");
                 String foundPhoto = rs.getString("photo");
                 long foundAddressId = rs.getLong("address");
-                Contact contact = new Contact(foundContactId, foundName, foundSurname, foundPatronymic, foundDateOfBirth, foundGender, foundCitizenship, foundFamilyStatus, foundWebsite, foundEmail, foundPlaceOfWork, foundAddressId, foundPhoto);
+                Contact contact = new Contact(foundContactId, foundName, foundSurname);
+                contact.setPatronymic(foundPatronymic);
+                contact.setDateOfBirth(foundDateOfBirth);
+                contact.setGender(foundGender);
+                contact.setCitizenship(foundCitizenship);
+                contact.setFamilyStatus(foundFamilyStatus);
+                contact.setWebsite(foundWebsite);
+                contact.setEmail(foundEmail);
+                contact.setPlaceOfWork(foundPlaceOfWork);
+                contact.setAddress(foundAddressId);
+                contact.setPhoto(foundPhoto);
+
+                contacts.add(contact);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBResourceManager.closeResources(cn, st, rs);
+        }
+
+        return contacts;
+    }
+
+    @Override
+    public ArrayList<Contact> getByBirthDate(Date date) {
+        ArrayList<Contact> contacts = null;
+        Connection cn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            cn = ds.getConnection();
+            st = cn.prepareStatement(SELECT_BY_ID_QUERY);
+            st.setDate(1, new java.sql.Date(date.getTime()));
+            rs = st.executeQuery();
+            while (rs.next()) {
+                String name = rs.getString("name");
+                String email = rs.getString("email");
+                Contact contact = new Contact();
+                contact.setName(name);
+                contact.setEmail(email);
                 contacts.add(contact);
             }
         } catch (SQLException e) {
