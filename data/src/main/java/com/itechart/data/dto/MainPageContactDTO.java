@@ -24,7 +24,7 @@ public class MainPageContactDTO {
     private String photo;
 
 
-    public MainPageContactDTO(Contact c, Address a, File file) {
+    public MainPageContactDTO(Contact c, Address a, File photo) {
         this.contactId = c.getContactId();
         this.name = c.getName();
         this.surname = c.getSurname();
@@ -36,7 +36,7 @@ public class MainPageContactDTO {
         this.house = a.getHouse();
         this.apartment = a.getApartment();
         this.placeOfWork = c.getPlaceOfWork();
-        this.photo = file.getStoredName();
+        this.photo = photo.getStoredName();
     }
 
     public long getContactId() {
