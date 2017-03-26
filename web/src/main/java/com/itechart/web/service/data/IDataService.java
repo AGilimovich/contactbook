@@ -1,6 +1,6 @@
 package com.itechart.web.service.data;
 
-import com.itechart.data.dto.FullContactDTO;
+import com.itechart.data.entity.FullContactEntity;
 import com.itechart.data.dto.MainPageContactDTO;
 import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Address;
@@ -17,9 +17,9 @@ public interface IDataService {
 
     void deleteContact(long contactId);
 
-    void saveNewContact(FullContactDTO fullContactDTO);
+    void saveNewContact(FullContactEntity fullContactEntity);
 
-    void updateContact(FullContactDTO changedContact, FullContactDTO contactToUpdate);
+    void updateContact(FullContactEntity changedContact, FullContactEntity contactToUpdate);
 
     ArrayList<Contact> getContactsWithBirthday(Date date);
 
@@ -33,7 +33,7 @@ public interface IDataService {
 
     ArrayList<MainPageContactDTO> getMainPageContactDTOs();
 
-    FullContactDTO getFullContactDTOById(long contactId);
+    FullContactEntity getFullContactEntityById(long contactId);
 
 
 }

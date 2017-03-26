@@ -1,29 +1,27 @@
-package com.itechart.data.dto;
-
-import com.itechart.data.entity.*;
+package com.itechart.data.entity;
 
 import java.util.ArrayList;
 
 /**
- * Contact DTO with all relevant fields including address, phones (new, updated and deleted),
+ * Contact entity with all relevant fields including address, phones (new, updated and deleted),
  * attachments (new, updated and deleted).
  */
-public class FullContactDTO {
+public class FullContactEntity {
 
     private Contact contact;
     private Address address;
     private File photo;
     private ArrayList<Phone> newPhones;
-    private ArrayList<FullAttachmentDTO> newAttachments;
+    private ArrayList<FullAttachmentEntity> newAttachments;
     private ArrayList<Phone> updatedPhones;
-    private ArrayList<FullAttachmentDTO> updatedAttachments;
+    private ArrayList<FullAttachmentEntity> updatedAttachments;
     private ArrayList<Phone> deletedPhones;
-    private ArrayList<FullAttachmentDTO> deletedAttachments;
+    private ArrayList<FullAttachmentEntity> deletedAttachments;
 
-    public FullContactDTO() {
+    public FullContactEntity() {
     }
 
-    public FullContactDTO(Contact contact, Address address, File photo) {
+    public FullContactEntity(Contact contact, Address address, File photo) {
         this.contact = contact;
         this.address = address;
         this.photo = photo;
@@ -70,19 +68,19 @@ public class FullContactDTO {
     }
 
 
-    public ArrayList<FullAttachmentDTO> getNewAttachments() {
+    public ArrayList<FullAttachmentEntity> getNewAttachments() {
         return newAttachments;
     }
 
-    public ArrayList<FullAttachmentDTO> getAttachments() {
+    public ArrayList<FullAttachmentEntity> getAttachments() {
         return newAttachments;
     }
 
-    public void setNewAttachments(ArrayList<FullAttachmentDTO> newAttachments) {
+    public void setNewAttachments(ArrayList<FullAttachmentEntity> newAttachments) {
         this.newAttachments = newAttachments;
     }
 
-    public void setAttachments(ArrayList<FullAttachmentDTO> newAttachments) {
+    public void setAttachments(ArrayList<FullAttachmentEntity> newAttachments) {
         this.newAttachments = newAttachments;
     }
 
@@ -94,11 +92,11 @@ public class FullContactDTO {
         this.updatedPhones = updatedPhones;
     }
 
-    public ArrayList<FullAttachmentDTO> getUpdatedAttachments() {
+    public ArrayList<FullAttachmentEntity> getUpdatedAttachments() {
         return updatedAttachments;
     }
 
-    public void setUpdatedAttachments(ArrayList<FullAttachmentDTO> updatedAttachments) {
+    public void setUpdatedAttachments(ArrayList<FullAttachmentEntity> updatedAttachments) {
         this.updatedAttachments = updatedAttachments;
     }
 
@@ -110,11 +108,11 @@ public class FullContactDTO {
         this.deletedPhones = deletedPhones;
     }
 
-    public ArrayList<FullAttachmentDTO> getDeletedAttachments() {
+    public ArrayList<FullAttachmentEntity> getDeletedAttachments() {
         return deletedAttachments;
     }
 
-    public void setDeletedAttachments(ArrayList<FullAttachmentDTO> deletedAttachments) {
+    public void setDeletedAttachments(ArrayList<FullAttachmentEntity> deletedAttachments) {
         this.deletedAttachments = deletedAttachments;
     }
 }

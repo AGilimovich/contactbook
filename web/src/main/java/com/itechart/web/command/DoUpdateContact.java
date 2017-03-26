@@ -1,8 +1,7 @@
 package com.itechart.web.command;
 
 import com.itechart.data.dto.MainPageContactDTO;
-import com.itechart.data.dto.FullContactDTO;
-import com.itechart.web.service.data.DataService;
+import com.itechart.data.entity.FullContactEntity;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.IDataService;
 
@@ -19,13 +18,13 @@ public class DoUpdateContact implements Command {
 
 
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        FullContactDTO constructedFullContactDTO = ServiceFactory.getServiceFactory().getRequestProcessingService().processContactRequest(request);
+        FullContactEntity constructedFullContactEntity = ServiceFactory.getServiceFactory().getRequestProcessingService().processContactRequest(request);
         //id of contacted retrieved from session
 
-        FullContactDTO contactToUpdate = (FullContactDTO) request.getSession().getAttribute("contactToUpdate");
-        constructedFullContactDTO.getContact();
+        FullContactEntity contactToUpdate = (FullContactEntity) request.getSession().getAttribute("contactToUpdate");
+        constructedFullContactEntity.getContact();
         IDataService dataService = ServiceFactory.getServiceFactory().getDataService();
-        dataService.updateContact(constructedFullContactDTO, contactToUpdate);
+        dataService.updateContact(constructedFullContactEntity, contactToUpdate);
 
         //remove session attributes
         request.getSession().removeAttribute("action");

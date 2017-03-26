@@ -1,6 +1,6 @@
 package com.itechart.web.service.request.processing;
 
-import com.itechart.data.dto.FullContactDTO;
+import com.itechart.data.entity.FullContactEntity;
 import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Contact;
 import com.itechart.web.properties.PropertiesManager;
@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class RequestProcessingService {
 
-    public FullContactDTO processContactRequest(HttpServletRequest request) {
+    public FullContactEntity processContactRequest(HttpServletRequest request) {
         MultipartRequestHandler handler = new MultipartRequestHandler();
         handler.handle(request);
         //get map of form field names and corresponding values

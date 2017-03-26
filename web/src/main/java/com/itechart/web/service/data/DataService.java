@@ -2,8 +2,8 @@ package com.itechart.web.service.data;
 
 import com.itechart.data.dao.*;
 import com.itechart.data.dto.MainPageContactDTO;
-import com.itechart.data.dto.FullAttachmentDTO;
-import com.itechart.data.dto.FullContactDTO;
+import com.itechart.data.entity.FullAttachmentEntity;
+import com.itechart.data.entity.FullContactEntity;
 import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.*;
 import com.itechart.data.transaction.Transaction;
@@ -58,7 +58,7 @@ public class DataService implements IDataService{
     }
 
 
-    public void saveNewContact(FullContactDTO fullContactDTO) {
+    public void saveNewContact(FullContactEntity fullContactEntity) {
         Transaction transaction = tm.getTransaction();
         JdbcPhoneDao phoneDao = new JdbcPhoneDao(transaction);
         JdbcAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
@@ -68,11 +68,11 @@ public class DataService implements IDataService{
 
 
 
-        Address address = fullContactDTO.getAddress();
-        ArrayList<Phone> phones = fullContactDTO.getNewPhones();
-        ArrayList<FullAttachmentDTO> attachments = fullContactDTO.getNewAttachments();
-        File photo = fullContactDTO.getPhoto();
-        Contact contact = fullContactDTO.getContact();
+        Address address = fullContactEntity.getAddress();
+        ArrayList<Phone> phones = fullContactEntity.getNewPhones();
+        ArrayList<FullAttachmentEntity> attachments = fullContactEntity.getNewAttachments();
+        File photo = fullContactEntity.getPhoto();
+        Contact contact = fullContactEntity.getContact();
 
 //        if (photo != null) {
         long photoId = fileDao.save(photo);
@@ -85,10 +85,10 @@ public class DataService implements IDataService{
             phone.setContactId(contactId);
             phoneDao.save(phone);
         }
-        for (FullAttachmentDTO fullAttachmentDTO : attachments) {
-            File file = fullAttachmentDTO.getFile();
+        for (FullAttachmentEntity fullAttachmentEntity : attachments) {
+            File file = fullAttachmentEntity.getFile();
             long fileId = fileDao.save(file);
-            Attachment attachment = fullAttachmentDTO.getAttachment();
+            Attachment attachment = fullAttachmentEntity.getAttachment();
             attachment.setContact(contactId);
             attachment.setFileId(fileId);
             attachmentDao.save(attachment);
@@ -97,7 +97,7 @@ public class DataService implements IDataService{
     }
 
 
-    public void updateContact(FullContactDTO changedContact, FullContactDTO contactToUpdate) {
+    public void updateContact(FullContactEntity changedContact, FullContactEntity contactToUpdate) {
         Transaction transaction = tm.getTransaction();
         JdbcPhoneDao phoneDao = new JdbcPhoneDao(transaction);
         JdbcAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
@@ -126,28 +126,28 @@ public class DataService implements IDataService{
             phoneDao.save(phone);
         }
         //delete attachments
-        for (FullAttachmentDTO fullAttachmentDTO : changedContact.getDeletedAttachments()) {
-            File file = fullAttachmentDTO.getFile();
+        for (FullAttachmentEntity fullAttachmentEntity : changedContact.getDeletedAttachments()) {
+            File file = fullAttachmentEntity.getFile();
             fileDao.delete(file.getId());
-            attachmentDao.delete(fullAttachmentDTO.getAttachment().getId());
+            attachmentDao.delete(fullAttachmentEntity.getAttachment().getId());
             // TODO: 23.03.2017 delete from disk
             ServiceFactory.getServiceFactory().getFileService().deleteFile(file.getStoredName());
         }
         //create new attachments
-        for (FullAttachmentDTO fullAttachmentDTO : changedContact.getNewAttachments()) {
-            File file = fullAttachmentDTO.getFile();
+        for (FullAttachmentEntity fullAttachmentEntity : changedContact.getNewAttachments()) {
+            File file = fullAttachmentEntity.getFile();
             long fileId = fileDao.save(file);
-            Attachment attachment = fullAttachmentDTO.getAttachment();
+            Attachment attachment = fullAttachmentEntity.getAttachment();
             attachment.setFileId(fileId);
             attachment.setContact(contactToUpdate.getContact().getContactId());
             attachmentDao.save(attachment);
         }
         //update attachments
-        for (FullAttachmentDTO fullAttachmentDTO : changedContact.getUpdatedAttachments()) {
-            File file = fullAttachmentDTO.getFile();
+        for (FullAttachmentEntity fullAttachmentEntity : changedContact.getUpdatedAttachments()) {
+            File file = fullAttachmentEntity.getFile();
             if (file != null)
                 fileDao.update(file);
-            attachmentDao.update(fullAttachmentDTO.getAttachment());
+            attachmentDao.update(fullAttachmentEntity.getAttachment());
         }
         transaction.commitTransaction();
 
@@ -214,7 +214,7 @@ public class DataService implements IDataService{
     }
 
 
-    public FullContactDTO getFullContactDTOById(long contactId) {
+    public FullContactEntity getFullContactEntityById(long contactId) {
         Transaction transaction = tm.getTransaction();
         JdbcContactDao contactDao = new JdbcContactDao(transaction);
         JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
@@ -227,22 +227,22 @@ public class DataService implements IDataService{
         File photo = fileDao.getFileById(contact.getPhotoId());
         ArrayList<Phone> phones = phoneDao.getAllForContact(contactId);
 
-        ArrayList<FullAttachmentDTO> fullAttachmentDTOs = new ArrayList<>();
+        ArrayList<FullAttachmentEntity> fullAttachmentEntities = new ArrayList<>();
         ArrayList<Attachment> attachments = attachmentDao.getAllForContact(contactId);
         for (Attachment attachment : attachments) {
             File file = fileDao.getFileById(attachment.getFileId());
-            FullAttachmentDTO fullAttachmentDTO = new FullAttachmentDTO(attachment, file);
-            fullAttachmentDTOs.add(fullAttachmentDTO);
+            FullAttachmentEntity fullAttachmentEntity = new FullAttachmentEntity(attachment, file);
+            fullAttachmentEntities.add(fullAttachmentEntity);
         }
 
 
-        FullContactDTO fullContactDTO = new FullContactDTO(contact, address, photo);
-        fullContactDTO.setPhones(phones);
-        fullContactDTO.setAttachments(fullAttachmentDTOs);
+        FullContactEntity fullContactEntity = new FullContactEntity(contact, address, photo);
+        fullContactEntity.setPhones(phones);
+        fullContactEntity.setAttachments(fullAttachmentEntities);
 
 
         transaction.commitTransaction();
-        return fullContactDTO;
+        return fullContactEntity;
     }
 
 }

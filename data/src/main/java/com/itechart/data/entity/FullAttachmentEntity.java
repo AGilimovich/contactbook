@@ -1,16 +1,13 @@
-package com.itechart.data.dto;
-
-import com.itechart.data.entity.Attachment;
-import com.itechart.data.entity.File;
+package com.itechart.data.entity;
 
 /**
  * Created by Aleksandr on 25.03.2017.
  */
-public class FullAttachmentDTO {
+public class FullAttachmentEntity {
     private Attachment attachment;
     private File file;
 
-    public FullAttachmentDTO(Attachment attachment, File file) {
+    public FullAttachmentEntity(Attachment attachment, File file) {
         this.attachment = attachment;
         this.file = file;
     }

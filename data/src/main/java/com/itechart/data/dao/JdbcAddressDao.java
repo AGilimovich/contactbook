@@ -29,7 +29,7 @@ public class JdbcAddressDao implements IAddressDao {
             " INNER JOIN contact_address AS c_a ON c_a.address_id = a.address_id" +
             " WHERE c_a.contact_id = ?";
 
-    private String DELETE_ADDRESSES_FOR_CONTACT_QUERY = "DELETE FROM address AS a WHERE a.address_id IN (SELECT c_a.address_id FROM contact_address AS c_a WHERE c_a.contact_id = ?)";
+    private String DELETE_ADDRESSES_FOR_CONTACT_QUERY = "DELETE FROM address WHERE address_id IN (SELECT c_a.address_id FROM contact_address AS c_a WHERE c_a.contact_id = ?)";
     public JdbcAddressDao(Transaction transaction) {
         this.transaction = transaction;
     }

@@ -80,7 +80,6 @@ public class JdbcContactDao implements IContactDao {
         long id = 0;
         try {
             cn = transaction.getConnection();
-//            cn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
             st = cn.prepareStatement(INSERT_CONTACT_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, contact.getSurname());
             st.setString(2, contact.getName());

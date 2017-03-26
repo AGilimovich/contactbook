@@ -28,10 +28,10 @@ public class JdbcFileDao implements IFileDao {
     private String INSERT_FILE_STORAGE_QUERY = "INSERT INTO file_storage VALUES()";
     private String SELECT_BY_STORAGE_ID_QUERY = "SELECT * FROM file WHERE file_storage_id = ?";
 
-    private String DELETE_FILE_STORAGE_FOR_CONTACT_ID_QUERY = "DELETE FROM file_storage AS f_s WHERE f_s.file_storage_id IN ((SELECT c.file_storage_id FROM contact AS c WHERE c.contact_id = ?)" +
-            " OR(SELECT a.file_storage_id FROM attachment AS a WHERE a.contact_id = ?))";
-    private String DELETE_FILES_FOR_CONTACT_QUERY = "DELETE FROM file WHERE file.file_storage_id IN ((SELECT c.file_storage_id FROM contact AS c WHERE c.contact_id = ?)" +
-            " OR (SELECT a.file_storage FROM attachments AS a WHERE a.contact = ?))";
+    private String DELETE_FILE_STORAGE_FOR_CONTACT_ID_QUERY = "DELETE FROM file_storage WHERE file_storage_id IN ((SELECT c.file_storage_id FROM contact AS c WHERE c.contact_id = ?)" +
+            " OR(SELECT a.file_storage_id FROM attachment AS a WHERE a.contact = ?))";
+    private String DELETE_FILES_FOR_CONTACT_QUERY = "DELETE FROM file WHERE file_storage_id IN ((SELECT c.file_storage_id FROM contact AS c WHERE c.contact_id = ?)" +
+            " OR (SELECT a.file_storage_id FROM attachment AS a WHERE a.contact = ?))";
 
     public JdbcFileDao(Transaction transaction) {
         this.transaction = transaction;

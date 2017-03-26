@@ -1,7 +1,7 @@
 package com.itechart.web.service.request.processing.builder;
 
-import com.itechart.data.dto.FullAttachmentDTO;
-import com.itechart.data.dto.FullContactDTO;
+import com.itechart.data.entity.FullAttachmentEntity;
+import com.itechart.data.entity.FullContactEntity;
 import com.itechart.data.entity.*;
 import com.itechart.web.service.request.processing.parser.AttachmentFormFieldParser;
 import com.itechart.web.service.request.processing.parser.PhoneFormFieldParser;
@@ -24,9 +24,9 @@ public class FullContactDTOBuilder {
     private ArrayList<Phone> updatedPhones = new ArrayList<>();
     private ArrayList<Phone> deletedPhones = new ArrayList<>();
 
-    private ArrayList<FullAttachmentDTO> newAttachments = new ArrayList<>();
-    private ArrayList<FullAttachmentDTO> updatedAttachments = new ArrayList<>();
-    private ArrayList<FullAttachmentDTO> deletedAttachments = new ArrayList<>();
+    private ArrayList<FullAttachmentEntity> newAttachments = new ArrayList<>();
+    private ArrayList<FullAttachmentEntity> updatedAttachments = new ArrayList<>();
+    private ArrayList<FullAttachmentEntity> deletedAttachments = new ArrayList<>();
 
 
     public FullContactDTOBuilder(Map<String, String> formFields, Map<String, String> storedFiles) {
@@ -103,19 +103,19 @@ public class FullContactDTOBuilder {
                 //add file name to parameters
                 File file = fileBuilder.buildFile(storedFiles, fileFieldNumber);
                 Attachment attachment = attachmentBuilder.buildAttachment(parameters);
-                FullAttachmentDTO fullAttachmentDTO = new FullAttachmentDTO(attachment, file);
+                FullAttachmentEntity fullAttachmentEntity = new FullAttachmentEntity(attachment, file);
                 String status = parameters.get("status");
                 switch (status) {
                     case "NEW":
-                        newAttachments.add(fullAttachmentDTO);
+                        newAttachments.add(fullAttachmentEntity);
                         break;
                     case "EDITED":
-                        updatedAttachments.add(fullAttachmentDTO);
+                        updatedAttachments.add(fullAttachmentEntity);
                         break;
                     case "NONE":
                         break;
                     case "DELETED":
-                        deletedAttachments.add(fullAttachmentDTO);
+                        deletedAttachments.add(fullAttachmentEntity);
                         break;
                     default:
                 }
@@ -124,15 +124,15 @@ public class FullContactDTOBuilder {
     }
 
 
-    public FullContactDTO getFullContactDTO() {
-        FullContactDTO fullContactDTO = new FullContactDTO(contact, address, photo);
-        fullContactDTO.setNewPhones(newPhones);
-        fullContactDTO.setNewAttachments(newAttachments);
-        fullContactDTO.setDeletedPhones(deletedPhones);
-        fullContactDTO.setUpdatedPhones(updatedPhones);
-        fullContactDTO.setDeletedAttachments(deletedAttachments);
-        fullContactDTO.setUpdatedAttachments(updatedAttachments);
-        return fullContactDTO;
+    public FullContactEntity getFullContactDTO() {
+        FullContactEntity fullContactEntity = new FullContactEntity(contact, address, photo);
+        fullContactEntity.setNewPhones(newPhones);
+        fullContactEntity.setNewAttachments(newAttachments);
+        fullContactEntity.setDeletedPhones(deletedPhones);
+        fullContactEntity.setUpdatedPhones(updatedPhones);
+        fullContactEntity.setDeletedAttachments(deletedAttachments);
+        fullContactEntity.setUpdatedAttachments(updatedAttachments);
+        return fullContactEntity;
 
     }
 
