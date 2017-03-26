@@ -18,7 +18,9 @@ public class Contact {
     private String website;
     private String email;
     private String placeOfWork;
+    //address_id in address table
     private long address;
+    //file_id in fil table
     private long photo;
 
     public Contact(long contactId, String name, String surname) {

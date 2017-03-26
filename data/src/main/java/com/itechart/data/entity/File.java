@@ -17,6 +17,12 @@ public class File {
         this.storedName = storedName;
     }
 
+    public void update(File file) {
+        this.name = file.getName();
+        if (storedName != null)
+            this.storedName = file.getStoredName();
+    }
+
     public long getId() {
         return id;
     }

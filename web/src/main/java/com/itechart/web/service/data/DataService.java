@@ -64,6 +64,8 @@ public class DataService {
         JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
         JdbcFileDao fileDao = new JdbcFileDao(transaction);
 
+
+
         Address address = fullContactDTO.getAddress();
         ArrayList<Phone> phones = fullContactDTO.getNewPhones();
         ArrayList<FullAttachmentDTO> attachments = fullContactDTO.getNewAttachments();
@@ -74,9 +76,9 @@ public class DataService {
         long photoId = fileDao.save(photo);
         contact.setPhoto(photoId);
 //        }
-        long addressId = addressDao.save(address);
-        contact.setAddress(addressId);
         long contactId = contactDao.save(contact);
+        long addressId = addressDao.save(address, contactId);
+
         for (Phone phone : phones) {
             phone.setContact(contactId);
             phoneDao.save(phone);
@@ -93,52 +95,53 @@ public class DataService {
     }
 
 
-    public void updateContact(FullContactDTO fullContactDTO) {
+    public void updateContact(FullContactDTO changedContact, FullContactDTO contactToUpdate) {
         Transaction transaction = tm.getTransaction();
         JdbcPhoneDao phoneDao = new JdbcPhoneDao(transaction);
         JdbcAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
         JdbcContactDao contactDao = new JdbcContactDao(transaction);
         JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
         JdbcFileDao fileDao = new JdbcFileDao(transaction);
-        Contact contactToUpdate = contactDao.getContactById(fullContactDTO.getContact().getContactId());
-        File photo = fullContactDTO.getPhoto();
-        photo.setId(contactToUpdate.getPhoto());
-        //if received new photo file
-        if (photo.getStoredName() != null && photo.getName() != null) {
-            // TODO: 25.03.2017 remove old file from file system
-            fileDao.update(photo);
-        }
 
-        Address addressToUpdate = addressDao.getAddressById(contactToUpdate.getAddress());
-        //update fields with new data
-        contactToUpdate.update(fullContactDTO.getContact());
-        addressToUpdate.update(fullContactDTO.getAddress());
+
+
+        contactToUpdate.getContact().update(changedContact.getContact());
+        contactToUpdate.getAddress().update(changedContact.getAddress());
+        contactToUpdate.getPhoto().update(changedContact.getPhoto());
+
+
+
         //update in db
-        addressDao.update(addressToUpdate);
-        contactDao.update(contactToUpdate);
+        contactDao.update(contactToUpdate.getContact());
+        addressDao.update(contactToUpdate.getAddress());
+
 
         //delete old phones
-        phoneDao.deleteForUser(fullContactDTO.getContact().getContactId());
+        phoneDao.deleteForUser(contactToUpdate.getContact().getContactId());
         //persist into db new phones
-        for (Phone phone : fullContactDTO.getNewPhones()) {
-            phone.setContact(fullContactDTO.getContact().getContactId());
+        for (Phone phone : changedContact.getNewPhones()) {
+            phone.setContact(contactToUpdate.getContact().getContactId());
             phoneDao.save(phone);
         }
-
-        for (FullAttachmentDTO fullAttachmentDTO : fullContactDTO.getDeletedAttachments()) {
-            fileDao.delete(fullAttachmentDTO.getFile().getId());
+        //delete attachments
+        for (FullAttachmentDTO fullAttachmentDTO : changedContact.getDeletedAttachments()) {
+            File file = fullAttachmentDTO.getFile();
+            fileDao.delete(file.getId());
             attachmentDao.delete(fullAttachmentDTO.getAttachment().getId());
             // TODO: 23.03.2017 delete from disk
+            ServiceFactory.getServiceFactory().getFileService().deleteFile(file.getStoredName());
         }
-        for (FullAttachmentDTO fullAttachmentDTO : fullContactDTO.getNewAttachments()) {
+        //create new attachments
+        for (FullAttachmentDTO fullAttachmentDTO : changedContact.getNewAttachments()) {
             File file = fullAttachmentDTO.getFile();
             long fileId = fileDao.save(file);
             Attachment attachment = fullAttachmentDTO.getAttachment();
             attachment.setFile(fileId);
-            attachment.setContact(fullContactDTO.getContact().getContactId());
+            attachment.setContact(contactToUpdate.getContact().getContactId());
             attachmentDao.save(attachment);
         }
-        for (FullAttachmentDTO fullAttachmentDTO : fullContactDTO.getUpdatedAttachments()) {
+        //update attachments
+        for (FullAttachmentDTO fullAttachmentDTO : changedContact.getUpdatedAttachments()) {
             File file = fullAttachmentDTO.getFile();
             if (file != null)
                 fileDao.update(file);

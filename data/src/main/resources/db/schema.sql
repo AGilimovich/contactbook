@@ -49,6 +49,11 @@ CREATE TABLE `address`(
 PRIMARY KEY(`address_id`)
 ) DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
 
+CREATE TABLE `file_storage`(
+`file_storage_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+PRIMARY KEY (`file_storage_id`)
+)DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
+
 CREATE TABLE `contact`(
 `contact_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 `name` VARCHAR(50) NOT NULL,
@@ -63,11 +68,13 @@ CREATE TABLE `contact`(
 `place_of_work` VARCHAR(50),
 `file_storage_id` BIGINT UNSIGNED,
 FOREIGN KEY (`gender`) REFERENCES `gender`(`gender_id`),
-FOREIGN KEY (`address`) REFERENCES `address`(`address_id`),
 FOREIGN KEY (`family_status`) REFERENCES `family_status`(`family_status_id`),
 FOREIGN KEY (`file_storage_id`) REFERENCES `file_storage`(`file_storage_id`),
 PRIMARY KEY (`contact_id`)
 ) DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
+
+
+
 
 CREATE TABLE `contact_address`(
 `contact_address_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -96,11 +103,6 @@ CREATE TABLE `attachment` (
 
 
 
-CREATE TABLE `file_storage`(
-`file_storage_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-PRIMARY KEY (`file_storage_id`)
-)DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
-
 
 CREATE TABLE `file`(
 `file_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -110,6 +112,9 @@ CREATE TABLE `file`(
 FOREIGN KEY (`file_storage_id`) REFERENCES `file_storage`(`file_storage_id`),
 PRIMARY KEY(`file_id`)
 ) DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
+
+
+
 
 CREATE TABLE `phone`(
 `phone_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -130,6 +135,17 @@ PRIMARY KEY (`phone_id`)
 
 CREATE USER IF NOT EXISTS gilimovich@localhost IDENTIFIED BY '1234567';
 GRANT ALL PRIVILEGES ON * . * TO gilimovich@localhost;
+
+
+
+
+
+
+
+
+
+
+
 
 
 

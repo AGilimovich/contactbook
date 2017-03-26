@@ -78,7 +78,7 @@ function deleteHiddenInput(index) {
     var id = phones[index].getId();
     var hiddenInput = document.getElementsByName("phone[" + id + "]");
 
-    hiddenInput[index].parentNode.removeChild(hiddenInput[index]);
+    hiddenInput[0].parentNode.removeChild(hiddenInput[0]);
 
 }
 

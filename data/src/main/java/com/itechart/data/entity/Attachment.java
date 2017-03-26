@@ -10,6 +10,7 @@ public class Attachment {
     private String name;
     private Date uploadDate;
     private String comment;
+    //file_id in file table
     private long file;
 
     public long getContact() {

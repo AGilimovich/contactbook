@@ -7,7 +7,7 @@ import com.itechart.data.entity.Address;
  */
 public interface IAddressDao {
 
-    long save(Address address);
+    long save(Address address, long contactId);
 
     void delete(long id);
 

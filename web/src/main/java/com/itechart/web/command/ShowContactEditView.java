@@ -22,6 +22,7 @@ public class ShowContactEditView implements Command {
 
         request.getSession().setAttribute("action", "update");
         request.getSession().setAttribute("id", fullContactDTO.getContact().getContactId());
+        request.getSession().setAttribute("contactToUpdate", fullContactDTO);
         request.setAttribute("photo", fullContactDTO.getPhoto());
         request.setAttribute("contact", fullContactDTO.getContact());
         request.setAttribute("address", fullContactDTO.getAddress());

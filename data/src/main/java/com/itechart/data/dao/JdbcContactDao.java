@@ -5,7 +5,6 @@ import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.transaction.Transaction;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -18,30 +17,53 @@ import java.util.Date;
 public class JdbcContactDao implements IContactDao {
     private Transaction transaction;
 
-    private final String SELECT_ALL_CONTACTS_QUERY = "SELECT c.*, gender.gender_value, family_status.family_status_value, a.* " +
-            " FROM contact AS c INNER JOIN gender ON c.gender = gender.gender_id" +
-            " INNER JOIN family_status ON c.family_status = family_status.family_status_id" +
-            " INNER JOIN address AS a ON c.address = a.address_id";
+    private final String SELECT_ALL_CONTACTS_QUERY = "SELECT c.contact_id, c.name, c.surname, c.patronymic, c.date_of_birth, c.citizenship, c.website, c.email, c.place_of_work," +
+            " g.gender_value, f_s.family_status_value, a.address_id, file.file_id " +
+            " FROM contact AS c INNER JOIN gender AS g ON c.gender = g.gender_id" +
+            " INNER JOIN family_status AS f_s ON c.family_status = f_s.family_status_id" +
+            " INNER JOIN contact_address AS a ON c.contact_id = a.contact_id" +
+            " INNER JOIN (file_storage AS st INNER JOIN file ON st.file_storage_id = file.file_storage_id) ON c.file_storage_id = st.file_storage_id";
 
-    private final String SELECT_BY_ID_QUERY = "SELECT c.*,  gender.gender_value, family_status.family_status_value, a.* FROM contact AS c " +
-            "INNER JOIN gender ON c.gender = gender.gender_id " +
-            "INNER JOIN family_status ON c.family_status = family_status.family_status_id " +
-            "INNER JOIN address AS a ON c.address = a.address_id WHERE c.contact_id = ?";
+    private final String SELECT_BY_ID_QUERY = "SELECT c.contact_id, c.name, c.surname, c.patronymic, c.date_of_birth, c.citizenship, c.website, c.email, c.place_of_work," +
+            " g.gender_value, f_s.family_status_value, a.address_id, file.file_id" +
+            " FROM contact AS c INNER JOIN gender AS g ON c.gender = g.gender_id" +
+            " INNER JOIN family_status AS f_s ON c.family_status = f_s.family_status_id" +
+            " INNER JOIN contact_address AS a ON c.contact_id = a.contact_id" +
+            " INNER JOIN (file_storage AS st INNER JOIN file ON st.file_storage_id = file.file_storage_id) ON c.file_storage_id = st.file_storage_id" +
+            " WHERE c.contact_id = ?";
 
-    private final String UPDATE_CONTACT_QUERY = "UPDATE contact INNER JOIN gender ON gender.gender_value = ? INNER JOIN family_status ON family_status.family_status_value = ? SET surname = ?, name = ?, patronymic = ?, date_of_birth = ?, gender = gender.gender_id, citizenship = ?, family_status = family_status.family_status_id, website = ?, email = ?, place_of_work = ?, photo = ?  WHERE contact_id = ?";
+    private final String UPDATE_CONTACT_QUERY = "UPDATE contact INNER JOIN gender AS g ON g.gender_value = ?" +
+            " INNER JOIN family_status AS f_s ON f_s.family_status_value = ?" +
+            " SET surname = ?, name = ?, patronymic = ?, date_of_birth = ?, gender = g.gender_id, citizenship = ?," +
+            " family_status = f_s.family_status_id, website = ?, email = ?, place_of_work = ? WHERE contact_id = ?";
 
-    private final String INSERT_CONTACT_QUERY = "INSERT INTO contact(surname, name, patronymic, date_of_birth, gender, citizenship, family_status, website, email, place_of_work, address, photo)" +
-            " SELECT ?,?,?,?,gender.gender_id,?,family_status.family_status_id,?,?,?,?,? FROM gender,family_status WHERE gender.gender_value = ? AND family_status.family_status_value = ?";
+    private final String INSERT_CONTACT_QUERY = "INSERT INTO contact(surname, name, patronymic, date_of_birth, gender, citizenship, family_status, website, email, place_of_work, file_storage_id)" +
+            " SELECT ?,?,?,?,g.gender_id,?,f_s.family_status_id,?,?,?,file.file_storage_id" +
+            " FROM gender AS g, family_status AS f_s, file" +
+            " WHERE g.gender_value = ? AND f_s.family_status_value = ? AND file.file_id = ?";
 
     private final String DELETE_CONTACT_QUERY = "DELETE FROM contact WHERE contact_id = ?";
 
-    private final String SELECT_BY_FIELDS_QUERY = "SELECT c.*, gender.gender_value, family_status.family_status_value, a.* FROM contact AS c " +
-            "INNER JOIN address AS a ON c.address = a.address_id " +
-            "INNER JOIN family_status ON c.family_status = family_status.family_status_id " +
-            "INNER JOIN gender ON c.gender = gender.gender_id " +
-            "WHERE (c.surname LIKE ?) AND (c.name LIKE ?) AND (c.patronymic LIKE ?) AND ((c.date_of_birth BETWEEN ? AND ?) OR (COALESCE(c.date_of_birth,'NULL') LIKE ?)) AND (gender.gender_value LIKE ?) AND (family_status.family_status_value LIKE ?) " +
-            "AND (c.citizenship LIKE ?) AND (a.country LIKE ?) AND (a.city LIKE ?) AND (a.street LIKE ?) AND (a.house LIKE ?) AND (a.apartment LIKE ?) AND (a.zip_code LIKE ?)";
-    private final String SELECT_CONTACTS_BY_BIRTHDATE = "SELECT name, email FROM contact WHERE date_of_birth = ?";
+    private final String SELECT_BY_FIELDS_QUERY = "SELECT c.contact_id, c.name, c.surname, c.patronymic, c.date_of_birth, c.citizenship, c.website, c.email, c.place_of_work," +
+            " g.gender_value, f_s.family_status_value, a.address_id, file.file_id" +
+            " INNER JOIN family_status AS f_s ON c.family_status = f_s.family_status_id" +
+            " INNER JOIN gender AS g ON c.gender = g.gender_id" +
+            " INNER JOIN (contact_address AS c_a INNER JOIN address AS a ON c_a.contact_id = c.id) ON c_a.address_id = a.address_id" +
+            " WHERE (c.surname LIKE ?)" +
+            " AND (c.name LIKE ?)" +
+            " AND (c.patronymic LIKE ?)" +
+            " AND ((c.date_of_birth BETWEEN ? AND ?) OR (COALESCE(c.date_of_birth,'NULL') LIKE ?))" +
+            " AND (g.gender_value LIKE ?)" +
+            " AND (f_s.family_status_value LIKE ?)" +
+            " AND (c.citizenship LIKE ?)" +
+            " AND (a.country LIKE ?)" +
+            " AND (a.city LIKE ?)" +
+            " AND (a.street LIKE ?)" +
+            " AND (a.house LIKE ?)" +
+            " AND (a.apartment LIKE ?)" +
+            " AND (a.zip_code LIKE ?)";
+
+    private final String SELECT_CONTACTS_BY_BIRTH_DATE = "SELECT name, email FROM contact WHERE date_of_birth = ?";
 
 
     public JdbcContactDao(Transaction transaction) {
@@ -55,6 +77,7 @@ public class JdbcContactDao implements IContactDao {
         long id = 0;
         try {
             cn = transaction.getConnection();
+            cn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
             st = cn.prepareStatement(INSERT_CONTACT_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, contact.getSurname());
             st.setString(2, contact.getName());
@@ -66,21 +89,17 @@ public class JdbcContactDao implements IContactDao {
             st.setString(6, contact.getWebsite());
             st.setString(7, contact.getEmail());
             st.setString(8, contact.getPlaceOfWork());
-            st.setLong(9, contact.getAddress());
-            st.setLong(10, contact.getPhoto());
             if (contact.getGender() != null)
-                st.setString(11, contact.getGender().name());
-            else st.setString(11, null);
+                st.setString(9, contact.getGender().name());
+            else st.setString(9, null);
             if (contact.getFamilyStatus() != null)
-                st.setString(12, contact.getFamilyStatus().name());
-            else st.setString(12, null);
+                st.setString(10, contact.getFamilyStatus().name());
+            else st.setString(10, null);
+            st.setLong(11, contact.getPhoto());
             st.executeUpdate();
-
             rs = st.getGeneratedKeys();
             if (rs.next())
                 id = rs.getLong(1);
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -99,6 +118,8 @@ public class JdbcContactDao implements IContactDao {
             st = cn.prepareStatement(DELETE_CONTACT_QUERY);
             st.setLong(1, id);
             st.executeUpdate();
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -133,9 +154,8 @@ public class JdbcContactDao implements IContactDao {
             st.setString(8, contact.getWebsite());
             st.setString(9, contact.getEmail());
             st.setString(10, contact.getPlaceOfWork());
-            st.setLong(11, contact.getPhoto());
 
-            st.setLong(12, contact.getContactId());
+            st.setLong(11, contact.getContactId());
             st.executeUpdate();
 
         } catch (SQLException e) {
@@ -171,7 +191,7 @@ public class JdbcContactDao implements IContactDao {
                 String website = rs.getString("website");
                 String email = rs.getString("email");
                 String placeOfWork = rs.getString("place_of_work");
-                long photo = rs.getLong("photo");
+                long photo = rs.getLong("file_id");
                 int addressId = rs.getInt("address_id");
                 Contact contact = new Contact(contactId, name, surname);
                 contact.setPatronymic(patronymic);
@@ -206,31 +226,32 @@ public class JdbcContactDao implements IContactDao {
             st = cn.prepareStatement(SELECT_BY_ID_QUERY);
             st.setLong(1, id);
             rs = st.executeQuery();
-            rs.next();
-            long contactId = rs.getLong("contact_id");
-            String name = rs.getString("name");
-            String surname = rs.getString("surname");
-            String patronymic = rs.getString("patronymic");
-            Date dateOfBirth = rs.getDate("date_of_birth");
-            Contact.Gender gender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
-            String citizenship = rs.getString("citizenship");
-            Contact.FamilyStatus familyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
-            String website = rs.getString("website");
-            String email = rs.getString("email");
-            String placeOfWork = rs.getString("place_of_work");
-            long photo = rs.getLong("photo");
-            long addressId = rs.getLong("address");
-            contact = new Contact(contactId, name, surname);
-            contact.setPatronymic(patronymic);
-            contact.setDateOfBirth(dateOfBirth);
-            contact.setGender(gender);
-            contact.setCitizenship(citizenship);
-            contact.setFamilyStatus(familyStatus);
-            contact.setWebsite(website);
-            contact.setEmail(email);
-            contact.setPlaceOfWork(placeOfWork);
-            contact.setAddress(addressId);
-            contact.setPhoto(photo);
+            if (rs.next()) {
+                long contactId = rs.getLong("contact_id");
+                String name = rs.getString("name");
+                String surname = rs.getString("surname");
+                String patronymic = rs.getString("patronymic");
+                Date dateOfBirth = rs.getDate("date_of_birth");
+                Contact.Gender gender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
+                String citizenship = rs.getString("citizenship");
+                Contact.FamilyStatus familyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
+                String website = rs.getString("website");
+                String email = rs.getString("email");
+                String placeOfWork = rs.getString("place_of_work");
+                long photo = rs.getLong("file_id");
+                long addressId = rs.getLong("address_id");
+                contact = new Contact(contactId, name, surname);
+                contact.setPatronymic(patronymic);
+                contact.setDateOfBirth(dateOfBirth);
+                contact.setGender(gender);
+                contact.setCitizenship(citizenship);
+                contact.setFamilyStatus(familyStatus);
+                contact.setWebsite(website);
+                contact.setEmail(email);
+                contact.setPlaceOfWork(placeOfWork);
+                contact.setAddress(addressId);
+                contact.setPhoto(photo);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -359,7 +380,7 @@ public class JdbcContactDao implements IContactDao {
         ResultSet rs = null;
         try {
             cn = transaction.getConnection();
-            st = cn.prepareStatement(SELECT_CONTACTS_BY_BIRTHDATE);
+            st = cn.prepareStatement(SELECT_CONTACTS_BY_BIRTH_DATE);
             st.setDate(1, new java.sql.Date(date.getTime()));
             rs = st.executeQuery();
             while (rs.next()) {

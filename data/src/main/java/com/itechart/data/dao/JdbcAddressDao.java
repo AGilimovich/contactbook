@@ -5,7 +5,6 @@ import com.itechart.data.entity.Address;
 import com.itechart.data.transaction.Transaction;
 import com.mysql.jdbc.Statement;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,19 +21,22 @@ public class JdbcAddressDao implements IAddressDao {
     private final String UPDATE_ADDRESS_QUERY = "UPDATE address SET country = ?, city = ?, street = ?, house = ?, apartment = ?, zip_code = ? WHERE address_id = ?";
     private final String DELETE_ADDRESS_QUERY = "DELETE FROM address WHERE address_id = ?";
 
+    //contact_address table
+    private String INSERT_CONTACT_ADDRESS_QUERY = "INSERT INTO contact_address(contact_id, address_id) VALUES (?, ?)";
 
     public JdbcAddressDao(Transaction transaction) {
         this.transaction = transaction;
     }
 
     @Override
-    public long save(Address address) {
+    public long save(Address address, long contactId) {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
         long id = 0;
         try {
             cn = transaction.getConnection();
+
             st = cn.prepareStatement(INSERT_ADDRESS_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, address.getCountry());
             st.setString(2, address.getCity());
@@ -46,7 +48,11 @@ public class JdbcAddressDao implements IAddressDao {
             rs = st.getGeneratedKeys();
             if (rs.next())
                 id = rs.getLong(1);
-
+            //insert contact_address
+            st = cn.prepareStatement(INSERT_CONTACT_ADDRESS_QUERY, Connection.TRANSACTION_READ_UNCOMMITTED);
+            st.setLong(1, contactId);
+            st.setLong(2, id);
+            st.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -65,6 +71,8 @@ public class JdbcAddressDao implements IAddressDao {
             st = cn.prepareStatement(DELETE_ADDRESS_QUERY);
             st.setLong(1, id);
             st.executeUpdate();
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
