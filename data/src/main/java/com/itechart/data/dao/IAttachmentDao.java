@@ -19,6 +19,6 @@ public interface IAttachmentDao {
 
     void update(Attachment attachment);
 
-    void deleteForUser(long userId);
+    void deleteForContact(long userId);
 
 }

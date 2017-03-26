@@ -18,7 +18,7 @@ public class ShowContactEditView implements Command {
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         long id = ServiceFactory.getServiceFactory().getRequestProcessingService().processFetchSingleContactRequest(request);
 
-        FullContactDTO fullContactDTO = ServiceFactory.getServiceFactory().getDataService().getFullContactById(id);
+        FullContactDTO fullContactDTO = ServiceFactory.getServiceFactory().getDataService().getFullContactDTOById(id);
 
         request.getSession().setAttribute("action", "update");
         request.getSession().setAttribute("id", fullContactDTO.getContact().getContactId());

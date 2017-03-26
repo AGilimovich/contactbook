@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Created by Aleksandr on 25.03.2017.
  */
-public class JdbcFileDao implements IContactFileDao {
+public class JdbcFileDao implements IFileDao {
     private Transaction transaction;
 
     private final String SELECT_BY_ID_QUERY = "SELECT * FROM file WHERE file_storage_id = ?";
@@ -23,9 +23,15 @@ public class JdbcFileDao implements IContactFileDao {
 
     private final String DELETE_FILE_QUERY = "DELETE FROM file WHERE file_id = ?";
 
-    private String DELETE_FILE_STORAGE_QUERY = "DELETE FROM file_storage WHERE file_storage_id IN (SELECT f.file_storage_id FROM file AS f WHERE f.file_id = ?)";
-    private String INSERT_FILE_STORAGE_QUERY = "INSERT INTO file_storage VALUES()";
+    private String DELETE_FILE_STORAGE_BY_FILE_ID_QUERY = "DELETE FROM file_storage WHERE file_storage_id IN (SELECT f.file_storage_id FROM file AS f WHERE f.file_id = ?)";
 
+    private String INSERT_FILE_STORAGE_QUERY = "INSERT INTO file_storage VALUES()";
+    private String SELECT_BY_STORAGE_ID_QUERY = "SELECT * FROM file WHERE file_storage_id = ?";
+
+    private String DELETE_FILE_STORAGE_FOR_CONTACT_ID_QUERY = "DELETE FROM file_storage AS f_s WHERE f_s.file_storage_id IN ((SELECT c.file_storage_id FROM contact AS c WHERE c.contact_id = ?)" +
+            " OR(SELECT a.file_storage_id FROM attachment AS a WHERE a.contact_id = ?))";
+    private String DELETE_FILES_FOR_CONTACT_QUERY = "DELETE FROM file WHERE file.file_storage_id IN ((SELECT c.file_storage_id FROM contact AS c WHERE c.contact_id = ?)" +
+            " OR (SELECT a.file_storage FROM attachments AS a WHERE a.contact = ?))";
 
     public JdbcFileDao(Transaction transaction) {
         this.transaction = transaction;
@@ -55,6 +61,33 @@ public class JdbcFileDao implements IContactFileDao {
         }
 
         return file;
+    }
+
+    @Override
+    public ArrayList<File> getFilesByIdInFileStorage(long file_storage_id) {
+        Connection cn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        ArrayList<File> files = new ArrayList<>();
+        try {
+            cn = transaction.getConnection();
+            st = cn.prepareStatement(SELECT_BY_STORAGE_ID_QUERY);
+            st.setLong(1, file_storage_id);
+            rs = st.executeQuery();
+            while (rs.next()) {
+                long file_id = rs.getLong("file_id");
+                String fileName = rs.getString("name");
+                String storedName = rs.getString("stored_name");
+                File file = new File(file_id, fileName, storedName);
+                files.add(file);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBResourceManager.closeResources(cn, st, rs);
+        }
+
+        return files;
     }
 
     @Override
@@ -110,22 +143,18 @@ public class JdbcFileDao implements IContactFileDao {
         long id = 0, fileStorageId = 0;
         try {
             cn = transaction.getConnection();
-            //insert file_storage entry
+            //insert into file_storage table
             st = cn.prepareStatement(INSERT_FILE_STORAGE_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.executeUpdate();
             rs = st.getGeneratedKeys();
             if (rs.next())
                 fileStorageId = rs.getLong(1);
-
+            //insert into file table
             st = cn.prepareStatement(INSERT_FILE_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, file.getName());
             st.setString(2, file.getStoredName());
             st.setLong(3, fileStorageId);
             st.executeUpdate();
-            rs = st.getGeneratedKeys();
-            if (rs.next())
-                id = rs.getLong(1);
-
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -133,7 +162,7 @@ public class JdbcFileDao implements IContactFileDao {
             DBResourceManager.closeResources(cn, st, rs);
         }
 
-        return id;
+        return fileStorageId;
     }
 
     @Override
@@ -142,16 +171,41 @@ public class JdbcFileDao implements IContactFileDao {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
-
+            cn = transaction.getConnection();
             st = cn.prepareStatement(DELETE_FILE_QUERY);
             st.setLong(1, id);
             st.executeUpdate();
             //delete corresponding entry in file_storage table
             cn = transaction.getConnection();
-            st = cn.prepareStatement(DELETE_FILE_STORAGE_QUERY, Connection.TRANSACTION_READ_UNCOMMITTED);
+            st = cn.prepareStatement(DELETE_FILE_STORAGE_BY_FILE_ID_QUERY);
             st.setLong(1, id);
             st.executeUpdate();
 
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBResourceManager.closeResources(cn, st, rs);
+        }
+    }
+
+    @Override
+    public void deleteForContact(long contactId) {
+        Connection cn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            cn = transaction.getConnection();
+            st = cn.prepareStatement(DELETE_FILE_STORAGE_FOR_CONTACT_ID_QUERY);
+            st.setLong(1, contactId);
+            st.setLong(2, contactId);
+            st.executeUpdate();
+            //delete corresponding entry in file_storage table
+            cn = transaction.getConnection();
+            st = cn.prepareStatement(DELETE_FILES_FOR_CONTACT_QUERY);
+            st.setLong(1, contactId);
+            st.setLong(2, contactId);
+            st.executeUpdate();
 
 
         } catch (SQLException e) {

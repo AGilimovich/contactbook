@@ -34,7 +34,7 @@ public class RequestProcessingService {
 
         FullContactDTOBuilder builder = new FullContactDTOBuilder(formFields, storedFiles);
 
-        return builder.getFullContact();
+        return builder.getFullContactDTO();
     }
 
     public String[] processDeleteContactRequest(HttpServletRequest request) {

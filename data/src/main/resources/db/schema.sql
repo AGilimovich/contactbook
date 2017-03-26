@@ -1,13 +1,13 @@
 CREATE DATABASE  IF NOT EXISTS `aleksandr_gilimovich`;
 USE `aleksandr_gilimovich`;
 
-DROP TABLE IF EXISTS `file`;
+DROP TABLE IF EXISTS `fileId`;
 
 DROP TABLE IF EXISTS `attachment`;
 DROP TABLE IF EXISTS `phone`;
-DROP TABLE IF EXISTS `contact`;
+DROP TABLE IF EXISTS `contactId`;
 DROP TABLE IF EXISTS `gender`;
-DROP TABLE IF EXISTS `address`;
+DROP TABLE IF EXISTS `addressId`;
 DROP TABLE IF EXISTS `family_status`;
 DROP TABLE IF EXISTS `phone_type`;
 DROP TABLE IF EXISTS `file_storage`;
@@ -37,7 +37,7 @@ CREATE TABLE `phone_type`(
 PRIMARY KEY (`phone_type_id`)
 ) DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
 
-CREATE TABLE `address`(
+CREATE TABLE `addressId`(
 `address_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 `country` VARCHAR(50),
 `city` VARCHAR(50),
@@ -54,7 +54,7 @@ CREATE TABLE `file_storage`(
 PRIMARY KEY (`file_storage_id`)
 )DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
 
-CREATE TABLE `contact`(
+CREATE TABLE `contactId`(
 `contact_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 `name` VARCHAR(50) NOT NULL,
 `surname` VARCHAR(50) NOT NULL,
@@ -81,8 +81,8 @@ CREATE TABLE `contact_address`(
 `contact_id` BIGINT UNSIGNED NOT NULL,
 `address_id` BIGINT UNSIGNED NOT NULL,
 PRIMARY KEY(`contact_address_id`),
-FOREIGN KEY (`contact_id`) REFERENCES `contact`(`contact_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY (`address_id`) REFERENCES `address`(`address_id`)
+FOREIGN KEY (`contact_id`) REFERENCES `contactId`(`contact_id`) ON DELETE CASCADE,
+FOREIGN KEY (`address_id`) REFERENCES `addressId`(`address_id`) ON DELETE CASCADE
 )DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
 
 
@@ -94,9 +94,9 @@ CREATE TABLE `attachment` (
     `upload_date` DATETIME NOT NULL,
     `comment` VARCHAR(100),
     `file_storage_id` BIGINT UNSIGNED,
-    `contact` BIGINT UNSIGNED NOT NULL,
-    FOREIGN KEY (`contact`)
-        REFERENCES `contact` (`contact_id`)  ON DELETE CASCADE ON UPDATE CASCADE,
+    `contactId` BIGINT UNSIGNED NOT NULL,
+    FOREIGN KEY (`contactId`)
+        REFERENCES `contactId` (`contact_id`),
 	FOREIGN KEY (`file_storage_id`) REFERENCES `file_storage`(`file_storage_id`),
     PRIMARY KEY (`attach_id`)
 ) DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
@@ -104,7 +104,7 @@ CREATE TABLE `attachment` (
 
 
 
-CREATE TABLE `file`(
+CREATE TABLE `fileId`(
 `file_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 `name` VARCHAR(50),
 `stored_name` VARCHAR(50) UNIQUE,
@@ -123,10 +123,10 @@ CREATE TABLE `phone`(
 `phone_number` VARCHAR(15) NOT NULL,
 `phone_type` INT UNSIGNED NOT NULL,
 `comment` VARCHAR(100),
-`contact` BIGINT UNSIGNED NOT NULL,
+`contactId` BIGINT UNSIGNED NOT NULL,
 
 
-FOREIGN KEY (`contact`) REFERENCES `contact`(`contact_id`)  ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (`contactId`) REFERENCES `contactId`(`contact_id`),
 FOREIGN KEY (`phone_type`) REFERENCES `phone_type`(`phone_type_id`),
 PRIMARY KEY (`phone_id`)
 ) DEFAULT CHARSET utf8mb4 ENGINE InnoDB;

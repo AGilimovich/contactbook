@@ -29,7 +29,7 @@ public class DoSendEmail implements Command {
                 e.printStackTrace();
             }
         }
-        ArrayList<MainPageContactDTO> contacts = ServiceFactory.getServiceFactory().getDataService().getContactsWithAddressDTO();
+        ArrayList<MainPageContactDTO> contacts = ServiceFactory.getServiceFactory().getDataService().getMainPageContactDTOs();
         request.setAttribute("contacts", contacts);
         return "/jsp/main.jsp";
     }

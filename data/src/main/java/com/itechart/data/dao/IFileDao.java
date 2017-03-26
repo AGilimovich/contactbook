@@ -7,8 +7,10 @@ import java.util.ArrayList;
 /**
  * Created by Aleksandr on 25.03.2017.
  */
-public interface IContactFileDao {
+public interface IFileDao {
     File getFileById(long id);
+
+    ArrayList<File> getFilesByIdInFileStorage(long id);
 
     ArrayList<File> getFilesByName(String name);
 
@@ -17,4 +19,7 @@ public interface IContactFileDao {
     long save(File file);
 
     void delete(long id);
+
+    void deleteForContact(long contactId);
+
 }

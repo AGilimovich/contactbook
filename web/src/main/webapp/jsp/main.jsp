@@ -58,14 +58,14 @@
                 </tr>
                 <c:forEach var="contact" items="${contacts}" varStatus="status">
 
-                    <tr valign="middle" class="${status.index<10? 'contact-entry':'contact-entry hidden'}">
+                    <tr valign="middle" class="${status.index<10? 'contactId-entry':'contactId-entry hidden'}">
                         <td class="table-checkbox" width="5%" align="middle">
                             <input type="checkbox" name="isSelected" value="${contact.contactId}">
                         </td>
 
                         <td width="110px">
-                            <div class="photo-container">
-                                <img src="${pageContext.request.contextPath}/file?id=${contact.photo}" alt="" height="100%" class="photo">
+                            <div class="photoId-container">
+                                <img src="${pageContext.request.contextPath}/fileId?id=${contact.photo}" alt="" height="100%" class="photoId">
                             </div>
                         </td>
                         <td>

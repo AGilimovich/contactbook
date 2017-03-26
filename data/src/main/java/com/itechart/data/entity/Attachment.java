@@ -10,8 +10,8 @@ public class Attachment {
     private String name;
     private Date uploadDate;
     private String comment;
-    //file_id in file table
-    private long file;
+    //file_id in file_storage table
+    private long fileId;
 
     public long getContact() {
         return contact;
@@ -19,12 +19,12 @@ public class Attachment {
 
     private long contact;
 
-    public Attachment(long id, String name, Date uploadDate, String comment, long file, long contact) {
+    public Attachment(long id, String name, Date uploadDate, String comment, long fileId, long contact) {
         this.id = id;
         this.name = name;
         this.uploadDate = uploadDate;
         this.comment = comment;
-        this.file = file;
+        this.fileId = fileId;
         this.contact = contact;
     }
 
@@ -53,8 +53,8 @@ public class Attachment {
         return comment;
     }
 
-    public long getFile() {
-        return file;
+    public long getFileId() {
+        return fileId;
     }
 
     public void setId(long id) {
@@ -73,8 +73,8 @@ public class Attachment {
         this.comment = comment;
     }
 
-    public void setFile(long file) {
-        this.file = file;
+    public void setFileId(long fileId) {
+        this.fileId = fileId;
     }
 
     public void setContact(long contact) {

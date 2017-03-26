@@ -62,8 +62,11 @@ public class JdbcContactDao implements IContactDao {
             " AND (a.house LIKE ?)" +
             " AND (a.apartment LIKE ?)" +
             " AND (a.zip_code LIKE ?)";
-
     private final String SELECT_CONTACTS_BY_BIRTH_DATE = "SELECT name, email FROM contact WHERE date_of_birth = ?";
+
+    //contact_address table
+    private String INSERT_CONTACT_ADDRESS_QUERY = "INSERT INTO contact_address(contact_id, address_id) VALUES (?, ?)";
+    private String DELETE_CONTACT_ADDRESS_QUERY = "DELETE FROM contact_address WHERE contact_id = ?";
 
 
     public JdbcContactDao(Transaction transaction) {
@@ -77,7 +80,7 @@ public class JdbcContactDao implements IContactDao {
         long id = 0;
         try {
             cn = transaction.getConnection();
-            cn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+//            cn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
             st = cn.prepareStatement(INSERT_CONTACT_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, contact.getSurname());
             st.setString(2, contact.getName());
@@ -95,11 +98,18 @@ public class JdbcContactDao implements IContactDao {
             if (contact.getFamilyStatus() != null)
                 st.setString(10, contact.getFamilyStatus().name());
             else st.setString(10, null);
-            st.setLong(11, contact.getPhoto());
+            st.setLong(11, contact.getPhotoId());
             st.executeUpdate();
             rs = st.getGeneratedKeys();
             if (rs.next())
                 id = rs.getLong(1);
+
+            //insert contact_address
+            st = cn.prepareStatement(INSERT_CONTACT_ADDRESS_QUERY);
+            st.setLong(1, id);
+            st.setLong(2, contact.getAddressId());
+            st.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -115,9 +125,15 @@ public class JdbcContactDao implements IContactDao {
         PreparedStatement st = null;
         try {
             cn = transaction.getConnection();
+            st = cn.prepareStatement(DELETE_CONTACT_ADDRESS_QUERY);
+            st.setLong(1, id);
+            st.executeUpdate();
+
+
             st = cn.prepareStatement(DELETE_CONTACT_QUERY);
             st.setLong(1, id);
             st.executeUpdate();
+
 
 
         } catch (SQLException e) {
@@ -202,8 +218,8 @@ public class JdbcContactDao implements IContactDao {
                 contact.setWebsite(website);
                 contact.setEmail(email);
                 contact.setPlaceOfWork(placeOfWork);
-                contact.setAddress(addressId);
-                contact.setPhoto(photo);
+                contact.setAddressId(addressId);
+                contact.setPhotoId(photo);
                 contacts.add(contact);
             }
         } catch (SQLException e) {
@@ -249,8 +265,8 @@ public class JdbcContactDao implements IContactDao {
                 contact.setWebsite(website);
                 contact.setEmail(email);
                 contact.setPlaceOfWork(placeOfWork);
-                contact.setAddress(addressId);
-                contact.setPhoto(photo);
+                contact.setAddressId(addressId);
+                contact.setPhotoId(photo);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -358,8 +374,8 @@ public class JdbcContactDao implements IContactDao {
                 contact.setWebsite(foundWebsite);
                 contact.setEmail(foundEmail);
                 contact.setPlaceOfWork(foundPlaceOfWork);
-                contact.setAddress(foundAddressId);
-                contact.setPhoto(foundPhoto);
+                contact.setAddressId(foundAddressId);
+                contact.setPhotoId(foundPhoto);
 
                 contacts.add(contact);
             }

@@ -18,16 +18,16 @@ public class Contact {
     private String website;
     private String email;
     private String placeOfWork;
-    //address_id in address table
-    private long address;
+    //address_id in addressId table
+    private long addressId;
     //file_id in fil table
-    private long photo;
+    private long photoId;
 
     public Contact(long contactId, String name, String surname) {
         this.contactId = contactId;
         this.name = name;
         this.surname = surname;
-       }
+    }
 
     public Contact() {
     }
@@ -56,8 +56,6 @@ public class Contact {
         this.website = contact.getWebsite();
         this.email = contact.getEmail();
         this.placeOfWork = contact.getPlaceOfWork();
-        if (contact.getPhoto() != 0)
-            this.photo = contact.getPhoto();
     }
 
     public long getContactId() {
@@ -100,12 +98,12 @@ public class Contact {
         return placeOfWork;
     }
 
-    public long getAddress() {
-        return address;
+    public long getAddressId() {
+        return addressId;
     }
 
-    public long getPhoto() {
-        return photo;
+    public long getPhotoId() {
+        return photoId;
     }
 
     public void setContactId(long contactId) {
@@ -152,11 +150,11 @@ public class Contact {
         this.placeOfWork = placeOfWork;
     }
 
-    public void setAddress(long address) {
-        this.address = address;
+    public void setAddressId(long addressId) {
+        this.addressId = addressId;
     }
 
-    public void setPhoto(long photo) {
-        this.photo = photo;
+    public void setPhotoId(long photoId) {
+        this.photoId = photoId;
     }
 }

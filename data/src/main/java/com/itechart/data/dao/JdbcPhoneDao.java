@@ -4,7 +4,6 @@ import com.itechart.data.db.DBResourceManager;
 import com.itechart.data.entity.Phone;
 import com.itechart.data.transaction.Transaction;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -107,7 +106,7 @@ public class JdbcPhoneDao implements IPhoneDao {
             st.setString(2, phone.getOperatorCode());
             st.setString(3, phone.getPhoneNumber());
             st.setString(4, phone.getComment());
-            st.setLong(5, phone.getContact());
+            st.setLong(5, phone.getContactId());
             st.setString(6, phone.getPhoneType().name());
             st.executeUpdate();
             rs = st.getGeneratedKeys();
@@ -166,7 +165,7 @@ public class JdbcPhoneDao implements IPhoneDao {
     }
 
     @Override
-    public void deleteForUser(long userId) {
+    public void deleteForContact(long userId) {
         Connection cn = null;
         PreparedStatement st = null;
         try {

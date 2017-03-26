@@ -7,6 +7,7 @@ import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.File;
 import com.itechart.web.service.data.DataService;
 import com.itechart.web.service.ServiceFactory;
+import com.itechart.web.service.data.IDataService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,12 +24,12 @@ public class DoSearch implements Command {
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         SearchDTO dto = ServiceFactory.getServiceFactory().getRequestProcessingService().processSearchContactsRequest(request);
-        DataService dataService = ServiceFactory.getServiceFactory().getDataService();
+        IDataService dataService = ServiceFactory.getServiceFactory().getDataService();
         ArrayList<Contact> contacts = dataService.getContactsByFields(dto);
         ArrayList<MainPageContactDTO> mainPageContactDTOs = new ArrayList<>();
         for (Contact contact : contacts) {
-            Address address = dataService.getAddressById(contact.getAddress());
-            File photo = dataService.getPhotoById(contact.getPhoto());
+            Address address = dataService.getAddressById(contact.getAddressId());
+            File photo = dataService.getFileById(contact.getPhotoId());
             MainPageContactDTO mainPageContactDTO = new MainPageContactDTO(contact, address, photo);
             mainPageContactDTOs.add(mainPageContactDTO);
         }

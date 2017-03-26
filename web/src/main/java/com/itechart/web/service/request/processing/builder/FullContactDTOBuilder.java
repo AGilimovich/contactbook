@@ -124,7 +124,7 @@ public class FullContactDTOBuilder {
     }
 
 
-    public FullContactDTO getFullContact() {
+    public FullContactDTO getFullContactDTO() {
         FullContactDTO fullContactDTO = new FullContactDTO(contact, address, photo);
         fullContactDTO.setNewPhones(newPhones);
         fullContactDTO.setNewAttachments(newAttachments);

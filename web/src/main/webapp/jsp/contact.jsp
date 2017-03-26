@@ -33,9 +33,9 @@
             <!--Photo-->
             <div class="col-md-1">
 
-                <div class="photo-container">
-                    <img src="${pageContext.request.contextPath}/file?id=${photo.storedName}" height="100%" alt="photo"
-                         id="photo">
+                <div class="photoId-container">
+                    <img src="${pageContext.request.contextPath}/fileId?id=${photo.storedName}" height="100%" alt="photoId"
+                         id="photoId">
                 </div>
 
             </div>
@@ -112,7 +112,7 @@
                         <input type="text" name="house" value="${address.house}" class="form-control">
 
                         <p class="form-text">Квартира:</p>
-                        <input type="text" name="apartment" value="${address.apartment}" class="form-control">
+                        <input type="text" name="apartment" value="${addressId.apartment}" class="form-control">
 
                         <p class="form-text">Почтовый индекс:</p>
                         <input type="text" name="zipCode" value="${address.zipCode}" class="form-control">
@@ -160,7 +160,7 @@
                         <tr>
                             <td width="6%"><input type="checkbox" name="attachIsSelected" value="${attachment.getAttachment().id}"></td>
                             <td width="20%" name="attachName"><a name="attachLink"
-                                                                 href="/file?id=${attachment.getFile().storedName}">${attachment.getAttachment().name}</a>
+                                                                 href="/fileId?id=${attachment.getFile().storedName}">${attachment.getAttachment().name}</a>
                             </td>
 
                             <td align="center" width="20%" name="attachUploadDate">
@@ -207,21 +207,21 @@
         </div>
         <%--------------------------------------------------------------------------------%>
 
-        <%--Add photo POPUP--%>
-        <div id="photo-popup" class="popup">
+        <%--Add photoId POPUP--%>
+        <div id="photoId-popup" class="popup">
             <div class="popup-content">
                 <p>Путь к картинке:</p>
-                <%--<input type="file" name="photoFile" accept="image/jpeg,image/png,image/gif" class="form-control"--%>
+                <%--<input type="fileId" name="photoFile" accept="image/jpeg,image/png,image/gif" class="form-control"--%>
                 <%--onchange="loadImg()">--%>
                 <input type="button" id="loadFile" class="btn" value="Найти"
                        onclick="document.getElementById('inputPhotoFile').click();"/>
-                <input id="inputPhotoFile" style="display:none;" type="file" name="photoFile"
+                <input id="inputPhotoFile" style="display:none;" type="fileId" name="photoFile"
                        accept="image/jpeg,image/png,image/gif" class="form-control"
                        onchange="loadImg()">
                 <div class="row controls-group">
 
-                    <button id="btn-save-photo" class="btn" type="button">Сохранить</button>
-                    <button id="btn-undo-photo" type="button" class="btn">Отменить</button>
+                    <button id="btn-save-photoId" class="btn" type="button">Сохранить</button>
+                    <button id="btn-undo-photoId" type="button" class="btn">Отменить</button>
                 </div>
             </div>
         </div>
@@ -259,8 +259,8 @@
     <div id="attach-popup" class="popup">
         <div class="popup-content">
             <form onsubmit="return saveAttach()">
-                <div id="file-container">
-                    <%--<input type="file" name="attachFile" class="" form="main-form">--%>
+                <div id="fileId-container">
+                    <%--<input type="fileId" name="attachFile" class="" form="main-form">--%>
                 </div>
                 <p>Имя файла:</p>
                 <input type="text" class="form-control" name="inputAttachName">

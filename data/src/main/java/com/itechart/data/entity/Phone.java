@@ -10,16 +10,16 @@ public class Phone {
     private String phoneNumber;
     private PhoneType phoneType;
     private String comment;
-    private long contact;
+    private long contactId;
 
-    public Phone(long id, String countryCode, String operatorCode, String phoneNumber, PhoneType phoneType, String comment, long contact) {
+    public Phone(long id, String countryCode, String operatorCode, String phoneNumber, PhoneType phoneType, String comment, long contactId) {
         this.id = id;
         this.countryCode = countryCode;
         this.operatorCode = operatorCode;
         this.phoneNumber = phoneNumber;
         this.phoneType = phoneType;
         this.comment = comment;
-        this.contact = contact;
+        this.contactId = contactId;
     }
 
     public Phone() {
@@ -60,8 +60,8 @@ public class Phone {
         return comment;
     }
 
-    public long getContact() {
-        return contact;
+    public long getContactId() {
+        return contactId;
     }
 
     public void setId(long id) {
@@ -88,7 +88,7 @@ public class Phone {
         this.comment = comment;
     }
 
-    public void setContact(long contact) {
-        this.contact = contact;
+    public void setContactId(long contactId) {
+        this.contactId = contactId;
     }
 }

@@ -2,6 +2,8 @@ package com.itechart.web.service;
 
 import com.itechart.data.transaction.TransactionManager;
 import com.itechart.web.service.data.DataService;
+import com.itechart.web.service.data.IDataService;
+import com.itechart.web.service.data.TransactionDataService;
 import com.itechart.web.service.email.EmailingService;
 import com.itechart.web.service.files.FileService;
 import com.itechart.web.service.request.processing.RequestProcessingService;
@@ -56,8 +58,8 @@ public class ServiceFactory {
     }
 
 
-    public DataService getDataService() {
-        return new DataService(transactionManager);
+    public IDataService getDataService() {
+        return new TransactionDataService(transactionManager);
     }
 
     public ValidationService getValidationService() {

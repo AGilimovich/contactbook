@@ -4,7 +4,6 @@ import com.itechart.data.db.DBResourceManager;
 import com.itechart.data.entity.Attachment;
 import com.itechart.data.transaction.Transaction;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,7 +19,8 @@ public class JdbcAttachmentDao implements IAttachmentDao {
     private final String SELECT_ATTACHMENTS_BY_ID_QUERY = "SELECT a.attach_id, a.attach_name, a.upload_date, a.comment, file.file_id, a.contact" +
             " FROM attachment AS a INNER JOIN (file_storage AS st  INNER JOIN file ON st.file_storage_id = file.file_storage_id) ON a.file_storage_id = st.file_storage_id" +
             " WHERE a.attach_id = ?";
-    private final String DELETE_FOR_USER_QUERY = "DELETE FROM attachment WHERE contact = ?";
+    private final String DELETE_FOR_CONTACT_QUERY = "DELETE FROM attachment WHERE contact = ?";
+
     private final String INSERT_ATTACHMENT_QUERY = "INSERT INTO attachment(attach_name, upload_date, comment, file_storage_id, contact)" +
             " SELECT ?, ?, ?, file.file_storage_id, ? FROM file WHERE file.file_id = ?";
 
@@ -106,7 +106,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
             st.setDate(2, new java.sql.Date(attachment.getUploadDate().getTime()));
             st.setString(3, attachment.getComment());
             st.setLong(4, attachment.getContact());
-            st.setLong(5, attachment.getFile());
+            st.setLong(5, attachment.getFileId());
             st.executeUpdate();
             rs = st.getGeneratedKeys();
             while (rs.next()) {
@@ -160,14 +160,16 @@ public class JdbcAttachmentDao implements IAttachmentDao {
     }
 
     @Override
-    public void deleteForUser(long userId) {
+    public void deleteForContact(long userId) {
         Connection cn = null;
         PreparedStatement st = null;
         try {
             cn = transaction.getConnection();
-            st = cn.prepareStatement(DELETE_FOR_USER_QUERY);
+            st = cn.prepareStatement(DELETE_FOR_CONTACT_QUERY);
             st.setLong(1, userId);
             st.executeUpdate();
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
