@@ -4,7 +4,7 @@ import com.itechart.web.command.Command;
 import com.itechart.web.command.CommandFactory;
 import com.itechart.web.properties.PropertiesManager;
 import com.itechart.web.service.ServiceFactory;
-import com.itechart.web.service.scheduler.SchedulingService;
+import com.itechart.web.service.scheduler.AbstractSchedulingService;
 import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
@@ -26,7 +26,7 @@ public class FrontCtrl extends HttpServlet {
         super.init(config);
         int scheduledHours = Integer.valueOf(PropertiesManager.scheduledHours());
         int scheduledMinutes = Integer.valueOf(PropertiesManager.scheduledMinutes());
-        SchedulingService schedulingService = ServiceFactory.getServiceFactory().getEmailCongratsService();
+        AbstractSchedulingService schedulingService = ServiceFactory.getServiceFactory().getEmailCongratsService();
         schedulingService.startScheduler(scheduledHours, scheduledMinutes);
     }
 

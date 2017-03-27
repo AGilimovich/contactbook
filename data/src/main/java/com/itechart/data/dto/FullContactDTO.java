@@ -29,6 +29,19 @@ public class FullContactDTO {
         this.photo = photo;
     }
 
+    public void update(FullContactDTO newFullContact) {
+        this.contact.update(newFullContact.getContact());
+        this.address.update(newFullContact.getAddress());
+        this.photo.update(newFullContact.getPhoto());
+        this.newAttachments = newFullContact.getNewAttachments();
+        this.updatedAttachments = newFullContact.getUpdatedAttachments();
+        this.deletedAttachments = newFullContact.getDeletedAttachments();
+        this.newPhones = newFullContact.getNewPhones();
+        this.deletedPhones = newFullContact.getDeletedPhones();
+        this.updatedPhones = newFullContact.getUpdatedPhones();
+    }
+
+
     public Contact getContact() {
         return contact;
     }

@@ -11,8 +11,9 @@ public class Address {
     private String house;
     private String apartment;
     private String zipCode;
+    private long contactId;
 
-    public Address(long id, String country, String city, String street, String house, String apartment, String zipCode) {
+    public Address(long id, String country, String city, String street, String house, String apartment, String zipCode, long contactId) {
         this.id = id;
         this.country = country;
         this.city = city;
@@ -20,18 +21,27 @@ public class Address {
         this.house = house;
         this.apartment = apartment;
         this.zipCode = zipCode;
-
+        this.contactId = contactId;
     }
 
     public Address() {
     }
-    public void update(Address address){
+
+    public void update(Address address) {
         this.country = address.getCountry();
         this.city = address.getCity();
         this.street = address.getStreet();
         this.house = address.getHouse();
         this.apartment = address.getApartment();
         this.zipCode = address.getZipCode();
+    }
+
+    public long getContactId() {
+        return contactId;
+    }
+
+    public void setContactId(long contactId) {
+        this.contactId = contactId;
     }
 
     public long getId() {

@@ -4,7 +4,6 @@ import com.itechart.data.db.DBResourceManager;
 import com.itechart.data.entity.Phone;
 import com.itechart.data.transaction.Transaction;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -25,7 +24,7 @@ public class JdbcPhoneDao implements IPhoneDao {
             "  SET country_code=?, operator_code=?,phone_number=?,phone_type = p_t.phone_type_id, comment=? WHERE phone_id = ?";
 
     private final String DELETE_PHONE_QUERY = "DELETE FROM phone WHERE phone_id = ?";
-    private final String DELETE_FOR_USER_QUERY = "DELETE FROM phone WHERE contact_id = ?";
+    private final String DELETE_FOR_CONTACT_QUERY = "DELETE FROM phone WHERE contact_id = ?";
 
     public JdbcPhoneDao(Transaction transaction) {
         this.transaction = transaction;
@@ -166,13 +165,13 @@ public class JdbcPhoneDao implements IPhoneDao {
     }
 
     @Override
-    public void deleteForUser(long userId) {
+    public void deleteForContact(long contactId) {
         Connection cn = null;
         PreparedStatement st = null;
         try {
             cn = transaction.getConnection();
-            st = cn.prepareStatement(DELETE_FOR_USER_QUERY);
-            st.setLong(1, userId);
+            st = cn.prepareStatement(DELETE_FOR_CONTACT_QUERY);
+            st.setLong(1, contactId);
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

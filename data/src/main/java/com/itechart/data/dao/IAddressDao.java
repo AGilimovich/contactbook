@@ -9,10 +9,10 @@ public interface IAddressDao {
 
     long save(Address address);
 
-    void delete(long id);
+    void deleteForContact(long contactId);
 
     void update(Address address);
 
-    Address getAddressById(long id);
+    Address getAddressByContactId(long contactId);
 
 }

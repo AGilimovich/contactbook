@@ -18,7 +18,6 @@ public class Contact {
     private String website;
     private String email;
     private String placeOfWork;
-    private long address;
     private long photo;
 
     public Contact(long contactId, String name, String surname) {
@@ -54,8 +53,8 @@ public class Contact {
         this.website = contact.getWebsite();
         this.email = contact.getEmail();
         this.placeOfWork = contact.getPlaceOfWork();
-        if (contact.getPhoto() != 0)
-            this.photo = contact.getPhoto();
+//        if (contact.getPhoto() != 0)
+//            this.photo = contact.getPhoto();
     }
 
     public long getContactId() {
@@ -98,9 +97,6 @@ public class Contact {
         return placeOfWork;
     }
 
-    public long getAddress() {
-        return address;
-    }
 
     public long getPhoto() {
         return photo;
@@ -150,9 +146,6 @@ public class Contact {
         this.placeOfWork = placeOfWork;
     }
 
-    public void setAddress(long address) {
-        this.address = address;
-    }
 
     public void setPhoto(long photo) {
         this.photo = photo;

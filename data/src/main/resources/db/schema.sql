@@ -1,12 +1,14 @@
 CREATE DATABASE  IF NOT EXISTS `aleksandr_gilimovich`;
 USE `aleksandr_gilimovich`;
 
-DROP TABLE IF EXISTS `file`;
+
 DROP TABLE IF EXISTS `attachment`;
 DROP TABLE IF EXISTS `phone`;
+DROP TABLE IF EXISTS `address`;
 DROP TABLE IF EXISTS `contact`;
 DROP TABLE IF EXISTS `gender`;
-DROP TABLE IF EXISTS `address`;
+
+DROP TABLE IF EXISTS `file`;
 DROP TABLE IF EXISTS `family_status`;
 
 DROP TABLE IF EXISTS `phone_type`;
@@ -42,17 +44,7 @@ CREATE TABLE `phone_type`(
 PRIMARY KEY (`phone_type_id`)
 ) DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
 
-CREATE TABLE `address`(
-`address_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-`country` VARCHAR(50),
-`city` VARCHAR(50),
-`street` VARCHAR(30),
-`house` VARCHAR(20),
-`apartment` VARCHAR(10),
-`zip_code` VARCHAR(10),
 
-PRIMARY KEY(`address_id`)
-) DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
 
 CREATE TABLE `contact`(
 `contact_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -66,13 +58,24 @@ CREATE TABLE `contact`(
 `website` VARCHAR(20),
 `email` VARCHAR(50),
 `place_of_work` VARCHAR(50),
-`address` BIGINT UNSIGNED,
 `photo` BIGINT UNSIGNED,
 FOREIGN KEY (`gender`) REFERENCES `gender`(`gender_id`),
-FOREIGN KEY (`address`) REFERENCES `address`(`address_id`),
 FOREIGN KEY (`family_status`) REFERENCES `family_status`(`family_status_id`),
 FOREIGN KEY (`photo`) REFERENCES `file`(`file_id`),
 PRIMARY KEY (`contact_id`)
+) DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
+
+CREATE TABLE `address`(
+`address_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+`country` VARCHAR(50),
+`city` VARCHAR(50),
+`street` VARCHAR(30),
+`house` VARCHAR(20),
+`apartment` VARCHAR(10),
+`zip_code` VARCHAR(10),
+`contact_id` BIGINT UNSIGNED NOT NULL,
+FOREIGN KEY(`contact_id`) REFERENCES `contact`(`contact_id`),
+PRIMARY KEY(`address_id`)
 ) DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
 
 CREATE TABLE `attachment` (
@@ -104,20 +107,5 @@ PRIMARY KEY (`phone_id`)
 ) DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
 
 
-
 CREATE USER IF NOT EXISTS gilimovich@localhost IDENTIFIED BY '1234567';
 GRANT ALL PRIVILEGES ON * . * TO gilimovich@localhost;
-
-
-
-
-
-
-
-
-
-
-
-
-
-

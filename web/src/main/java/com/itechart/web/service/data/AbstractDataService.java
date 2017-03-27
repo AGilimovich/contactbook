@@ -27,7 +27,7 @@ public interface AbstractDataService {
 
     Contact getContactById(long contactId);
 
-    Address getAddressById(long addressId);
+    Address getAddressByContactId(long addressId);
 
     File getPhotoById(long photoId);
 

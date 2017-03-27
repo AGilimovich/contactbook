@@ -27,34 +27,34 @@ public class TransactionalDataService implements AbstractDataService {
 
     public void deleteContact(long contactId) {
         Transaction transaction = tm.getTransaction();
-        JdbcPhoneDao phoneDao = new JdbcPhoneDao(transaction);
+        // JdbcPhoneDao phoneDao = new JdbcPhoneDao(transaction);
         JdbcAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
         JdbcContactDao contactDao = new JdbcContactDao(transaction);
-        JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
+        //  JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
         JdbcFileDao fileDao = new JdbcFileDao(transaction);
         AbstractFileService fileService = ServiceFactory.getServiceFactory().getFileService();
 
-
-
         Contact contact = contactDao.getContactById(contactId);
-        File photo = fileDao.getFileById(contact.getPhoto());
+        long photoId = contact.getPhoto();
         ArrayList<Attachment> attachments = attachmentDao.getAllForContact(contactId);
-
-        for (Attachment attachment : attachments) {
-            File file = fileDao.getFileById(attachment.getFile());
-            fileDao.delete(file.getId());
-            fileService.deleteFile(file.getStoredName());
-        }
-        phoneDao.deleteForUser(contactId);
-        attachmentDao.deleteForUser(contactId);
-
-        fileDao.delete(contact.getPhoto());
-        fileService.deleteFile(photo.getStoredName());
-
-        long addressId = contactDao.getContactById(contactId).getAddress();
+        //delete contact; phones, address, attachments are cascading
         contactDao.delete(contactId);
-        addressDao.delete(addressId);
+        //delete files
+        ArrayList<String> listOfFilesForDeleting = new ArrayList<>();
+        listOfFilesForDeleting.add(fileDao.getFileById(photoId).getStoredName());
+        fileDao.delete(photoId);
+        for (Attachment attachment : attachments) {
+            listOfFilesForDeleting.add(fileDao.getFileById(attachment.getFile()).getStoredName());
+            fileDao.delete(attachment.getFile());
+        }
         transaction.commitTransaction();
+        //todo if transaction committed delete files from disk
+        if (false) {
+            for (String name : listOfFilesForDeleting) {
+                fileService.deleteFile(name);
+            }
+        }
+
     }
 
 
@@ -66,87 +66,85 @@ public class TransactionalDataService implements AbstractDataService {
         JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
         JdbcFileDao fileDao = new JdbcFileDao(transaction);
 
-        Address address = fullContactDTO.getAddress();
-        ArrayList<Phone> phones = fullContactDTO.getNewPhones();
-        ArrayList<FullAttachmentDTO> attachments = fullContactDTO.getNewAttachments();
-        File photo = fullContactDTO.getPhoto();
-        Contact contact = fullContactDTO.getContact();
-
-//        if (photo != null) {
-        long photoId = fileDao.save(photo);
-        contact.setPhoto(photoId);
-//        }
-        long addressId = addressDao.save(address);
-        contact.setAddress(addressId);
-        long contactId = contactDao.save(contact);
-        for (Phone phone : phones) {
-            phone.setContact(contactId);
-            phoneDao.save(phone);
+        //save photo
+        long photoId = fileDao.save(fullContactDTO.getPhoto());
+        //set photo id in contact and save it
+        Contact contactToSave = fullContactDTO.getContact();
+        contactToSave.setPhoto(photoId);
+        long contactId = contactDao.save(contactToSave);
+        //set contact id in address object and save it
+        Address addressToSave = fullContactDTO.getAddress();
+        addressToSave.setContactId(contactId);
+        addressDao.save(addressToSave);
+        //set contact id in every phone object and save it
+        for (Phone phoneToSave : fullContactDTO.getPhones()) {
+            phoneToSave.setContact(contactId);
+            phoneDao.save(phoneToSave);
         }
-        for (FullAttachmentDTO fullAttachmentDTO : attachments) {
-            File file = fullAttachmentDTO.getFile();
-            long fileId = fileDao.save(file);
-            Attachment attachment = fullAttachmentDTO.getAttachment();
-            attachment.setContact(contactId);
-            attachment.setFile(fileId);
-            attachmentDao.save(attachment);
+        //save attachments with files
+        for (FullAttachmentDTO fullAttachmentToSave : fullContactDTO.getAttachments()) {
+            File fileToSave = fullAttachmentToSave.getFile();
+            long fileId = fileDao.save(fileToSave);
+            Attachment attachmentToSave = fullAttachmentToSave.getAttachment();
+            attachmentToSave.setContact(contactId);
+            attachmentToSave.setFile(fileId);
+            attachmentDao.save(attachmentToSave);
         }
         transaction.commitTransaction();
     }
 
 
-    public void updateContact(FullContactDTO reconstructed, FullContactDTO contactToUpdate) {
+    public void updateContact(FullContactDTO reconstructedContact, FullContactDTO contactToUpdate) {
         Transaction transaction = tm.getTransaction();
         JdbcPhoneDao phoneDao = new JdbcPhoneDao(transaction);
         JdbcAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
         JdbcContactDao contactDao = new JdbcContactDao(transaction);
         JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
         JdbcFileDao fileDao = new JdbcFileDao(transaction);
-        Contact contactToUpdate = contactDao.getContactById(reconstructed.getContact().getContactId());
-        File photo = reconstructed.getPhoto();
-        photo.setId(contactToUpdate.getPhoto());
-        //if received new photo file
-        if (photo.getStoredName() != null && photo.getName() != null) {
-            // TODO: 25.03.2017 remove old file from file system
-            fileDao.update(photo);
+        AbstractFileService fileService = ServiceFactory.getServiceFactory().getFileService();
+
+        ArrayList<String> filesToDelete = new ArrayList<>();
+        //todo use commons library
+        if (reconstructedContact.getPhoto() != null)
+
+//        if (reconstructedContact.getPhoto() != null && !contactToUpdate.getPhoto().getStoredName().equals(reconstructedContact.getPhoto().getStoredName()))
+            filesToDelete.add(contactToUpdate.getPhoto().getStoredName());
+        contactToUpdate.update(reconstructedContact);
+        contactDao.update(contactToUpdate.getContact());
+        addressDao.update(contactToUpdate.getAddress());
+        fileDao.update(contactToUpdate.getPhoto());
+        // TODO: 27.03.2017 delete update and delete phones
+        phoneDao.deleteForContact(contactToUpdate.getContact().getContactId());
+        for (Phone phoneToCreate : contactToUpdate.getNewPhones()) {
+            phoneToCreate.setContact(contactToUpdate.getContact().getContactId());
+            phoneDao.save(phoneToCreate);
+        }
+        // TODO: 27.03.2017 phones to update and delete
+
+        for (FullAttachmentDTO fullAttachmentToUpdate : contactToUpdate.getUpdatedAttachments()) {
+            attachmentDao.update(fullAttachmentToUpdate.getAttachment());
+        }
+        for (FullAttachmentDTO fullAttachmentToDelete : contactToUpdate.getDeletedAttachments()) {
+            filesToDelete.add(fullAttachmentToDelete.getFile().getStoredName());
+            attachmentDao.delete(fullAttachmentToDelete.getAttachment().getId());
+            fileDao.delete(fullAttachmentToDelete.getFile().getId());
+        }
+        for (FullAttachmentDTO fullAttachmentToCreate : contactToUpdate.getNewAttachments()) {
+            File fileToSave = fullAttachmentToCreate.getFile();
+            long fileId = fileDao.save(fileToSave);
+            Attachment attachmentToSave = fullAttachmentToCreate.getAttachment();
+            attachmentToSave.setContact(contactToUpdate.getContact().getContactId());
+            attachmentToSave.setFile(fileId);
+            attachmentDao.save(attachmentToSave);
         }
 
-        Address addressToUpdate = addressDao.getAddressById(contactToUpdate.getAddress());
-        //update fields with new data
-        contactToUpdate.update(reconstructed.getContact());
-        addressToUpdate.update(reconstructed.getAddress());
-        //update in db
-        addressDao.update(addressToUpdate);
-        contactDao.update(contactToUpdate);
-
-        //delete old phones
-        phoneDao.deleteForUser(reconstructed.getContact().getContactId());
-        //persist into db new phones
-        for (Phone phone : reconstructed.getNewPhones()) {
-            phone.setContact(reconstructed.getContact().getContactId());
-            phoneDao.save(phone);
-        }
-
-        for (FullAttachmentDTO fullAttachmentDTO : reconstructed.getDeletedAttachments()) {
-            fileDao.delete(fullAttachmentDTO.getFile().getId());
-            attachmentDao.delete(fullAttachmentDTO.getAttachment().getId());
-            // TODO: 23.03.2017 delete from disk
-        }
-        for (FullAttachmentDTO fullAttachmentDTO : reconstructed.getNewAttachments()) {
-            File file = fullAttachmentDTO.getFile();
-            long fileId = fileDao.save(file);
-            Attachment attachment = fullAttachmentDTO.getAttachment();
-            attachment.setFile(fileId);
-            attachment.setContact(reconstructed.getContact().getContactId());
-            attachmentDao.save(attachment);
-        }
-        for (FullAttachmentDTO fullAttachmentDTO : reconstructed.getUpdatedAttachments()) {
-            File file = fullAttachmentDTO.getFile();
-            if (file != null)
-                fileDao.update(file);
-            attachmentDao.update(fullAttachmentDTO.getAttachment());
-        }
         transaction.commitTransaction();
+        //todo if transaction committed delete files from disk
+        if (false) {
+            for (String name : filesToDelete) {
+                fileService.deleteFile(name);
+            }
+        }
 
     }
 
@@ -176,10 +174,10 @@ public class TransactionalDataService implements AbstractDataService {
     }
 
 
-    public Address getAddressById(long addressId) {
+    public Address getAddressByContactId(long contactId) {
         Transaction transaction = tm.getTransaction();
         JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
-        Address address = addressDao.getAddressById(addressId);
+        Address address = addressDao.getAddressByContactId(contactId);
         transaction.commitTransaction();
         return address;
     }
@@ -202,7 +200,7 @@ public class TransactionalDataService implements AbstractDataService {
         ArrayList<MainPageContactDTO> mainPageContactDTOs = new ArrayList<>();
         for (Contact contact : contacts) {
             File photo = fileDao.getFileById(contact.getPhoto());
-            Address address = addressDao.getAddressById(contact.getAddress());
+            Address address = addressDao.getAddressByContactId(contact.getContactId());
             MainPageContactDTO mainPageContactDTO = new MainPageContactDTO(contact, address, photo);
             mainPageContactDTOs.add(mainPageContactDTO);
         }
@@ -220,7 +218,7 @@ public class TransactionalDataService implements AbstractDataService {
         JdbcAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
 
         Contact contact = contactDao.getContactById(contactId);
-        Address address = addressDao.getAddressById(contactId);
+        Address address = addressDao.getAddressByContactId(contactId);
         File photo = fileDao.getFileById(contact.getPhoto());
         ArrayList<Phone> phones = phoneDao.getAllForContact(contactId);
 

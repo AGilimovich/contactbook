@@ -18,25 +18,25 @@ import java.util.Date;
 public class JdbcContactDao implements IContactDao {
     private Transaction transaction;
 
-    private final String SELECT_ALL_CONTACTS_QUERY = "SELECT c.*, gender.gender_value, family_status.family_status_value, a.* " +
-            " FROM contact AS c INNER JOIN gender ON c.gender = gender.gender_id" +
-            " INNER JOIN family_status ON c.family_status = family_status.family_status_id" +
-            " INNER JOIN address AS a ON c.address = a.address_id";
+    private final String SELECT_ALL_CONTACTS_QUERY = "SELECT c.*, g.gender_value, f_s.family_status_value " +
+            " FROM contact AS c INNER JOIN gender AS g ON c.gender = g.gender_id" +
+            " INNER JOIN family_status AS f_s ON c.family_status = f_s.family_status_id";
 
-    private final String SELECT_BY_ID_QUERY = "SELECT c.*,  gender.gender_value, family_status.family_status_value, a.* FROM contact AS c " +
-            "INNER JOIN gender ON c.gender = gender.gender_id " +
-            "INNER JOIN family_status ON c.family_status = family_status.family_status_id " +
-            "INNER JOIN address AS a ON c.address = a.address_id WHERE c.contact_id = ?";
+    private final String SELECT_BY_ID_QUERY = "SELECT c.*, g.gender_value, f_s.family_status_value" +
+            " FROM contact AS c" +
+            " INNER JOIN gender AS g ON c.gender = g.gender_id" +
+            " INNER JOIN family_status AS f_s ON c.family_status = f_s.family_status_id" +
+            " WHERE c.contact_id = ?";
 
     private final String UPDATE_CONTACT_QUERY = "UPDATE contact INNER JOIN gender ON gender.gender_value = ? INNER JOIN family_status ON family_status.family_status_value = ? SET surname = ?, name = ?, patronymic = ?, date_of_birth = ?, gender = gender.gender_id, citizenship = ?, family_status = family_status.family_status_id, website = ?, email = ?, place_of_work = ?, photo = ?  WHERE contact_id = ?";
 
-    private final String INSERT_CONTACT_QUERY = "INSERT INTO contact(surname, name, patronymic, date_of_birth, gender, citizenship, family_status, website, email, place_of_work, address, photo)" +
-            " SELECT ?,?,?,?,gender.gender_id,?,family_status.family_status_id,?,?,?,?,? FROM gender,family_status WHERE gender.gender_value = ? AND family_status.family_status_value = ?";
+    private final String INSERT_CONTACT_QUERY = "INSERT INTO contact(surname, name, patronymic, date_of_birth, gender, citizenship, family_status, website, email, place_of_work, photo)" +
+            " SELECT ?,?,?,?,gender.gender_id,?,family_status.family_status_id,?,?,?,? FROM gender,family_status WHERE gender.gender_value = ? AND family_status.family_status_value = ?";
 
     private final String DELETE_CONTACT_QUERY = "DELETE FROM contact WHERE contact_id = ?";
 
     private final String SELECT_BY_FIELDS_QUERY = "SELECT c.*, gender.gender_value, family_status.family_status_value, a.* FROM contact AS c " +
-            "INNER JOIN address AS a ON c.address = a.address_id " +
+            "INNER JOIN address AS a ON c.contact_id = a.contact_id " +
             "INNER JOIN family_status ON c.family_status = family_status.family_status_id " +
             "INNER JOIN gender ON c.gender = gender.gender_id " +
             "WHERE (c.surname LIKE ?) AND (c.name LIKE ?) AND (c.patronymic LIKE ?) AND ((c.date_of_birth BETWEEN ? AND ?) OR (COALESCE(c.date_of_birth,'NULL') LIKE ?)) AND (gender.gender_value LIKE ?) AND (family_status.family_status_value LIKE ?) " +
@@ -66,14 +66,14 @@ public class JdbcContactDao implements IContactDao {
             st.setString(6, contact.getWebsite());
             st.setString(7, contact.getEmail());
             st.setString(8, contact.getPlaceOfWork());
-            st.setLong(9, contact.getAddress());
-            st.setLong(10, contact.getPhoto());
+
+            st.setLong(9, contact.getPhoto());
             if (contact.getGender() != null)
-                st.setString(11, contact.getGender().name());
-            else st.setString(11, null);
+                st.setString(10, contact.getGender().name());
+            else st.setString(10, null);
             if (contact.getFamilyStatus() != null)
-                st.setString(12, contact.getFamilyStatus().name());
-            else st.setString(12, null);
+                st.setString(11, contact.getFamilyStatus().name());
+            else st.setString(11, null);
             st.executeUpdate();
 
             rs = st.getGeneratedKeys();
@@ -172,7 +172,6 @@ public class JdbcContactDao implements IContactDao {
                 String email = rs.getString("email");
                 String placeOfWork = rs.getString("place_of_work");
                 long photo = rs.getLong("photo");
-                int addressId = rs.getInt("address_id");
                 Contact contact = new Contact(contactId, name, surname);
                 contact.setPatronymic(patronymic);
                 contact.setDateOfBirth(dateOfBirth);
@@ -182,7 +181,6 @@ public class JdbcContactDao implements IContactDao {
                 contact.setWebsite(website);
                 contact.setEmail(email);
                 contact.setPlaceOfWork(placeOfWork);
-                contact.setAddress(addressId);
                 contact.setPhoto(photo);
                 contacts.add(contact);
             }
@@ -219,7 +217,6 @@ public class JdbcContactDao implements IContactDao {
             String email = rs.getString("email");
             String placeOfWork = rs.getString("place_of_work");
             long photo = rs.getLong("photo");
-            long addressId = rs.getLong("address");
             contact = new Contact(contactId, name, surname);
             contact.setPatronymic(patronymic);
             contact.setDateOfBirth(dateOfBirth);
@@ -229,7 +226,6 @@ public class JdbcContactDao implements IContactDao {
             contact.setWebsite(website);
             contact.setEmail(email);
             contact.setPlaceOfWork(placeOfWork);
-            contact.setAddress(addressId);
             contact.setPhoto(photo);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -327,7 +323,6 @@ public class JdbcContactDao implements IContactDao {
                 String foundEmail = rs.getString("email");
                 String foundPlaceOfWork = rs.getString("place_of_work");
                 long foundPhoto = rs.getLong("photo");
-                long foundAddressId = rs.getLong("address");
                 Contact contact = new Contact(foundContactId, foundName, foundSurname);
                 contact.setPatronymic(foundPatronymic);
                 contact.setDateOfBirth(foundDateOfBirth);
@@ -337,7 +332,6 @@ public class JdbcContactDao implements IContactDao {
                 contact.setWebsite(foundWebsite);
                 contact.setEmail(foundEmail);
                 contact.setPlaceOfWork(foundPlaceOfWork);
-                contact.setAddress(foundAddressId);
                 contact.setPhoto(foundPhoto);
 
                 contacts.add(contact);

@@ -5,7 +5,6 @@ import com.itechart.data.entity.Address;
 import com.itechart.data.transaction.Transaction;
 import com.mysql.jdbc.Statement;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,10 +16,10 @@ import java.sql.SQLException;
 public class JdbcAddressDao implements IAddressDao {
     private Transaction transaction;
 
-    private final String SELECT_ADDRESS_BY_ID_QUERY = "SELECT * FROM address WHERE address_id = ?";
-    private final String INSERT_ADDRESS_QUERY = "INSERT INTO address(country, city, street, house, apartment, zip_code) VALUES(?, ?, ?, ?, ?, ?)";
-    private final String UPDATE_ADDRESS_QUERY = "UPDATE address SET country = ?, city = ?, street = ?, house = ?, apartment = ?, zip_code = ? WHERE address_id = ?";
-    private final String DELETE_ADDRESS_QUERY = "DELETE FROM address WHERE address_id = ?";
+    private final String INSERT_ADDRESS_QUERY = "INSERT INTO address(country, city, street, house, apartment, zip_code, contact_id) VALUES(?, ?, ?, ?, ?, ?, ?)";
+    private final String SELECT_ADDRESS_BY_CONTACT_ID_QUERY = "SELECT * FROM address WHERE contact_id = ?";
+    private final String DELETE_ADDRESS_FOR_CONTACT_QUERY = "DELETE FROM address WHERE contact_id = ?";
+    private final String UPDATE_ADDRESS_QUERY = "UPDATE address SET country = ?, city = ?, street = ?, house = ?, apartment = ?, zip_code = ? WHERE contact_id = ?";
 
 
     public JdbcAddressDao(Transaction transaction) {
@@ -42,6 +41,7 @@ public class JdbcAddressDao implements IAddressDao {
             st.setString(4, address.getHouse());
             st.setString(5, address.getApartment());
             st.setString(6, address.getZipCode());
+            st.setLong(7, address.getContactId());
             st.executeUpdate();
             rs = st.getGeneratedKeys();
             if (rs.next())
@@ -57,13 +57,13 @@ public class JdbcAddressDao implements IAddressDao {
     }
 
     @Override
-    public void delete(long id) {
+    public void deleteForContact(long contactId) {
         Connection cn = null;
         PreparedStatement st = null;
         try {
             cn = transaction.getConnection();
-            st = cn.prepareStatement(DELETE_ADDRESS_QUERY);
-            st.setLong(1, id);
+            st = cn.prepareStatement(DELETE_ADDRESS_FOR_CONTACT_QUERY);
+            st.setLong(1, contactId);
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,7 +86,7 @@ public class JdbcAddressDao implements IAddressDao {
             st.setString(4, address.getHouse());
             st.setString(5, address.getApartment());
             st.setString(6, address.getZipCode());
-            st.setLong(7, address.getId());
+            st.setLong(7, address.getContactId());
             st.executeUpdate();
 
         } catch (SQLException e) {
@@ -97,7 +97,7 @@ public class JdbcAddressDao implements IAddressDao {
     }
 
     @Override
-    public Address getAddressById(long id) {
+    public Address getAddressByContactId(long contactId) {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -105,8 +105,8 @@ public class JdbcAddressDao implements IAddressDao {
 
         try {
             cn = transaction.getConnection();
-            st = cn.prepareStatement(SELECT_ADDRESS_BY_ID_QUERY);
-            st.setLong(1, id);
+            st = cn.prepareStatement(SELECT_ADDRESS_BY_CONTACT_ID_QUERY);
+            st.setLong(1, contactId);
             rs = st.executeQuery();
             rs.next();
             int addressId = rs.getInt("address_id");
@@ -116,7 +116,8 @@ public class JdbcAddressDao implements IAddressDao {
             String house = rs.getString("house");
             String apartment = rs.getString("apartment");
             String zipCode = rs.getString("zip_code");
-            a = new Address(addressId, country, city, street, house, apartment, zipCode);
+            long extractedContactId = rs.getLong("contact_id");
+            a = new Address(addressId, country, city, street, house, apartment, zipCode, extractedContactId);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

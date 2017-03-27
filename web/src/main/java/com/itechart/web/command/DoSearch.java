@@ -6,7 +6,6 @@ import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.File;
 import com.itechart.web.service.data.AbstractDataService;
-import com.itechart.web.service.data.TransactionalDataService;
 import com.itechart.web.service.ServiceFactory;
 
 import javax.servlet.ServletException;
@@ -28,7 +27,7 @@ public class DoSearch implements Command {
         ArrayList<Contact> contacts = dataService.getContactsByFields(dto);
         ArrayList<MainPageContactDTO> mainPageContactDTOs = new ArrayList<>();
         for (Contact contact : contacts) {
-            Address address = dataService.getAddressById(contact.getAddress());
+            Address address = dataService.getAddressByContactId(contact.getContactId());
             File photo = dataService.getPhotoById(contact.getPhoto());
             MainPageContactDTO mainPageContactDTO = new MainPageContactDTO(contact, address, photo);
             mainPageContactDTOs.add(mainPageContactDTO);

@@ -17,6 +17,13 @@ public class File {
         this.storedName = storedName;
     }
 
+    public void update(File file) {
+        this.name = file.getName();
+        // TODO: 27.03.2017 use common library for check
+        if (file.getStoredName() != null)
+            this.storedName = file.getStoredName();
+    }
+
     public long getId() {
         return id;
     }
@@ -24,6 +31,7 @@ public class File {
     public void setId(long id) {
         this.id = id;
     }
+
 
     public String getName() {
         return name;

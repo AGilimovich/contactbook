@@ -21,7 +21,7 @@ public class JdbcFileDao implements IFileDao {
 
     private final String UPDATE_FILE_QUERY = "UPDATE file SET name = ?, stored_name = ? WHERE file_id = ?";
 
-    private final String DELETE_FILE_QUERY = "DELETE FROM file WHERE id = ?";
+    private final String DELETE_FILE_QUERY = "DELETE FROM file WHERE file_id = ?";
 
 
     public JdbcFileDao(Transaction transaction) {
