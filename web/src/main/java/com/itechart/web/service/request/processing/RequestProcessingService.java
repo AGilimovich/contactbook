@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * Class with a set of methods designed for processing different requests.
  */
-public class RequestProcessingService {
+public class RequestProcessingService implements AbstractRequestProcessingService {
 
     public FullContactDTO processContactRequest(HttpServletRequest request) {
         MultipartRequestHandler handler = new MultipartRequestHandler();
@@ -111,7 +111,6 @@ public class RequestProcessingService {
 
 
     }
-
 
 
     public String[] processShowEmailViewRequest(HttpServletRequest request) {

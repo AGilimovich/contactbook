@@ -1,7 +1,7 @@
 package com.itechart.web.command;
 
 import com.itechart.data.dto.MainPageContactDTO;
-import com.itechart.web.service.data.DataService;
+import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.ServiceFactory;
 
 import javax.servlet.ServletException;
@@ -19,14 +19,14 @@ public class DoDeleteContact implements Command {
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         String[] selectedContactsId = ServiceFactory.getServiceFactory().getRequestProcessingService().processDeleteContactRequest(request);
-        DataService dataService = ServiceFactory.getServiceFactory().getDataService();
+        AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
         if (selectedContactsId != null) {
             for (String c : selectedContactsId) {
                 long contactId = Long.valueOf(c);
                 dataService.deleteContact(contactId);
             }
         }
-        ArrayList<MainPageContactDTO> contacts = ServiceFactory.getServiceFactory().getDataService().getContactsWithAddressDTO();
+        ArrayList<MainPageContactDTO> contacts = dataService.getMainPageContactDTO();
         request.setAttribute("contacts",contacts);
         return "/jsp/main.jsp";
     }

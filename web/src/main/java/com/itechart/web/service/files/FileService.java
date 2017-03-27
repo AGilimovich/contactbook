@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 /**
  * Created by Aleksandr on 25.03.2017.
  */
-public class FileService {
+public class FileService implements AbstractFileService {
     String FILE_PATH = PropertiesManager.FILE_PATH();
 
 

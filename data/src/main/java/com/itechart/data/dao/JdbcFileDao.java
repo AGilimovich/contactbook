@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Created by Aleksandr on 25.03.2017.
  */
-public class JdbcFileDao implements IContactFileDao {
+public class JdbcFileDao implements IFileDao {
     private Transaction transaction;
 
     private final String SELECT_BY_ID_QUERY = "SELECT * FROM file WHERE file_id = ?";

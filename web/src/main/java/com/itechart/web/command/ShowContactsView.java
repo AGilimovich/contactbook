@@ -1,7 +1,7 @@
 package com.itechart.web.command;
 
 import com.itechart.data.dto.MainPageContactDTO;
-import com.itechart.web.service.data.DataService;
+import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.ServiceFactory;
 
 import javax.servlet.ServletException;
@@ -17,8 +17,8 @@ public class ShowContactsView implements Command {
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        DataService dataService = ServiceFactory.getServiceFactory().getDataService();
-        ArrayList<MainPageContactDTO> mainPageContactDTOs = dataService.getContactsWithAddressDTO();
+        AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
+        ArrayList<MainPageContactDTO> mainPageContactDTOs = dataService.getMainPageContactDTO();
         request.setAttribute("contacts", mainPageContactDTOs);
 
         return "/jsp/main.jsp";

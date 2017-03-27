@@ -10,7 +10,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
 /**
  * Class for initialization and starting scheduler.
  */
-public class SchedulingService {
+public class SchedulingService implements AbstractSchedulingService{
 
     private Class<? extends Job> scheduledJob;
 

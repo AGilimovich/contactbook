@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * Created by Aleksandr on 24.03.2017.
  */
-public class EmailTemplatesProvidingService {
+public class TemplatesProvidingService implements AbstractTemplateProvidingService {
     private static Map<Class<? extends Template>, Template> emailBodyTemplates = new HashMap<>();
 
     static {

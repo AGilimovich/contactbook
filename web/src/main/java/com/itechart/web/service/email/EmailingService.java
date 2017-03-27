@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
 /**
  * Created by Aleksandr on 18.03.2017.
  */
-public class EmailingService {
+public class EmailingService implements AbstractEmailingService {
     private String hostName;
     private int SMTPPort;
     private String userName;

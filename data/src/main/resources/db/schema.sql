@@ -81,8 +81,8 @@ CREATE TABLE `attachment` (
     `upload_date` DATETIME NOT NULL,
     `comment` VARCHAR(100),
     `file` BIGINT UNSIGNED,
-    `contact` BIGINT UNSIGNED NOT NULL,
-    FOREIGN KEY (`contact`)
+    `contact_id` BIGINT UNSIGNED NOT NULL,
+    FOREIGN KEY (`contact_id`)
         REFERENCES `contact` (`contact_id`)  ON DELETE CASCADE,
 	FOREIGN KEY (`file`) REFERENCES `file`(`file_id`),
     PRIMARY KEY (`attach_id`)
@@ -95,10 +95,10 @@ CREATE TABLE `phone`(
 `phone_number` VARCHAR(15) NOT NULL,
 `phone_type` INT UNSIGNED NOT NULL,
 `comment` VARCHAR(100),
-`contact` BIGINT UNSIGNED NOT NULL,
+`contact_id` BIGINT UNSIGNED NOT NULL,
 
 
-FOREIGN KEY (`contact`) REFERENCES `contact`(`contact_id`)  ON DELETE CASCADE,
+FOREIGN KEY (`contact_id`) REFERENCES `contact`(`contact_id`)  ON DELETE CASCADE,
 FOREIGN KEY (`phone_type`) REFERENCES `phone_type`(`phone_type_id`),
 PRIMARY KEY (`phone_id`)
 ) DEFAULT CHARSET utf8mb4 ENGINE InnoDB;

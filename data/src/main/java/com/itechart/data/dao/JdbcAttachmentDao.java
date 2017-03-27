@@ -14,10 +14,10 @@ import java.util.Date;
  */
 public class JdbcAttachmentDao implements IAttachmentDao {
 
-    private final String SELECT_ATTACHMENTS_FOR_CONTACT_QUERY = "SELECT attach_id, attach_name, upload_date, comment, file, contact FROM attachment WHERE contact = ?";
-    private final String SELECT_ATTACHMENTS_BY_ID_QUERY = "SELECT attach_id, attach_name, upload_date, comment, file, contact FROM attachment WHERE attach_id = ?";
-    private final String DELETE_FOR_USER_QUERY = "DELETE FROM attachment WHERE contact = ?";
-    private final String INSERT_ATTACHMENT_QUERY = "INSERT INTO attachment(attach_name,upload_date,comment,file,contact) VALUES (?,?,?,?,?)";
+    private final String SELECT_ATTACHMENTS_FOR_CONTACT_QUERY = "SELECT attach_id, attach_name, upload_date, comment, file, contact_id FROM attachment WHERE contact_id = ?";
+    private final String SELECT_ATTACHMENTS_BY_ID_QUERY = "SELECT attach_id, attach_name, upload_date, comment, file, contact_id FROM attachment WHERE attach_id = ?";
+    private final String DELETE_FOR_USER_QUERY = "DELETE FROM attachment WHERE contact_id = ?";
+    private final String INSERT_ATTACHMENT_QUERY = "INSERT INTO attachment(attach_name,upload_date,comment,file,contact_id) VALUES (?,?,?,?,?)";
     private final String UPDATE_ATTACHMENT_QUERY = "UPDATE attachment SET attach_name=?,comment=? WHERE attach_id=?";
     private final String DELETE_ATTACHMENT_QUERY = "DELETE FROM attachment WHERE attach_id = ?";
     private Transaction transaction;
@@ -44,7 +44,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
                 long attach_id = rs.getLong("attach_id");
                 String comment = rs.getString("comment");
                 long file = rs.getLong("file");
-                long contact = rs.getLong("contact");
+                long contact = rs.getLong("contact_id");
                 Attachment attachment = new Attachment(attach_id, attach_name, uploadDate, comment, file, contact);
                 attachments.add(attachment);
             }
@@ -75,7 +75,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
             long attach_id = rs.getLong("attach_id");
             String comment = rs.getString("comment");
             Long file = rs.getLong("file");
-            long contact = rs.getLong("contact");
+            long contact = rs.getLong("contact_id");
             attachment = new Attachment(attach_id, attach_name, uploadDate, comment, file, contact);
 
         } catch (SQLException e) {

@@ -2,7 +2,7 @@ package com.itechart.web.command;
 
 import com.itechart.data.dto.MainPageContactDTO;
 import com.itechart.data.dto.FullContactDTO;
-import com.itechart.web.service.data.DataService;
+import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.ServiceFactory;
 
 import javax.servlet.ServletException;
@@ -18,17 +18,19 @@ public class DoUpdateContact implements Command {
 
 
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        FullContactDTO receivedFullContactDTO = ServiceFactory.getServiceFactory().getRequestProcessingService().processContactRequest(request);
+        FullContactDTO reconstructedFullContactDTO = ServiceFactory.getServiceFactory().getRequestProcessingService().processContactRequest(request);
         //id of contacted retrieved from session
         long contactId = (long) request.getSession().getAttribute("id");
-        receivedFullContactDTO.getContact().setContactId(contactId);
-        DataService dataService = ServiceFactory.getServiceFactory().getDataService();
-        dataService.updateContact(receivedFullContactDTO);
+        reconstructedFullContactDTO.getContact().setContactId(contactId);
+        AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
+        FullContactDTO contactToUpdate = (FullContactDTO) request.getSession().getAttribute("contactToUpdate");
+        dataService.updateContact(reconstructedFullContactDTO, contactToUpdate);
 
         //remove session attributes
+        request.getSession().removeAttribute("contactToUpdate");
         request.getSession().removeAttribute("action");
         request.getSession().removeAttribute("id");
-        ArrayList<MainPageContactDTO> contacts = ServiceFactory.getServiceFactory().getDataService().getContactsWithAddressDTO();
+        ArrayList<MainPageContactDTO> contacts = dataService.getMainPageContactDTO();
         request.setAttribute("contacts", contacts);
         return "/jsp/main.jsp";
     }

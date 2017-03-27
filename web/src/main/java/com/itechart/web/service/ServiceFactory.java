@@ -1,13 +1,20 @@
 package com.itechart.web.service;
 
 import com.itechart.data.transaction.TransactionManager;
-import com.itechart.web.service.data.DataService;
+import com.itechart.web.service.data.AbstractDataService;
+import com.itechart.web.service.data.TransactionalDataService;
+import com.itechart.web.service.email.AbstractEmailingService;
 import com.itechart.web.service.email.EmailingService;
+import com.itechart.web.service.files.AbstractFileService;
 import com.itechart.web.service.files.FileService;
+import com.itechart.web.service.request.processing.AbstractRequestProcessingService;
 import com.itechart.web.service.request.processing.RequestProcessingService;
+import com.itechart.web.service.scheduler.AbstractSchedulingService;
 import com.itechart.web.service.scheduler.EmailCongratsJob;
 import com.itechart.web.service.scheduler.SchedulingService;
-import com.itechart.web.service.template.EmailTemplatesProvidingService;
+import com.itechart.web.service.template.AbstractTemplateProvidingService;
+import com.itechart.web.service.template.TemplatesProvidingService;
+import com.itechart.web.service.validation.AbstractValidationService;
 import com.itechart.web.service.validation.ValidationService;
 
 import java.util.ResourceBundle;
@@ -15,7 +22,7 @@ import java.util.ResourceBundle;
 /**
  * Created by Aleksandr on 24.03.2017.
  */
-public class ServiceFactory {
+public class ServiceFactory implements AbstractServiceFactory{
 
 
     private static ServiceFactory instance;
@@ -56,31 +63,31 @@ public class ServiceFactory {
     }
 
 
-    public DataService getDataService() {
-        return new DataService(transactionManager);
+    public AbstractDataService getDataService() {
+        return new TransactionalDataService(transactionManager);
     }
 
-    public ValidationService getValidationService() {
+    public AbstractValidationService getValidationService() {
         return new ValidationService();
     }
 
-    public RequestProcessingService getRequestProcessingService() {
+    public AbstractRequestProcessingService getRequestProcessingService() {
         return new RequestProcessingService();
     }
 
-    public EmailingService getEmailService() {
+    public AbstractEmailingService getEmailService() {
         return new EmailingService(hostName, SMTPPort, userName, password, emailFrom);
     }
 
-    public EmailTemplatesProvidingService getEmailTemplateProvidingService() {
-        return new EmailTemplatesProvidingService();
+    public AbstractTemplateProvidingService getEmailTemplateProvidingService() {
+        return new TemplatesProvidingService();
     }
 
-    public SchedulingService getEmailCongratsService() {
+    public AbstractSchedulingService getEmailCongratsService() {
         return new SchedulingService(EmailCongratsJob.class);
     }
 
-    public FileService getFileService() {
+    public AbstractFileService getFileService() {
         return new FileService();
     }
 

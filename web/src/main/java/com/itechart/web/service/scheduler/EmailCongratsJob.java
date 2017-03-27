@@ -2,10 +2,12 @@ package com.itechart.web.service.scheduler;
 
 import com.itechart.data.entity.Contact;
 import com.itechart.web.service.ServiceFactory;
+import com.itechart.web.service.email.AbstractEmailingService;
 import com.itechart.web.service.email.EmailingService;
+import com.itechart.web.service.template.AbstractTemplateProvidingService;
 import com.itechart.web.service.template.BirthdayEmailTemplate;
 import com.itechart.web.service.template.Template;
-import com.itechart.web.service.template.EmailTemplatesProvidingService;
+import com.itechart.web.service.template.TemplatesProvidingService;
 import org.apache.commons.mail.EmailException;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -24,8 +26,8 @@ public class EmailCongratsJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         ArrayList<Contact> contacts = ServiceFactory.getServiceFactory().getDataService().getContactsWithBirthday(new Date());
-        EmailingService emailingService = ServiceFactory.getServiceFactory().getEmailService();
-        EmailTemplatesProvidingService templateService = ServiceFactory.getServiceFactory().getEmailTemplateProvidingService();
+        AbstractEmailingService emailingService = ServiceFactory.getServiceFactory().getEmailService();
+        AbstractTemplateProvidingService templateService = ServiceFactory.getServiceFactory().getEmailTemplateProvidingService();
 
         Template template = templateService.getPredefinedEmailTemplates().get(BirthdayEmailTemplate.class);
         String subject = "C днем рождения!";

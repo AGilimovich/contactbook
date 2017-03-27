@@ -9,7 +9,7 @@ import com.itechart.data.entity.*;
 import com.itechart.data.transaction.Transaction;
 import com.itechart.data.transaction.TransactionManager;
 import com.itechart.web.service.ServiceFactory;
-import com.itechart.web.service.files.FileService;
+import com.itechart.web.service.files.AbstractFileService;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,11 +17,11 @@ import java.util.Date;
 /**
  * Created by Aleksandr on 22.03.2017.
  */
-public class DataService {
+public class TransactionalDataService implements AbstractDataService {
 
     private TransactionManager tm;
 
-    public DataService(TransactionManager tm) {
+    public TransactionalDataService(TransactionManager tm) {
         this.tm = tm;
     }
 
@@ -32,7 +32,9 @@ public class DataService {
         JdbcContactDao contactDao = new JdbcContactDao(transaction);
         JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
         JdbcFileDao fileDao = new JdbcFileDao(transaction);
-        FileService fileService = ServiceFactory.getServiceFactory().getFileService();
+        AbstractFileService fileService = ServiceFactory.getServiceFactory().getFileService();
+
+
 
         Contact contact = contactDao.getContactById(contactId);
         File photo = fileDao.getFileById(contact.getPhoto());
@@ -93,15 +95,15 @@ public class DataService {
     }
 
 
-    public void updateContact(FullContactDTO fullContactDTO) {
+    public void updateContact(FullContactDTO reconstructed, FullContactDTO contactToUpdate) {
         Transaction transaction = tm.getTransaction();
         JdbcPhoneDao phoneDao = new JdbcPhoneDao(transaction);
         JdbcAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
         JdbcContactDao contactDao = new JdbcContactDao(transaction);
         JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
         JdbcFileDao fileDao = new JdbcFileDao(transaction);
-        Contact contactToUpdate = contactDao.getContactById(fullContactDTO.getContact().getContactId());
-        File photo = fullContactDTO.getPhoto();
+        Contact contactToUpdate = contactDao.getContactById(reconstructed.getContact().getContactId());
+        File photo = reconstructed.getPhoto();
         photo.setId(contactToUpdate.getPhoto());
         //if received new photo file
         if (photo.getStoredName() != null && photo.getName() != null) {
@@ -111,34 +113,34 @@ public class DataService {
 
         Address addressToUpdate = addressDao.getAddressById(contactToUpdate.getAddress());
         //update fields with new data
-        contactToUpdate.update(fullContactDTO.getContact());
-        addressToUpdate.update(fullContactDTO.getAddress());
+        contactToUpdate.update(reconstructed.getContact());
+        addressToUpdate.update(reconstructed.getAddress());
         //update in db
         addressDao.update(addressToUpdate);
         contactDao.update(contactToUpdate);
 
         //delete old phones
-        phoneDao.deleteForUser(fullContactDTO.getContact().getContactId());
+        phoneDao.deleteForUser(reconstructed.getContact().getContactId());
         //persist into db new phones
-        for (Phone phone : fullContactDTO.getNewPhones()) {
-            phone.setContact(fullContactDTO.getContact().getContactId());
+        for (Phone phone : reconstructed.getNewPhones()) {
+            phone.setContact(reconstructed.getContact().getContactId());
             phoneDao.save(phone);
         }
 
-        for (FullAttachmentDTO fullAttachmentDTO : fullContactDTO.getDeletedAttachments()) {
+        for (FullAttachmentDTO fullAttachmentDTO : reconstructed.getDeletedAttachments()) {
             fileDao.delete(fullAttachmentDTO.getFile().getId());
             attachmentDao.delete(fullAttachmentDTO.getAttachment().getId());
             // TODO: 23.03.2017 delete from disk
         }
-        for (FullAttachmentDTO fullAttachmentDTO : fullContactDTO.getNewAttachments()) {
+        for (FullAttachmentDTO fullAttachmentDTO : reconstructed.getNewAttachments()) {
             File file = fullAttachmentDTO.getFile();
             long fileId = fileDao.save(file);
             Attachment attachment = fullAttachmentDTO.getAttachment();
             attachment.setFile(fileId);
-            attachment.setContact(fullContactDTO.getContact().getContactId());
+            attachment.setContact(reconstructed.getContact().getContactId());
             attachmentDao.save(attachment);
         }
-        for (FullAttachmentDTO fullAttachmentDTO : fullContactDTO.getUpdatedAttachments()) {
+        for (FullAttachmentDTO fullAttachmentDTO : reconstructed.getUpdatedAttachments()) {
             File file = fullAttachmentDTO.getFile();
             if (file != null)
                 fileDao.update(file);
@@ -191,7 +193,7 @@ public class DataService {
     }
 
 
-    public ArrayList<MainPageContactDTO> getContactsWithAddressDTO() {
+    public ArrayList<MainPageContactDTO> getMainPageContactDTO() {
         Transaction transaction = tm.getTransaction();
         JdbcContactDao contactDao = new JdbcContactDao(transaction);
         JdbcAddressDao addressDao = new JdbcAddressDao(transaction);

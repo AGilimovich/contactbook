@@ -20,6 +20,7 @@ public class ShowContactEditView implements Command {
 
         FullContactDTO fullContactDTO = ServiceFactory.getServiceFactory().getDataService().getFullContactById(id);
 
+        request.getSession().setAttribute("contactToUpdate", fullContactDTO);
         request.getSession().setAttribute("action", "update");
         request.getSession().setAttribute("id", fullContactDTO.getContact().getContactId());
         request.setAttribute("photo", fullContactDTO.getPhoto());

@@ -2,8 +2,8 @@ package com.itechart.web.command;
 
 import com.itechart.data.dto.MainPageContactDTO;
 import com.itechart.web.service.ServiceFactory;
+import com.itechart.web.service.email.AbstractEmailingService;
 import com.itechart.web.service.email.Email;
-import com.itechart.web.service.email.EmailingService;
 import org.apache.commons.mail.EmailException;
 
 import javax.servlet.ServletException;
@@ -21,7 +21,7 @@ public class DoSendEmail implements Command {
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         Email email = ServiceFactory.getServiceFactory().getRequestProcessingService().processSendEmailRequest(request);
-        EmailingService emailingService = ServiceFactory.getServiceFactory().getEmailService();
+        AbstractEmailingService emailingService = ServiceFactory.getServiceFactory().getEmailService();
         for (String emailAddress : email.getEmailAddresses()) {
             try {
                 emailingService.sendEmail(emailAddress, email.getSubject(), email.getBody());
@@ -29,7 +29,7 @@ public class DoSendEmail implements Command {
                 e.printStackTrace();
             }
         }
-        ArrayList<MainPageContactDTO> contacts = ServiceFactory.getServiceFactory().getDataService().getContactsWithAddressDTO();
+        ArrayList<MainPageContactDTO> contacts = ServiceFactory.getServiceFactory().getDataService().getMainPageContactDTO();
         request.setAttribute("contacts", contacts);
         return "/jsp/main.jsp";
     }

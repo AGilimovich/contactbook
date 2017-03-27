@@ -3,6 +3,7 @@ package com.itechart.web.command;
 import com.itechart.data.dto.MainPageContactDTO;
 import com.itechart.data.dto.FullContactDTO;
 import com.itechart.web.service.ServiceFactory;
+import com.itechart.web.service.data.AbstractDataService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,10 +18,11 @@ public class DoCreateContact implements Command {
 
 
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        FullContactDTO fullContactDTO =  ServiceFactory.getServiceFactory().getRequestProcessingService().processContactRequest(request);
-        ServiceFactory.getServiceFactory().getDataService().saveNewContact(fullContactDTO);
-        ArrayList<MainPageContactDTO> contacts = ServiceFactory.getServiceFactory().getDataService().getContactsWithAddressDTO();
-        request.setAttribute("contacts",contacts);
+        FullContactDTO fullContactDTO = ServiceFactory.getServiceFactory().getRequestProcessingService().processContactRequest(request);
+        AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
+        dataService.saveNewContact(fullContactDTO);
+        ArrayList<MainPageContactDTO> contacts = dataService.getMainPageContactDTO();
+        request.setAttribute("contacts", contacts);
         request.getSession().removeAttribute("action");
         return "/jsp/main.jsp";
     }
