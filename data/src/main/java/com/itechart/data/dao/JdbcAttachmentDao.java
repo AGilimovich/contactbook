@@ -97,7 +97,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
             cn = transaction.getConnection();
             st = cn.prepareStatement(INSERT_ATTACHMENT_QUERY, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, attachment.getName());
-            st.setDate(2, new java.sql.Date(attachment.getUploadDate().getTime()));
+            st.setTimestamp(2, new Timestamp(attachment.getUploadDate().getTime()));
             st.setString(3, attachment.getComment());
             st.setLong(4, attachment.getFile());
             st.setLong(5, attachment.getContact());

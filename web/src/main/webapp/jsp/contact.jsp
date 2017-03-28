@@ -34,7 +34,7 @@
             <div class="col-md-1">
 
                 <div class="photo-container">
-                    <img src="${pageContext.request.contextPath}/file?id=${photo.storedName}" height="100%" alt="photo"
+                    <img src="${pageContext.request.contextPath}/image?id=${photo.storedName}" height="100%" alt="photo"
                          id="photo">
                 </div>
 

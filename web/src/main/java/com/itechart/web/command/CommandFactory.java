@@ -24,6 +24,7 @@ public class CommandFactory {
         commands.put("/find", DoSearch.class);
         commands.put("/delete", DoDeleteContact.class);
         commands.put("/file", DoSendFile.class);
+        commands.put("/image", DoSendImage.class);
     }
 
 

@@ -9,23 +9,22 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Command for sending requested files.
+ * Created by Aleksandr on 28.03.2017.
  */
-public class DoSendFile implements Command {
-
-
+public class DoSendImage implements Command {
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        byte[] file = ServiceFactory.getServiceFactory().getFileService().getFile(request.getParameter("id"));
-        if (file != null) {
+        byte[] image = ServiceFactory.getServiceFactory().getFileService().getFile(request.getParameter("id"));
+        if (image != null) {
             try {
-                response.getOutputStream().write(file);
+                response.getOutputStream().write(image);
                 response.getOutputStream().flush();
+                return null;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return null;
+        return "/resources/images/male.jpg";
 
     }
 }

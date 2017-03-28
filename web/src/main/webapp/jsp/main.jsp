@@ -63,9 +63,9 @@
                             <input type="checkbox" name="isSelected" value="${contact.contactId}">
                         </td>
 
-                        <td width="110px">
+                        <td width="150px">
                             <div class="photo-container">
-                                <img src="${pageContext.request.contextPath}/file?id=${contact.photo}" alt="" height="100%" class="photo">
+                                <img src="${pageContext.request.contextPath}/image?id=${contact.photo}" onerror="this.onerror=null;this.src='imagefound.gif';" alt="" height="100%" class="photo">
                             </div>
                         </td>
                         <td>

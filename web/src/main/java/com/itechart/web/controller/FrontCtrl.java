@@ -35,6 +35,7 @@ public class FrontCtrl extends HttpServlet {
         String page = command.execute(this, request, response);
         if (page != null)
             dispatch(request, response, page);
+        else response.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -50,6 +51,7 @@ public class FrontCtrl extends HttpServlet {
     protected void dispatch(HttpServletRequest request, HttpServletResponse response, String page) throws ServletException, IOException {
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
         dispatcher.forward(request, response);
+
     }
 
 }
