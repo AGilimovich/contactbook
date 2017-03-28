@@ -60,7 +60,7 @@
                     <div class="control-group buffer-top">
                         <button class="btn btn-success" type="submit">Отправить</button>
                         <a href="${pageContext.request.contextPath}/">
-                            <button class="btn btn-danger" type="button">Отменить</button>
+                            <button class="btn" type="button">Отменить</button>
                         </a>
                     </div>
                 </div>

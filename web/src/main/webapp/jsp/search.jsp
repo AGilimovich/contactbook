@@ -22,7 +22,7 @@
 
     <form action="/find" method="post">
         <div class="top-buffer row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="row well">
                     <div class="col-md-4">
                         <p>Фамилия:</p>
@@ -40,7 +40,7 @@
             </div>
         </div>
         <div class="top-buffer row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="row well">
                     <div class="col-md-4">
                         <div class="row">
@@ -79,7 +79,7 @@
                         </div>
 
                     </div>
-                    <div class="col-md-3 col-md-offset-1">
+                    <div class="col-md-4">
                         <div class="row">
                             <p>Гражданство:</p>
                         </div>
@@ -94,7 +94,7 @@
             </div>
         </div>
         <div class="top-buffer row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="row well">
                     <h3 style="margin-left:15px">Адрес проживания</h3>
 
@@ -130,7 +130,7 @@
 
         </div>
         <div class="top-buffer row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <button type="submit" class="btn btn-search btn-success">Поиск</button>
             </div>
         </div>
