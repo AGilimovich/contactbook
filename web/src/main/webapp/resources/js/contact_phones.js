@@ -21,6 +21,9 @@ var phoneNumber = document.getElementsByName("phoneNumber");
 var phoneType = document.getElementsByName("phoneType");
 var phoneComment = document.getElementsByName("phoneComment");
 //-------------------------------
+//tooltips
+var deletePhoneTooltip = document.getElementById("delete-phone-tooltip");
+var editPhoneTooltip = document.getElementById("edit-phone-tooltip");
 
 
 // Elements on phone popup
@@ -127,8 +130,10 @@ btnUndoPhone.onclick = function () {
 
 //action - delete selected phones
 btnDeletePhones.onclick = function () {
+    var counter = 0;
     for (var i = 0; i < phonesCheckBoxes.length;) {
         if (phonesCheckBoxes[i].checked) {
+            counter++;
             //todo popup acknowledge deleting
             // deleteHiddenInput(phonesCheckBoxes[i].value);
             var phone = phones[i];
@@ -142,7 +147,12 @@ btnDeletePhones.onclick = function () {
             //todo deleting hidden inputs
         } else i++;
     }
-
+    if (counter == 0) {
+        deletePhoneTooltip.className = "tooltiptext show-tooltip";
+        setTimeout(function () {
+            deletePhoneTooltip.className = "tooltiptext";
+        }, 2000);
+    }
 }
 
 
@@ -183,10 +193,17 @@ btnEditPhone.onclick = function () {
     }
     //if no checked checkboxes
     if (countSelected == 0) {
-        //todo popup: select one item
+        editPhoneTooltip.className = "tooltiptext show-tooltip";
+        setTimeout(function () {
+            editPhoneTooltip.className = "tooltiptext";
+        }, 2000);
+
         // if checked more than one checkbox
     } else if (countSelected > 1) {
-        //todo popup: select one item
+        editPhoneTooltip.className = "tooltiptext show-tooltip";
+        setTimeout(function () {
+            editPhoneTooltip.className = "tooltiptext";
+        }, 2000);
     }
     else {
 
@@ -268,7 +285,7 @@ function createRow(table, phone) {
 
     if (phone.getPhoneType() === "MOBILE") {
         cellPhoneType.innerHTML = "Мобильный";
-    } else cellPhoneType.innerHTML =  "Домашний";
+    } else cellPhoneType.innerHTML = "Домашний";
 
     cellPhoneType.setAttribute("name", "phoneType");
     cellPhoneType.setAttribute("align", "center");

@@ -23,15 +23,18 @@ var attachComment = document.getElementsByName("attachComment");
 
 //-------------------------------
 
+//tooltips
+var deleteAttachTooltip = document.getElementById("delete-attach-tooltip");
+var editAttachTooltip = document.getElementById("edit-attach-tooltip");
+
 
 // Elements on attach popup
 //-------------------------------
 var divInputFileContainer = document.getElementById("file-container");
-var btnSaveAttach = document.getElementById("btn-save-attach");
 var btnUndoAttach = document.getElementById("btn-undo-attach");
-var inputFile = document.getElementsByName("attachFile");
-var inputAttachName = document.getElementsByName("inputAttachName");
+var inputAttachName = document.getElementById("file-name-input");
 var inputAttachComment = document.getElementsByName("inputAttachComment");
+var nameLabel = document.getElementById("file-name-label");
 //-------------------------------
 
 
@@ -149,12 +152,15 @@ btnAddAttach.onclick = function () {
     var newInput = newAttachFileInput();
     newInput.required = true;
     //reset values of of popup form inputs
-    inputAttachName[0].value = "";
+    inputAttachName.value = "";
     inputAttachComment[0].value = "";
     attachPopup.className += " show";
     // btnSaveAttach.onclick = function () {
     //     saveNewAttach(newInput);
     // }
+    newInput.onchange = function () {
+        inputAttachName.value = newInput.files[0].name;
+    }
     saveAttach = function () {
         saveNewAttach(newInput);
         changeFormAttribute(newInput, "main-form");
@@ -167,8 +173,10 @@ btnAddAttach.onclick = function () {
 }
 
 btnDeleteAttaches.onclick = function () {
+    var counter = 0;
     for (var i = 0; i < attachCheckBoxes.length;) {
         if (attachCheckBoxes[i].checked) {
+            counter++;
             var attachment = attachments[i];
             //todo popup acknowledge deleting
             attachment.setStatus(STATUS.DELETED);
@@ -177,6 +185,12 @@ btnDeleteAttaches.onclick = function () {
             deleteAttachFile(attachment);
             attachments.splice(i, 1);
         } else i++;
+    }
+    if (counter == 0) {
+        deleteAttachTooltip.className = "tooltiptext show-tooltip";
+        setTimeout(function () {
+            deleteAttachTooltip.className = "tooltiptext";
+        }, 2000);
     }
 }
 
@@ -195,19 +209,30 @@ btnEditAttach.onclick = function () {
 
     //if no checked checkboxes
     if (countSelected == 0) {
-        //todo popup: select one item
+        editAttachTooltip.className = "tooltiptext show-tooltip";
+        setTimeout(function () {
+            editAttachTooltip.className = "tooltiptext";
+        }, 2000);
         // if checked more than one checkbox
     } else if (countSelected > 1) {
-        //todo popup: select one item
+        editAttachTooltip.className = "tooltiptext show-tooltip";
+        setTimeout(function () {
+            editAttachTooltip.className = "tooltiptext";
+        }, 2000);
     }
     else {
         //fill inputs with values
-        inputAttachName[0].value = attachName[checkedIndex].innerText;
+        inputAttachName.value = attachName[checkedIndex].innerText;
         inputAttachComment[0].value = attachComment[checkedIndex].innerText;
         var attachment = attachments[checkedIndex];
         var fileInput = attachment.getAttachFileInput();
+        if (typeof fileInput !== "undefined") {
+            fileInput.onchange = function () {
+                inputAttachName.value = fileInput.files[0].name;
+            }
+        }
         if (typeof fileInput !== "undefined")
-            fileInput.className = "";
+            fileInput.className = "form-control";
         // btnSaveAttach.onclick = function () {
         //     editExistingAttach(attachment);
         // }
@@ -237,7 +262,9 @@ cancelAttachEditing = function (attachment) {
 }
 
 function saveNewAttach(input) {
-    var attachmentName = inputAttachName[0].value;
+    // var attachmentName = input.files[0].name;
+
+    var attachmentName = inputAttachName.value;
     var attachmentUploadDate = dateToString(new Date());
     var attachmentComment = inputAttachComment[0].value;
     var attachmentId = new Date().getTime();
@@ -255,7 +282,7 @@ function saveNewAttach(input) {
 function editExistingAttach(attachment) {
     if (attachment.getStatus() !== STATUS.NEW)
         attachment.setStatus(STATUS.EDITED);
-    var attachmentName = inputAttachName[0].value;
+    var attachmentName = inputAttachName.value;
     var attachmentComment = inputAttachComment[0].value;
     attachment.setName(attachmentName);
     attachment.setComment(attachmentComment);
@@ -320,6 +347,7 @@ function newAttachMetaInput(attachment) {
 function newAttachFileInput() {
     var newInput = document.createElement("input");
     newInput.setAttribute("type", "file");
+    newInput.className = "form-control";
     //newInput.setAttribute("form", "main-form");
     divInputFileContainer.appendChild(newInput);
     return newInput;
@@ -338,14 +366,13 @@ function editAttachTableRow(attachment) {
     var cellAttachUploadDate = row.cells[2];
     var cellAttachComment = row.cells[3];
 
-    cellAttachName.innerText = inputAttachName[0].value;
+    cellAttachName.innerText = inputAttachName.value;
     cellAttachComment.innerText = inputAttachComment[0].value;
     cellAttachUploadDate.innerText;
 }
 
 function editAttachMetaInput(attachment) {
-    var attachMetaInput = attachment.getAttachMetaInput();
-    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append("uploadDate",attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
+    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
     attachment.getAttachMetaInput().setAttribute("value", value);
 }
 

@@ -124,11 +124,18 @@
                 <h3>Список контактных телефонов</h3>
 
                 <div class="table-btns">
-                    <button type="button" id="btn-delete-phones" class="btn">Удалить</button>
-                    <button type="button" id="btn-add-phone" class="btn">Добавить</button>
-                    <button type="button" id="btn-edit-phone" class="btn">Редактировать</button>
+                    <div class="tooltip-error">
+                        <button type="button" id="btn-delete-phones" class="btn">Удалить</button>
+                        <span class="tooltiptext" id="delete-phone-tooltip">Выберите как минимум один элемент</span>
+                    </div>
 
+                    <button type="button" id="btn-add-phone" class="btn">Добавить</button>
+                    <div class="tooltip-error">
+                        <button type="button" id="btn-edit-phone" class="btn">Редактировать</button>
+                        <span class="tooltiptext" id="edit-phone-tooltip">Выберите один элемент</span>
+                    </div>
                 </div>
+
 
                 <table id="phone-table" class="tbl" width="100%">
                     <c:forEach var="phone" items="${phones}">
@@ -149,10 +156,23 @@
 
                 <%----------------------------------Attachments---------------------------------------%>
                 <h3>Список присоединений</h3>
+
                 <div class="table-btns">
-                    <button type="button" id="btn-delete-attach" class="btn">Удалить</button>
+                    <div class="tooltip-error">
+                        <button type="button" id="btn-delete-attach" class="btn">Удалить</button>
+                        <span class="tooltiptext" id="delete-attach-tooltip">Выберите как минимум один элемент</span>
+                    </div>
+
                     <button type="button" id="btn-add-attach" class="btn">Добавить</button>
-                    <button type="button" id="btn-edit-attach" class="btn">Редактировать</button>
+                    <div class="tooltip-error">
+                        <button type="button" id="btn-edit-attach" class="btn">Редактировать</button>
+                        <span class="tooltiptext" id="edit-attach-tooltip">Выберите один элемент</span>
+                    </div>
+
+
+
+
+
 
                 </div>
                 <table id="attach-table" class="tbl" width="100%">
@@ -278,10 +298,9 @@
         <div class="popup-content attach-popup">
             <form onsubmit="return saveAttach()">
                 <div id="file-container">
-                    <%--<input type="file" name="attachFile" class="" form="main-form">--%>
                 </div>
-                <p class="form-text">Имя файла:</p>
-                <input type="text" class="form-control input-margin" name="inputAttachName">
+                <p class="form-text" id="file-name-label">Имя файла:</p>
+                <input type="text" id="file-name-input" class="form-control input-margin" name="inputAttachName">
 
                 <p class="form-text">Комментарий:</p>
                 <input type="text" class="form-control input-margin" name="inputAttachComment">
@@ -293,7 +312,6 @@
             </form>
         </div>
     </div>
-
 
 </div>
 
