@@ -68,21 +68,23 @@ public class FullContactDTOBuilder {
             //if phone parameters received in request
             if (fieldNamePattern.matcher(requestParam.getKey()).matches()) {
                 Map<String, String> parameters = parser.parse(requestParam.getValue());
-//                switch (status) {
-//                    case "NEW":
-//                        newPhones.add(phone);
-//                        break;
-//                    case "EDITED":
-//                        updatedPhones.add(phone);
-//                        break;
-//                    case "NONE":
-//                        break;
-//                    case "DELETED":
-//                        deletedPhones.add(phone);
-//                        break;
-//                    default:
-//                }
-                newPhones.add(phoneBuilder.buildPhone(parameters));
+                Phone phone = phoneBuilder.buildPhone(parameters);
+                String status = parameters.get("status");
+                switch (status) {
+                    case "NEW":
+                        newPhones.add(phone);
+                        break;
+                    case "EDITED":
+                        updatedPhones.add(phone);
+                        break;
+                    case "NONE":
+                        break;
+                    case "DELETED":
+                        deletedPhones.add(phone);
+                        break;
+                    default:
+                }
+
             }
         }
     }
@@ -127,9 +129,9 @@ public class FullContactDTOBuilder {
     public FullContactDTO getFullContact() {
         FullContactDTO fullContactDTO = new FullContactDTO(contact, address, photo);
         fullContactDTO.setNewPhones(newPhones);
-        fullContactDTO.setNewAttachments(newAttachments);
         fullContactDTO.setDeletedPhones(deletedPhones);
         fullContactDTO.setUpdatedPhones(updatedPhones);
+        fullContactDTO.setNewAttachments(newAttachments);
         fullContactDTO.setDeletedAttachments(deletedAttachments);
         fullContactDTO.setUpdatedAttachments(updatedAttachments);
         return fullContactDTO;

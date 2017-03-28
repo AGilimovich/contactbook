@@ -49,7 +49,7 @@ public class TransactionalDataService implements AbstractDataService {
         }
         transaction.commitTransaction();
         //todo if transaction committed delete files from disk
-        if (false) {
+        if (true) {
             for (String name : listOfFilesForDeleting) {
                 fileService.deleteFile(name);
             }
@@ -113,12 +113,20 @@ public class TransactionalDataService implements AbstractDataService {
         contactDao.update(contactToUpdate.getContact());
         addressDao.update(contactToUpdate.getAddress());
         fileDao.update(contactToUpdate.getPhoto());
-        // TODO: 27.03.2017 delete update and delete phones
-        phoneDao.deleteForContact(contactToUpdate.getContact().getContactId());
+
         for (Phone phoneToCreate : contactToUpdate.getNewPhones()) {
             phoneToCreate.setContact(contactToUpdate.getContact().getContactId());
             phoneDao.save(phoneToCreate);
         }
+        for (Phone phoneToUpdate : contactToUpdate.getUpdatedPhones()) {
+            phoneToUpdate.setContact(contactToUpdate.getContact().getContactId());
+            phoneDao.update(phoneToUpdate);
+        }
+        for (Phone phoneToDelete : contactToUpdate.getDeletedPhones()) {
+            phoneToDelete.setContact(contactToUpdate.getContact().getContactId());
+            phoneDao.delete(phoneToDelete.getId());
+        }
+
         // TODO: 27.03.2017 phones to update and delete
 
         for (FullAttachmentDTO fullAttachmentToUpdate : contactToUpdate.getUpdatedAttachments()) {

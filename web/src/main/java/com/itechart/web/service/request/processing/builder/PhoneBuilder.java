@@ -10,6 +10,7 @@ import java.util.Map;
 public class PhoneBuilder {
 
     public Phone buildPhone(Map<String, String> parameters) {
+        String id = parameters.get("id");
         String countryCode = parameters.get("countryCode");
         String operatorCode = parameters.get("operatorCode");
         String phoneNumber = parameters.get("number");
@@ -20,6 +21,7 @@ public class PhoneBuilder {
         String comment = parameters.get("comment");
 
         Phone phone = new Phone();
+        phone.setId(Long.valueOf(id));
         phone.setCountryCode(countryCode);
         phone.setOperatorCode(operatorCode);
         phone.setPhoneNumber(phoneNumber);

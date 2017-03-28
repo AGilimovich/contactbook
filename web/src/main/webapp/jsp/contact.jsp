@@ -191,8 +191,8 @@
             <%--cloning visible phone table but with input instead of labels--%>
             <table id="hidden-table">
                 <c:forEach var="phone" items="${phones}" varStatus="counter">
-                    <input type="text" name="phone[${phone.id}]"
-                           value="countryCode=${phone.countryCode}&operatorCode=${phone.operatorCode}&number=${phone.phoneNumber}&type=${phone.phoneType.name()}&comment=${phone.comment}">
+                    <input type="text" name="phone[${counter.index}]"
+                           value="id=${phone.id}&countryCode=${phone.countryCode}&operatorCode=${phone.operatorCode}&number=${phone.phoneNumber}&type=${phone.phoneType.name()}&comment=${phone.comment}&status=NONE">
                 </c:forEach>
             </table>
             <%--hidden input for attachments metadata--%>

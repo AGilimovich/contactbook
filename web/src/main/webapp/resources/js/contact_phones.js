@@ -13,7 +13,7 @@ var hiddenDiv = document.getElementById("hidden-div");
 
 //table columns
 //-------------------------------
-//checkbox in table representing selected phones
+//checkbox in table 
 var phonesCheckBoxes = document.getElementsByName("phoneIsSelected");
 var countryCode = document.getElementsByName("countryCode");
 var operatorCode = document.getElementsByName("operatorCode");
@@ -37,7 +37,68 @@ var inputPhoneComment = document.getElementsByName("inputPhoneComment");
 //-------------------------------
 
 
+function Phone(id, countryCode, operatorCode, phoneNumber, phoneType, phoneComment, status) {
+    this.id = id;
+    this.countryCode = countryCode;
+    this.operatorCode = operatorCode;
+    this.phoneNumber = phoneNumber;
+    this.phoneType = phoneType;
+    this.phoneComment = phoneComment;
+    this.status = status;
+    var hiddenInput;
 
+    return {
+        setId: function (id) {
+            id = id;
+        },
+        setCountryCode: function (c) {
+            countryCode = c;
+        },
+        setOperatorCode: function (c) {
+            operatorCode = c;
+        },
+        setPhoneNumber: function (n) {
+            phoneNumber = n;
+        },
+        setPhoneType: function (t) {
+            phoneType = t;
+        },
+        setPhoneComment: function (c) {
+            phoneComment = c;
+        },
+        setStatus: function (s) {
+            status = s;
+        },
+        getId: function () {
+            return id;
+        },
+        getCountryCode: function () {
+            return countryCode;
+        },
+        getOperatorCode: function () {
+            return operatorCode;
+        },
+        getPhoneNumber: function () {
+            return phoneNumber;
+        },
+        getPhoneType: function () {
+            return phoneType;
+        },
+        getPhoneComment: function () {
+            return phoneComment;
+        },
+        getStatus: function () {
+            return status;
+        },
+        setHiddenInput: function (i) {
+            hiddenInput = i;
+        },
+        getHiddenInput: function () {
+            return hiddenInput;
+        }
+    }
+
+}
 
 
 // action - show phone creating popup window
@@ -65,20 +126,31 @@ btnDeletePhones.onclick = function () {
         if (phonesCheckBoxes[i].checked) {
             //todo popup acknowledge deleting
             // deleteHiddenInput(phonesCheckBoxes[i].value);
-            deleteHiddenInput(i);
+            var phone = phones[i];
+            if (phone.getStatus() != STATUS.NEW) {
+                phone.setStatus(STATUS.DELETED);
+            }
+            deleteHiddenInput(phone);
             phoneTable.deleteRow(i);
+            phones.splice(i, 1);
             // i = 0;
             //todo deleting hidden inputs
         } else i++;
     }
 
 }
-//function for deleting hidden input with specified index
-function deleteHiddenInput(index) {
-    var id = phones[index].getId();
-    var hiddenInput = document.getElementsByName("phone[" + id + "]");
 
-    hiddenInput[0].parentNode.removeChild(hiddenInput[0]);
+
+function deleteHiddenInput(phone) {
+    var hiddenInput = phone.getHiddenInput();
+    if (typeof hiddenInput != "undefined") {
+        if (phone.getStatus() == STATUS.NEW) {
+            hiddenInput.parentNode.removeChild(hiddenInput);
+        } else {
+            var value = new Appendable("id", phone.getId()).append("countryCode", phone.getCountryCode()).append("operatorCode", phone.getOperatorCode()).append("phoneNumber", phone.getPhoneNumber()).append("phoneType", phone.getPhoneType()).append("phone", phone.getPhoneComment()).append("status", phone.getStatus()).value();
+            hiddenInput.setAttribute("value", value);
+        }
+    }
 
 }
 
@@ -131,9 +203,9 @@ btnEditPhone.onclick = function () {
 
 
 //function for creation of a new row in phone table and filling it with data
-function createRow(table, countryCode, operatorCode, phoneNumber, phoneType, phoneComment) {
+function createRow(table, phone) {
     var rows = table.rows;
-    var row = table.insertRow(rows);
+    var row = table.insertRow(-1);
 
     // insert cells into inserted row
     var cellCheckbox = row.insertCell(0);
@@ -166,13 +238,13 @@ function createRow(table, countryCode, operatorCode, phoneNumber, phoneType, pho
     checkbox.value = rows.length;
     checkbox.setAttribute("name", "phoneIsSelected");
 
-    cellCountryCode.innerHTML = countryCode;
+    cellCountryCode.innerHTML = phone.getCountryCode();
     cellCountryCode.setAttribute("name", "countryCode");
 
     cellOpenBracket.innerHTML = "(";
     cellOpenBracket.setAttribute("align", "right");
 
-    cellOperatorCode.innerHTML += operatorCode;
+    cellOperatorCode.innerHTML += phone.getOperatorCode();
     cellOperatorCode.setAttribute("name", "operatorCode");
     cellOperatorCode.setAttribute("align", "center");
 
@@ -180,16 +252,16 @@ function createRow(table, countryCode, operatorCode, phoneNumber, phoneType, pho
     cellCloseBracket.setAttribute("align", "left");
 
 
-    cellPhoneNumber.innerHTML = phoneNumber;
+    cellPhoneNumber.innerHTML = phone.getPhoneNumber();
     cellPhoneNumber.setAttribute("name", "phoneNumber");
 
 
-    cellPhoneType.innerHTML = phoneType;
+    cellPhoneType.innerHTML = phone.getPhoneType();
     cellPhoneType.setAttribute("name", "phoneType");
     cellPhoneType.setAttribute("align", "center");
 
     cellPhoneComment.setAttribute("name", "phoneComment");
-    cellPhoneComment.innerHTML = phoneComment;
+    cellPhoneComment.innerHTML = phone.getPhoneComment();
 
 }
 
@@ -208,14 +280,14 @@ function Appendable(n, v) {
 }
 
 //function for creating hidden input element
-function createHiddenInputForPhone(countryCode, operatorCode, phoneNumber, phoneType, phoneComment) {
-    var value = new Appendable("countryCode", countryCode).append("operatorCode", operatorCode).append("number", phoneNumber).append("type", phoneType).append("comment", phoneComment).value();
+function createHiddenInputForPhone(phone) {
+    var value = new Appendable("id", phone.getId()).append("countryCode", phone.getCountryCode()).append("operatorCode", phone.getOperatorCode()).append("number", phone.getPhoneNumber()).append("type", phone.getPhoneType()).append("comment", phone.getPhoneComment()).append("status", phone.getStatus()).value();
     var phoneHiddenInput = document.createElement("input");
-    var id = new Date().getTime();
-    phones.push(new Phone(id));
-    phoneHiddenInput.setAttribute("name", "phone[" + id + "]");
+    phoneHiddenInput.setAttribute("name", "phone[" + phone.getId() + "]");
     phoneHiddenInput.setAttribute("value", value);
+    phones.push(phone);
     hiddenDiv.appendChild(phoneHiddenInput);
+    return phoneHiddenInput;
 }
 
 //function for adding new phone to table and hidden input using data from inputs
@@ -228,14 +300,19 @@ function saveNew() {
         phoneType = "MOBILE";
     } else phoneType = "HOME";
     phoneComment = inputPhoneComment[0].value;
-    createRow(phoneTable, countryCode, operatorCode, phoneNumber, phoneType, phoneComment);
-    createHiddenInputForPhone(countryCode, operatorCode, phoneNumber, phoneType, phoneComment);
+    var newPhone = new Phone(new Date().getTime(), countryCode, operatorCode, phoneNumber, phoneType, phoneComment, STATUS.NEW);
+    createRow(phoneTable, newPhone);
+    var hiddenInput = createHiddenInputForPhone(newPhone);
+    newPhone.setHiddenInput(hiddenInput);
+    phones.push(hiddenInput);
     //close popup
     phonePopup.className = "popup";
 }
 
 //function for editing existing phone
 function editExisting(index) {
+    var phone = phones[index];
+
     //edit data in the phone table
     var row = phoneTable.rows[index];
     var cellCountryCode = row.cells[1];
@@ -243,25 +320,26 @@ function editExisting(index) {
     var cellPhoneNumber = row.cells[5];
     var cellPhoneType = row.cells[6];
     var cellPhoneComment = row.cells[7];
-    var countryCode = cellCountryCode.innerHTML = inputCountryCode[0].value;
-    var operatorCode = cellOperatorCode.innerHTML = inputOperatorCode[0].value;
-    var phoneNumber = cellPhoneNumber.innerHTML = inputPhoneNumber[0].value;
+    phone.setCountryCode(cellCountryCode.innerHTML = inputCountryCode[0].value);
+    phone.setOperatorCode(cellOperatorCode.innerHTML = inputOperatorCode[0].value);
+    phone.setPhoneNumber(phoneNumber = cellPhoneNumber.innerHTML = inputPhoneNumber[0].value);
 
     if (inputPhoneTypes[1].checked) {
-        var phoneType = cellPhoneType.innerHTML = "MOBILE";
-    } else var phoneType = cellPhoneType.innerHTML = "HOME";
-    var phoneComment = cellPhoneComment.innerHTML = inputPhoneComment[0].value;
+        phone.setPhoneType(cellPhoneType.innerHTML = "MOBILE");
+    } else phone.setPhoneType(cellPhoneType.innerHTML = "HOME");
+    phone.setPhoneComment(cellPhoneComment.innerHTML = inputPhoneComment[0].value);
     //close popup
     phonePopup.className = "popup";
-    editHiddenInput(index, countryCode, operatorCode, phoneNumber, phoneType, phoneComment)
+    if (phone.getStatus() != STATUS.NEW)
+        phone.setStatus(STATUS.EDITED);
+    editHiddenInput(phone);
 }
 
 //function for setting new value to hidden input
-function editHiddenInput(index, countryCode, operatorCode, phoneNumber, phoneType, phoneComment) {
-    var id = phones[index].getId();
-    var hiddenInput = document.getElementsByName("phone[" + id + "]");
-    var value = new Appendable("countryCode", countryCode).append("operatorCode", operatorCode).append("number", phoneNumber).append("type", phoneType).append("comment", phoneComment).value();
-    hiddenInput[0].setAttribute("value", value);
+function editHiddenInput(phone) {
+    var hiddenInput = phone.getHiddenInput();
+    var value = new Appendable("id", phone.getId()).append("countryCode", phone.getCountryCode()).append("operatorCode", phone.getOperatorCode()).append("number", phone.getPhoneNumber()).append("type", phone.getPhoneType()).append("comment", phone.getPhoneComment()).append("status", phone.getStatus()).value();
+    hiddenInput.setAttribute("value", value);
 }
 
 
