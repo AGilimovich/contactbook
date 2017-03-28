@@ -36,6 +36,7 @@ var inputPhoneTypeHome = document.getElementById("input-phone-type-home");
 var inputPhoneComment = document.getElementsByName("inputPhoneComment");
 //-------------------------------
 
+var hiddenPhoneTable = document.getElementById("hidden-phone-table");
 
 function Phone(id, countryCode, operatorCode, phoneNumber, phoneType, phoneComment, status) {
     this.id = id;
@@ -100,7 +101,8 @@ function Phone(id, countryCode, operatorCode, phoneNumber, phoneType, phoneComme
 
 }
 
-
+//function called when phone form submitted
+var save;
 // action - show phone creating popup window
 btnAddPhone.onclick = function () {
     //reset input values of popup form
@@ -109,8 +111,12 @@ btnAddPhone.onclick = function () {
     inputPhoneNumber[0].value = "";
     inputPhoneComment[0].value = "";
     inputPhoneTypeHome.checked = true;
-    btnSavePhone.onclick = function () {
+    // btnSavePhone.onclick = function () {
+    //     saveNew();
+    // }
+    save = function () {
         saveNew();
+        return false;
     }
     phonePopup.className += " show";
 }
@@ -119,6 +125,7 @@ btnAddPhone.onclick = function () {
 btnUndoPhone.onclick = function () {
     phonePopup.className = "popup";
 }
+
 
 //action - delete selected phones
 btnDeletePhones.onclick = function () {
@@ -193,10 +200,13 @@ btnEditPhone.onclick = function () {
             inputPhoneTypeMobile.checked = true;
         } else inputPhoneTypeHome.checked = true;
         inputPhoneComment[0].value = phoneComment[checkedIndex].innerHTML;
-        btnSavePhone.onclick = function () {
+        // btnSavePhone.onclick = function () {
+        //     editExisting(checkedIndex);
+        // }
+        save = function () {
             editExisting(checkedIndex);
+            return false;
         }
-
         phonePopup.className += " show";
     }
 }
@@ -286,7 +296,7 @@ function createHiddenInputForPhone(phone) {
     phoneHiddenInput.setAttribute("name", "phone[" + phone.getId() + "]");
     phoneHiddenInput.setAttribute("value", value);
     phones.push(phone);
-    hiddenDiv.appendChild(phoneHiddenInput);
+    hiddenPhoneTable.appendChild(phoneHiddenInput);
     return phoneHiddenInput;
 }
 
@@ -333,6 +343,7 @@ function editExisting(index) {
     if (phone.getStatus() != STATUS.NEW)
         phone.setStatus(STATUS.EDITED);
     editHiddenInput(phone);
+
 }
 
 //function for setting new value to hidden input

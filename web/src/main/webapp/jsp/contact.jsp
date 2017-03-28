@@ -189,7 +189,7 @@
         <%---------------------------------hidden inputs------------------------------------%>
         <div id="hidden-div" class="hidden">
             <%--cloning visible phone table but with input instead of labels--%>
-            <table id="hidden-table">
+            <table id="hidden-phone-table">
                 <c:forEach var="phone" items="${phones}" varStatus="counter">
                     <input type="text" name="phone[${counter.index}]"
                            value="id=${phone.id}&countryCode=${phone.countryCode}&operatorCode=${phone.operatorCode}&number=${phone.phoneNumber}&type=${phone.phoneType.name()}&comment=${phone.comment}&status=NONE">
@@ -231,7 +231,7 @@
     <%--Add phone POPUP--%>
     <div id="phone-popup" class="popup">
         <div class="popup-content">
-            <form>
+            <form onsubmit="return save();">
                 <p>Код страны в формате +XXX:</p>
                 <input type="tel" pattern="[\+]\d{3}" class="form-control" name="inputCountryCode" required>
 
@@ -248,7 +248,7 @@
                 <input type="text" class="form-control" name="inputPhoneComment">
 
                 <div class="controls-group">
-                    <button id="btn-save-phone" type="button" class="btn">Сохранить</button>
+                    <button id="btn-save-phone" type="submit" class="btn">Сохранить</button>
                     <button id="btn-undo-phone" type="button" class="btn">Отменить</button>
                 </div>
             </form>
