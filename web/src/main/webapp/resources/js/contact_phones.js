@@ -106,12 +106,12 @@ var save;
 // action - show phone creating popup window
 btnAddPhone.onclick = function () {
     //reset input values of popup form
-    inputCountryCode[0].value = "+";
+    inputCountryCode[0].value = "";
     inputOperatorCode[0].value = "";
     inputPhoneNumber[0].value = "";
     inputPhoneComment[0].value = "";
     inputPhoneTypeHome.checked = true;
-  
+
     save = function () {
         saveNew();
         return false;
@@ -191,10 +191,10 @@ btnEditPhone.onclick = function () {
     else {
 
         //fill inputs with values
-        inputCountryCode[0].value = countryCode[checkedIndex].innerHTML;
+        inputCountryCode[0].value = deletePlus(countryCode[checkedIndex].innerHTML);
         inputOperatorCode[0].value = operatorCode[checkedIndex].innerHTML;
         inputPhoneNumber[0].value = phoneNumber[checkedIndex].innerHTML;
-        if (phoneType[checkedIndex].innerHTML == "MOBILE") {
+        if (phoneType[checkedIndex].innerHTML === "Мобильный") {
             inputPhoneTypeMobile.checked = true;
         } else inputPhoneTypeHome.checked = true;
         inputPhoneComment[0].value = phoneComment[checkedIndex].innerHTML;
@@ -209,6 +209,9 @@ btnEditPhone.onclick = function () {
     }
 }
 
+function deletePlus(text) {
+    return text.replace("+", "");
+}
 
 //function for creation of a new row in phone table and filling it with data
 function createRow(table, phone) {
@@ -263,8 +266,10 @@ function createRow(table, phone) {
     cellPhoneNumber.innerHTML = phone.getPhoneNumber();
     cellPhoneNumber.setAttribute("name", "phoneNumber");
 
+    if (phone.getPhoneType() === "MOBILE") {
+        cellPhoneType.innerHTML = "Мобильный";
+    } else cellPhoneType.innerHTML =  "Домашний";
 
-    cellPhoneType.innerHTML = phone.getPhoneType();
     cellPhoneType.setAttribute("name", "phoneType");
     cellPhoneType.setAttribute("align", "center");
 
@@ -301,7 +306,7 @@ function createHiddenInputForPhone(phone) {
 //function for adding new phone to table and hidden input using data from inputs
 function saveNew() {
     //get data from inputs of popup window
-    countryCode = inputCountryCode[0].value;
+    countryCode = "+" + inputCountryCode[0].value;
     operatorCode = inputOperatorCode[0].value;
     phoneNumber = inputPhoneNumber[0].value;
     if (inputPhoneTypes[1].checked) {
@@ -328,13 +333,17 @@ function editExisting(index) {
     var cellPhoneNumber = row.cells[5];
     var cellPhoneType = row.cells[6];
     var cellPhoneComment = row.cells[7];
-    phone.setCountryCode(cellCountryCode.innerHTML = inputCountryCode[0].value);
+    phone.setCountryCode(cellCountryCode.innerHTML = "+" + inputCountryCode[0].value);
     phone.setOperatorCode(cellOperatorCode.innerHTML = inputOperatorCode[0].value);
     phone.setPhoneNumber(phoneNumber = cellPhoneNumber.innerHTML = inputPhoneNumber[0].value);
 
     if (inputPhoneTypes[1].checked) {
-        phone.setPhoneType(cellPhoneType.innerHTML = "MOBILE");
-    } else phone.setPhoneType(cellPhoneType.innerHTML = "HOME");
+        phone.setPhoneType("MOBILE");
+        cellPhoneType.innerHTML = "Мобильный";
+    } else {
+        phone.setPhoneType("HOME");
+        cellPhoneType.innerHTML = "Домашний";
+    }
     phone.setPhoneComment(cellPhoneComment.innerHTML = inputPhoneComment[0].value);
     //close popup
     phonePopup.className = "popup";

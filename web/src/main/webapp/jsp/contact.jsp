@@ -31,7 +31,7 @@
         <div class="row">
 
             <!--Photo-->
-            <div class="col-md-1">
+            <div class="col-md-2">
 
                 <div class="photo-container">
                     <img src="${pageContext.request.contextPath}/image?id=${photo.storedName}" height="100%" alt="photo"
@@ -120,7 +120,7 @@
                 </div>
             </div>
 
-            <div class="col-md-7">
+            <div class="col-md-6">
                 <h3>Список контактных телефонов</h3>
 
                 <div class="table-btns">
@@ -138,9 +138,9 @@
                             <td width="1%" align="right">(</td>
                             <td name="operatorCode" width="3%" align="center">${phone.operatorCode}</td>
                             <td width="1%" align="left">)</td>
-                            <td name="phoneNumber" width="10%">${phone.phoneNumber}</td>
-                            <td name="phoneType" align="center" width="20%">${phone.phoneType.name()}</td>
-                            <td name="phoneComment" width="54%">${phone.comment}</td>
+                            <td name="phoneNumber" width="14%">${phone.phoneNumber}</td>
+                            <td name="phoneType" align="center" width="20%">${phone.phoneType.toString()}</td>
+                            <td name="phoneComment" width="50%">${phone.comment}</td>
                         </tr>
                     </c:forEach>
 
@@ -158,7 +158,8 @@
                 <table id="attach-table" class="tbl" width="100%">
                     <c:forEach var="attachment" items="${attachments}" varStatus="counter">
                         <tr>
-                            <td width="6%"><input type="checkbox" name="attachIsSelected" value="${attachment.getAttachment().id}"></td>
+                            <td width="6%"><input type="checkbox" name="attachIsSelected"
+                                                  value="${attachment.getAttachment().id}"></td>
                             <td width="20%" name="attachName"><a name="attachLink"
                                                                  href="/file?id=${attachment.getFile().storedName}">${attachment.getAttachment().name}</a>
                             </td>
@@ -209,7 +210,7 @@
 
         <%--Add photo POPUP--%>
         <div id="photo-popup" class="popup">
-            <div class="popup-content">
+            <div class="popup-content photo-popup-content">
                 <p>Путь к картинке:</p>
                 <%--<input type="file" name="photoFile" accept="image/jpeg,image/png,image/gif" class="form-control"--%>
                 <%--onchange="loadImg()">--%>
@@ -220,8 +221,8 @@
                        onchange="loadImg()">
                 <div class="row controls-group">
 
-                    <button id="btn-save-photo" class="btn" type="button">Сохранить</button>
-                    <button id="btn-undo-photo" type="button" class="btn">Отменить</button>
+                    <button id="btn-save-photo" class="btn popup-button" type="button">Сохранить</button>
+                    <button id="btn-undo-photo" type="button" class="btn popup-button">Отменить</button>
                 </div>
             </div>
         </div>
@@ -232,24 +233,41 @@
     <div id="phone-popup" class="popup">
         <div class="popup-content">
             <form onsubmit="return save();">
-                <p>Код страны в формате +XXX:</p>
-                <input type="tel" pattern="[\+]\d{3}" class="form-control" name="inputCountryCode" required>
 
-                <p>Код оператора в формате XX:</p>
-                <input type="tel" pattern="\d{2}" class="form-control" name="inputOperatorCode" required>
+                <p class="form-text">Код страны:</p>
+                <input type="tel" pattern="\d{3}" class="form-control input-margin input-inline" name="inputCountryCode"
+                       placeholder="XXX" required>
 
-                <p>Телефонный номер в формате XXXXXXX:</p>
-                <input type="tel" pattern="\d{7}" class="form-control" name="inputPhoneNumber" required>
+                <p class="form-text">Код оператора:</p>
+                <input type="tel" pattern="\d{2}" class="form-control input-margin" name="inputOperatorCode"
+                       placeholder="XX" required>
 
-                <input type="radio" id="input-phone-type-home" name="inputPhoneType" value="home" checked> Дом.
-                <input type="radio" id="input-phone-type-mobile" name="inputPhoneType" value="mobile"> Моб.
+                <p class="form-text">Телефонный номер:</p>
+                <input type="tel" pattern="\d{7}" class="form-control input-margin" name="inputPhoneNumber"
+                       placeholder="XXXXXXX" required>
+                <p class="form-text">Тип телефона:</p>
+                <div class="row">
+                    <div class="col-md-1 col-md-offset-2">
+                        <input type="radio" id="input-phone-type-home" class="input-margin" name="inputPhoneType"
+                               value="home" checked>
+                    </div>
+                    <div class="col-md-2">Домашний</div>
 
-                <p>Комментарий:</p>
-                <input type="text" class="form-control" name="inputPhoneComment">
+                    <div class="col-md-1 col-md-offset-1">
+                        <input type="radio" id="input-phone-type-mobile" class="input-margin" name="inputPhoneType"
+                               value="mobile">
+                    </div>
+                    <div class="col-md-2">Мобильный</div>
+
+
+                </div>
+                <p class="form-text">Комментарий:</p>
+                <input type="text" class="form-control input-margin" name="inputPhoneComment">
+
 
                 <div class="controls-group">
-                    <button id="btn-save-phone" type="submit" class="btn">Сохранить</button>
-                    <button id="btn-undo-phone" type="button" class="btn">Отменить</button>
+                    <button id="btn-save-phone" type="submit" class="btn popup-button">Сохранить</button>
+                    <button id="btn-undo-phone" type="button" class="btn popup-button">Отменить</button>
                 </div>
             </form>
         </div>
@@ -257,20 +275,20 @@
 
     <%--Add attach POPUP--%>
     <div id="attach-popup" class="popup">
-        <div class="popup-content">
+        <div class="popup-content attach-popup">
             <form onsubmit="return saveAttach()">
                 <div id="file-container">
                     <%--<input type="file" name="attachFile" class="" form="main-form">--%>
                 </div>
-                <p>Имя файла:</p>
-                <input type="text" class="form-control" name="inputAttachName">
+                <p class="form-text">Имя файла:</p>
+                <input type="text" class="form-control input-margin" name="inputAttachName">
 
-                <p>Комментарий:</p>
-                <input type="text" class="form-control" name="inputAttachComment">
+                <p class="form-text">Комментарий:</p>
+                <input type="text" class="form-control input-margin" name="inputAttachComment">
 
                 <div class="row controls-group">
-                    <button id="btn-save-attach" class="btn" type="submit">Сохранить</button>
-                    <button id="btn-undo-attach" class="btn" type="button">Отменить</button>
+                    <button id="btn-save-attach" class="btn popup-button" type="submit">Сохранить</button>
+                    <button id="btn-undo-attach" class="btn popup-button" type="button">Отменить</button>
                 </div>
             </form>
         </div>

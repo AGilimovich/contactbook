@@ -70,8 +70,11 @@ window.onload = function () {
     //create array of phone object
     if (typeof phonesCheckBoxes !== "undefined" && phonesCheckBoxes.length > 0) {
         for (var i = 0; i < phonesCheckBoxes.length; i++) {
-
-            var phone = new Phone(phonesCheckBoxes[i].value, countryCode[i].innerText, operatorCode[i].innerText, phoneNumber[i].innerText, phoneType[i].innerText, phoneComment[i].innerText, STATUS.NONE);
+            var phoneTypeValue;
+            if (phoneType[i].innerText === "Мобильный") {
+                phoneTypeValue = "MOBILE";
+            } else  phoneTypeValue = "HOME";
+            var phone = new Phone(phonesCheckBoxes[i].value, countryCode[i].innerText, operatorCode[i].innerText, phoneNumber[i].innerText, phoneTypeValue, phoneComment[i].innerText, STATUS.NONE);
             var hiddenInput = document.getElementsByName("phone[" + i + "]")[0];
             phone.setHiddenInput(hiddenInput);
             phones.push(phone);

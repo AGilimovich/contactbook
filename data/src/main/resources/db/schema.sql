@@ -74,14 +74,14 @@ CREATE TABLE `address`(
 `apartment` VARCHAR(10),
 `zip_code` VARCHAR(10),
 `contact_id` BIGINT UNSIGNED NOT NULL,
-FOREIGN KEY(`contact_id`) REFERENCES `contact`(`contact_id`),
+FOREIGN KEY(`contact_id`) REFERENCES `contact`(`contact_id`) ON DELETE CASCADE,
 PRIMARY KEY(`address_id`)
 ) DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
 
 CREATE TABLE `attachment` (
     `attach_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `attach_name` VARCHAR(50),
-    `upload_date` DATETIME NOT NULL,
+    `upload_date` TIMESTAMP NOT NULL,
     `comment` VARCHAR(100),
     `file` BIGINT UNSIGNED,
     `contact_id` BIGINT UNSIGNED NOT NULL,
@@ -109,3 +109,5 @@ PRIMARY KEY (`phone_id`)
 
 CREATE USER IF NOT EXISTS gilimovich@localhost IDENTIFIED BY '1234567';
 GRANT ALL PRIVILEGES ON * . * TO gilimovich@localhost;
+
+

@@ -15,7 +15,7 @@
 }
 
 select {
-    max-width: 30%;
+    max-width: 50%;
 }
 
 .control-group {
@@ -29,4 +29,9 @@ select {
 
 .white-space-pre {
     white-space: pre-wrap;
+}
+
+.form-text {
+    margin-top: 12px;
+    margin-bottom: 3px;
 }

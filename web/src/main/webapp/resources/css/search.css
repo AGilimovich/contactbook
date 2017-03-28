@@ -10,13 +10,14 @@
 }
 
 .date {
-    margin: 10px 0;
-    max-width: 170px;
+    margin-bottom: 10px;
+    max-width: 150px;
     display: inline-block;
 }
 
 .gender {
     max-width: 175px;
+    min-width: 90px;
 }
 
 .family {

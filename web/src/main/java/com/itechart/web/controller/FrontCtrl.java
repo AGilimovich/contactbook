@@ -33,9 +33,11 @@ public class FrontCtrl extends HttpServlet {
     public void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Command command = CommandFactory.getCommand(request);
         String page = command.execute(this, request, response);
-        if (page != null)
-            dispatch(request, response, page);
-        else response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        if (!response.isCommitted()) {
+            if (page != null)
+                dispatch(request, response, page);
+            else response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

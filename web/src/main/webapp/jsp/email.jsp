@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
@@ -25,30 +25,33 @@
         <div class="row">
             <div class="col-md-6 well offset20px">
                 <div class="row buffer-top">
-                    <p>Кому:</p>
-                    <input type="text" name="emailAddresses" value="${emailListTemplate.getTemplate().render()}" class="form-control"
+                    <p class="form-text">Кому:</p>
+                    <input type="text" name="emailAddresses" value="${emailListTemplate.getTemplate().render()}"
+                           class="form-control"
                            required>
                 </div>
                 <div class="row">
-                    <p>Тема:</p>
+                    <p class="form-text">Тема:</p>
                     <input type="text" name="subject" value="${email.subject}" class="form-control">
                 </div>
                 <div class="row">
-                    <p>Шаблон:</p>
-                    <select name="template" value="${template.getValue().getDescription()}" class="form-control" onchange="showTemplate(this.selectedIndex);">
-                        <c:forEach var="template" items="${templates}" varStatus="status">
-                            <option value="${status.index}">${template.getValue().getDescription()}</option>
-                        </c:forEach>
-                    </select>
+                        <p class="form-text">Шаблон:</p>
+                        <select name="template" value="${template.getValue().getDescription()}" class="form-control"
+                                onchange="showTemplate(this.selectedIndex);">
+                            <c:forEach var="template" items="${templates}" varStatus="status">
+                                <option value="${status.index}">${template.getValue().getDescription()}</option>
+                            </c:forEach>
+                        </select>
                 </div>
                 <%--<input name="emailBody" value="${templates[0].render()}" type="text" class="hidden">--%>
 
                 <div class="row">
-                    <p>Текст:</p>
+                    <p class="form-text">Текст:</p>
                     <c:forEach var="template" items="${templates}" varStatus="status">
-                        <textarea name="email-body" id="email-body[${status.index}]" ${status.index == 0?'' : 'disabled'}
+                        <textarea name="email-body"
+                                  id="email-body[${status.index}]" ${status.index == 0?'' : 'disabled'}
 
-                             class="${status.index == 0?'text-field white-space-pre' : 'text-field white-space-pre hidden'}">${template.getValue().getTemplate().render()}</textarea>
+                                  class="${status.index == 0?'text-field white-space-pre' : 'text-field white-space-pre hidden'}">${template.getValue().getTemplate().render()}</textarea>
                     </c:forEach>
 
 

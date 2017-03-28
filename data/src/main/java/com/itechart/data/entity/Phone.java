@@ -26,16 +26,26 @@ public class Phone {
     }
 
     public enum PhoneType {
-        HOME, MOBILE;
+        HOME("Домашний"), MOBILE("Мобильный");
+        private String description;
+
+        PhoneType(String description) {
+            this.description = description;
+        }
+
+        public String toString() {
+            return description;
+        }
     }
 
-    public void update(Phone phone){
+    public void update(Phone phone) {
         this.countryCode = phone.getCountryCode();
         this.operatorCode = phone.getOperatorCode();
         this.phoneNumber = phone.getPhoneNumber();
         this.phoneType = phone.getPhoneType();
         this.comment = phone.getComment();
     }
+
     public long getId() {
         return id;
     }

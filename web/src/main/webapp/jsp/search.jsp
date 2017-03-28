@@ -53,7 +53,7 @@
                                    class="date form-control">
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1 ">
                         <div class="row">
                             <p>Пол:</p>
                         </div>
@@ -65,7 +65,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 col-md-offset-1">
                         <div class="row">
                             <p>Семейное положение:</p>
                         </div>
@@ -79,7 +79,7 @@
                         </div>
 
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3 col-md-offset-1">
                         <div class="row">
                             <p>Гражданство:</p>
                         </div>
