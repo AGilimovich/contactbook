@@ -45,6 +45,7 @@ function findIndexOfAttachment(attachment) {
 
 }
 
+
 var phones = [];
 
 
@@ -156,7 +157,6 @@ btnAddAttach.onclick = function () {
     // }
     saveAttach = function () {
         saveNewAttach(newInput);
-
         changeFormAttribute(newInput, "main-form");
         return false;
     }
@@ -253,7 +253,8 @@ function saveNewAttach(input) {
 }
 
 function editExistingAttach(attachment) {
-    attachment.setStatus(STATUS.EDITED);
+    if (attachment.getStatus() !== STATUS.NEW)
+        attachment.setStatus(STATUS.EDITED);
     var attachmentName = inputAttachName[0].value;
     var attachmentComment = inputAttachComment[0].value;
     attachment.setName(attachmentName);
@@ -344,7 +345,7 @@ function editAttachTableRow(attachment) {
 
 function editAttachMetaInput(attachment) {
     var attachMetaInput = attachment.getAttachMetaInput();
-    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append(attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
+    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append("uploadDate",attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
     attachment.getAttachMetaInput().setAttribute("value", value);
 }
 

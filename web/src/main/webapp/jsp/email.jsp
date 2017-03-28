@@ -43,7 +43,6 @@
                             </c:forEach>
                         </select>
                 </div>
-                <%--<input name="emailBody" value="${templates[0].render()}" type="text" class="hidden">--%>
 
                 <div class="row">
                     <p class="form-text">Текст:</p>
