@@ -111,9 +111,7 @@ btnAddPhone.onclick = function () {
     inputPhoneNumber[0].value = "";
     inputPhoneComment[0].value = "";
     inputPhoneTypeHome.checked = true;
-    // btnSavePhone.onclick = function () {
-    //     saveNew();
-    // }
+  
     save = function () {
         saveNew();
         return false;

@@ -138,22 +138,24 @@ function Attachment(id, name, uploadDate, comment, status) {
 }
 
 
-function geIndexOfAttachment(attachment) {
-    for (var i = 0; i < attachments.length; i++) {
-        if (attachments[i].getId() === id) return attachments[i];
-    }
-    return null;
-}
-
+//function called on submitting attachment form
+var saveAttach;
 
 btnAddAttach.onclick = function () {
     var newInput = newAttachFileInput();
+    newInput.required = true;
     //reset values of of popup form inputs
     inputAttachName[0].value = "";
     inputAttachComment[0].value = "";
     attachPopup.className += " show";
-    btnSaveAttach.onclick = function () {
+    // btnSaveAttach.onclick = function () {
+    //     saveNewAttach(newInput);
+    // }
+    saveAttach = function () {
         saveNewAttach(newInput);
+
+        changeFormAttribute(newInput, "main-form");
+        return false;
     }
     btnUndoAttach.onclick = function () {
         cancelAttachCreation(newInput);
@@ -203,8 +205,12 @@ btnEditAttach.onclick = function () {
         var fileInput = attachment.getAttachFileInput();
         if (typeof fileInput !== "undefined")
             fileInput.className = "";
-        btnSaveAttach.onclick = function () {
+        // btnSaveAttach.onclick = function () {
+        //     editExistingAttach(attachment);
+        // }
+        saveAttach = function () {
             editExistingAttach(attachment);
+            return false;
         }
         btnUndoAttach.onclick = function () {
             cancelAttachEditing(attachment);
@@ -310,9 +316,14 @@ function newAttachMetaInput(attachment) {
 function newAttachFileInput() {
     var newInput = document.createElement("input");
     newInput.setAttribute("type", "file");
-    newInput.setAttribute("form", "main-form");
+    //newInput.setAttribute("form", "main-form");
     divInputFileContainer.appendChild(newInput);
     return newInput;
+}
+
+function changeFormAttribute(input, newForm) {
+    input.setAttribute("form", newForm);
+
 }
 
 function editAttachTableRow(attachment) {

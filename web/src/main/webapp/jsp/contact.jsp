@@ -269,7 +269,7 @@
                 <input type="text" class="form-control" name="inputAttachComment">
 
                 <div class="row controls-group">
-                    <button id="btn-save-attach" class="btn" type="button">Сохранить</button>
+                    <button id="btn-save-attach" class="btn" type="submit">Сохранить</button>
                     <button id="btn-undo-attach" class="btn" type="button">Отменить</button>
                 </div>
             </form>
