@@ -8,6 +8,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 /**
  * Created by Aleksandr on 25.03.2017.
@@ -27,6 +28,13 @@ public class FileService implements AbstractFileService {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void deleteFiles(ArrayList<String> names) {
+        for (String name : names) {
+            deleteFile(name);
+        }
     }
 
     public byte[] getFile(String name) {

@@ -66,11 +66,13 @@ public class TransactionalDataService implements AbstractDataService {
         IContactDao contactDao = new JdbcContactDao(transaction);
         IAddressDao addressDao = new JdbcAddressDao(transaction);
         IFileDao fileDao = new JdbcFileDao(transaction);
-
+        AbstractFileService fileService = ServiceFactory.getServiceFactory().getFileService();
+        ArrayList<String> savedFiles = new ArrayList<>();
         try {
             //save photo
             long photoId = 0;
             photoId = fileDao.save(fullContactDTO.getPhoto());
+            savedFiles.add(fullContactDTO.getPhoto().getStoredName());
             //set photo id in contact and save it
             Contact contactToSave = fullContactDTO.getContact();
             contactToSave.setPhoto(photoId);
@@ -87,6 +89,7 @@ public class TransactionalDataService implements AbstractDataService {
             //save attachments with files
             for (FullAttachmentDTO fullAttachmentToSave : fullContactDTO.getAttachments()) {
                 File fileToSave = fullAttachmentToSave.getFile();
+                savedFiles.add(fileToSave.getStoredName());
                 long fileId = fileDao.save(fileToSave);
                 Attachment attachmentToSave = fullAttachmentToSave.getAttachment();
                 attachmentToSave.setContact(contactId);
@@ -96,6 +99,7 @@ public class TransactionalDataService implements AbstractDataService {
             transaction.commitTransaction();
         } catch (DaoException e) {
             transaction.rollbackTransaction();
+            fileService.deleteFiles(savedFiles);
         }
 
     }
@@ -111,6 +115,10 @@ public class TransactionalDataService implements AbstractDataService {
         AbstractFileService fileService = ServiceFactory.getServiceFactory().getFileService();
 
         ArrayList<String> filesToDelete = new ArrayList<>();
+        ArrayList<String> savedFiles = new ArrayList<>();
+        if (contactToUpdate.getPhoto() != null){
+            savedFiles.add(contactToUpdate.getPhoto().getStoredName());
+        }
         try {
 
             if (reconstructedContact.getPhoto() != null)
@@ -148,6 +156,7 @@ public class TransactionalDataService implements AbstractDataService {
             for (FullAttachmentDTO fullAttachmentToCreate : contactToUpdate.getNewAttachments()) {
                 File fileToSave = fullAttachmentToCreate.getFile();
                 long fileId = fileDao.save(fileToSave);
+                savedFiles.add(fileToSave.getStoredName());
                 Attachment attachmentToSave = fullAttachmentToCreate.getAttachment();
                 attachmentToSave.setContact(contactToUpdate.getContact().getContactId());
                 attachmentToSave.setFile(fileId);
@@ -159,6 +168,7 @@ public class TransactionalDataService implements AbstractDataService {
             transaction.commitTransaction();
         } catch (DaoException e) {
             transaction.rollbackTransaction();
+            fileService.deleteFiles(savedFiles);
         }
 
 
