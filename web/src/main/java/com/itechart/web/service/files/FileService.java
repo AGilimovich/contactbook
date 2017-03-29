@@ -1,9 +1,10 @@
 package com.itechart.web.service.files;
 
-import com.itechart.web.properties.PropertiesManager;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,13 +20,18 @@ public class FileService implements AbstractFileService {
     }
 
     public void deleteFile(String name) {
-        String path = FILE_PATH + "\\" + name;
-        new File(path).delete();
+        File file = new File(FILE_PATH + FileSystems.getDefault().getSeparator() + name.charAt(0) + FileSystems.getDefault().getSeparator() + name);
+        try {
+            FileUtils.forceDelete(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public byte[] getFile(String name) {
         if (!name.isEmpty()) {
-            Path path = Paths.get(FILE_PATH + "\\" + name);
+            Path path = Paths.get(FILE_PATH + FileSystems.getDefault().getSeparator() + name.charAt(0) + FileSystems.getDefault().getSeparator() + name);
             try {
                 return Files.readAllBytes(path);
 

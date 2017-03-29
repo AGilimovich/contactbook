@@ -18,6 +18,7 @@ public class File {
     }
 
     public void update(File file) {
+
         this.name = file.getName();
         // TODO: 27.03.2017 use common library for check
         if (file.getStoredName() != null)

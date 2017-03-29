@@ -2,6 +2,7 @@ package com.itechart.web.service.request.processing.builder;
 
 import com.itechart.data.entity.Contact;
 import com.itechart.web.service.request.processing.parser.DateTimeParser;
+import com.mysql.jdbc.StringUtils;
 
 import java.util.Map;
 
@@ -11,8 +12,14 @@ import java.util.Map;
 public class ContactBuilder {
     public Contact buildContact(Map<String, String> parameters) {
         Contact contact = new Contact();
-        contact.setName(parameters.get("name"));
-        contact.setSurname(parameters.get("surname"));
+        String name = parameters.get("name");
+        String surname = parameters.get("surname");
+
+        if (StringUtils.isNullOrEmpty(name) || StringUtils.isNullOrEmpty(surname))
+            // TODO: 29.03.2017 validation exception
+            return null;
+        contact.setName(name);
+        contact.setSurname(surname);
         contact.setPatronymic(parameters.get("patronymic"));
         String dateOfBirth = parameters.get("dateOfBirth");
         contact.setDateOfBirth(DateTimeParser.parseDate(dateOfBirth, "yyyy-MM-dd"));

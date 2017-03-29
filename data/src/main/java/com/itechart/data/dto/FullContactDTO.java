@@ -30,9 +30,13 @@ public class FullContactDTO {
     }
 
     public void update(FullContactDTO newFullContact) {
+        //todo check nulls and emptiness??
         this.contact.update(newFullContact.getContact());
         this.address.update(newFullContact.getAddress());
-        this.photo.update(newFullContact.getPhoto());
+        if (newFullContact.getPhoto() == null)
+            this.photo = null;
+        else
+            this.photo.update(newFullContact.getPhoto());
         // TODO: 29.03.2017 update attachment
         this.newAttachments = newFullContact.getNewAttachments();
         this.updatedAttachments = newFullContact.getUpdatedAttachments();

@@ -112,13 +112,14 @@ public class TransactionalDataService implements AbstractDataService {
 
         ArrayList<String> filesToDelete = new ArrayList<>();
         try {
-            //todo use commons library
+
             if (reconstructedContact.getPhoto() != null)
                 filesToDelete.add(contactToUpdate.getPhoto().getStoredName());
             contactToUpdate.update(reconstructedContact);
             contactDao.update(contactToUpdate.getContact());
             addressDao.update(contactToUpdate.getAddress());
-            fileDao.update(contactToUpdate.getPhoto());
+            if (contactToUpdate.getPhoto() != null)
+                fileDao.update(contactToUpdate.getPhoto());
 
 
             for (Phone phoneToCreate : contactToUpdate.getNewPhones()) {
@@ -213,7 +214,7 @@ public class TransactionalDataService implements AbstractDataService {
             address = addressDao.getAddressByContactId(contactId);
             transaction.commitTransaction();
         } catch (DaoException e) {
-           transaction.rollbackTransaction();
+            transaction.rollbackTransaction();
         }
         return address;
     }
