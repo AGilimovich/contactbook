@@ -21,11 +21,14 @@ public class FileService implements AbstractFileService {
     }
 
     public void deleteFile(String name) {
+        // TODO: 29.03.2017 check null
         File file = new File(FILE_PATH + FileSystems.getDefault().getSeparator() + name.charAt(0) + FileSystems.getDefault().getSeparator() + name);
-        try {
-            FileUtils.forceDelete(file);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (file.exists()) {
+            try {
+                FileUtils.forceDelete(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }

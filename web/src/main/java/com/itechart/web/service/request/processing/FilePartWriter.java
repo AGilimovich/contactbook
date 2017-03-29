@@ -1,6 +1,7 @@
 package com.itechart.web.service.request.processing;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.nio.file.FileSystems;
@@ -30,7 +31,7 @@ public class FilePartWriter {
         Map<String, String> storedFiles = new HashMap<>();
         for (Map.Entry<String, FileItem> part : fileParts.entrySet()) {
             //if there is file, then save it
-            if (part.getValue().getSize() != 0) {
+            if (StringUtils.isNotEmpty(part.getValue().getName())) {
                 // TODO: 29.03.2017 check null
                 //stored name = name on disk
                 storedFiles.put(part.getKey() + "_stored", writeFilePart(part.getValue()));
