@@ -12,10 +12,8 @@ public class PhotoFileBuilder {
     public File buildFile(Map<String, String> parameters) {
         String realName = parameters.get("photoFile_real");
         String storedName = parameters.get("photoFile_stored");
-        // TODO: 29.03.2017 if  was not saved return null
-        if (StringUtils.isNullOrEmpty(storedName)) {
-            return null;
-        }
+        // TODO: 29.03.2017 if  was not saved??
+
         if (StringUtils.isNullOrEmpty(realName))
             realName = storedName;
         File file = new File();

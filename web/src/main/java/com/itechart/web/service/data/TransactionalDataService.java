@@ -9,8 +9,11 @@ import com.itechart.data.entity.*;
 import com.itechart.data.exception.DaoException;
 import com.itechart.data.transaction.Transaction;
 import com.itechart.data.transaction.TransactionManager;
+import com.itechart.web.controller.FrontCtrl;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.files.AbstractFileService;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,7 +22,7 @@ import java.util.Date;
  * Created by Aleksandr on 22.03.2017.
  */
 public class TransactionalDataService implements AbstractDataService {
-
+    private static final Logger log = Logger.getLogger(TransactionalDataService.class);
     private TransactionManager tm;
 
     public TransactionalDataService(TransactionManager tm) {
@@ -54,6 +57,7 @@ public class TransactionalDataService implements AbstractDataService {
             }
             transaction.commitTransaction();
         } catch (DaoException e) {
+            log.error(e.getCause().getMessage());
             transaction.rollbackTransaction();
         }
     }
@@ -70,12 +74,16 @@ public class TransactionalDataService implements AbstractDataService {
         ArrayList<String> savedFiles = new ArrayList<>();
         try {
             //save photo
-            long photoId = 0;
-            photoId = fileDao.save(fullContactDTO.getPhoto());
-            savedFiles.add(fullContactDTO.getPhoto().getStoredName());
-            //set photo id in contact and save it
             Contact contactToSave = fullContactDTO.getContact();
+            if (StringUtils.isNotEmpty(fullContactDTO.getPhoto().getStoredName())) {
+                savedFiles.add(fullContactDTO.getPhoto().getStoredName());
+            }
+
+            long photoId = fileDao.save(fullContactDTO.getPhoto());
+
+            //set photo id in contact and save it
             contactToSave.setPhoto(photoId);
+
             long contactId = contactDao.save(contactToSave);
             //set contact id in address object and save it
             Address addressToSave = fullContactDTO.getAddress();
@@ -89,15 +97,18 @@ public class TransactionalDataService implements AbstractDataService {
             //save attachments with files
             for (FullAttachmentDTO fullAttachmentToSave : fullContactDTO.getAttachments()) {
                 File fileToSave = fullAttachmentToSave.getFile();
-                savedFiles.add(fileToSave.getStoredName());
-                long fileId = fileDao.save(fileToSave);
-                Attachment attachmentToSave = fullAttachmentToSave.getAttachment();
-                attachmentToSave.setContact(contactId);
-                attachmentToSave.setFile(fileId);
-                attachmentDao.save(attachmentToSave);
+                if (fileToSave != null) {
+                    savedFiles.add(fileToSave.getStoredName());
+                    long fileId = fileDao.save(fileToSave);
+                    Attachment attachmentToSave = fullAttachmentToSave.getAttachment();
+                    attachmentToSave.setContact(contactId);
+                    attachmentToSave.setFile(fileId);
+                    attachmentDao.save(attachmentToSave);
+                }
             }
             transaction.commitTransaction();
         } catch (DaoException e) {
+            log.error(e.getCause().getMessage());
             transaction.rollbackTransaction();
             fileService.deleteFiles(savedFiles);
         }
@@ -116,18 +127,22 @@ public class TransactionalDataService implements AbstractDataService {
 
         ArrayList<String> filesToDelete = new ArrayList<>();
         ArrayList<String> savedFiles = new ArrayList<>();
-        if (contactToUpdate.getPhoto() != null){
-            savedFiles.add(contactToUpdate.getPhoto().getStoredName());
-        }
+//        if (StringUtils.isNotEmpty(contactToUpdate.getPhoto().getStoredName())) {
+//            savedFiles.add(contactToUpdate.getPhoto().getStoredName());
+//        }
         try {
-
-            if (reconstructedContact.getPhoto() != null)
+            //if old file exists and new file was stored -> mark old file for delition
+            if (StringUtils.isNotEmpty(contactToUpdate.getPhoto().getStoredName())&& StringUtils.isNotEmpty(reconstructedContact.getPhoto().getStoredName()))
                 filesToDelete.add(contactToUpdate.getPhoto().getStoredName());
+
             contactToUpdate.update(reconstructedContact);
+            if (StringUtils.isNotEmpty(reconstructedContact.getPhoto().getStoredName())) {
+                fileDao.update(contactToUpdate.getPhoto());
+            }
+
             contactDao.update(contactToUpdate.getContact());
             addressDao.update(contactToUpdate.getAddress());
-            if (contactToUpdate.getPhoto() != null)
-                fileDao.update(contactToUpdate.getPhoto());
+
 
 
             for (Phone phoneToCreate : contactToUpdate.getNewPhones()) {
@@ -162,11 +177,12 @@ public class TransactionalDataService implements AbstractDataService {
                 attachmentToSave.setFile(fileId);
                 attachmentDao.save(attachmentToSave);
             }
-            for (String name : filesToDelete) {
-                fileService.deleteFile(name);
-            }
+
+            fileService.deleteFiles(filesToDelete);
+
             transaction.commitTransaction();
         } catch (DaoException e) {
+            log.error(e.getCause().getMessage());
             transaction.rollbackTransaction();
             fileService.deleteFiles(savedFiles);
         }
@@ -184,6 +200,7 @@ public class TransactionalDataService implements AbstractDataService {
             transaction.commitTransaction();
 
         } catch (DaoException e) {
+            log.error(e.getCause().getMessage());
             transaction.rollbackTransaction();
         }
         return contacts;
@@ -210,6 +227,7 @@ public class TransactionalDataService implements AbstractDataService {
             contact = contactDao.getContactById(contactId);
             transaction.commitTransaction();
         } catch (DaoException e) {
+            log.error(e.getCause().getMessage());
             transaction.rollbackTransaction();
         }
         return contact;
@@ -224,6 +242,7 @@ public class TransactionalDataService implements AbstractDataService {
             address = addressDao.getAddressByContactId(contactId);
             transaction.commitTransaction();
         } catch (DaoException e) {
+            log.error(e.getCause().getMessage());
             transaction.rollbackTransaction();
         }
         return address;
@@ -237,6 +256,7 @@ public class TransactionalDataService implements AbstractDataService {
             photo = fileDao.getFileById(photoId);
             transaction.commitTransaction();
         } catch (DaoException e) {
+            log.error(e.getCause().getMessage());
             transaction.rollbackTransaction();
         }
         return photo;
@@ -261,6 +281,7 @@ public class TransactionalDataService implements AbstractDataService {
             }
             transaction.commitTransaction();
         } catch (DaoException e) {
+            log.error(e.getCause().getMessage());
             transaction.rollbackTransaction();
         }
 
@@ -296,6 +317,7 @@ public class TransactionalDataService implements AbstractDataService {
             transaction.commitTransaction();
 
         } catch (DaoException e) {
+            log.error(e.getCause().getMessage());
             transaction.rollbackTransaction();
         }
 
