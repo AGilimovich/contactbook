@@ -1,6 +1,7 @@
 package com.itechart.web.service;
 
 import com.itechart.data.transaction.TransactionManager;
+import com.itechart.web.properties.PropertiesManager;
 import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.data.TransactionalDataService;
 import com.itechart.web.service.email.AbstractEmailingService;
@@ -17,12 +18,16 @@ import com.itechart.web.service.template.TemplatesProvidingService;
 import com.itechart.web.service.validation.AbstractValidationService;
 import com.itechart.web.service.validation.ValidationService;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.util.ResourceBundle;
 
 /**
- * Created by Aleksandr on 24.03.2017.
+ * Singleton class.
  */
-public class ServiceFactory implements AbstractServiceFactory{
+public class ServiceFactory {
 
 
     private static ServiceFactory instance;
@@ -33,17 +38,26 @@ public class ServiceFactory implements AbstractServiceFactory{
     private String password;
     private String emailFrom;
     private TransactionManager transactionManager;
-
+    private String FILE_PATH = PropertiesManager.FILE_PATH();
 
     private ServiceFactory() {
-
         ResourceBundle bundle = ResourceBundle.getBundle("application");
         hostName = bundle.getString("HOST_NAME");
         SMTPPort = Integer.valueOf(bundle.getString("PORT"));
         userName = bundle.getString("USER_NAME");
         password = bundle.getString("PASSWORD");
         emailFrom = bundle.getString("EMAIL");
-        transactionManager = new TransactionManager();
+        DataSource dataSource = null;
+        try {
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            dataSource = (DataSource) envContext.lookup("jdbc/MySQLDatasource");
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
+        transactionManager = new TransactionManager(dataSource);
+
+
     }
 
     /**
@@ -88,7 +102,7 @@ public class ServiceFactory implements AbstractServiceFactory{
     }
 
     public AbstractFileService getFileService() {
-        return new FileService();
+        return new FileService(FILE_PATH);
     }
 
 

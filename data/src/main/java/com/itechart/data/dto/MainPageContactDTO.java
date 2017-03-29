@@ -36,7 +36,9 @@ public class MainPageContactDTO {
         this.house = a.getHouse();
         this.apartment = a.getApartment();
         this.placeOfWork = c.getPlaceOfWork();
-        this.photo = photo.getStoredName();
+        // TODO: 29.03.2017 null check
+        if (photo != null)
+            this.photo = photo.getStoredName();
     }
 
     public long getContactId() {

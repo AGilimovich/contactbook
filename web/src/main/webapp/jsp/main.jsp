@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
@@ -42,10 +42,18 @@
                     class="btn btn-primary btn-add">
                 Добавить <span
                     class="glyphicon glyphicon-plus"></span></button>
-            <button type="submit" formaction="${pageContext.request.contextPath}/delete" formmethod="post"
-                    class="btn btn-danger btn-delete">
-                Удалить
+
+            <div class="tooltip-error">
+                <button type="button" id="btn-delete-contacts" class="btn btn-danger btn-delete">
+                    Удалить
+                </button>
+                <span class="tooltiptext" id="delete-contact-tooltip">Выберите как минимум один элемент</span>
+            </div>
+            <button type="submit" id="btn-submit-delete"
+                    formaction="${pageContext.request.contextPath}/delete" formmethod="post"
+                    class="hidden">
             </button>
+
 
         </div>
 
@@ -65,7 +73,9 @@
 
                         <td width="150px">
                             <div class="photo-container">
-                                <img src="${pageContext.request.contextPath}/image?id=${contact.photo}" onerror="this.onerror=null;this.src='imagefound.gif';" alt="" height="100%" class="photo">
+                                <img src="${pageContext.request.contextPath}/image?id=${contact.photo}"
+                                     onerror="this.onerror=null;this.src='imagefound.gif';" alt="" height="100%"
+                                     class="photo">
                             </div>
                         </td>
                         <td>

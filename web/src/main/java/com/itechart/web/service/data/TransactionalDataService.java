@@ -106,13 +106,12 @@ public class TransactionalDataService implements AbstractDataService {
         ArrayList<String> filesToDelete = new ArrayList<>();
         //todo use commons library
         if (reconstructedContact.getPhoto() != null)
-
-//        if (reconstructedContact.getPhoto() != null && !contactToUpdate.getPhoto().getStoredName().equals(reconstructedContact.getPhoto().getStoredName()))
             filesToDelete.add(contactToUpdate.getPhoto().getStoredName());
         contactToUpdate.update(reconstructedContact);
         contactDao.update(contactToUpdate.getContact());
         addressDao.update(contactToUpdate.getAddress());
         fileDao.update(contactToUpdate.getPhoto());
+
 
         for (Phone phoneToCreate : contactToUpdate.getNewPhones()) {
             phoneToCreate.setContact(contactToUpdate.getContact().getContactId());
@@ -127,9 +126,10 @@ public class TransactionalDataService implements AbstractDataService {
             phoneDao.delete(phoneToDelete.getId());
         }
 
-        // TODO: 27.03.2017 phones to update and delete
 
         for (FullAttachmentDTO fullAttachmentToUpdate : contactToUpdate.getUpdatedAttachments()) {
+            //todo delete old files and update db
+
             attachmentDao.update(fullAttachmentToUpdate.getAttachment());
         }
         for (FullAttachmentDTO fullAttachmentToDelete : contactToUpdate.getDeletedAttachments()) {

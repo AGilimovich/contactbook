@@ -10,10 +10,33 @@ var pageItemNext = document.getElementsByClassName("page-item-next");
 var pageItemPrev = document.getElementsByClassName("page-item-prev");
 var selectAllCheckbox = document.getElementById("selectAll");
 var checkboxes = document.getElementsByName("isSelected");
+var btnDelete = document.getElementById("btn-delete-contacts");
+var btnSubmitDelete = document.getElementById("btn-submit-delete");
+//tooltip
+var deleteContactTooltip = document.getElementById("delete-contact-tooltip");
 
 var currentPage = 1;
 var step = 10;
 var lastPage = Math.ceil(rows.length / 10);
+
+
+btnDelete.onclick = function () {
+    var count = 0;
+    for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+            count++
+        }
+    }
+    if (count === 0) {
+        deleteContactTooltip.className = "tooltiptext show-tooltip";
+        setTimeout(function () {
+            deleteContactTooltip.className = "tooltiptext";
+        }, 2000);
+    } else {
+        btnSubmitDelete.click();
+    }
+}
+
 
 function selectAllContacts() {
     if (selectAllCheckbox.checked == true) {
