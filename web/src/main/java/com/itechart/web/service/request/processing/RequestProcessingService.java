@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class RequestProcessingService implements AbstractRequestProcessingService {
 
-    public FullContactDTO processContactRequest(HttpServletRequest request) {
+    public FullContactDTO processMultipartContactRequest(HttpServletRequest request) throws FileSizeException {
         MultipartRequestHandler handler = new MultipartRequestHandler();
         handler.handle(request);
         //get map of form field names and corresponding values

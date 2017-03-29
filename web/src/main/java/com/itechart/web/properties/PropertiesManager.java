@@ -11,7 +11,18 @@ public class PropertiesManager {
     private static final String FILE_PATH = applicationProperties.getString("FILE_PATH");
     private static final String scheduledHours = applicationProperties.getString("SCHEDULED_HOURS");
     private static final String scheduledMinutes = applicationProperties.getString("SCHEDULED_MINUTES");
+    private static final long MAX_FILE_SIZE = Long.valueOf(applicationProperties.getString("MAX_FILE_SIZE"))*1024*1024;
+    private static final long MAX_REQUEST_SIZE = Long.valueOf(applicationProperties.getString("MAX_REQUEST_SIZE"))*1024*1024;
 
+
+
+    public static long MAX_FILE_SIZE() {
+        return MAX_FILE_SIZE;
+    }
+
+    public static long MAX_REQUEST_SIZE() {
+        return MAX_REQUEST_SIZE;
+    }
 
     public static String FILE_PATH() {
         return FILE_PATH;

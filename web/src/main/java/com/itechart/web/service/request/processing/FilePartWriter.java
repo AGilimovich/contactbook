@@ -15,6 +15,8 @@ import java.util.UUID;
 public class FilePartWriter {
     private final String path;
 
+
+
     public FilePartWriter(String path) {
         this.path = path;
     }
@@ -53,7 +55,7 @@ public class FilePartWriter {
 
             String storedFileName = UUID.randomUUID().toString();
             //create folder with name first character of generated UUID
-            File folder = new File(path +FileSystems.getDefault().getSeparator()+ storedFileName.charAt(0));
+            File folder = new File(path + FileSystems.getDefault().getSeparator() + storedFileName.charAt(0));
             if (!folder.exists()) {
                 try {
                     folder.mkdir();

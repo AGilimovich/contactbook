@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
  * Created by Aleksandr on 27.03.2017.
  */
 public interface AbstractRequestProcessingService {
-    FullContactDTO processContactRequest(HttpServletRequest request);
+    FullContactDTO processMultipartContactRequest(HttpServletRequest request) throws FileSizeException;
 
     String[] processDeleteContactRequest(HttpServletRequest request);
 

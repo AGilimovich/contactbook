@@ -1,6 +1,8 @@
 package com.itechart.web.service.request.processing;
 
+import com.itechart.web.properties.PropertiesManager;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -19,13 +21,17 @@ public class MultipartRequestHandler {
     private Map<String, String> formFields;
     private Map<String, FileItem> fileParts;
 
+
     /**
      * Creates maps of form fields names and their values, file items and their field names.
+     *
      * @param request from client.
      */
-    public void handle(HttpServletRequest request) {
+    public void handle(HttpServletRequest request) throws FileSizeException {
         DiskFileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
+        upload.setFileSizeMax(PropertiesManager.MAX_FILE_SIZE());
+        upload.setSizeMax(PropertiesManager.MAX_REQUEST_SIZE());
         formFields = new HashMap<>();
         fileParts = new HashMap<>();
         try {
@@ -41,7 +47,10 @@ public class MultipartRequestHandler {
                     fileParts.put(item.getFieldName(), item);
                 }
             }
-        } catch (FileUploadException e) {
+        } catch (FileUploadBase.SizeLimitExceededException e) {
+            throw new FileSizeException("File size exceeds max permitted value");
+        } catch
+                (FileUploadException e) {
             e.printStackTrace();
         }
 
