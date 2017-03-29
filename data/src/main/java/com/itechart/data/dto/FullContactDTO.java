@@ -33,6 +33,7 @@ public class FullContactDTO {
         this.contact.update(newFullContact.getContact());
         this.address.update(newFullContact.getAddress());
         this.photo.update(newFullContact.getPhoto());
+        // TODO: 29.03.2017 update attachment
         this.newAttachments = newFullContact.getNewAttachments();
         this.updatedAttachments = newFullContact.getUpdatedAttachments();
         this.deletedAttachments = newFullContact.getDeletedAttachments();

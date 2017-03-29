@@ -3,6 +3,7 @@ package com.itechart.data.dao;
 import com.itechart.data.db.DBResourceManager;
 import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Contact;
+import com.itechart.data.exception.DaoException;
 import com.itechart.data.transaction.Transaction;
 
 import javax.sql.DataSource;
@@ -48,7 +49,7 @@ public class JdbcContactDao implements IContactDao {
         this.transaction = transaction;
     }
 
-    public long save(Contact contact) {
+    public long save(Contact contact) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -82,7 +83,8 @@ public class JdbcContactDao implements IContactDao {
 
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during saving contact in the database", e);
+
         } finally {
             DBResourceManager.closeResources(cn, st, rs);
         }
@@ -91,7 +93,7 @@ public class JdbcContactDao implements IContactDao {
 
     }
 
-    public void delete(long id) {
+    public void delete(long id) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -100,14 +102,14 @@ public class JdbcContactDao implements IContactDao {
             st.setLong(1, id);
             st.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during deleting contact from the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, null);
 
         }
     }
 
-    public void update(Contact contact) {
+    public void update(Contact contact) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -139,7 +141,7 @@ public class JdbcContactDao implements IContactDao {
             st.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during updating contact in the database", e);
         } finally {
 
             DBResourceManager.closeResources(cn, st, null);
@@ -148,7 +150,7 @@ public class JdbcContactDao implements IContactDao {
     }
 
     @Override
-    public ArrayList<Contact> getAll() {
+    public ArrayList<Contact> getAll() throws DaoException {
         ArrayList<Contact> contacts = new ArrayList<>();
         Connection cn = null;
         Statement st = null;
@@ -185,7 +187,7 @@ public class JdbcContactDao implements IContactDao {
                 contacts.add(contact);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during retrieving contacts from the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, rs);
 
@@ -194,7 +196,7 @@ public class JdbcContactDao implements IContactDao {
     }
 
     @Override
-    public Contact getContactById(long id) {
+    public Contact getContactById(long id) throws DaoException {
         Contact contact = null;
         Connection cn = null;
         PreparedStatement st = null;
@@ -228,7 +230,7 @@ public class JdbcContactDao implements IContactDao {
             contact.setPlaceOfWork(placeOfWork);
             contact.setPhoto(photo);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during retrieving contact from the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, rs);
         }
@@ -237,7 +239,7 @@ public class JdbcContactDao implements IContactDao {
     }
 
     @Override
-    public ArrayList<Contact> findContactsByFields(SearchDTO dto) {
+    public ArrayList<Contact> findContactsByFields(SearchDTO dto) throws DaoException {
 
         ArrayList<Contact> contacts = new ArrayList<>();
         Connection cn = null;
@@ -337,7 +339,7 @@ public class JdbcContactDao implements IContactDao {
                 contacts.add(contact);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during retrieving contacts from the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, rs);
         }
@@ -346,7 +348,7 @@ public class JdbcContactDao implements IContactDao {
     }
 
     @Override
-    public ArrayList<Contact> getByBirthDate(Date date) {
+    public ArrayList<Contact> getByBirthDate(Date date) throws DaoException {
         ArrayList<Contact> contacts = new ArrayList<>();
         Connection cn = null;
         PreparedStatement st = null;
@@ -365,7 +367,7 @@ public class JdbcContactDao implements IContactDao {
                 contacts.add(contact);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during retrieving contact from the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, rs);
         }

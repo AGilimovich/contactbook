@@ -1,6 +1,7 @@
 package com.itechart.data.dao;
 
 import com.itechart.data.entity.Phone;
+import com.itechart.data.exception.DaoException;
 
 import java.util.ArrayList;
 
@@ -9,16 +10,16 @@ import java.util.ArrayList;
  */
 public interface IPhoneDao {
 
-    ArrayList<Phone> getAllForContact(long id);
+    ArrayList<Phone> getAllForContact(long id) throws DaoException;
 
-    Phone getPhoneById(long id);
+    Phone getPhoneById(long id) throws DaoException;
 
-    long save(Phone phone);
+    long save(Phone phone) throws DaoException;
 
-    void delete(long id);
+    void delete(long id) throws DaoException;
 
-    void update(Phone phone);
+    void update(Phone phone) throws DaoException;
 
-    void deleteForContact(long contactId);
+    void deleteForContact(long contactId) throws DaoException;
 
 }

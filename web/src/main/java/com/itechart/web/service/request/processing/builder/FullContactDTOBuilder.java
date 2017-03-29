@@ -103,6 +103,7 @@ public class FullContactDTOBuilder {
                 Map<String, String> parameters = parser.parse(formParameter.getValue());
                 String fileFieldNumber = matcher.group(1);
                 //add file name to parameters
+                //todo if attach new then build file, else no file were stored
                 File file = fileBuilder.buildFile(storedFiles, fileFieldNumber);
                 Attachment attachment = attachmentBuilder.buildAttachment(parameters);
                 FullAttachmentDTO fullAttachmentDTO = new FullAttachmentDTO(attachment, file);

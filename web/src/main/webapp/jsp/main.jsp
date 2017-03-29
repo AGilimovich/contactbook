@@ -61,7 +61,8 @@
             <table class="table">
                 <tr>
                     <td class="table-checkbox" width="5%" align="middle">
-                        <input type="checkbox" id="selectAll" onchange="selectAllContacts()">
+                        <input type="checkbox" class="${contacts.size()>0 ? '':'hidden'}" id="selectAll"
+                               onchange="selectAllContacts()">
                     </td>
                 </tr>
                 <c:forEach var="contact" items="${contacts}" varStatus="status">

@@ -2,6 +2,7 @@ package com.itechart.data.dao;
 
 import com.itechart.data.db.DBResourceManager;
 import com.itechart.data.entity.Attachment;
+import com.itechart.data.exception.DaoException;
 import com.itechart.data.transaction.Transaction;
 
 import javax.sql.DataSource;
@@ -28,7 +29,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
 
 
     @Override
-    public ArrayList<Attachment> getAllForContact(long id) {
+    public ArrayList<Attachment> getAllForContact(long id) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -50,7 +51,8 @@ public class JdbcAttachmentDao implements IAttachmentDao {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during retrieving attachments from the database", e);
+
         } finally {
             DBResourceManager.closeResources(cn, st, rs);
         }
@@ -59,7 +61,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
     }
 
     @Override
-    public Attachment getAttachmentById(long id) {
+    public Attachment getAttachmentById(long id) throws DaoException {
 
         Connection cn = null;
         PreparedStatement st = null;
@@ -79,7 +81,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
             attachment = new Attachment(attach_id, attach_name, uploadDate, comment, file, contact);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during retrieving attachment from the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, rs);
         }
@@ -88,7 +90,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
     }
 
     @Override
-    public long save(Attachment attachment) {
+    public long save(Attachment attachment) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -109,7 +111,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during saving attachment in the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, rs);
         }
@@ -118,7 +120,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
 
 
     @Override
-    public void delete(long id) {
+    public void delete(long id) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -127,7 +129,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
             st.setLong(1, id);
             st.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during deleting attachment from the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, null);
         }
@@ -135,7 +137,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
     }
 
     @Override
-    public void update(Attachment attachment) {
+    public void update(Attachment attachment) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -147,14 +149,14 @@ public class JdbcAttachmentDao implements IAttachmentDao {
             st.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during updating attachment in the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, null);
         }
     }
 
     @Override
-    public void deleteForUser(long userId) {
+    public void deleteForUser(long userId) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -163,7 +165,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
             st.setLong(1, userId);
             st.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during deleting attachments from the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, null);
         }

@@ -1,6 +1,7 @@
 package com.itechart.data.dao;
 
 import com.itechart.data.entity.Attachment;
+import com.itechart.data.exception.DaoException;
 
 import java.util.ArrayList;
 
@@ -9,16 +10,16 @@ import java.util.ArrayList;
  */
 public interface IAttachmentDao {
 
-    ArrayList<Attachment> getAllForContact(long id);
+    ArrayList<Attachment> getAllForContact(long id) throws DaoException;
 
-    Attachment getAttachmentById(long id);
+    Attachment getAttachmentById(long id) throws DaoException;
 
-    long save(Attachment attachment);
+    long save(Attachment attachment) throws DaoException;
 
-    void delete(long id);
+    void delete(long id) throws DaoException;
 
-    void update(Attachment attachment);
+    void update(Attachment attachment) throws DaoException;
 
-    void deleteForUser(long userId);
+    void deleteForUser(long userId) throws DaoException;
 
 }

@@ -2,6 +2,7 @@ package com.itechart.data.dao;
 
 import com.itechart.data.db.DBResourceManager;
 import com.itechart.data.entity.Phone;
+import com.itechart.data.exception.DaoException;
 import com.itechart.data.transaction.Transaction;
 
 import java.sql.*;
@@ -34,7 +35,7 @@ public class JdbcPhoneDao implements IPhoneDao {
 
 
     @Override
-    public ArrayList<Phone> getAllForContact(long id) {
+    public ArrayList<Phone> getAllForContact(long id) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -56,7 +57,8 @@ public class JdbcPhoneDao implements IPhoneDao {
                 phones.add(phone);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during retrieving phones from the database", e);
+
         } finally {
             DBResourceManager.closeResources(cn, st, rs);
         }
@@ -64,7 +66,7 @@ public class JdbcPhoneDao implements IPhoneDao {
     }
 
     @Override
-    public Phone getPhoneById(long id) {
+    public Phone getPhoneById(long id) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -85,7 +87,7 @@ public class JdbcPhoneDao implements IPhoneDao {
             phone = new Phone(phone_id, countryCode, operatorCode, phoneNumber, phoneType, phone_comment, contact);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during retrieving phone from the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, rs);
         }
@@ -95,7 +97,7 @@ public class JdbcPhoneDao implements IPhoneDao {
 
 
     @Override
-    public long save(Phone phone) {
+    public long save(Phone phone) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -115,7 +117,7 @@ public class JdbcPhoneDao implements IPhoneDao {
 
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during saving phone in the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, rs);
         }
@@ -125,7 +127,7 @@ public class JdbcPhoneDao implements IPhoneDao {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(long id) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -134,14 +136,14 @@ public class JdbcPhoneDao implements IPhoneDao {
             st.setLong(1, id);
             st.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during deleting phone from the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, null);
         }
     }
 
     @Override
-    public void update(Phone phone) {
+    public void update(Phone phone) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -156,7 +158,7 @@ public class JdbcPhoneDao implements IPhoneDao {
             st.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during updating phone in the database", e);
         } finally {
 
             DBResourceManager.closeResources(cn, st, null);
@@ -165,7 +167,7 @@ public class JdbcPhoneDao implements IPhoneDao {
     }
 
     @Override
-    public void deleteForContact(long contactId) {
+    public void deleteForContact(long contactId) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -174,7 +176,7 @@ public class JdbcPhoneDao implements IPhoneDao {
             st.setLong(1, contactId);
             st.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during deleting phones from the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, null);
         }

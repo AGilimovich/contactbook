@@ -9,11 +9,12 @@ import java.util.Map;
  */
 
 public class AttachFileBuilder {
-    public File buildFile(Map<String, String> parameters, String id) {
+    public File buildFile(Map<String, String> parameters, String fieldId) {
 
-        String realName = parameters.get("attachFile[" + id + "]_real");
-        String storedName = parameters.get("attachFile[" + id + "]_stored");
+        String realName = parameters.get("attachFile[" + fieldId + "]_real");
+        String storedName = parameters.get("attachFile[" + fieldId + "]_stored");
 
+        // TODO: 29.03.2017
         if (realName == null)
             realName = storedName;
         File file = new File();

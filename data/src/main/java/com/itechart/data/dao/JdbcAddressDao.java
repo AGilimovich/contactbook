@@ -2,6 +2,7 @@ package com.itechart.data.dao;
 
 import com.itechart.data.db.DBResourceManager;
 import com.itechart.data.entity.Address;
+import com.itechart.data.exception.DaoException;
 import com.itechart.data.transaction.Transaction;
 import com.mysql.jdbc.Statement;
 
@@ -27,7 +28,7 @@ public class JdbcAddressDao implements IAddressDao {
     }
 
     @Override
-    public long save(Address address) {
+    public long save(Address address) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -46,10 +47,8 @@ public class JdbcAddressDao implements IAddressDao {
             rs = st.getGeneratedKeys();
             if (rs.next())
                 id = rs.getLong(1);
-
-
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during saving address in database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, rs);
         }
@@ -57,7 +56,7 @@ public class JdbcAddressDao implements IAddressDao {
     }
 
     @Override
-    public void deleteForContact(long contactId) {
+    public void deleteForContact(long contactId) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -66,14 +65,14 @@ public class JdbcAddressDao implements IAddressDao {
             st.setLong(1, contactId);
             st.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during deleting address from the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, null);
         }
     }
 
     @Override
-    public void update(Address address) {
+    public void update(Address address) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -90,14 +89,14 @@ public class JdbcAddressDao implements IAddressDao {
             st.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during updating address in the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, rs);
         }
     }
 
     @Override
-    public Address getAddressByContactId(long contactId) {
+    public Address getAddressByContactId(long contactId) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -119,7 +118,7 @@ public class JdbcAddressDao implements IAddressDao {
             long extractedContactId = rs.getLong("contact_id");
             a = new Address(addressId, country, city, street, house, apartment, zipCode, extractedContactId);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during retrieving address from the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, rs);
         }

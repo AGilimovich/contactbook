@@ -2,6 +2,7 @@ package com.itechart.data.dao;
 
 import com.itechart.data.db.DBResourceManager;
 import com.itechart.data.entity.File;
+import com.itechart.data.exception.DaoException;
 import com.itechart.data.transaction.Transaction;
 
 import java.sql.*;
@@ -23,13 +24,14 @@ public class JdbcFileDao implements IFileDao {
 
     private final String DELETE_FILE_QUERY = "DELETE FROM file WHERE file_id = ?";
 
+    private final String SELECT_BY_ATTACH_ID_QUERY = "SELECT * FROM file INNER JOIN attachment AS a ON a.file = file.file_id  WHERE a.attach_id = ?";
 
     public JdbcFileDao(Transaction transaction) {
         this.transaction = transaction;
     }
 
     @Override
-    public File getFileById(long id) {
+    public File getFileById(long id) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -46,7 +48,7 @@ public class JdbcFileDao implements IFileDao {
                 file = new File(foundId, fileName, storedName);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during retrieving file from the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, rs);
         }
@@ -55,7 +57,7 @@ public class JdbcFileDao implements IFileDao {
     }
 
     @Override
-    public ArrayList<File> getFilesByName(String name) {
+    public ArrayList<File> getFilesByName(String name) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -73,7 +75,7 @@ public class JdbcFileDao implements IFileDao {
                 files.add(file);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during retrieving file from the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, rs);
         }
@@ -82,7 +84,7 @@ public class JdbcFileDao implements IFileDao {
     }
 
     @Override
-    public void update(File file) {
+    public void update(File file) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -93,14 +95,14 @@ public class JdbcFileDao implements IFileDao {
             st.setLong(3, file.getId());
             st.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during updating file in the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, null);
         }
     }
 
     @Override
-    public long save(File file) {
+    public long save(File file) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -116,7 +118,7 @@ public class JdbcFileDao implements IFileDao {
                 id = rs.getLong(1);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during saving file in the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, rs);
         }
@@ -125,7 +127,7 @@ public class JdbcFileDao implements IFileDao {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(long id) throws DaoException {
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -134,9 +136,35 @@ public class JdbcFileDao implements IFileDao {
             st.setLong(1, id);
             st.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Exception during deleting file from the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, null);
         }
+    }
+
+    @Override
+    public File getFileByAttachmentId(long attachId) throws DaoException {
+        Connection cn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        File file = null;
+        try {
+            cn = transaction.getConnection();
+            st = cn.prepareStatement(SELECT_BY_ATTACH_ID_QUERY);
+            st.setLong(1, attachId);
+            rs = st.executeQuery();
+            while (rs.next()) {
+                long foundId = rs.getLong("file_id");
+                String fileName = rs.getString("name");
+                String storedName = rs.getString("stored_name");
+                file = new File(foundId, fileName, storedName);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Exception during retrieving file from the database", e);
+        } finally {
+            DBResourceManager.closeResources(cn, st, rs);
+        }
+
+        return file;
     }
 }

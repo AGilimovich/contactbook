@@ -2,6 +2,7 @@ package com.itechart.data.dao;
 
 import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Contact;
+import com.itechart.data.exception.DaoException;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,19 +12,19 @@ import java.util.Date;
  */
 public interface IContactDao {
 
-    long save(Contact contact);
+    long save(Contact contact) throws DaoException;
 
-    void delete(long id);
+    void delete(long id) throws DaoException;
 
-    void update(Contact contact);
+    void update(Contact contact) throws DaoException;
 
-    ArrayList<Contact> getAll();
+    ArrayList<Contact> getAll() throws DaoException;
 
-    Contact getContactById(long id);
+    Contact getContactById(long id) throws DaoException;
 
-    ArrayList<Contact> findContactsByFields(SearchDTO dto);
+    ArrayList<Contact> findContactsByFields(SearchDTO dto) throws DaoException;
 
-    ArrayList<Contact> getByBirthDate(Date date);
+    ArrayList<Contact> getByBirthDate(Date date) throws DaoException;
 
 
 }
