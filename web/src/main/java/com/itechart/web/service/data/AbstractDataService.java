@@ -31,9 +31,12 @@ public interface AbstractDataService {
 
     File getPhotoById(long photoId);
 
-    ArrayList<MainPageContactDTO> getMainPageContactDTO();
+    ArrayList<MainPageContactDTO> getMainPageContactDTO(int page, int count);
 
     FullContactDTO getFullContactById(long contactId);
+
+    int getContactsCount();
+
 
 
 }

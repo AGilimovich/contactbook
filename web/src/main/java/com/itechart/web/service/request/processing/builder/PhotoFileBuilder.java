@@ -1,7 +1,7 @@
 package com.itechart.web.service.request.processing.builder;
 
 import com.itechart.data.entity.File;
-import com.mysql.jdbc.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -14,7 +14,7 @@ public class PhotoFileBuilder {
         String storedName = parameters.get("photoFile_stored");
         // TODO: 29.03.2017 if  was not saved??
 
-        if (StringUtils.isNullOrEmpty(realName))
+        if (StringUtils.isEmpty(realName))
             realName = storedName;
         File file = new File();
         file.setName(realName);

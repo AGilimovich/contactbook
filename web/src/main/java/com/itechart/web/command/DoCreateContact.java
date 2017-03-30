@@ -34,7 +34,8 @@ public class DoCreateContact implements Command {
         }
         AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
         dataService.saveNewContact(fullContactDTO);
-        ArrayList<MainPageContactDTO> contacts = dataService.getMainPageContactDTO();
+        //todo
+        ArrayList<MainPageContactDTO> contacts = dataService.getMainPageContactDTO(0,10);
         request.setAttribute("contacts", contacts);
         request.getSession().removeAttribute("action");
         return "/jsp/main.jsp";

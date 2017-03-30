@@ -82,7 +82,7 @@ CREATE TABLE `attachment` (
     `attach_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `attach_name` VARCHAR(50),
     `upload_date` TIMESTAMP NOT NULL,
-    `comment` VARCHAR(100),
+    `comment` TEXT(500),
     `file` BIGINT UNSIGNED,
     `contact_id` BIGINT UNSIGNED NOT NULL,
     FOREIGN KEY (`contact_id`)
@@ -97,7 +97,7 @@ CREATE TABLE `phone`(
 `operator_code` VARCHAR(10) NOT NULL,
 `phone_number` VARCHAR(15) NOT NULL,
 `phone_type` INT UNSIGNED NOT NULL,
-`comment` VARCHAR(100),
+`comment` TEXT(500),
 `contact_id` BIGINT UNSIGNED NOT NULL,
 
 
@@ -107,7 +107,14 @@ PRIMARY KEY (`phone_id`)
 ) DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
 
 
+
 CREATE USER IF NOT EXISTS gilimovich@localhost IDENTIFIED BY '1234567';
 GRANT ALL PRIVILEGES ON * . * TO gilimovich@localhost;
 
-
+USE aleksandr_gilimovich;
+INSERT INTO gender(gender_value) VALUES ("male");
+INSERT INTO gender(gender_value) VALUES ("female");
+INSERT INTO family_status(family_status_value) VALUES("married");
+INSERT INTO family_status(family_status_value) VALUES("single");
+INSERT INTO phone_type(phone_type_value) VALUES("home");
+INSERT INTO phone_type(phone_type_value) VALUES("mobile");

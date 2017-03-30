@@ -26,5 +26,8 @@ public interface IContactDao {
 
     ArrayList<Contact> getByBirthDate(Date date) throws DaoException;
 
+    ArrayList<Contact> getContactsForPage(int page, int count) throws DaoException;
+
+    int getContactsCount() throws DaoException;
 
 }

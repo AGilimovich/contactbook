@@ -2,9 +2,11 @@ package com.itechart.web.service.request.processing;
 
 import com.itechart.data.dto.FullContactDTO;
 import com.itechart.data.dto.SearchDTO;
+import com.itechart.data.entity.Contact;
 import com.itechart.web.service.email.Email;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 
 /**
  * Created by Aleksandr on 27.03.2017.
@@ -16,6 +18,8 @@ public interface AbstractRequestProcessingService {
 
 
     long processFetchSingleContactRequest(HttpServletRequest request);
+
+    String processFetchContactsRequest(HttpServletRequest request);
 
     SearchDTO processSearchContactsRequest(HttpServletRequest request);
 

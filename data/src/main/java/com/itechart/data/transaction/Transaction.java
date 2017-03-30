@@ -1,5 +1,7 @@
 package com.itechart.data.transaction;
 
+import com.itechart.data.db.DBResourceManager;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -25,6 +27,7 @@ public class Transaction {
     public void commitTransaction() {
         try {
             connection.commit();
+            DBResourceManager.closeResources(connection, null, null);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -33,6 +36,7 @@ public class Transaction {
     public void rollbackTransaction() {
         try {
             connection.rollback();
+            DBResourceManager.closeResources(connection, null, null);
         } catch (SQLException e) {
             e.printStackTrace();
         }

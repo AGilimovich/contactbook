@@ -42,6 +42,7 @@ public class FileService implements AbstractFileService {
 
     public byte[] getFile(String name) {
         if (!name.isEmpty()) {
+            // TODO: 30.03.2017 check file exists
             Path path = Paths.get(FILE_PATH + FileSystems.getDefault().getSeparator() + name.charAt(0) + FileSystems.getDefault().getSeparator() + name);
             try {
                 return Files.readAllBytes(path);

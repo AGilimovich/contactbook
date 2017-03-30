@@ -9,7 +9,6 @@ import com.itechart.data.entity.*;
 import com.itechart.data.exception.DaoException;
 import com.itechart.data.transaction.Transaction;
 import com.itechart.data.transaction.TransactionManager;
-import com.itechart.web.controller.FrontCtrl;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.files.AbstractFileService;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +28,7 @@ public class TransactionalDataService implements AbstractDataService {
         this.tm = tm;
     }
 
+    @Override
     public void deleteContact(long contactId) {
         Transaction transaction = tm.getTransaction();
         // JdbcPhoneDao phoneDao = new JdbcPhoneDao(transaction);
@@ -62,7 +62,7 @@ public class TransactionalDataService implements AbstractDataService {
         }
     }
 
-
+    @Override
     public void saveNewContact(FullContactDTO fullContactDTO) {
         Transaction transaction = tm.getTransaction();
         IPhoneDao phoneDao = new JdbcPhoneDao(transaction);
@@ -115,7 +115,7 @@ public class TransactionalDataService implements AbstractDataService {
 
     }
 
-
+    @Override
     public void updateContact(FullContactDTO reconstructedContact, FullContactDTO contactToUpdate) {
         Transaction transaction = tm.getTransaction();
         IPhoneDao phoneDao = new JdbcPhoneDao(transaction);
@@ -132,7 +132,7 @@ public class TransactionalDataService implements AbstractDataService {
 //        }
         try {
             //if old file exists and new file was stored -> mark old file for delition
-            if (StringUtils.isNotEmpty(contactToUpdate.getPhoto().getStoredName())&& StringUtils.isNotEmpty(reconstructedContact.getPhoto().getStoredName()))
+            if (StringUtils.isNotEmpty(contactToUpdate.getPhoto().getStoredName()) && StringUtils.isNotEmpty(reconstructedContact.getPhoto().getStoredName()))
                 filesToDelete.add(contactToUpdate.getPhoto().getStoredName());
 
             contactToUpdate.update(reconstructedContact);
@@ -142,7 +142,6 @@ public class TransactionalDataService implements AbstractDataService {
 
             contactDao.update(contactToUpdate.getContact());
             addressDao.update(contactToUpdate.getAddress());
-
 
 
             for (Phone phoneToCreate : contactToUpdate.getNewPhones()) {
@@ -190,7 +189,7 @@ public class TransactionalDataService implements AbstractDataService {
 
     }
 
-
+    @Override
     public ArrayList<Contact> getContactsWithBirthday(Date date) {
         Transaction transaction = tm.getTransaction();
         IContactDao contactDao = new JdbcContactDao(transaction);
@@ -206,6 +205,7 @@ public class TransactionalDataService implements AbstractDataService {
         return contacts;
     }
 
+    @Override
     public ArrayList<Contact> getContactsByFields(SearchDTO dto) {
         Transaction transaction = tm.getTransaction();
         IContactDao contactDao = new JdbcContactDao(transaction);
@@ -219,6 +219,7 @@ public class TransactionalDataService implements AbstractDataService {
         return contacts;
     }
 
+    @Override
     public Contact getContactById(long contactId) {
         Transaction transaction = tm.getTransaction();
         IContactDao contactDao = new JdbcContactDao(transaction);
@@ -233,7 +234,7 @@ public class TransactionalDataService implements AbstractDataService {
         return contact;
     }
 
-
+    @Override
     public Address getAddressByContactId(long contactId) {
         Transaction transaction = tm.getTransaction();
         IAddressDao addressDao = new JdbcAddressDao(transaction);
@@ -248,6 +249,7 @@ public class TransactionalDataService implements AbstractDataService {
         return address;
     }
 
+    @Override
     public File getPhotoById(long photoId) {
         Transaction transaction = tm.getTransaction();
         IFileDao fileDao = new JdbcFileDao(transaction);
@@ -262,8 +264,8 @@ public class TransactionalDataService implements AbstractDataService {
         return photo;
     }
 
-
-    public ArrayList<MainPageContactDTO> getMainPageContactDTO() {
+    @Override
+    public ArrayList<MainPageContactDTO> getMainPageContactDTO(int page, int count) {
         Transaction transaction = tm.getTransaction();
         IContactDao contactDao = new JdbcContactDao(transaction);
         IAddressDao addressDao = new JdbcAddressDao(transaction);
@@ -271,8 +273,7 @@ public class TransactionalDataService implements AbstractDataService {
         ArrayList<Contact> contacts = null;
         ArrayList<MainPageContactDTO> mainPageContactDTOs = new ArrayList<>();
         try {
-            contacts = contactDao.getAll();
-
+            contacts = contactDao.getContactsForPage(page, count);
             for (Contact contact : contacts) {
                 File photo = fileDao.getFileById(contact.getPhoto());
                 Address address = addressDao.getAddressByContactId(contact.getContactId());
@@ -288,7 +289,7 @@ public class TransactionalDataService implements AbstractDataService {
         return mainPageContactDTOs;
     }
 
-
+    @Override
     public FullContactDTO getFullContactById(long contactId) {
         Transaction transaction = tm.getTransaction();
         IContactDao contactDao = new JdbcContactDao(transaction);
@@ -322,6 +323,19 @@ public class TransactionalDataService implements AbstractDataService {
         }
 
         return fullContactDTO;
+    }
+
+    @Override
+    public int getContactsCount() {
+        Transaction transaction = tm.getTransaction();
+        IContactDao contactDao = new JdbcContactDao(transaction);
+        try {
+            return contactDao.getContactsCount();
+        } catch (DaoException e) {
+            log.error(e.getCause().getMessage());
+            transaction.rollbackTransaction();
+        }
+        return 0;
     }
 
 }

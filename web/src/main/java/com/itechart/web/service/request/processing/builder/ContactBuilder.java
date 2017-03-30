@@ -2,7 +2,8 @@ package com.itechart.web.service.request.processing.builder;
 
 import com.itechart.data.entity.Contact;
 import com.itechart.web.service.request.processing.parser.DateTimeParser;
-import com.mysql.jdbc.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+
 
 import java.util.Map;
 
@@ -15,7 +16,7 @@ public class ContactBuilder {
         String name = parameters.get("name");
         String surname = parameters.get("surname");
 
-        if (StringUtils.isNullOrEmpty(name) || StringUtils.isNullOrEmpty(surname))
+        if (StringUtils.isEmpty(name) || StringUtils.isEmpty(surname))
             // TODO: 29.03.2017 validation exception
             return null;
         contact.setName(name);

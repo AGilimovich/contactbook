@@ -25,6 +25,13 @@ public class DoSendFile implements Command {
                 e.printStackTrace();
             }
         }
+        else {
+            try {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         return null;
 
     }

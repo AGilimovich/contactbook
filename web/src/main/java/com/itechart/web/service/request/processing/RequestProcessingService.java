@@ -50,6 +50,11 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
 
     }
 
+    @Override
+    public String processFetchContactsRequest(HttpServletRequest request) {
+        return request.getParameter("page");
+    }
+
     public SearchDTO processSearchContactsRequest(HttpServletRequest request) {
         String surname = request.getParameter("surname");
         String name = request.getParameter("name");

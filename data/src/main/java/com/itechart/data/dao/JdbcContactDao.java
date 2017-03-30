@@ -44,6 +44,13 @@ public class JdbcContactDao implements IContactDao {
             "AND (c.citizenship LIKE ?) AND (a.country LIKE ?) AND (a.city LIKE ?) AND (a.street LIKE ?) AND (a.house LIKE ?) AND (a.apartment LIKE ?) AND (a.zip_code LIKE ?)";
     private final String SELECT_CONTACTS_BY_BIRTHDATE = "SELECT name, email FROM contact WHERE date_of_birth = ?";
 
+    private final String SELECT_CONTACTS_FOR_PAGE_QUERY = "SELECT c.*, g.gender_value, f_s.family_status_value " +
+            " FROM contact AS c INNER JOIN gender AS g ON c.gender = g.gender_id" +
+            " INNER JOIN family_status AS f_s ON c.family_status = f_s.family_status_id" +
+            " LIMIT ?,?";
+
+
+    private final String SELECT_CONTACTS_COUNT_QUERY = "SELECT count(*) FROM contact";
 
     public JdbcContactDao(Transaction transaction) {
         this.transaction = transaction;
@@ -105,7 +112,6 @@ public class JdbcContactDao implements IContactDao {
             throw new DaoException("Exception during deleting contact from the database", e);
         } finally {
             DBResourceManager.closeResources(cn, st, null);
-
         }
     }
 
@@ -373,6 +379,73 @@ public class JdbcContactDao implements IContactDao {
         }
 
         return contacts;
+    }
+
+    @Override
+    public ArrayList<Contact> getContactsForPage(int page, int count) throws DaoException {
+        ArrayList<Contact> contacts = new ArrayList<>();
+        Connection cn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            cn = transaction.getConnection();
+            st = cn.prepareStatement(SELECT_CONTACTS_FOR_PAGE_QUERY);
+            st.setInt(1, page * count);
+            st.setInt(2, count);
+            rs = st.executeQuery();
+            while (rs.next()) {
+                //contact info
+                long contactId = rs.getLong("contact_id");
+                String name = rs.getString("name");
+                String surname = rs.getString("surname");
+                String patronymic = rs.getString("patronymic");
+                Date dateOfBirth = rs.getDate("date_of_birth");
+                Contact.Gender gender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
+                String citizenship = rs.getString("citizenship");
+                Contact.FamilyStatus familyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
+                String website = rs.getString("website");
+                String email = rs.getString("email");
+                String placeOfWork = rs.getString("place_of_work");
+                long photo = rs.getLong("photo");
+                Contact contact = new Contact(contactId, name, surname);
+                contact.setPatronymic(patronymic);
+                contact.setDateOfBirth(dateOfBirth);
+                contact.setGender(gender);
+                contact.setCitizenship(citizenship);
+                contact.setFamilyStatus(familyStatus);
+                contact.setWebsite(website);
+                contact.setEmail(email);
+                contact.setPlaceOfWork(placeOfWork);
+                contact.setPhoto(photo);
+                contacts.add(contact);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Exception during retrieving contacts from the database", e);
+        } finally {
+            DBResourceManager.closeResources(cn, st, rs);
+        }
+        return contacts;
+    }
+
+    @Override
+    public int getContactsCount() throws DaoException {
+        Connection cn = null;
+        Statement st = null;
+        ResultSet rs = null;
+        int count = 0;
+        try {
+            cn = transaction.getConnection();
+            st = cn.createStatement();
+            rs = st.executeQuery(SELECT_CONTACTS_COUNT_QUERY);
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Exception during retrieving contacts count from the database", e);
+        } finally {
+            DBResourceManager.closeResources(cn, st, rs);
+        }
+        return count;
     }
 
 

@@ -34,8 +34,6 @@ body {
     font-size: 4em !important;
 }
 
-
-
 .btn-delete {
     margin-left: 30px;
     min-width: 110px;
@@ -46,21 +44,18 @@ body {
     min-width: 110px;
 }
 
-
 .items-display select {
     display: inline;
     max-width: 70px;
 }
 
-
-#link-email{
+#link-email {
     background-color: #e7e7e7;
     border: inherit;
     outline: inherit;
     color: inherit;
     margin-left: 5px;
 }
-
 
 /*-----------------TOOLTIP--------------*/
 /* Tooltip container */
@@ -107,4 +102,9 @@ body {
 .show-tooltip {
     visibility: visible !important;
     opacity: 1 !important;
+}
+
+/*do not highlight on click*/
+#btn-delete-contacts:focus {
+    outline: 0;
 }
