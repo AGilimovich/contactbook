@@ -7,8 +7,11 @@ import com.itechart.web.properties.PropertiesManager;
 import com.itechart.web.service.email.Email;
 import com.itechart.web.service.email.EmailAddressesParser;
 import com.itechart.web.service.request.processing.builder.FullContactDTOBuilder;
-import com.itechart.web.service.request.processing.parser.DateTimeParser;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -71,10 +74,25 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
             familyStatus = Contact.FamilyStatus.valueOf(familyStatusParam.toUpperCase());
 
         String fromDateParam = request.getParameter("fromDate");
-        Date fromDateOfBirth = DateTimeParser.parseDate(fromDateParam, "dd.MM.yyyy");
+
+        DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyy");
+        Date fromDateOfBirth = null;
+        if (StringUtils.isNotEmpty(fromDateParam)) {
+            DateTime dateTime = format.parseDateTime(fromDateParam);
+            if (dateTime != null)
+                fromDateOfBirth = dateTime.toDate();
+        }
+
+      //  Date fromDateOfBirth = DateTimeParser.parseDate(fromDateParam, "dd.MM.yyyy");
 
         String toDateParam = request.getParameter("toDate");
-        Date toDateOfBirth = DateTimeParser.parseDate(toDateParam, "dd.MM.yyyy");
+        Date toDateOfBirth = null;
+        if (StringUtils.isNotEmpty(toDateParam)) {
+            DateTime dateTime = format.parseDateTime(toDateParam);
+            if (dateTime != null)
+                toDateOfBirth = dateTime.toDate();
+        }
+//        Date toDateOfBirth = DateTimeParser.parseDate(toDateParam, "dd.MM.yyyy");
 
         String citizenship = request.getParameter("citizenship");
 

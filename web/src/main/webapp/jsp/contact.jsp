@@ -185,12 +185,12 @@
                             <td width="6%"><input type="checkbox" name="attachIsSelected"
                                                   value="${attachment.getAttachment().id}"></td>
                             <td width="20%" name="attachName"><a name="attachLink"
-                                                                 href="/file?id=${attachment.getFile().storedName}">${attachment.getAttachment().name}</a>
+                                                                 href="/file?id=${attachment.getFile().storedName}" download="${attachment.getAttachment().name}">${attachment.getAttachment().name}</a>
                             </td>
 
                             <td align="center" width="20%" name="attachUploadDate">
                                 <fmt:formatDate value="${attachment.getAttachment().uploadDate}" var="formattedDate"
-                                                type="date" pattern="MM-dd-yyyy HH:mm:ss"/>
+                                                type="date" pattern="dd-MM-yyyy HH:mm:ss"/>
                                     ${formattedDate}
                             </td>
                             <td width="54%" name="attachComment">${attachment.getAttachment().comment}</td>
@@ -224,7 +224,7 @@
             <table id="attach-hidden-table">
                 <c:forEach var="attachment" items="${attachments}" varStatus="counter">
                     <fmt:formatDate value="${attachment.getAttachment().uploadDate}" var="formattedDate"
-                                    type="date" pattern="MM.dd.yyyy HH:mm:ss"/>
+                                    type="date" pattern="dd.MM.yyyy HH:mm:ss"/>
                     <input type="text" name="attachMeta[${counter.index}]"
                            value="id=${attachment.getAttachment().id}&name=${attachment.getAttachment().name}&uploadDate=${formattedDate}&comment=${attachment.getAttachment().comment}&status=NONE">
                 </c:forEach>
