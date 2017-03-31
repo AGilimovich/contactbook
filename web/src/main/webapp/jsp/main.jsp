@@ -16,7 +16,7 @@
         <div class="navbar-header">
             <a href="../?search=false" class="navbar-brand">Справочник контактов</a>
         </div>
-        <div class="collapse navbar-collapse" id="myNavbar">
+        <div  id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
                 <li class="active"><a href="${pageContext.request.contextPath}/search"><span
                         class="glyphicon glyphicon-search"></span> Поиск
