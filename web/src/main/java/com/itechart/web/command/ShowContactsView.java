@@ -4,6 +4,8 @@ import com.itechart.data.dto.MainPageContactDTO;
 import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.ServiceFactory;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,9 +17,15 @@ import java.util.ArrayList;
  * Implementation of command which shows contacts according to request.
  */
 public class ShowContactsView implements Command {
+    private static final Logger log = LoggerFactory.getLogger(DoCreateContact.class);
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        log.debug("111{}",request);
+        log.info("1{}",request);
+
+
+
         if (request.getSession().getAttribute("isSearch") != null) {
             if ((boolean) request.getSession().getAttribute("isSearch")) {
                 if (StringUtils.isNotEmpty(request.getParameter("search"))) {

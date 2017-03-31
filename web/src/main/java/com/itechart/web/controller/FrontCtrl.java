@@ -20,7 +20,6 @@ import java.io.IOException;
  */
 public class FrontCtrl extends HttpServlet {
 
-    private static final Logger log = Logger.getLogger(FrontCtrl.class);
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -41,12 +40,10 @@ public class FrontCtrl extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        log.info("HTTP GET запрос");
         processRequest(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        log.info("HTTP POST запрос");
         processRequest(request, response);
     }
 
