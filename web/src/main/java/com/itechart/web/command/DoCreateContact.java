@@ -35,11 +35,11 @@ public class DoCreateContact implements Command {
 
         request.getSession().setAttribute("isSearch", false);
 
-
+        AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
+        dataService.saveNewContact(fullContactDTO);
         return (new ShowContactsView()).execute(servlet, request, response);
 
-//        AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
-//        dataService.saveNewContact(fullContactDTO);
+//
 //        //todo
 //        ArrayList<MainPageContactDTO> contacts = dataService.getMainPageContactDTO(0,10);
 //        request.setAttribute("contacts", contacts);

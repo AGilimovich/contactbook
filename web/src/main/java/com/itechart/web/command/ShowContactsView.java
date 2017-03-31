@@ -51,7 +51,7 @@ public class ShowContactsView implements Command {
 
         ArrayList<MainPageContactDTO> mainPageContactDTOs = dataService.getMainPageContactDTO(pageNumber, contactsOnPage);
         int contactsInDBCount = dataService.getContactsCount();
-        int pagesCount = (int) Math.ceil(contactsInDBCount / contactsOnPage);
+        int pagesCount = (int) Math.ceil((double)contactsInDBCount / contactsOnPage);
         request.getSession().setAttribute("pageNumber", pageNumber);
         request.setAttribute("contacts", mainPageContactDTOs);
         request.setAttribute("pagesCount", pagesCount);

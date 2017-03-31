@@ -59,7 +59,7 @@ public class DoSearch implements Command {
             mainPageContactDTOs.add(mainPageContactDTO);
         }
 
-        int pagesCount = (int) Math.ceil(contactsCount / contactsOnPage);
+        int pagesCount = (int) Math.ceil((double) contactsCount / contactsOnPage);
         request.getSession().setAttribute("searchDTO", dto);
         request.getSession().setAttribute("isSearch", true);
         request.setAttribute("contacts", mainPageContactDTOs);

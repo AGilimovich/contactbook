@@ -142,12 +142,12 @@
                         <li class="page-item ${pageNumber == 0? ' hidden':''}">
                             <a href="../?pageNumber=${pageNumber-1}&search=${isSearch}">Предыдущая</a>
                         </li>
-                        <c:forEach begin="0" end="${pagesCount}" varStatus="counter">
-                            <li class="page ${counter.index == pageNumber ? ' active':''}">
-                                <a href="../?pageNumber=${counter.index}&search=${isSearch}"> ${counter.index+1}</a>
+                        <c:forEach begin="1" end="${pagesCount}" varStatus="counter">
+                            <li class="page ${counter.index == pageNumber+1 ? ' active':''} ${pagesCount == 0 ?'hidden':''}">
+                                <a href="../?pageNumber=${counter.index-1}&search=${isSearch}"> ${counter.index}</a>
                             </li>
                         </c:forEach>
-                        <li class="page-item ${pageNumber == pagesCount? ' hidden':''}">
+                        <li class="page-item ${pageNumber == pagesCount-1? ' hidden':''}">
                             <a href="../?pageNumber=${pageNumber+1}&search=${isSearch}">Следующая</a>
                         </li>
                     </ul>
