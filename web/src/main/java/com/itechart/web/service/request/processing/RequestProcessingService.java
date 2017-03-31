@@ -71,10 +71,10 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
             familyStatus = Contact.FamilyStatus.valueOf(familyStatusParam.toUpperCase());
 
         String fromDateParam = request.getParameter("fromDate");
-        Date fromDateOfBirth = DateTimeParser.parseDate(fromDateParam, "yyyy-MM-dd");
+        Date fromDateOfBirth = DateTimeParser.parseDate(fromDateParam, "dd.MM.yyyy");
 
         String toDateParam = request.getParameter("toDate");
-        Date toDateOfBirth = DateTimeParser.parseDate(toDateParam, "yyyy-MM-dd");
+        Date toDateOfBirth = DateTimeParser.parseDate(toDateParam, "dd.MM.yyyy");
 
         String citizenship = request.getParameter("citizenship");
 

@@ -10,7 +10,7 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a href="${pageContext.request.contextPath}?search=false" class="navbar-brand">Справочник контактов</a>
+            <a href="../?search=false" class="navbar-brand">Справочник контактов</a>
         </div>
         <div class="navbar-header">
             <span class="navbar-brand">> Поиск контакта</span>
@@ -47,9 +47,9 @@
                             <p>Дата рождения:</p>
                         </div>
                         <div class="row">
-                            <span>с </span><input type="date" name="fromDate" class="date form-control"> <span>по</span>
+                            <span>с </span><input type="text" placeholder="ДД.ММ.ГГГГ" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}" name="fromDate" class="date form-control"> <span>по</span>
                             <input id='toDate' name="toDate"
-                                   type="date"
+                                   type="text" placeholder="ДД.ММ.ГГГГ" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}"
                                    class="date form-control">
                         </div>
                     </div>

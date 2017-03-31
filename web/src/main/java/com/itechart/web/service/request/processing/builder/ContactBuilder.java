@@ -23,7 +23,7 @@ public class ContactBuilder {
         contact.setSurname(surname);
         contact.setPatronymic(parameters.get("patronymic"));
         String dateOfBirth = parameters.get("dateOfBirth");
-        contact.setDateOfBirth(DateTimeParser.parseDate(dateOfBirth, "yyyy-MM-dd"));
+        contact.setDateOfBirth(DateTimeParser.parseDate(dateOfBirth, "dd.MM.yyyy"));
         if (parameters.get("gender") != null) {
             contact.setGender(Contact.Gender.valueOf(parameters.get("gender").toUpperCase()));
         }

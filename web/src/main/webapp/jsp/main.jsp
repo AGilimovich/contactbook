@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <title>Title</title>
@@ -91,7 +91,9 @@
                                         <p><b>Дата рождения:</b></p>
                                     </div>
                                     <div class="row">
-                                        <p>${contact.dateOfBirth}</p>
+                                        <fmt:formatDate value="${contact.dateOfBirth}" var="formattedDateOfBirth"
+                                                        type="date" pattern="dd.MM.yyyy"/>
+                                        <p>${formattedDateOfBirth}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -147,7 +149,7 @@
                                 <a href="../?pageNumber=${counter.index-1}&search=${isSearch}"> ${counter.index}</a>
                             </li>
                         </c:forEach>
-                        <li class="page-item ${pageNumber == pagesCount-1? ' hidden':''}">
+                        <li class="page-item ${pageNumber == pagesCount-1 || pagesCount==0? ' hidden':''}">
                             <a href="../?pageNumber=${pageNumber+1}&search=${isSearch}">Следующая</a>
                         </li>
                     </ul>

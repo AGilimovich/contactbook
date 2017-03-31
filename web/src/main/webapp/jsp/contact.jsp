@@ -58,7 +58,11 @@
 
 
                         <p class="form-text">Дата рождения:</p>
-                        <input type="date" name="dateOfBirth" value="${contact.dateOfBirth}" class="form-control">
+                        <fmt:formatDate value="${contact.dateOfBirth}" var="formattedDateOfBirth"
+                                        type="date" pattern="dd.MM.yyyy"/>
+                        <input type="text" name="dateOfBirth" value="${formattedDateOfBirth}" placeholder="ДД.ММ.ГГГГ" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}" class="form-control">
+
+
 
                         <p class="form-text">Пол:</p>
 
