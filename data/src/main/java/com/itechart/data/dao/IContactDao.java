@@ -24,10 +24,14 @@ public interface IContactDao {
 
     ArrayList<Contact> findContactsByFields(SearchDTO dto) throws DaoException;
 
+    ArrayList<Contact> findContactsByFieldsLimit(SearchDTO dto, int from, int count) throws DaoException;
+
     ArrayList<Contact> getByBirthDate(Date date) throws DaoException;
 
-    ArrayList<Contact> getContactsForPage(int page, int count) throws DaoException;
+    ArrayList<Contact> getContactsLimit(int startingFrom, int count) throws DaoException;
 
     int getContactsCount() throws DaoException;
+
+    int getContactsSearchResultCount(SearchDTO dto)throws DaoException;
 
 }

@@ -32,13 +32,19 @@ public class DoCreateContact implements Command {
                 e1.printStackTrace();
             }
         }
-        AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
-        dataService.saveNewContact(fullContactDTO);
-        //todo
-        ArrayList<MainPageContactDTO> contacts = dataService.getMainPageContactDTO(0,10);
-        request.setAttribute("contacts", contacts);
-        request.getSession().removeAttribute("action");
-        return "/jsp/main.jsp";
+
+        request.getSession().setAttribute("isSearch", false);
+
+
+        return (new ShowContactsView()).execute(servlet, request, response);
+
+//        AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
+//        dataService.saveNewContact(fullContactDTO);
+//        //todo
+//        ArrayList<MainPageContactDTO> contacts = dataService.getMainPageContactDTO(0,10);
+//        request.setAttribute("contacts", contacts);
+//        request.getSession().removeAttribute("action");
+//        return "/jsp/main.jsp";
     }
 
 

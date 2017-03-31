@@ -18,33 +18,45 @@ public class ShowContactsView implements Command {
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        if (request.getSession().getAttribute("isSearch") != null) {
+            if ((boolean) request.getSession().getAttribute("isSearch")) {
+                if (StringUtils.isNotEmpty(request.getParameter("search"))) {
+                    if (!request.getParameter("search").equals("false"))
+                        return new DoSearch().execute(servlet, request, response);
+                } else {
+                    return new DoSearch().execute(servlet, request, response);
+                }
+            }
+        }
 
+        request.getSession().setAttribute("isSearch", false);
         //default values
-        int page = 0;
-        int count = 10;
-        String countParam = request.getParameter("count");
-        String pageParam = request.getParameter("page");
-        if (StringUtils.isEmpty(countParam)) {
-            if (request.getSession().getAttribute("count") != null)
-                count = (int) request.getSession().getAttribute("count");
+        int pageNumber = 0;
+        int contactsOnPage = 10;
+
+        String contactsOnPageParam = request.getParameter("contactsOnPage");
+        String pageNumberParam = request.getParameter("pageNumber");
+        if (StringUtils.isEmpty(contactsOnPageParam)) {
+            if (request.getSession().getAttribute("contactsOnPage") != null)
+                contactsOnPage = (int) request.getSession().getAttribute("contactsOnPage");
         } else {
             //if displaying contacts count was changed
-            count = Integer.valueOf(countParam);
-            request.getSession().setAttribute("count", count);
+            contactsOnPage = Integer.valueOf(contactsOnPageParam);
+            request.getSession().setAttribute("contactsOnPage", contactsOnPage);
         }
-        if (StringUtils.isNotEmpty(pageParam)) {
-            page = Integer.valueOf(pageParam);
+        if (StringUtils.isNotEmpty(pageNumberParam)) {
+            pageNumber = Integer.valueOf(pageNumberParam);
         }
-
-
         AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
-        ArrayList<MainPageContactDTO> mainPageContactDTOs = dataService.getMainPageContactDTO(page, count);
-        int contactsInDBCount = dataService.getContactsCount();
 
-        int pagesCount = (int) Math.ceil(contactsInDBCount / count);
-        request.getSession().setAttribute("page", page);
+        ArrayList<MainPageContactDTO> mainPageContactDTOs = dataService.getMainPageContactDTO(pageNumber, contactsOnPage);
+        int contactsInDBCount = dataService.getContactsCount();
+        int pagesCount = (int) Math.ceil(contactsInDBCount / contactsOnPage);
+        request.getSession().setAttribute("pageNumber", pageNumber);
         request.setAttribute("contacts", mainPageContactDTOs);
-        request.setAttribute("pages", pagesCount);
+        request.setAttribute("pagesCount", pagesCount);
+
+
         return "/jsp/main.jsp";
     }
 

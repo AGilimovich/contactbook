@@ -54,7 +54,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
             throw new DaoException("Exception during retrieving attachments from the database", e);
 
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
         }
         return attachments;
 
@@ -83,7 +83,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during retrieving attachment from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
         }
         return attachment;
 
@@ -113,7 +113,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during saving attachment in the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
         }
         return id;
     }
@@ -131,7 +131,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during deleting attachment from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, null);
+            DBResourceManager.closeResources(null, st, null);
         }
 
     }
@@ -151,7 +151,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during updating attachment in the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, null);
+            DBResourceManager.closeResources(null, st, null);
         }
     }
 
@@ -167,7 +167,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during deleting attachments from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, null);
+            DBResourceManager.closeResources(null, st, null);
         }
     }
 }

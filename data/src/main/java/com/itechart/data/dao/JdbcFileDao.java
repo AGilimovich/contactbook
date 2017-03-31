@@ -50,7 +50,7 @@ public class JdbcFileDao implements IFileDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during retrieving file from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
         }
 
         return file;
@@ -77,7 +77,7 @@ public class JdbcFileDao implements IFileDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during retrieving file from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
         }
 
         return files;
@@ -97,7 +97,7 @@ public class JdbcFileDao implements IFileDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during updating file in the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, null);
+            DBResourceManager.closeResources(null, st, null);
         }
     }
 
@@ -120,7 +120,7 @@ public class JdbcFileDao implements IFileDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during saving file in the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
         }
 
         return id;
@@ -138,7 +138,7 @@ public class JdbcFileDao implements IFileDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during deleting file from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, null);
+            DBResourceManager.closeResources(null, st, null);
         }
     }
 
@@ -162,7 +162,7 @@ public class JdbcFileDao implements IFileDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during retrieving file from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
         }
 
         return file;

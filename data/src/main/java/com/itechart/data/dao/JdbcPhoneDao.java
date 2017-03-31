@@ -60,7 +60,7 @@ public class JdbcPhoneDao implements IPhoneDao {
             throw new DaoException("Exception during retrieving phones from the database", e);
 
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
         }
         return phones;
     }
@@ -89,7 +89,7 @@ public class JdbcPhoneDao implements IPhoneDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during retrieving phone from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
         }
 
         return phone;
@@ -119,7 +119,7 @@ public class JdbcPhoneDao implements IPhoneDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during saving phone in the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
         }
 
 
@@ -138,7 +138,7 @@ public class JdbcPhoneDao implements IPhoneDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during deleting phone from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, null);
+            DBResourceManager.closeResources(null, st, null);
         }
     }
 
@@ -161,7 +161,7 @@ public class JdbcPhoneDao implements IPhoneDao {
             throw new DaoException("Exception during updating phone in the database", e);
         } finally {
 
-            DBResourceManager.closeResources(cn, st, null);
+            DBResourceManager.closeResources(null, st, null);
         }
 
     }
@@ -178,7 +178,7 @@ public class JdbcPhoneDao implements IPhoneDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during deleting phones from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, null);
+            DBResourceManager.closeResources(null, st, null);
         }
     }
 }

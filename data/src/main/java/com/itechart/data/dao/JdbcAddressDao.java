@@ -50,7 +50,7 @@ public class JdbcAddressDao implements IAddressDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during saving address in database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
         }
         return id;
     }
@@ -67,7 +67,7 @@ public class JdbcAddressDao implements IAddressDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during deleting address from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, null);
+            DBResourceManager.closeResources(null, st, null);
         }
     }
 
@@ -91,7 +91,7 @@ public class JdbcAddressDao implements IAddressDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during updating address in the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
         }
     }
 
@@ -120,7 +120,7 @@ public class JdbcAddressDao implements IAddressDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during retrieving address from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
         }
 
 

@@ -14,7 +14,7 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a href="${pageContext.request.contextPath}/" class="navbar-brand">Справочник контактов</a>
+            <a href="../?search=false" class="navbar-brand">Справочник контактов</a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
@@ -126,12 +126,8 @@
                                     </div>
                                     <div class="row">
                                         <p>${contact.placeOfWork}</p>
-
                                     </div>
-
                                 </div>
-
-
                             </div>
                         </td>
                     </tr>
@@ -143,16 +139,16 @@
             <div class="col-md-10">
                 <div class="pages">
                     <ul class="pagination">
-                        <li class="page-item ${page == 0? ' hidden':''}">
-                            <a href="${pageContext.request.contextPath}?page=${page-1}">Предыдущая</a>
+                        <li class="page-item ${pageNumber == 0? ' hidden':''}">
+                            <a href="../?pageNumber=${pageNumber-1}&search=${isSearch}">Предыдущая</a>
                         </li>
-                        <c:forEach begin="0" end="${pages}" varStatus="counter">
-                            <li class="page ${counter.index == page ? ' active':''}">
-                                <a href="${pageContext.request.contextPath}?page=${counter.index}"> ${counter.index+1}</a>
+                        <c:forEach begin="0" end="${pagesCount}" varStatus="counter">
+                            <li class="page ${counter.index == pageNumber ? ' active':''}">
+                                <a href="../?pageNumber=${counter.index}&search=${isSearch}"> ${counter.index+1}</a>
                             </li>
                         </c:forEach>
-                        <li class="page-item ${page == pages? ' hidden':''}">
-                            <a href="${pageContext.request.contextPath}?page=${page+1}">Следующая</a>
+                        <li class="page-item ${pageNumber == pagesCount? ' hidden':''}">
+                            <a href="../?pageNumber=${pageNumber+1}&search=${isSearch}">Следующая</a>
                         </li>
                     </ul>
                 </div>
@@ -160,13 +156,13 @@
             <div class="col-md-2">
                 <div class="items-display">
                     <span>Отображать контактов:</span>
-                    <select id="display-items" name="count" class="form-control" onchange="submitCount()">
-                        <option value="10" ${count == 10 ? 'selected': ''}>10</option>
-                        <option value="20" ${count == 20 ? 'selected': ''}>20</option>
+                    <select id="display-items" name="contactsOnPage" class="form-control" onchange="submitCount()">
+                        <option value="10" ${contactsOnPage == 10 ? 'selected': ''}>10</option>
+                        <option value="20" ${contactsOnPage == 20 ? 'selected': ''}>20</option>
                     </select>
                 </div>
                 <input type="submit" id="btn-submit-item-count" form="main-form"
-                       formaction="${pageContext.request.contextPath}/" class="hidden">
+                       formaction="../?search=${isSearch}" class="hidden">
 
             </div>
         </div>

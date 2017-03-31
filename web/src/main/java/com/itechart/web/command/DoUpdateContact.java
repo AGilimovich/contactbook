@@ -1,9 +1,8 @@
 package com.itechart.web.command;
 
-import com.itechart.data.dto.MainPageContactDTO;
 import com.itechart.data.dto.FullContactDTO;
-import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.ServiceFactory;
+import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.request.processing.FileSizeException;
 
 import javax.servlet.ServletException;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Created by Aleksandr on 14.03.2017.
@@ -42,9 +40,16 @@ public class DoUpdateContact implements Command {
         request.getSession().removeAttribute("contactToUpdate");
         request.getSession().removeAttribute("action");
         request.getSession().removeAttribute("id");
-        ArrayList<MainPageContactDTO> contacts = dataService.getMainPageContactDTO();
-        request.setAttribute("contacts", contacts);
-        return "/jsp/main.jsp";
+
+        // TODO: 31.03.
+        request.getSession().setAttribute("isSearch", false);
+
+
+        return (new ShowContactsView()).execute(servlet, request, response);
+
+
+        // request.setAttribute("contacts", contacts);
+        // return "/jsp/main.jsp";
     }
 
 }

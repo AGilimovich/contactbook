@@ -26,8 +26,24 @@ public class DoDeleteContact implements Command {
                 dataService.deleteContact(contactId);
             }
         }
-        ArrayList<MainPageContactDTO> contacts = dataService.getMainPageContactDTO();
-        request.setAttribute("contacts",contacts);
-        return "/jsp/main.jsp";
+
+//        int contactsOnPage = 10;
+        // TODO: 31.03.2017 null check
+
+        request.getSession().setAttribute("isSearch", false);
+        return new ShowContactsView().execute(servlet, request, response);
+
+//
+//        int pageNumber = (int) request.getSession().getAttribute("page");
+//
+//        String contactsOnPageParam = request.getParameter("contactsOnPage");
+//        String pageNumberParam = request.getParameter("pageNumber");
+//        if (request.getSession().getAttribute("contactsOnPage") != null)
+//            contactsOnPage = (int) request.getSession().getAttribute("contactsOnPage");
+//
+//
+//        ArrayList<MainPageContactDTO> contacts = dataService.getMainPageContactDTO(pageNumber, contactsOnPage);
+//        request.setAttribute("contacts", contacts);
+//        return "/jsp/main.jsp";
     }
 }

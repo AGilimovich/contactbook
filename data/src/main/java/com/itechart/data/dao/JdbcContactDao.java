@@ -6,7 +6,6 @@ import com.itechart.data.entity.Contact;
 import com.itechart.data.exception.DaoException;
 import com.itechart.data.transaction.Transaction;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -36,21 +35,38 @@ public class JdbcContactDao implements IContactDao {
 
     private final String DELETE_CONTACT_QUERY = "DELETE FROM contact WHERE contact_id = ?";
 
-    private final String SELECT_BY_FIELDS_QUERY = "SELECT c.*, gender.gender_value, family_status.family_status_value, a.* FROM contact AS c " +
+    private final String SELECT_All_BY_FIELDS_QUERY = "SELECT c.*, gender.gender_value, family_status.family_status_value, a.* FROM contact AS c " +
             "INNER JOIN address AS a ON c.contact_id = a.contact_id " +
             "INNER JOIN family_status ON c.family_status = family_status.family_status_id " +
             "INNER JOIN gender ON c.gender = gender.gender_id " +
             "WHERE (c.surname LIKE ?) AND (c.name LIKE ?) AND (c.patronymic LIKE ?) AND ((c.date_of_birth BETWEEN ? AND ?) OR (COALESCE(c.date_of_birth,'NULL') LIKE ?)) AND (gender.gender_value LIKE ?) AND (family_status.family_status_value LIKE ?) " +
             "AND (c.citizenship LIKE ?) AND (a.country LIKE ?) AND (a.city LIKE ?) AND (a.street LIKE ?) AND (a.house LIKE ?) AND (a.apartment LIKE ?) AND (a.zip_code LIKE ?)";
+
+    private final String SELECT_BY_FIELDS_LIMIT_QUERY = "SELECT c.*, gender.gender_value, family_status.family_status_value, a.* FROM contact AS c " +
+            "INNER JOIN address AS a ON c.contact_id = a.contact_id " +
+            "INNER JOIN family_status ON c.family_status = family_status.family_status_id " +
+            "INNER JOIN gender ON c.gender = gender.gender_id " +
+            "WHERE (c.surname LIKE ?) AND (c.name LIKE ?) AND (c.patronymic LIKE ?) AND ((c.date_of_birth BETWEEN ? AND ?) OR (COALESCE(c.date_of_birth,'NULL') LIKE ?)) AND (gender.gender_value LIKE ?) AND (family_status.family_status_value LIKE ?) " +
+            "AND (c.citizenship LIKE ?) AND (a.country LIKE ?) AND (a.city LIKE ?) AND (a.street LIKE ?) AND (a.house LIKE ?) AND (a.apartment LIKE ?) AND (a.zip_code LIKE ?)" +
+            "LIMIT ?,?";
+
     private final String SELECT_CONTACTS_BY_BIRTHDATE = "SELECT name, email FROM contact WHERE date_of_birth = ?";
 
-    private final String SELECT_CONTACTS_FOR_PAGE_QUERY = "SELECT c.*, g.gender_value, f_s.family_status_value " +
+    private final String SELECT_CONTACTS_LIMIT_QUERY = "SELECT c.*, g.gender_value, f_s.family_status_value " +
             " FROM contact AS c INNER JOIN gender AS g ON c.gender = g.gender_id" +
             " INNER JOIN family_status AS f_s ON c.family_status = f_s.family_status_id" +
             " LIMIT ?,?";
 
-
     private final String SELECT_CONTACTS_COUNT_QUERY = "SELECT count(*) FROM contact";
+
+    private final String SELECT_COUNT_BY_FIELDS_QUERY = "SELECT count(*) " +
+            "FROM contact AS c " +
+            "INNER JOIN address AS a ON c.contact_id = a.contact_id " +
+            "INNER JOIN family_status ON c.family_status = family_status.family_status_id " +
+            "INNER JOIN gender ON c.gender = gender.gender_id " +
+            "WHERE (c.surname LIKE ?) AND (c.name LIKE ?) AND (c.patronymic LIKE ?) AND ((c.date_of_birth BETWEEN ? AND ?) OR (COALESCE(c.date_of_birth,'NULL') LIKE ?)) AND (gender.gender_value LIKE ?) AND (family_status.family_status_value LIKE ?) " +
+            "AND (c.citizenship LIKE ?) AND (a.country LIKE ?) AND (a.city LIKE ?) AND (a.street LIKE ?) AND (a.house LIKE ?) AND (a.apartment LIKE ?) AND (a.zip_code LIKE ?)";;
+
 
     public JdbcContactDao(Transaction transaction) {
         this.transaction = transaction;
@@ -93,7 +109,7 @@ public class JdbcContactDao implements IContactDao {
             throw new DaoException("Exception during saving contact in the database", e);
 
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
         }
 
         return id;
@@ -111,7 +127,7 @@ public class JdbcContactDao implements IContactDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during deleting contact from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, null);
+            DBResourceManager.closeResources(null, st, null);
         }
     }
 
@@ -150,7 +166,7 @@ public class JdbcContactDao implements IContactDao {
             throw new DaoException("Exception during updating contact in the database", e);
         } finally {
 
-            DBResourceManager.closeResources(cn, st, null);
+            DBResourceManager.closeResources(null, st, null);
 
         }
     }
@@ -195,7 +211,7 @@ public class JdbcContactDao implements IContactDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during retrieving contacts from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
 
         }
         return contacts;
@@ -238,7 +254,7 @@ public class JdbcContactDao implements IContactDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during retrieving contact from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
         }
 
         return contact;
@@ -253,7 +269,7 @@ public class JdbcContactDao implements IContactDao {
         ResultSet rs = null;
         try {
             cn = transaction.getConnection();
-            st = cn.prepareStatement(SELECT_BY_FIELDS_QUERY);
+            st = cn.prepareStatement(SELECT_All_BY_FIELDS_QUERY);
             if (!dto.getSurname().isEmpty())
                 st.setString(1, dto.getSurname());
             else st.setString(1, "%");
@@ -347,7 +363,118 @@ public class JdbcContactDao implements IContactDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during retrieving contacts from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
+        }
+
+        return contacts;
+    }
+
+    @Override
+    public ArrayList<Contact> findContactsByFieldsLimit(SearchDTO dto, int from, int count) throws DaoException {
+        ArrayList<Contact> contacts = new ArrayList<>();
+        Connection cn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            cn = transaction.getConnection();
+            st = cn.prepareStatement(SELECT_BY_FIELDS_LIMIT_QUERY);
+            if (!dto.getSurname().isEmpty())
+                st.setString(1, dto.getSurname());
+            else st.setString(1, "%");
+
+            if (!dto.getName().isEmpty())
+                st.setString(2, dto.getName());
+            else st.setString(2, "%");
+
+            if (!dto.getPatronymic().isEmpty())
+                st.setString(3, dto.getPatronymic());
+            else st.setString(3, "%");
+
+            if (dto.getFromDate() != null)
+                st.setDate(4, new java.sql.Date(dto.getFromDate().getTime()));
+            else
+                try {
+                    st.setDate(4, new java.sql.Date(DateFormat.getDateInstance().parse("01.01.1900").getTime()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            if (dto.getToDate() != null)
+                st.setDate(5, new java.sql.Date(dto.getToDate().getTime()));
+            else st.setDate(5, new java.sql.Date(new Date().getTime()));
+            // if dates are specified then do not look for rows with NULL dateOfBirth values
+            if (dto.getToDate() != null || dto.getFromDate() != null) {
+                st.setString(6, "NOT NULL");
+            } else st.setString(6, "NULL");
+
+            if (dto.getGender() != null)
+                st.setString(7, dto.getGender().name());
+            else st.setString(7, "%");
+            if (dto.getFamilyStatus() != null)
+                st.setString(8, dto.getFamilyStatus().name());
+            else st.setString(8, "%");
+            if (!dto.getCitizenship().isEmpty())
+                st.setString(9, dto.getCitizenship());
+            else st.setString(9, "%");
+            if (!dto.getCountry().isEmpty())
+                st.setString(10, dto.getCountry());
+            else st.setString(10, "%");
+
+            if (!dto.getCity().isEmpty())
+                st.setString(11, dto.getCity());
+            else st.setString(11, "%");
+
+            if (!dto.getStreet().isEmpty())
+                st.setString(12, dto.getStreet());
+            else st.setString(12, "%");
+
+            if (!dto.getHouse().isEmpty())
+                st.setString(13, dto.getHouse());
+            else st.setString(13, "%");
+
+            if (!dto.getApartment().isEmpty())
+                st.setString(14, dto.getApartment());
+            else st.setString(14, "%");
+
+            if (!dto.getZipCOde().isEmpty())
+                st.setString(15, dto.getZipCOde());
+            else st.setString(15, "%");
+
+            st.setInt(16, from);
+            st.setInt(17, count);
+
+
+            rs = st.executeQuery();
+            while (rs.next()) {
+                long foundContactId = rs.getLong("contact_id");
+                String foundName = rs.getString("name");
+                String foundSurname = rs.getString("surname");
+                String foundPatronymic = rs.getString("patronymic");
+                Date foundDateOfBirth = rs.getDate("date_of_birth");
+                Contact.Gender foundGender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
+                String foundCitizenship = rs.getString("citizenship");
+                Contact.FamilyStatus foundFamilyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
+                String foundWebsite = rs.getString("website");
+                String foundEmail = rs.getString("email");
+                String foundPlaceOfWork = rs.getString("place_of_work");
+                long foundPhoto = rs.getLong("photo");
+                Contact contact = new Contact(foundContactId, foundName, foundSurname);
+                contact.setPatronymic(foundPatronymic);
+                contact.setDateOfBirth(foundDateOfBirth);
+                contact.setGender(foundGender);
+                contact.setCitizenship(foundCitizenship);
+                contact.setFamilyStatus(foundFamilyStatus);
+                contact.setWebsite(foundWebsite);
+                contact.setEmail(foundEmail);
+                contact.setPlaceOfWork(foundPlaceOfWork);
+                contact.setPhoto(foundPhoto);
+
+                contacts.add(contact);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Exception during retrieving contacts from the database", e);
+        } finally {
+            DBResourceManager.closeResources(null, st, rs);
         }
 
         return contacts;
@@ -375,22 +502,22 @@ public class JdbcContactDao implements IContactDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during retrieving contact from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
         }
 
         return contacts;
     }
 
     @Override
-    public ArrayList<Contact> getContactsForPage(int page, int count) throws DaoException {
+    public ArrayList<Contact> getContactsLimit(int startingFrom, int count) throws DaoException {
         ArrayList<Contact> contacts = new ArrayList<>();
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
             cn = transaction.getConnection();
-            st = cn.prepareStatement(SELECT_CONTACTS_FOR_PAGE_QUERY);
-            st.setInt(1, page * count);
+            st = cn.prepareStatement(SELECT_CONTACTS_LIMIT_QUERY);
+            st.setInt(1, startingFrom);
             st.setInt(2, count);
             rs = st.executeQuery();
             while (rs.next()) {
@@ -422,7 +549,7 @@ public class JdbcContactDao implements IContactDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during retrieving contacts from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
         }
         return contacts;
     }
@@ -443,8 +570,93 @@ public class JdbcContactDao implements IContactDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during retrieving contacts count from the database", e);
         } finally {
-            DBResourceManager.closeResources(cn, st, rs);
+            DBResourceManager.closeResources(null, st, rs);
         }
+        return count;
+    }
+
+    @Override
+    public int getContactsSearchResultCount(SearchDTO dto) throws DaoException {
+        Connection cn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        int count = 0;
+        try {
+            cn = transaction.getConnection();
+            st = cn.prepareStatement(SELECT_COUNT_BY_FIELDS_QUERY);
+            if (!dto.getSurname().isEmpty())
+                st.setString(1, dto.getSurname());
+            else st.setString(1, "%");
+
+            if (!dto.getName().isEmpty())
+                st.setString(2, dto.getName());
+            else st.setString(2, "%");
+
+            if (!dto.getPatronymic().isEmpty())
+                st.setString(3, dto.getPatronymic());
+            else st.setString(3, "%");
+
+            if (dto.getFromDate() != null)
+                st.setDate(4, new java.sql.Date(dto.getFromDate().getTime()));
+            else
+                try {
+                    st.setDate(4, new java.sql.Date(DateFormat.getDateInstance().parse("01.01.1900").getTime()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            if (dto.getToDate() != null)
+                st.setDate(5, new java.sql.Date(dto.getToDate().getTime()));
+            else st.setDate(5, new java.sql.Date(new Date().getTime()));
+            // if dates are specified then do not look for rows with NULL dateOfBirth values
+            if (dto.getToDate() != null || dto.getFromDate() != null) {
+                st.setString(6, "NOT NULL");
+            } else st.setString(6, "NULL");
+
+            if (dto.getGender() != null)
+                st.setString(7, dto.getGender().name());
+            else st.setString(7, "%");
+            if (dto.getFamilyStatus() != null)
+                st.setString(8, dto.getFamilyStatus().name());
+            else st.setString(8, "%");
+            if (!dto.getCitizenship().isEmpty())
+                st.setString(9, dto.getCitizenship());
+            else st.setString(9, "%");
+            if (!dto.getCountry().isEmpty())
+                st.setString(10, dto.getCountry());
+            else st.setString(10, "%");
+
+            if (!dto.getCity().isEmpty())
+                st.setString(11, dto.getCity());
+            else st.setString(11, "%");
+
+            if (!dto.getStreet().isEmpty())
+                st.setString(12, dto.getStreet());
+            else st.setString(12, "%");
+
+            if (!dto.getHouse().isEmpty())
+                st.setString(13, dto.getHouse());
+            else st.setString(13, "%");
+
+            if (!dto.getApartment().isEmpty())
+                st.setString(14, dto.getApartment());
+            else st.setString(14, "%");
+
+            if (!dto.getZipCOde().isEmpty())
+                st.setString(15, dto.getZipCOde());
+            else st.setString(15, "%");
+
+
+            rs = st.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Exception during retrieving contacts from the database", e);
+        } finally {
+            DBResourceManager.closeResources(null, st, rs);
+        }
+
         return count;
     }
 

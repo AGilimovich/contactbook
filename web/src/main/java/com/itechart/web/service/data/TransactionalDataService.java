@@ -206,10 +206,10 @@ public class TransactionalDataService implements AbstractDataService {
     }
 
     @Override
-    public ArrayList<Contact> getContactsByFields(SearchDTO dto) {
+    public ArrayList<Contact> getAllContactsByFields(SearchDTO dto) {
         Transaction transaction = tm.getTransaction();
         IContactDao contactDao = new JdbcContactDao(transaction);
-        ArrayList<Contact> contacts = null;
+        ArrayList<Contact> contacts = new ArrayList<>();
         try {
             contacts = contactDao.findContactsByFields(dto);
             transaction.commitTransaction();
@@ -217,6 +217,33 @@ public class TransactionalDataService implements AbstractDataService {
             transaction.rollbackTransaction();
         }
         return contacts;
+    }
+
+    @Override
+    public ArrayList<Contact> getContactsByFieldsForPage(SearchDTO dto, int page, int count) {
+        Transaction transaction = tm.getTransaction();
+        IContactDao contactDao = new JdbcContactDao(transaction);
+        ArrayList<Contact> contacts = new ArrayList<>();
+        try {
+            contacts = contactDao.findContactsByFieldsLimit(dto, page * count, count);
+            transaction.commitTransaction();
+        } catch (DaoException e) {
+            transaction.rollbackTransaction();
+        }
+        return contacts;
+    }
+
+    @Override
+    public int getContactsSearchResultCount(SearchDTO dto) {
+        Transaction transaction = tm.getTransaction();
+        IContactDao contactDao = new JdbcContactDao(transaction);
+        try {
+            return contactDao.getContactsSearchResultCount(dto);
+        } catch (DaoException e) {
+            log.error(e.getCause().getMessage());
+            transaction.rollbackTransaction();
+        }
+        return 0;
     }
 
     @Override
@@ -273,7 +300,7 @@ public class TransactionalDataService implements AbstractDataService {
         ArrayList<Contact> contacts = null;
         ArrayList<MainPageContactDTO> mainPageContactDTOs = new ArrayList<>();
         try {
-            contacts = contactDao.getContactsForPage(page, count);
+            contacts = contactDao.getContactsLimit(page * count, count);
             for (Contact contact : contacts) {
                 File photo = fileDao.getFileById(contact.getPhoto());
                 Address address = addressDao.getAddressByContactId(contact.getContactId());

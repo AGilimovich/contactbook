@@ -23,7 +23,11 @@ public interface AbstractDataService {
 
     ArrayList<Contact> getContactsWithBirthday(Date date);
 
-    ArrayList<Contact> getContactsByFields(SearchDTO dto);
+    ArrayList<Contact> getAllContactsByFields(SearchDTO dto);
+
+    ArrayList<Contact> getContactsByFieldsForPage(SearchDTO dto, int page, int count);
+
+    int getContactsSearchResultCount(SearchDTO dto);
 
     Contact getContactById(long contactId);
 
