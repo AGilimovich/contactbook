@@ -15,14 +15,21 @@ import java.util.Map;
 public class AttachmentBuilder {
 
     public Attachment buildAttachment(Map<String, String> parameters) {
-        String id = parameters.get("id");
-        String name = parameters.get("name");
+        String idParam = parameters.get("id");
+        String nameParam = parameters.get("name");
         String uploadDateParam = parameters.get("uploadDate");
-        String comment = parameters.get("comment");
+        String commentParam = parameters.get("comment");
         Attachment attachment = new Attachment();
-        attachment.setId(Long.valueOf(id));
-        attachment.setName(name);
-        attachment.setComment(comment);
+
+        if (StringUtils.isNotEmpty(idParam)){
+            attachment.setId(Long.valueOf(idParam));
+        }
+        if (StringUtils.isNotEmpty(nameParam)){
+            attachment.setName(nameParam);
+        }
+        if (StringUtils.isNotEmpty(commentParam)){
+            attachment.setComment(commentParam);
+        }
 
         DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyy HH:mm:ss");
         Date uploadDate = null;

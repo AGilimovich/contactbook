@@ -10,15 +10,22 @@ import java.util.Map;
  */
 public class PhotoFileBuilder {
     public File buildFile(Map<String, String> parameters) {
-        String realName = parameters.get("photoFile_real");
-        String storedName = parameters.get("photoFile_stored");
+        String realNameParam = parameters.get("photoFile_real");
+        String storedNameParam = parameters.get("photoFile_stored");
+        File file = new File();
+
+        if (StringUtils.isNotEmpty(realNameParam)){
+            file.setName(realNameParam);
+        } else {
+            //if real name is empty, give file stored name
+            file.setName(storedNameParam);
+        }
+        if (StringUtils.isNotEmpty(storedNameParam)){
+            file.setStoredName(storedNameParam);
+        }
+
         // TODO: 29.03.2017 if  was not saved??
 
-        if (StringUtils.isEmpty(realName))
-            realName = storedName;
-        File file = new File();
-        file.setName(realName);
-        file.setStoredName(storedName);
         return file;
     }
 }

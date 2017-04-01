@@ -58,6 +58,7 @@ public class JdbcFileDao implements IFileDao {
 
     @Override
     public ArrayList<File> getFilesByName(String name) throws DaoException {
+        if (name == null) throw new DaoException("Name is null value");
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -85,6 +86,7 @@ public class JdbcFileDao implements IFileDao {
 
     @Override
     public void update(File file) throws DaoException {
+        if (file == null) throw new DaoException("File is null value");
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -103,6 +105,7 @@ public class JdbcFileDao implements IFileDao {
 
     @Override
     public long save(File file) throws DaoException {
+        if (file == null) throw new DaoException("File is null value");
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;

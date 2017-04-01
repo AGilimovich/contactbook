@@ -1,6 +1,7 @@
 package com.itechart.web.service.request.processing.builder;
 
 import com.itechart.data.entity.File;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -10,16 +11,22 @@ import java.util.Map;
 
 public class AttachFileBuilder {
     public File buildFile(Map<String, String> parameters, String fieldId) {
+        if (fieldId == null) return null;
+        String realNameParam = parameters.get("attachFile[" + fieldId + "]_real");
+        String storedNameParam = parameters.get("attachFile[" + fieldId + "]_stored");
 
-        String realName = parameters.get("attachFile[" + fieldId + "]_real");
-        String storedName = parameters.get("attachFile[" + fieldId + "]_stored");
-
-        // TODO: 29.03.2017
-        if (realName == null)
-            realName = storedName;
         File file = new File();
-        file.setName(realName);
-        file.setStoredName(storedName);
+
+        if (StringUtils.isNotEmpty(realNameParam)) {
+            file.setName(realNameParam);
+        } else {
+            //if real name is empty, give file stored name
+            file.setName(storedNameParam);
+        }
+        if (StringUtils.isNotEmpty(storedNameParam)) {
+            file.setStoredName(storedNameParam);
+        }
+
         return file;
     }
 }

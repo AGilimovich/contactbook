@@ -7,6 +7,7 @@ import com.itechart.web.properties.PropertiesManager;
 import com.itechart.web.service.email.Email;
 import com.itechart.web.service.email.EmailAddressesParser;
 import com.itechart.web.service.request.processing.builder.FullContactDTOBuilder;
+import com.itechart.web.service.validation.ValidationException;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -15,7 +16,6 @@ import org.joda.time.format.DateTimeFormatter;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public class RequestProcessingService implements AbstractRequestProcessingService {
 
-    public FullContactDTO processMultipartContactRequest(HttpServletRequest request) throws FileSizeException {
+    public FullContactDTO processMultipartContactRequest(HttpServletRequest request) throws FileSizeException, ValidationException {
         MultipartRequestHandler handler = new MultipartRequestHandler();
         handler.handle(request);
         //get map of form field names and corresponding values
@@ -47,8 +47,11 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
 
 
     public long processFetchSingleContactRequest(HttpServletRequest request) {
-
-        return Long.valueOf(request.getParameter("id"));
+        String idParam = request.getParameter("id");
+        if (StringUtils.isNotEmpty(idParam)) {
+            return Long.valueOf(idParam);
+        }
+        return 0;
 
 
     }
@@ -59,69 +62,72 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
     }
 
     public SearchDTO processSearchContactsRequest(HttpServletRequest request) {
-        String surname = request.getParameter("surname");
-        String name = request.getParameter("name");
-        String patronymic = request.getParameter("patronymic");
+        String surnameParam = request.getParameter("surname");
+        String nameParam = request.getParameter("name");
+        String patronymicParam = request.getParameter("patronymic");
         String genderParam = request.getParameter("gender");
-        Contact.Gender gender = null;
-        if (genderParam != null && !genderParam.equals("any"))
-            gender = Contact.Gender.valueOf(genderParam.toUpperCase());
-
-
         String familyStatusParam = request.getParameter("familyStatus");
-        Contact.FamilyStatus familyStatus = null;
-        if (familyStatusParam != null && !familyStatusParam.equals("any"))
-            familyStatus = Contact.FamilyStatus.valueOf(familyStatusParam.toUpperCase());
-
         String fromDateParam = request.getParameter("fromDate");
-
+        String toDateParam = request.getParameter("toDate");
+        String citizenshipParam = request.getParameter("citizenship");
+        String countryParam = request.getParameter("country");
+        String cityParam = request.getParameter("city");
+        String streetParam = request.getParameter("street");
+        String houseParam = request.getParameter("house");
+        String apartmentParam = request.getParameter("apartment");
+        String zipCodeParam = request.getParameter("zipCode");
+        SearchDTO dto = new SearchDTO();
+        if (StringUtils.isNotEmpty(surnameParam)) {
+            dto.setSurname(surnameParam);
+        }
+        if (StringUtils.isNotEmpty(nameParam)) {
+            dto.setName(nameParam);
+        }
+        if (StringUtils.isNotEmpty(patronymicParam)) {
+            dto.setPatronymic(patronymicParam);
+        }
+        if (StringUtils.isNotEmpty(genderParam)) {
+            if (!genderParam.equals("any"))
+                dto.setGender(Contact.Gender.valueOf(genderParam.toUpperCase()));
+        }
+        if (StringUtils.isNotEmpty(familyStatusParam)) {
+            if (!familyStatusParam.equals("any"))
+                dto.setFamilyStatus(Contact.FamilyStatus.valueOf(familyStatusParam.toUpperCase()));
+        }
         DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyy");
-        Date fromDateOfBirth = null;
         if (StringUtils.isNotEmpty(fromDateParam)) {
             DateTime dateTime = format.parseDateTime(fromDateParam);
             if (dateTime != null)
-                fromDateOfBirth = dateTime.toDate();
+                dto.setFromDate(dateTime.toDate());
         }
-
-      //  Date fromDateOfBirth = DateTimeParser.parseDate(fromDateParam, "dd.MM.yyyy");
-
-        String toDateParam = request.getParameter("toDate");
-        Date toDateOfBirth = null;
         if (StringUtils.isNotEmpty(toDateParam)) {
             DateTime dateTime = format.parseDateTime(toDateParam);
             if (dateTime != null)
-                toDateOfBirth = dateTime.toDate();
+                dto.setToDate(dateTime.toDate());
         }
-//        Date toDateOfBirth = DateTimeParser.parseDate(toDateParam, "dd.MM.yyyy");
 
-        String citizenship = request.getParameter("citizenship");
-
-        String country = request.getParameter("country");
-        String city = request.getParameter("city");
-        String street = request.getParameter("street");
-        String house = request.getParameter("house");
-        String apartment = request.getParameter("apartment");
-        String zipCode = request.getParameter("zipCode");
-
-        SearchDTO dto = new SearchDTO();
-        dto.setSurname(surname);
-        dto.setName(name);
-        dto.setPatronymic(patronymic);
-        dto.setFromDate(fromDateOfBirth);
-        dto.setToDate(toDateOfBirth);
-        dto.setGender(gender);
-        dto.setFamilyStatus(familyStatus);
-        dto.setCitizenship(citizenship);
-        dto.setCountry(country);
-        dto.setCity(city);
-        dto.setStreet(street);
-        dto.setHouse(house);
-        dto.setApartment(apartment);
-        dto.setZipCOde(zipCode);
-
+        if (StringUtils.isNotEmpty(citizenshipParam)) {
+            dto.setCitizenship(citizenshipParam);
+        }
+        if (StringUtils.isNotEmpty(countryParam)) {
+            dto.setCountry(countryParam);
+        }
+        if (StringUtils.isNotEmpty(cityParam)) {
+            dto.setCity(cityParam);
+        }
+        if (StringUtils.isNotEmpty(streetParam)) {
+            dto.setStreet(streetParam);
+        }
+        if (StringUtils.isNotEmpty(houseParam)) {
+            dto.setHouse(houseParam);
+        }
+        if (StringUtils.isNotEmpty(apartmentParam)) {
+            dto.setApartment(apartmentParam);
+        }
+        if (StringUtils.isNotEmpty(zipCodeParam)) {
+            dto.setZipCOde(zipCodeParam);
+        }
         return dto;
-
-
     }
 
     public Email processSendEmailRequest(HttpServletRequest request) {
@@ -129,7 +135,7 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         String subject = request.getParameter("subject");
         String body = request.getParameter("email-body");
         ArrayList<String> emailAddresses = new EmailAddressesParser().getEmailAddresses(emailAddressesString);
-
+        ArrayList<Email> emails = new ArrayList<>();
         return new Email(emailAddresses, subject, body);
 
 

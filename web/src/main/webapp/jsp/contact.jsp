@@ -304,7 +304,7 @@
                 <div id="file-container">
                 </div>
                 <p class="form-text" id="file-name-label">Имя файла:</p>
-                <input type="text" id="file-name-input" class="form-control input-margin" name="inputAttachName">
+                <input type="text" id="file-name-input" class="form-control input-margin" name="inputAttachName" required>
 
                 <p class="form-text">Комментарий:</p>
                 <input type="text" class="form-control input-margin" name="inputAttachComment">

@@ -22,11 +22,10 @@ public class FileService implements AbstractFileService {
     }
 
     public void deleteFile(String name) {
-        // TODO: 29.03.2017 check null
         if (StringUtils.isEmpty(name)) return;
         String filePath = StringUtils.join(new Object[]{FILE_PATH, name.charAt(0), name}, FileSystems.getDefault().getSeparator());
         File file = null;
-        if (filePath != null)
+        if (StringUtils.isNotEmpty(filePath))
             file = new File(filePath);
         if (file != null && file.exists()) {
             try {
@@ -40,14 +39,15 @@ public class FileService implements AbstractFileService {
 
     @Override
     public void deleteFiles(ArrayList<String> names) {
-        for (String name : names) {
-            deleteFile(name);
+        if (names != null) {
+            for (String name : names) {
+                deleteFile(name);
+            }
         }
     }
 
     public byte[] getFile(String name) {
         if (StringUtils.isNotEmpty(name)) {
-            // TODO: 30.03.2017 check file exists
             Path path = Paths.get(StringUtils.join(new Object[]{FILE_PATH, name.charAt(0), name}, FileSystems.getDefault().getSeparator()));
             if (path != null) {
                 try {

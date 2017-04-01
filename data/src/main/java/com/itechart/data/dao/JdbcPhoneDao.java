@@ -98,6 +98,7 @@ public class JdbcPhoneDao implements IPhoneDao {
 
     @Override
     public long save(Phone phone) throws DaoException {
+        if (phone == null) throw new DaoException("Phone is null value");
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -144,6 +145,7 @@ public class JdbcPhoneDao implements IPhoneDao {
 
     @Override
     public void update(Phone phone) throws DaoException {
+        if (phone == null) throw new DaoException("Phone is null value");
         Connection cn = null;
         PreparedStatement st = null;
         try {

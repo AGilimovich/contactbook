@@ -14,7 +14,7 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a href="../?search=false" class="navbar-brand">Справочник контактов</a>
+            <a href="../${pageContext.request.contextPath}?search=false" class="navbar-brand">Справочник контактов</a>
         </div>
         <div  id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
@@ -142,15 +142,15 @@
                 <div class="pages">
                     <ul class="pagination">
                         <li class="page-item ${pageNumber == 0? ' hidden':''}">
-                            <a href="../?pageNumber=${pageNumber-1}&search=${isSearch}">Предыдущая</a>
+                            <a href="../${pageContext.request.contextPath}?pageNumber=${pageNumber-1}&search=${isSearch}">Предыдущая</a>
                         </li>
                         <c:forEach begin="1" end="${pagesCount}" varStatus="counter">
                             <li class="page ${counter.index == pageNumber+1 ? ' active':''} ${pagesCount == 0 ?'hidden':''}">
-                                <a href="../?pageNumber=${counter.index-1}&search=${isSearch}"> ${counter.index}</a>
+                                <a href="../${pageContext.request.contextPath}?pageNumber=${counter.index-1}&search=${isSearch}"> ${counter.index}</a>
                             </li>
                         </c:forEach>
                         <li class="page-item ${pageNumber == pagesCount-1 || pagesCount==0? ' hidden':''}">
-                            <a href="../?pageNumber=${pageNumber+1}&search=${isSearch}">Следующая</a>
+                            <a href="../${pageContext.request.contextPath}?pageNumber=${pageNumber+1}&search=${isSearch}">Следующая</a>
                         </li>
                     </ul>
                 </div>
@@ -164,7 +164,7 @@
                     </select>
                 </div>
                 <input type="submit" id="btn-submit-item-count" form="main-form"
-                       formaction="../?search=${isSearch}" class="hidden">
+                       formaction="../${pageContext.request.contextPath}?search=${isSearch}" class="hidden">
 
             </div>
         </div>

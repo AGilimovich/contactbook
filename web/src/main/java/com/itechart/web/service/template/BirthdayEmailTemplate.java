@@ -7,7 +7,7 @@ import org.stringtemplate.v4.ST;
  */
 public class BirthdayEmailTemplate implements Template {
     private ST template;
-    private String description = "Поздравление с днем рождения";
+    private final String description = "Поздравление с днем рождения";
 
     public BirthdayEmailTemplate(ST template) {
         this.template = template;

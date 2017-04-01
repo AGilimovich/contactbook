@@ -3,6 +3,7 @@ package com.itechart.web.command;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.email.AbstractEmailingService;
 import com.itechart.web.service.email.Email;
+import com.itechart.web.service.validation.AbstractValidationService;
 import org.apache.commons.mail.EmailException;
 
 import javax.servlet.ServletException;
@@ -20,9 +21,12 @@ public class DoSendEmail implements Command {
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         Email email = ServiceFactory.getServiceFactory().getRequestProcessingService().processSendEmailRequest(request);
         AbstractEmailingService emailingService = ServiceFactory.getServiceFactory().getEmailService();
+        AbstractValidationService validationService = ServiceFactory.getServiceFactory().getValidationService();
         for (String emailAddress : email.getEmailAddresses()) {
             try {
-                emailingService.sendEmail(emailAddress, email.getSubject(), email.getBody());
+                if (validationService.validateEmail(emailAddress)) {
+                    emailingService.sendEmail(emailAddress, email.getSubject(), email.getBody());
+                }
             } catch (EmailException e) {
                 e.printStackTrace();
             }

@@ -10,6 +10,5 @@ public interface AbstractTemplateProvidingService {
 
     Map<Class<? extends Template>, Template> getPredefinedEmailTemplates();
 
-
     Template getEmailListTemplate(ArrayList<String> emailList);
 }

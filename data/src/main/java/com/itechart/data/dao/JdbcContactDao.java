@@ -5,6 +5,7 @@ import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.exception.DaoException;
 import com.itechart.data.transaction.Transaction;
+import org.apache.commons.lang3.StringUtils;
 
 import java.sql.*;
 import java.text.DateFormat;
@@ -65,7 +66,7 @@ public class JdbcContactDao implements IContactDao {
             "INNER JOIN family_status ON c.family_status = family_status.family_status_id " +
             "INNER JOIN gender ON c.gender = gender.gender_id " +
             "WHERE (c.surname LIKE ?) AND (c.name LIKE ?) AND (c.patronymic LIKE ?) AND ((c.date_of_birth BETWEEN ? AND ?) OR (COALESCE(c.date_of_birth,'NULL') LIKE ?)) AND (gender.gender_value LIKE ?) AND (family_status.family_status_value LIKE ?) " +
-            "AND (c.citizenship LIKE ?) AND (a.country LIKE ?) AND (a.city LIKE ?) AND (a.street LIKE ?) AND (a.house LIKE ?) AND (a.apartment LIKE ?) AND (a.zip_code LIKE ?)";;
+            "AND (c.citizenship LIKE ?) AND (a.country LIKE ?) AND (a.city LIKE ?) AND (a.street LIKE ?) AND (a.house LIKE ?) AND (a.apartment LIKE ?) AND (a.zip_code LIKE ?)";
 
 
     public JdbcContactDao(Transaction transaction) {
@@ -73,6 +74,7 @@ public class JdbcContactDao implements IContactDao {
     }
 
     public long save(Contact contact) throws DaoException {
+        if (contact == null) throw new DaoException("Contact is null value");
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -132,6 +134,7 @@ public class JdbcContactDao implements IContactDao {
     }
 
     public void update(Contact contact) throws DaoException {
+        if (contact == null) return;
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -262,7 +265,7 @@ public class JdbcContactDao implements IContactDao {
 
     @Override
     public ArrayList<Contact> findContactsByFields(SearchDTO dto) throws DaoException {
-
+        if (dto == null) throw new DaoException("Search DTO is null value");
         ArrayList<Contact> contacts = new ArrayList<>();
         Connection cn = null;
         PreparedStatement st = null;
@@ -270,15 +273,15 @@ public class JdbcContactDao implements IContactDao {
         try {
             cn = transaction.getConnection();
             st = cn.prepareStatement(SELECT_All_BY_FIELDS_QUERY);
-            if (!dto.getSurname().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getSurname()))
                 st.setString(1, dto.getSurname());
             else st.setString(1, "%");
 
-            if (!dto.getName().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getName()))
                 st.setString(2, dto.getName());
             else st.setString(2, "%");
 
-            if (!dto.getPatronymic().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getPatronymic()))
                 st.setString(3, dto.getPatronymic());
             else st.setString(3, "%");
 
@@ -305,30 +308,30 @@ public class JdbcContactDao implements IContactDao {
             if (dto.getFamilyStatus() != null)
                 st.setString(8, dto.getFamilyStatus().name());
             else st.setString(8, "%");
-            if (!dto.getCitizenship().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getCitizenship()))
                 st.setString(9, dto.getCitizenship());
             else st.setString(9, "%");
-            if (!dto.getCountry().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getCountry()))
                 st.setString(10, dto.getCountry());
             else st.setString(10, "%");
 
-            if (!dto.getCity().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getCity()))
                 st.setString(11, dto.getCity());
             else st.setString(11, "%");
 
-            if (!dto.getStreet().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getStreet()))
                 st.setString(12, dto.getStreet());
             else st.setString(12, "%");
 
-            if (!dto.getHouse().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getHouse()))
                 st.setString(13, dto.getHouse());
             else st.setString(13, "%");
 
-            if (!dto.getApartment().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getApartment()))
                 st.setString(14, dto.getApartment());
             else st.setString(14, "%");
 
-            if (!dto.getZipCOde().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getZipCOde()))
                 st.setString(15, dto.getZipCOde());
             else st.setString(15, "%");
 
@@ -371,6 +374,7 @@ public class JdbcContactDao implements IContactDao {
 
     @Override
     public ArrayList<Contact> findContactsByFieldsLimit(SearchDTO dto, int from, int count) throws DaoException {
+        if (dto == null) throw new DaoException("Search DTO is null value");;
         ArrayList<Contact> contacts = new ArrayList<>();
         Connection cn = null;
         PreparedStatement st = null;
@@ -378,15 +382,15 @@ public class JdbcContactDao implements IContactDao {
         try {
             cn = transaction.getConnection();
             st = cn.prepareStatement(SELECT_BY_FIELDS_LIMIT_QUERY);
-            if (!dto.getSurname().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getSurname()))
                 st.setString(1, dto.getSurname());
             else st.setString(1, "%");
 
-            if (!dto.getName().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getName()))
                 st.setString(2, dto.getName());
             else st.setString(2, "%");
 
-            if (!dto.getPatronymic().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getPatronymic()))
                 st.setString(3, dto.getPatronymic());
             else st.setString(3, "%");
 
@@ -413,30 +417,30 @@ public class JdbcContactDao implements IContactDao {
             if (dto.getFamilyStatus() != null)
                 st.setString(8, dto.getFamilyStatus().name());
             else st.setString(8, "%");
-            if (!dto.getCitizenship().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getCitizenship()))
                 st.setString(9, dto.getCitizenship());
             else st.setString(9, "%");
-            if (!dto.getCountry().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getCountry()))
                 st.setString(10, dto.getCountry());
             else st.setString(10, "%");
 
-            if (!dto.getCity().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getCity()))
                 st.setString(11, dto.getCity());
             else st.setString(11, "%");
 
-            if (!dto.getStreet().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getStreet()))
                 st.setString(12, dto.getStreet());
             else st.setString(12, "%");
 
-            if (!dto.getHouse().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getHouse()))
                 st.setString(13, dto.getHouse());
             else st.setString(13, "%");
 
-            if (!dto.getApartment().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getApartment()))
                 st.setString(14, dto.getApartment());
             else st.setString(14, "%");
 
-            if (!dto.getZipCOde().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getZipCOde()))
                 st.setString(15, dto.getZipCOde());
             else st.setString(15, "%");
 
@@ -482,6 +486,7 @@ public class JdbcContactDao implements IContactDao {
 
     @Override
     public ArrayList<Contact> getByBirthDate(Date date) throws DaoException {
+        if (date == null) throw new DaoException("Date is null value");;
         ArrayList<Contact> contacts = new ArrayList<>();
         Connection cn = null;
         PreparedStatement st = null;
@@ -577,6 +582,7 @@ public class JdbcContactDao implements IContactDao {
 
     @Override
     public int getContactsSearchResultCount(SearchDTO dto) throws DaoException {
+        if (dto == null) throw new DaoException("Search DTO is null value");;
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -584,15 +590,15 @@ public class JdbcContactDao implements IContactDao {
         try {
             cn = transaction.getConnection();
             st = cn.prepareStatement(SELECT_COUNT_BY_FIELDS_QUERY);
-            if (!dto.getSurname().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getSurname()))
                 st.setString(1, dto.getSurname());
             else st.setString(1, "%");
 
-            if (!dto.getName().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getName()))
                 st.setString(2, dto.getName());
             else st.setString(2, "%");
 
-            if (!dto.getPatronymic().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getPatronymic()))
                 st.setString(3, dto.getPatronymic());
             else st.setString(3, "%");
 
@@ -619,30 +625,30 @@ public class JdbcContactDao implements IContactDao {
             if (dto.getFamilyStatus() != null)
                 st.setString(8, dto.getFamilyStatus().name());
             else st.setString(8, "%");
-            if (!dto.getCitizenship().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getCitizenship()))
                 st.setString(9, dto.getCitizenship());
             else st.setString(9, "%");
-            if (!dto.getCountry().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getCountry()))
                 st.setString(10, dto.getCountry());
             else st.setString(10, "%");
 
-            if (!dto.getCity().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getCity()))
                 st.setString(11, dto.getCity());
             else st.setString(11, "%");
 
-            if (!dto.getStreet().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getStreet()))
                 st.setString(12, dto.getStreet());
             else st.setString(12, "%");
 
-            if (!dto.getHouse().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getHouse()))
                 st.setString(13, dto.getHouse());
             else st.setString(13, "%");
 
-            if (!dto.getApartment().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getApartment()))
                 st.setString(14, dto.getApartment());
             else st.setString(14, "%");
 
-            if (!dto.getZipCOde().isEmpty())
+            if (StringUtils.isNotEmpty(dto.getZipCOde()))
                 st.setString(15, dto.getZipCOde());
             else st.setString(15, "%");
 

@@ -29,6 +29,7 @@ public class JdbcAddressDao implements IAddressDao {
 
     @Override
     public long save(Address address) throws DaoException {
+        if (address == null) throw new DaoException("Address is null value");
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -73,6 +74,7 @@ public class JdbcAddressDao implements IAddressDao {
 
     @Override
     public void update(Address address) throws DaoException {
+        if (address == null) throw new DaoException("Address is null value");
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;

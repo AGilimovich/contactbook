@@ -12,6 +12,7 @@ public class EmailAddressesParser {
     private Pattern pattern = Pattern.compile(emailRegex);
 
     public ArrayList<String> getEmailAddresses(String emailAddresses) {
+        if (emailAddresses == null) return null;
         ArrayList<String> addresses = new ArrayList<>();
         Matcher matcher = pattern.matcher(emailAddresses);
         while (matcher.find()) {

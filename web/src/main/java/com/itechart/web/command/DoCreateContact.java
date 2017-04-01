@@ -4,6 +4,7 @@ import com.itechart.data.dto.FullContactDTO;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.request.processing.FileSizeException;
+import com.itechart.web.service.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,10 +28,15 @@ public class DoCreateContact implements Command {
         try {
             fullContactDTO = ServiceFactory.getServiceFactory().getRequestProcessingService().processMultipartContactRequest(request);
         } catch (FileSizeException e) {
-
             try {
                 response.sendError(HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE);
                 return null;
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        } catch (ValidationException e) {
+            try {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             } catch (IOException e1) {
                 e1.printStackTrace();
             }

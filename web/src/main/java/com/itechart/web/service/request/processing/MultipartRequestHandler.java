@@ -31,24 +31,25 @@ public class MultipartRequestHandler {
         DiskFileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
         upload.setFileSizeMax(PropertiesManager.MAX_FILE_SIZE());
-        upload.setSizeMax(PropertiesManager.MAX_REQUEST_SIZE());
         formFields = new HashMap<>();
         fileParts = new HashMap<>();
         try {
             List<FileItem> items = upload.parseRequest(request);
-            for (FileItem item : items) {
-                if (item.isFormField()) {
-                    try {
-                        formFields.put(item.getFieldName(), item.getString("UTF-8"));
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
+            if (items != null) {
+                for (FileItem item : items) {
+                    if (item.isFormField()) {
+                        try {
+                            formFields.put(item.getFieldName(), item.getString("UTF-8"));
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        fileParts.put(item.getFieldName(), item);
                     }
-                } else {
-                    fileParts.put(item.getFieldName(), item);
                 }
             }
         } catch (FileUploadBase.SizeLimitExceededException e) {
-            throw new FileSizeException("File size exceeds max permitted value");
+            throw new FileSizeException("The file size exceeds maximum permitted value");
         } catch
                 (FileUploadException e) {
             e.printStackTrace();
