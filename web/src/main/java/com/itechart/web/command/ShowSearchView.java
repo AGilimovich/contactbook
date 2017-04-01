@@ -13,6 +13,7 @@ public class ShowSearchView implements Command {
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        request.getSession().removeAttribute("searchDTO");
         return "/jsp/search.jsp";
     }
 }
