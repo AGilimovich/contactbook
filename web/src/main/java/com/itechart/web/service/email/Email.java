@@ -6,22 +6,22 @@ import java.util.ArrayList;
  * Created by Aleksandr on 24.03.2017.
  */
 public class Email {
-    private ArrayList<String> emailAddresses;
+    private String emailAddress;
     private String subject;
     private String body;
 
-    public Email(ArrayList<String> emailAddresses, String subject, String body) {
-        this.emailAddresses = emailAddresses;
+    public Email(String emailAddress, String subject, String body) {
+        this.emailAddress = emailAddress;
         this.subject = subject;
         this.body = body;
     }
 
-    public ArrayList<String> getEmailAddresses() {
-        return emailAddresses;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setEmailAddresses(ArrayList<String> emailAddresses) {
-        this.emailAddresses = emailAddresses;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public String getSubject() {

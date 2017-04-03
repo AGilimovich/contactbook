@@ -6,7 +6,7 @@
               username="gilimovich"
               password="1234567"
               driverClassName="com.mysql.jdbc.Driver"
-              url="jdbc:mysql://localhost:3306/aleksandr_gilimovich"
+              url="jdbc:mysql://localhost:3306/aleksandr_gilimovich?autoReconnect=true&amp;useSSL=false"
               maxActive="50"
               maxIdle="50"
               maxWait="100"/>

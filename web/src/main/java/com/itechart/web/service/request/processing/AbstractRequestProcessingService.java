@@ -3,6 +3,7 @@ package com.itechart.web.service.request.processing;
 import com.itechart.data.dto.FullContactDTO;
 import com.itechart.data.dto.SearchDTO;
 import com.itechart.web.service.email.Email;
+import com.itechart.web.service.request.processing.exception.FileSizeException;
 import com.itechart.web.service.validation.ValidationException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,17 +15,14 @@ import java.util.ArrayList;
 public interface AbstractRequestProcessingService {
     FullContactDTO processMultipartContactRequest(HttpServletRequest request) throws FileSizeException, ValidationException;
 
-    String[] processDeleteContactRequest(HttpServletRequest request);
+    ArrayList<Long> processDeleteContactRequest(HttpServletRequest request) throws ValidationException;
+
+    long processFetchSingleContactRequest(HttpServletRequest request) throws ValidationException;
+
+    SearchDTO processSearchContactsRequest(HttpServletRequest request) throws ValidationException;
+
+    ArrayList<Email> processSendEmailRequest(HttpServletRequest request) throws ValidationException;
 
 
-    long processFetchSingleContactRequest(HttpServletRequest request);
-
-    String processFetchContactsRequest(HttpServletRequest request);
-
-    SearchDTO processSearchContactsRequest(HttpServletRequest request);
-
-    Email processSendEmailRequest(HttpServletRequest request);
-
-
-    String[] processShowEmailViewRequest(HttpServletRequest request);
+    ArrayList<Long> processShowEmailViewRequest(HttpServletRequest request) throws ValidationException;
 }

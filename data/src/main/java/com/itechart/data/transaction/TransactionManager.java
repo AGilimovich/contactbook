@@ -1,6 +1,7 @@
 package com.itechart.data.transaction;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
@@ -12,13 +13,13 @@ public class TransactionManager {
 
     public TransactionManager(DataSource dataSource) {
         this.dataSource = dataSource;
-
-
     }
 
     public Transaction getTransaction() {
         try {
-            return new Transaction(dataSource.getConnection());
+            Connection connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+            return new Transaction(connection);
         } catch (SQLException e) {
             e.printStackTrace();
         }

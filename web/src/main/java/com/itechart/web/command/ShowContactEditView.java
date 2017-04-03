@@ -1,7 +1,10 @@
 package com.itechart.web.command;
 
 import com.itechart.data.dto.FullContactDTO;
+import com.itechart.web.command.dispatcher.ErrorDispatcher;
 import com.itechart.web.service.ServiceFactory;
+import com.itechart.web.service.data.exception.DataException;
+import com.itechart.web.service.validation.ValidationException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,9 +19,22 @@ public class ShowContactEditView implements Command {
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        long id = ServiceFactory.getServiceFactory().getRequestProcessingService().processFetchSingleContactRequest(request);
+        long id = 0;
+        try {
+            id = ServiceFactory.getServiceFactory().getRequestProcessingService().processFetchSingleContactRequest(request);
+        } catch (ValidationException e) {
+            e.printStackTrace();
+            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_BAD_REQUEST);
+            return null;
+        }
 
-        FullContactDTO fullContactDTO = ServiceFactory.getServiceFactory().getDataService().getFullContactById(id);
+        FullContactDTO fullContactDTO = null;
+        try {
+            fullContactDTO = ServiceFactory.getServiceFactory().getDataService().getFullContactById(id);
+        } catch (DataException e) {
+            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return null;
+        }
 
         request.getSession().setAttribute("contactToUpdate", fullContactDTO);
         request.getSession().setAttribute("action", "update");

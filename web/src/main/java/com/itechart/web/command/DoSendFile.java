@@ -1,5 +1,6 @@
 package com.itechart.web.command;
 
+import com.itechart.web.command.dispatcher.ErrorDispatcher;
 import com.itechart.web.service.ServiceFactory;
 
 import javax.servlet.ServletException;
@@ -26,11 +27,7 @@ public class DoSendFile implements Command {
             }
         }
         else {
-            try {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_NOT_FOUND);
         }
         return null;
 

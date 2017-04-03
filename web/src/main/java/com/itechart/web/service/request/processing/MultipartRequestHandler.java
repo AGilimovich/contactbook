@@ -1,11 +1,14 @@
 package com.itechart.web.service.request.processing;
 
 import com.itechart.web.properties.PropertiesManager;
+import com.itechart.web.service.request.processing.exception.FileSizeException;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
@@ -17,7 +20,6 @@ import java.util.Map;
  * Class for handling multipart requests.
  */
 public class MultipartRequestHandler {
-
     private Map<String, String> formFields;
     private Map<String, FileItem> fileParts;
 
@@ -50,11 +52,9 @@ public class MultipartRequestHandler {
             }
         } catch (FileUploadBase.SizeLimitExceededException e) {
             throw new FileSizeException("The file size exceeds maximum permitted value");
-        } catch
-                (FileUploadException e) {
+        } catch (FileUploadException e) {
             e.printStackTrace();
         }
-
 
     }
 

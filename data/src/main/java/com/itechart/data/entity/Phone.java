@@ -39,6 +39,7 @@ public class Phone {
     }
 
     public void update(Phone phone) {
+        if (phone == null) return;
         this.countryCode = phone.getCountryCode();
         this.operatorCode = phone.getOperatorCode();
         this.phoneNumber = phone.getPhoneNumber();

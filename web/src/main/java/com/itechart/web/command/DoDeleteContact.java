@@ -1,12 +1,19 @@
 package com.itechart.web.command;
 
+import com.itechart.web.command.dispatcher.ErrorDispatcher;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.AbstractDataService;
+import com.itechart.web.service.data.exception.DataException;
+import com.itechart.web.service.validation.ValidationException;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 
 /**
  * Command for deleting selected contacts.
@@ -16,14 +23,22 @@ public class DoDeleteContact implements Command {
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        String[] selectedContactsId = ServiceFactory.getServiceFactory().getRequestProcessingService().processDeleteContactRequest(request);
-        AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
-        if (selectedContactsId != null) {
-            for (String c : selectedContactsId) {
-                long contactId = Long.valueOf(c);
-                dataService.deleteContact(contactId);
-            }
+        ArrayList<Long> selectedContactsId = null;
+        try {
+            selectedContactsId = ServiceFactory.getServiceFactory().getRequestProcessingService().processDeleteContactRequest(request);
+        } catch (ValidationException e) {
+
+            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_BAD_REQUEST);
+            return null;
         }
+        AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
+        try {
+            dataService.deleteContacts(selectedContactsId);
+        } catch (DataException e) {
+            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return null;
+        }
+
 
 //        int contactsOnPage = 10;
         // TODO: 31.03.2017 null check

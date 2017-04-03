@@ -17,7 +17,7 @@ public class AttachFileBuilder {
 
         File file = new File();
 
-        if (StringUtils.isNotEmpty(realNameParam)) {
+        if (StringUtils.isNotBlank(realNameParam)) {
             file.setName(realNameParam);
         } else {
             //if real name is empty, give file stored name

@@ -2,27 +2,29 @@ package com.itechart.web.service.request.processing;
 
 import com.itechart.data.dto.FullContactDTO;
 import com.itechart.data.dto.SearchDTO;
-import com.itechart.data.entity.Contact;
 import com.itechart.web.properties.PropertiesManager;
+import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.email.Email;
 import com.itechart.web.service.email.EmailAddressesParser;
 import com.itechart.web.service.request.processing.builder.FullContactDTOBuilder;
+import com.itechart.web.service.request.processing.builder.SearchDTOBuilder;
+import com.itechart.web.service.request.processing.exception.FileSizeException;
+import com.itechart.web.service.validation.AbstractValidationService;
 import com.itechart.web.service.validation.ValidationException;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class with a set of methods designed for processing different requests.
+ * Service layer for processing different http requests.
  */
 public class RequestProcessingService implements AbstractRequestProcessingService {
 
+    @Override
     public FullContactDTO processMultipartContactRequest(HttpServletRequest request) throws FileSizeException, ValidationException {
         MultipartRequestHandler handler = new MultipartRequestHandler();
         handler.handle(request);
@@ -40,110 +42,95 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         return builder.getFullContact();
     }
 
-    public String[] processDeleteContactRequest(HttpServletRequest request) {
-        return request.getParameterValues("isSelected");
-
-    }
-
-
-    public long processFetchSingleContactRequest(HttpServletRequest request) {
-        String idParam = request.getParameter("id");
-        if (StringUtils.isNotEmpty(idParam)) {
-            return Long.valueOf(idParam);
+    @Override
+    public ArrayList<Long> processDeleteContactRequest(HttpServletRequest request) throws ValidationException {
+        String[] idArrayParam = request.getParameterValues("isSelected");
+        AbstractValidationService validationService = ServiceFactory.getServiceFactory().getValidationService();
+        ArrayList<Long> selectedIdList = new ArrayList<>();
+        if (idArrayParam != null) {
+            for (String id : idArrayParam) {
+                if (validationService.validateId(id)) {
+                    selectedIdList.add(Long.valueOf(id));
+                } else {
+                    throw new ValidationException(StringUtils.join(new Object[]{"Illegal id", id}, ": "));
+                }
+            }
         }
-        return 0;
-
-
+        return selectedIdList;
     }
 
     @Override
-    public String processFetchContactsRequest(HttpServletRequest request) {
-        return request.getParameter("page");
+    public long processFetchSingleContactRequest(HttpServletRequest request) throws ValidationException {
+        String idParam = request.getParameter("id");
+        AbstractValidationService validationService = ServiceFactory.getServiceFactory().getValidationService();
+        if (StringUtils.isNotEmpty(idParam)) {
+            if (validationService.validateId(idParam)) {
+                return Long.valueOf(idParam);
+            }
+        }
+        throw new ValidationException("Illegal id");
     }
 
-    public SearchDTO processSearchContactsRequest(HttpServletRequest request) {
-        String surnameParam = request.getParameter("surname");
-        String nameParam = request.getParameter("name");
-        String patronymicParam = request.getParameter("patronymic");
-        String genderParam = request.getParameter("gender");
-        String familyStatusParam = request.getParameter("familyStatus");
-        String fromDateParam = request.getParameter("fromDate");
-        String toDateParam = request.getParameter("toDate");
-        String citizenshipParam = request.getParameter("citizenship");
-        String countryParam = request.getParameter("country");
-        String cityParam = request.getParameter("city");
-        String streetParam = request.getParameter("street");
-        String houseParam = request.getParameter("house");
-        String apartmentParam = request.getParameter("apartment");
-        String zipCodeParam = request.getParameter("zipCode");
-        SearchDTO dto = new SearchDTO();
-        if (StringUtils.isNotEmpty(surnameParam)) {
-            dto.setSurname(surnameParam);
-        }
-        if (StringUtils.isNotEmpty(nameParam)) {
-            dto.setName(nameParam);
-        }
-        if (StringUtils.isNotEmpty(patronymicParam)) {
-            dto.setPatronymic(patronymicParam);
-        }
-        if (StringUtils.isNotEmpty(genderParam)) {
-            if (!genderParam.equals("any"))
-                dto.setGender(Contact.Gender.valueOf(genderParam.toUpperCase()));
-        }
-        if (StringUtils.isNotEmpty(familyStatusParam)) {
-            if (!familyStatusParam.equals("any"))
-                dto.setFamilyStatus(Contact.FamilyStatus.valueOf(familyStatusParam.toUpperCase()));
-        }
-        DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyy");
-        if (StringUtils.isNotEmpty(fromDateParam)) {
-            DateTime dateTime = format.parseDateTime(fromDateParam);
-            if (dateTime != null)
-                dto.setFromDate(dateTime.toDate());
-        }
-        if (StringUtils.isNotEmpty(toDateParam)) {
-            DateTime dateTime = format.parseDateTime(toDateParam);
-            if (dateTime != null)
-                dto.setToDate(dateTime.toDate());
-        }
 
-        if (StringUtils.isNotEmpty(citizenshipParam)) {
-            dto.setCitizenship(citizenshipParam);
-        }
-        if (StringUtils.isNotEmpty(countryParam)) {
-            dto.setCountry(countryParam);
-        }
-        if (StringUtils.isNotEmpty(cityParam)) {
-            dto.setCity(cityParam);
-        }
-        if (StringUtils.isNotEmpty(streetParam)) {
-            dto.setStreet(streetParam);
-        }
-        if (StringUtils.isNotEmpty(houseParam)) {
-            dto.setHouse(houseParam);
-        }
-        if (StringUtils.isNotEmpty(apartmentParam)) {
-            dto.setApartment(apartmentParam);
-        }
-        if (StringUtils.isNotEmpty(zipCodeParam)) {
-            dto.setZipCOde(zipCodeParam);
-        }
+    @Override
+    public SearchDTO processSearchContactsRequest(HttpServletRequest request) throws ValidationException {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("surname", request.getParameter("surname"));
+        parameters.put("name", request.getParameter("name"));
+        parameters.put("patronymic", request.getParameter("patronymic"));
+        parameters.put("gender", request.getParameter("gender"));
+        parameters.put("familyStatus", request.getParameter("familyStatus"));
+        parameters.put("fromDate", request.getParameter("fromDate"));
+        parameters.put("toDate", request.getParameter("toDate"));
+        parameters.put("citizenship", request.getParameter("citizenship"));
+        parameters.put("country", request.getParameter("country"));
+        parameters.put("city", request.getParameter("city"));
+        parameters.put("street", request.getParameter("street"));
+        parameters.put("house", request.getParameter("house"));
+        parameters.put("apartment", request.getParameter("apartment"));
+        parameters.put("zipCode", request.getParameter("zipCode"));
+        SearchDTO dto = (new SearchDTOBuilder()).buildSearchDTO(parameters);
         return dto;
     }
 
-    public Email processSendEmailRequest(HttpServletRequest request) {
+    @Override
+    public ArrayList<Email> processSendEmailRequest(HttpServletRequest request) throws ValidationException {
+        AbstractValidationService validationService = ServiceFactory.getServiceFactory().getValidationService();
+
         String emailAddressesString = request.getParameter("emailAddresses");
         String subject = request.getParameter("subject");
         String body = request.getParameter("email-body");
         ArrayList<String> emailAddresses = new EmailAddressesParser().getEmailAddresses(emailAddressesString);
-        ArrayList<Email> emails = new ArrayList<>();
-        return new Email(emailAddresses, subject, body);
 
+        ArrayList<Email> emails = new ArrayList<>();
+        if (emailAddresses != null) {
+            for (String emailAddress : emailAddresses) {
+                if (validationService.validateEmail(emailAddress)) {
+                    emails.add(new Email(emailAddress, subject, body));
+                }
+            }
+        } else {
+            throw new ValidationException("List of emails is empty");
+        }
+        return emails;
 
     }
 
-
-    public String[] processShowEmailViewRequest(HttpServletRequest request) {
-        return request.getParameterValues("isSelected");
+    @Override
+    public ArrayList<Long> processShowEmailViewRequest(HttpServletRequest request) throws ValidationException {
+        AbstractValidationService validationService = ServiceFactory.getServiceFactory().getValidationService();
+        String[] selectedIdArrayParam = request.getParameterValues("isSelected");
+        ArrayList<Long> selectedIdList = new ArrayList<>();
+        if (selectedIdArrayParam != null) {
+            for (String id : selectedIdArrayParam) {
+                if (validationService.validateId(id)) {
+                    selectedIdList.add(Long.valueOf(id));
+                } else {
+                    throw new ValidationException(StringUtils.join(new Object[]{"Illegal id", id}, ": "));
+                }
+            }
+        }
+        return selectedIdList;
     }
 
 

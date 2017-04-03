@@ -4,7 +4,7 @@ import com.itechart.data.entity.Address;
 import com.itechart.data.exception.DaoException;
 
 /**
- * Interface of DAO class for Address entity.
+ * Interface of address DAO.
  */
 public interface IAddressDao {
 

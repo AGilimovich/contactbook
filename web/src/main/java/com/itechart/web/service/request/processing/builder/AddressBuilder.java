@@ -18,22 +18,22 @@ public class AddressBuilder {
         String apartmentParam = parameters.get("apartment");
         String zipCodeParam = parameters.get("zipCode");
 
-        if (StringUtils.isNotEmpty(countryParam)) {
+        if (StringUtils.isNotBlank(countryParam)) {
             address.setCountry(countryParam);
         }
-        if (StringUtils.isNotEmpty(cityParam)) {
+        if (StringUtils.isNotBlank(cityParam)) {
             address.setCity(cityParam);
         }
-        if (StringUtils.isNotEmpty(streetParam)) {
+        if (StringUtils.isNotBlank(streetParam)) {
             address.setStreet(streetParam);
         }
-        if (StringUtils.isNotEmpty(houseParam)) {
+        if (StringUtils.isNotBlank(houseParam)) {
             address.setHouse(houseParam);
         }
-        if (StringUtils.isNotEmpty(apartmentParam)) {
+        if (StringUtils.isNotBlank(apartmentParam)) {
             address.setApartment(apartmentParam);
         }
-        if (StringUtils.isNotEmpty(zipCodeParam)) {
+        if (StringUtils.isNotBlank(zipCodeParam)) {
             address.setZipCode(zipCodeParam);
         }
 

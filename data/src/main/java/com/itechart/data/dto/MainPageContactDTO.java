@@ -25,6 +25,7 @@ public class MainPageContactDTO {
 
 
     public MainPageContactDTO(Contact c, Address a, File photo) {
+        if (c == null || a == null || photo == null) return;
         this.contactId = c.getContactId();
         this.name = c.getName();
         this.surname = c.getSurname();
@@ -36,9 +37,7 @@ public class MainPageContactDTO {
         this.house = a.getHouse();
         this.apartment = a.getApartment();
         this.placeOfWork = c.getPlaceOfWork();
-        // TODO: 29.03.2017 null check
-        if (photo != null)
-            this.photo = photo.getStoredName();
+        this.photo = photo.getStoredName();
     }
 
     public long getContactId() {

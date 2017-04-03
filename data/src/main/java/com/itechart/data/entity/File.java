@@ -1,5 +1,7 @@
 package com.itechart.data.entity;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Created by Aleksandr on 25.03.2017.
  */
@@ -18,10 +20,9 @@ public class File {
     }
 
     public void update(File file) {
-
+        if (file == null) return;
         this.name = file.getName();
-        // TODO: 27.03.2017 use common library for check
-        if (file.getStoredName() != null)
+        if (StringUtils.isNotEmpty(file.getStoredName()))
             this.storedName = file.getStoredName();
     }
 

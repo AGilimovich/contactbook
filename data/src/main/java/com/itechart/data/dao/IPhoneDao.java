@@ -6,7 +6,7 @@ import com.itechart.data.exception.DaoException;
 import java.util.ArrayList;
 
 /**
- * Created by Aleksandr on 13.03.2017.
+ * Interface of phone DAO.
  */
 public interface IPhoneDao {
 

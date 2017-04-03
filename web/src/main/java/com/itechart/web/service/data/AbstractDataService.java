@@ -6,6 +6,7 @@ import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.File;
+import com.itechart.web.service.data.exception.DataException;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,32 +16,33 @@ import java.util.Date;
  */
 public interface AbstractDataService {
 
-    void deleteContact(long contactId);
+    void deleteContact(long contactId) throws DataException;
 
-    void saveNewContact(FullContactDTO fullContactDTO);
+    void deleteContacts(ArrayList<Long> contactId) throws DataException;
 
-    void updateContact(FullContactDTO reconstructed, FullContactDTO contactToUpdate);
+    void saveNewContact(FullContactDTO fullContactDTO) throws DataException;
 
-    ArrayList<Contact> getContactsWithBirthday(Date date);
+    void updateContact(FullContactDTO reconstructed, FullContactDTO contactToUpdate) throws DataException;
 
-    ArrayList<Contact> getAllContactsByFields(SearchDTO dto);
+    ArrayList<Contact> getContactsWithBirthday(Date date) throws DataException;
 
-    ArrayList<Contact> getContactsByFieldsForPage(SearchDTO dto, int page, int count);
+    ArrayList<Contact> getAllContactsByFields(SearchDTO dto) throws DataException;
 
-    int getContactsSearchResultCount(SearchDTO dto);
+    ArrayList<Contact> getContactsByFieldsForPage(SearchDTO dto, int page, int count) throws DataException;
 
-    Contact getContactById(long contactId);
+    int getContactsSearchResultCount(SearchDTO dto) throws DataException;
 
-    Address getAddressByContactId(long addressId);
+    Contact getContactById(long contactId) throws DataException;
 
-    File getPhotoById(long photoId);
+    Address getAddressByContactId(long addressId) throws DataException;
 
-    ArrayList<MainPageContactDTO> getMainPageContactDTO(int page, int count);
+    File getPhotoById(long photoId) throws DataException;
 
-    FullContactDTO getFullContactById(long contactId);
+    ArrayList<MainPageContactDTO> getMainPageContactDTO(int page, int count) throws DataException;
 
-    int getContactsCount();
+    FullContactDTO getFullContactById(long contactId) throws DataException;
 
+    int getContactsCount() throws DataException;
 
 
 }

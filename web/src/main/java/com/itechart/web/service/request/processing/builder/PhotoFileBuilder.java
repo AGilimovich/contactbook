@@ -14,13 +14,13 @@ public class PhotoFileBuilder {
         String storedNameParam = parameters.get("photoFile_stored");
         File file = new File();
 
-        if (StringUtils.isNotEmpty(realNameParam)){
+        if (StringUtils.isNotBlank(realNameParam)){
             file.setName(realNameParam);
         } else {
             //if real name is empty, give file stored name
             file.setName(storedNameParam);
         }
-        if (StringUtils.isNotEmpty(storedNameParam)){
+        if (StringUtils.isNotBlank(storedNameParam)){
             file.setStoredName(storedNameParam);
         }
 

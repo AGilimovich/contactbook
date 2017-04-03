@@ -28,6 +28,7 @@ public class Address {
     }
 
     public void update(Address address) {
+        if (address == null) return;
         this.country = address.getCountry();
         this.city = address.getCity();
         this.street = address.getStreet();

@@ -5,4 +5,8 @@ package com.itechart.web.service.validation;
  */
 public interface AbstractValidationService {
     boolean validateEmail(String email);
+
+    boolean validatePhone(String countryCode, String operatorCode, String phoneNumber);
+
+    boolean validateId(String id);
 }

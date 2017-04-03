@@ -22,7 +22,7 @@ public class FileService implements AbstractFileService {
     }
 
     public void deleteFile(String name) {
-        if (StringUtils.isEmpty(name)) return;
+        if (StringUtils.isBlank(name)) return;
         String filePath = StringUtils.join(new Object[]{FILE_PATH, name.charAt(0), name}, FileSystems.getDefault().getSeparator());
         File file = null;
         if (StringUtils.isNotEmpty(filePath))
@@ -47,7 +47,7 @@ public class FileService implements AbstractFileService {
     }
 
     public byte[] getFile(String name) {
-        if (StringUtils.isNotEmpty(name)) {
+        if (StringUtils.isNotBlank(name)) {
             Path path = Paths.get(StringUtils.join(new Object[]{FILE_PATH, name.charAt(0), name}, FileSystems.getDefault().getSeparator()));
             if (path != null) {
                 try {

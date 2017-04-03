@@ -1,6 +1,10 @@
 package com.itechart.web.service.request.processing.builder;
 
 import com.itechart.data.entity.Attachment;
+import com.itechart.web.service.ServiceFactory;
+import com.itechart.web.service.validation.AbstractValidationService;
+import com.itechart.web.service.validation.ValidationException;
+import com.itechart.web.service.validation.ValidationService;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -14,32 +18,39 @@ import java.util.Map;
  */
 public class AttachmentBuilder {
 
-    public Attachment buildAttachment(Map<String, String> parameters) {
+    public Attachment buildAttachment(Map<String, String> parameters) throws ValidationException {
         String idParam = parameters.get("id");
         String nameParam = parameters.get("name");
         String uploadDateParam = parameters.get("uploadDate");
         String commentParam = parameters.get("comment");
         Attachment attachment = new Attachment();
-
-        if (StringUtils.isNotEmpty(idParam)){
-            attachment.setId(Long.valueOf(idParam));
+        AbstractValidationService validationService = ServiceFactory.getServiceFactory().getValidationService();
+        DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyy HH:mm:ss");
+        if (StringUtils.isNotBlank(uploadDateParam)) {
+            DateTime dateTime = null;
+            try {
+                dateTime = format.parseDateTime(uploadDateParam);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new ValidationException("Date has illegal format");
+            }
+            if (dateTime != null)
+                attachment.setUploadDate(dateTime.toDate());
         }
-        if (StringUtils.isNotEmpty(nameParam)){
+
+        if (StringUtils.isNotBlank(idParam)) {
+            if (validationService.validateId(idParam))
+                attachment.setId(Long.valueOf(idParam));
+            else throw new ValidationException("Invalid id of phone");
+        }
+        if (StringUtils.isNotBlank(nameParam)) {
             attachment.setName(nameParam);
         }
-        if (StringUtils.isNotEmpty(commentParam)){
+        if (StringUtils.isNotBlank(commentParam)) {
             attachment.setComment(commentParam);
         }
 
-        DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyy HH:mm:ss");
-        Date uploadDate = null;
-        if (StringUtils.isNotEmpty(uploadDateParam)) {
-            DateTime dateTime = format.parseDateTime(uploadDateParam);
-            if (dateTime != null)
-                uploadDate = dateTime.toDate();
-        }
 
-        attachment.setUploadDate(uploadDate);
         return attachment;
     }
 

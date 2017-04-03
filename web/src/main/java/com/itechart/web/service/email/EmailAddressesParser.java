@@ -1,5 +1,7 @@
 package com.itechart.web.service.email;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,7 +14,7 @@ public class EmailAddressesParser {
     private Pattern pattern = Pattern.compile(emailRegex);
 
     public ArrayList<String> getEmailAddresses(String emailAddresses) {
-        if (emailAddresses == null) return null;
+        if (StringUtils.isBlank(emailAddresses)) return null;
         ArrayList<String> addresses = new ArrayList<>();
         Matcher matcher = pattern.matcher(emailAddresses);
         while (matcher.find()) {

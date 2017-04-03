@@ -1,4 +1,4 @@
-package com.itechart.web.service.request.processing;
+package com.itechart.web.service.request.processing.exception;
 
 /**
  * Created by Aleksandr on 29.03.2017.

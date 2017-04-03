@@ -61,7 +61,7 @@ public class FullContactDTOBuilder {
         address = addressBuilder.buildAddress(formFields);
     }
 
-    private void buildPhones(Map<String, String> formFields) {
+    private void buildPhones(Map<String, String> formFields) throws ValidationException {
         if (formFields == null) return;
 
         PhoneFormFieldParser parser = new PhoneFormFieldParser();
@@ -74,7 +74,7 @@ public class FullContactDTOBuilder {
                 Map<String, String> parameters = parser.parse(requestParam.getValue());
                 Phone phone = phoneBuilder.buildPhone(parameters);
                 String status = parameters.get("status");
-                if (StringUtils.isNotEmpty(status)) {
+                if (StringUtils.isNotBlank(status)) {
                     switch (status) {
                         case "NEW":
                             newPhones.add(phone);
@@ -95,7 +95,7 @@ public class FullContactDTOBuilder {
         }
     }
 
-    private void buildAttachments(Map<String, String> formFields, Map<String, String> storedFiles) {
+    private void buildAttachments(Map<String, String> formFields, Map<String, String> storedFiles) throws ValidationException {
         if (formFields == null || storedFiles == null) return;
         AttachmentBuilder attachmentBuilder = new AttachmentBuilder();
         AttachFileBuilder fileBuilder = new AttachFileBuilder();
@@ -114,7 +114,7 @@ public class FullContactDTOBuilder {
                 Attachment attachment = attachmentBuilder.buildAttachment(parameters);
                 FullAttachmentDTO fullAttachmentDTO = new FullAttachmentDTO(attachment, file);
                 String status = parameters.get("status");
-                if (StringUtils.isNotEmpty(status)) {
+                if (StringUtils.isNotBlank(status)) {
                     switch (status) {
                         case "NEW":
                             newAttachments.add(fullAttachmentDTO);

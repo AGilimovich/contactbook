@@ -2,6 +2,7 @@ package com.itechart.web.controller;
 
 import com.itechart.web.command.Command;
 import com.itechart.web.command.CommandFactory;
+import com.itechart.web.command.dispatcher.ErrorDispatcher;
 import com.itechart.web.properties.PropertiesManager;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.scheduler.AbstractSchedulingService;
@@ -35,7 +36,8 @@ public class FrontCtrl extends HttpServlet {
         if (!response.isCommitted()) {
             if (page != null)
                 dispatch(request, response, page);
-            else response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            else
+                ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_NOT_FOUND);
         }
     }
 

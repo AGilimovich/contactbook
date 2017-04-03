@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Interface for contacts data access object.
+ * Interface of contact DAO.
  */
 public interface IContactDao {
 
@@ -22,7 +22,7 @@ public interface IContactDao {
 
     Contact getContactById(long id) throws DaoException;
 
-    ArrayList<Contact> findContactsByFields(SearchDTO dto) throws DaoException;
+ //   ArrayList<Contact> findContactsByFields(SearchDTO dto) throws DaoException;
 
     ArrayList<Contact> findContactsByFieldsLimit(SearchDTO dto, int from, int count) throws DaoException;
 

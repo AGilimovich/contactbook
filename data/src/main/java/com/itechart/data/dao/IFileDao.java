@@ -6,7 +6,7 @@ import com.itechart.data.exception.DaoException;
 import java.util.ArrayList;
 
 /**
- * Created by Aleksandr on 25.03.2017.
+ * Interface of file DAO.
  */
 public interface IFileDao {
     File getFileById(long id) throws DaoException;

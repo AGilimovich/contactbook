@@ -1,8 +1,10 @@
 package com.itechart.web.command;
 
 import com.itechart.data.dto.MainPageContactDTO;
+import com.itechart.web.command.dispatcher.ErrorDispatcher;
 import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.ServiceFactory;
+import com.itechart.web.service.data.exception.DataException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +23,9 @@ public class ShowContactsView implements Command {
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        log.debug("111{}",request);
-        log.info("1{}",request);
-
+        // TODO: 03.04.2017 logging
+        log.debug("111{}", request);
+        log.info("1{}", request);
 
 
         if (request.getSession().getAttribute("isSearch") != null) {
@@ -57,9 +59,21 @@ public class ShowContactsView implements Command {
         }
         AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
 
-        ArrayList<MainPageContactDTO> mainPageContactDTOs = dataService.getMainPageContactDTO(pageNumber, contactsOnPage);
-        int contactsInDBCount = dataService.getContactsCount();
-        int pagesCount = (int) Math.ceil((double)contactsInDBCount / contactsOnPage);
+        int contactsInDBCount = 0;
+        ArrayList<MainPageContactDTO> mainPageContactDTOs = null;
+        try {
+            mainPageContactDTOs = dataService.getMainPageContactDTO(pageNumber, contactsOnPage);
+            contactsInDBCount = dataService.getContactsCount();
+        } catch (DataException e) {
+            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return null;
+        }
+
+
+        int pagesCount = 1;
+        if (contactsOnPage != 0) {
+            pagesCount = (int) Math.ceil((double) contactsInDBCount / contactsOnPage);
+        }
         request.getSession().removeAttribute("searchDTO");
         request.getSession().setAttribute("pageNumber", pageNumber);
         request.setAttribute("contacts", mainPageContactDTOs);

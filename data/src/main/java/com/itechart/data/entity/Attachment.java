@@ -31,6 +31,7 @@ public class Attachment {
     }
 
     public void update(Attachment attachment){
+        if (attachment == null) return;
         this.name = attachment.getName();
         this.uploadDate = attachment.getUploadDate();
         this.comment = attachment.getComment();

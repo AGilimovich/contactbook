@@ -5,7 +5,7 @@ package com.itechart.data.exception;
  */
 public class DaoException extends Exception {
 
-       public DaoException(String message) {
+    public DaoException(String message) {
         super(message);
     }
 

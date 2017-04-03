@@ -43,6 +43,7 @@ public class Contact {
     }
 
     public void update(Contact contact) {
+        if (contact == null) return;
         this.name = contact.getName();
         this.surname = contact.getSurname();
         this.patronymic = contact.getPatronymic();
@@ -53,8 +54,6 @@ public class Contact {
         this.website = contact.getWebsite();
         this.email = contact.getEmail();
         this.placeOfWork = contact.getPlaceOfWork();
-//        if (contact.getPhoto() != 0)
-//            this.photo = contact.getPhoto();
     }
 
     public long getContactId() {

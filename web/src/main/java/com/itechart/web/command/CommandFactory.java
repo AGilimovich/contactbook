@@ -1,5 +1,8 @@
 package com.itechart.web.command;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -9,7 +12,7 @@ import java.util.Map;
  * Factory class for which produces command objects.
  */
 public class CommandFactory {
-
+    private static Logger logger = LoggerFactory.getLogger(CommandFactory.class);
     private static Map<String, Class<? extends Command>> commands = new HashMap();
 
     static {
@@ -30,16 +33,17 @@ public class CommandFactory {
 
     public static Command getCommand(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
-
         Class<? extends Command> commandClass = commands.get(path);
         if (commandClass != null)
             try {
+                logger.info("Request for path: {}", request.getRequestURI());
                 return commandClass.newInstance();
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
+
         return null;
     }
 }

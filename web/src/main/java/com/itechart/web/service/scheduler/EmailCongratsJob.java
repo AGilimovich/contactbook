@@ -2,6 +2,7 @@ package com.itechart.web.service.scheduler;
 
 import com.itechart.data.entity.Contact;
 import com.itechart.web.service.ServiceFactory;
+import com.itechart.web.service.data.exception.DataException;
 import com.itechart.web.service.email.AbstractEmailingService;
 import com.itechart.web.service.email.EmailingService;
 import com.itechart.web.service.template.AbstractTemplateProvidingService;
@@ -25,7 +26,12 @@ public class EmailCongratsJob implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        ArrayList<Contact> contacts = ServiceFactory.getServiceFactory().getDataService().getContactsWithBirthday(new Date());
+        ArrayList<Contact> contacts = null;
+        try {
+            contacts = ServiceFactory.getServiceFactory().getDataService().getContactsWithBirthday(new Date());
+        } catch (DataException e) {
+            e.printStackTrace();
+        }
         AbstractEmailingService emailingService = ServiceFactory.getServiceFactory().getEmailService();
         AbstractTemplateProvidingService templateService = ServiceFactory.getServiceFactory().getEmailTemplateProvidingService();
 
