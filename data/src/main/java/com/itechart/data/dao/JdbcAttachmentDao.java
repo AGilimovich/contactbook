@@ -91,7 +91,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
 
     @Override
     public long save(Attachment attachment) throws DaoException {
-        if (attachment == null) throw new DaoException("Attachment is null value");
+        if (attachment == null) throw new DaoException("Attachment is null");
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -139,7 +139,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
 
     @Override
     public void update(Attachment attachment) throws DaoException {
-        if (attachment == null) throw new DaoException("Attachment is null value");
+        if (attachment == null) throw new DaoException("Attachment is null");
         Connection cn = null;
         PreparedStatement st = null;
         try {

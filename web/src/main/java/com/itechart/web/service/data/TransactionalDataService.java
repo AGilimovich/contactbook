@@ -219,7 +219,7 @@ public class TransactionalDataService implements AbstractDataService {
         Transaction transaction = tm.getTransaction();
         IContactDao contactDao = new JdbcContactDao(transaction);
         ArrayList<Contact> contacts = new ArrayList<>();
-        // TODO: 03.04.2017  
+        // TODO: 03.04.2017
 //        try {
 //            contacts = contactDao.findContactsByFields(dto);
 //            transaction.commitTransaction();

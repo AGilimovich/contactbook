@@ -4,7 +4,7 @@ import com.itechart.data.db.DBResourceManager;
 import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.exception.DaoException;
-import com.itechart.data.query.DynamicQueryBuilder;
+import com.itechart.data.query.DynamicPreparedQueryBuilder;
 import com.itechart.data.transaction.Transaction;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -89,7 +89,7 @@ public class JdbcContactDao implements IContactDao {
     }
 
     public long save(Contact contact) throws DaoException {
-        if (contact == null) throw new DaoException("Contact is null value");
+        if (contact == null) throw new DaoException("Contact is null");
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -278,64 +278,102 @@ public class JdbcContactDao implements IContactDao {
         return contact;
     }
 
+
     @Override
     public ArrayList<Contact> findContactsByFieldsLimit(SearchDTO dto, int from, int count) throws DaoException {
-        if (dto == null) throw new DaoException("Search DTO is null value");
-        DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
-        DynamicQueryBuilder builder = new DynamicQueryBuilder(SELECT_BY_FIELDS_BASE_QUERY);
+        if (dto == null) throw new DaoException("Search DTO is null");
+        DynamicPreparedQueryBuilder builder = new DynamicPreparedQueryBuilder(SELECT_BY_FIELDS_BASE_QUERY);
+        ArrayList<Object> parameters = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
 
-        if (StringUtils.isNotBlank(dto.getSurname()))
-            builder.appendClause("c.surname", dto.getSurname());
-        if (StringUtils.isNotBlank(dto.getName()))
-            builder.appendClause("c.name", dto.getName());
-        if (StringUtils.isNotBlank(dto.getPatronymic()))
-            builder.appendClause("c.patronymic", dto.getPatronymic());
-        if (dto.getFromDate() != null || dto.getToDate() != null) {
-            builder.appendBetween("c.date_of_birth");
-            if (dto.getFromDate() != null) {
-                String date = fmt.print(new DateTime(dto.getFromDate()));
-                if (date != null)
-                    builder.appendBetweenFirstValue("'" + date + "'");
-            } else
-                builder.appendBetweenFirstValue("'1000-01-01'");
-            if (dto.getFromDate() != null) {
-                String date = fmt.print(new DateTime(dto.getToDate()));
-                if (date != null)
-                    builder.appendBetweenSecondValue("'" + date + "'");
-            } else {
-                builder.appendBetweenSecondValue("'9999-12-31'");
-            }
+        if (StringUtils.isNotBlank(dto.getSurname())) {
+            parameters.add(dto.getSurname());
+            builder.appendWhereClause("c.surname");
         }
-        if (dto.getGender() != null)
-            builder.appendClause("gender.gender_value", dto.getGender().name());
-        if (dto.getFamilyStatus() != null)
-            builder.appendClause("family_status.family_status_value", dto.getFamilyStatus().name());
-        if (StringUtils.isNotEmpty(dto.getCitizenship()))
-            builder.appendClause("c.citizenship", dto.getCitizenship());
-        if (StringUtils.isNotEmpty(dto.getCountry()))
-            builder.appendClause("a.country", dto.getCountry());
-        if (StringUtils.isNotEmpty(dto.getCity()))
-            builder.appendClause("a.city", dto.getCity());
-        if (StringUtils.isNotEmpty(dto.getStreet()))
-            builder.appendClause("a.street", dto.getStreet());
-        if (StringUtils.isNotEmpty(dto.getHouse()))
-            builder.appendClause("a.house", dto.getHouse());
-        if (StringUtils.isNotEmpty(dto.getApartment()))
-            builder.appendClause("a.apartment", dto.getApartment());
-        if (StringUtils.isNotEmpty(dto.getZipCOde()))
-            builder.appendClause("a.zip_code", dto.getZipCOde());
+
+        if (StringUtils.isNotBlank(dto.getName())) {
+            parameters.add(dto.getName());
+            builder.appendWhereClause("c.name");
+        }
+        if (StringUtils.isNotBlank(dto.getPatronymic())) {
+            parameters.add(dto.getPatronymic());
+            builder.appendWhereClause("c.patronymic");
+        }
+        if (dto.getFromDate() != null || dto.getToDate() != null) {
+            if (dto.getFromDate() != null) {
+                parameters.add(new java.sql.Date(dto.getFromDate().getTime()));
+            } else {
+                DateTime date = formatter.parseDateTime("1000-01-01");
+                parameters.add(new java.sql.Date(date.toDate().getTime()));
+            }
+            if (dto.getToDate() != null) {
+                parameters.add(new java.sql.Date(dto.getToDate().getTime()));
+            } else {
+                DateTime date = formatter.parseDateTime("9999-12-31");
+                parameters.add(new java.sql.Date(date.toDate().getTime()));
+            }
+            builder.appendBetween("c.date_of_birth");
+        }
+        if (dto.getGender() != null) {
+            parameters.add(dto.getGender().name());
+            builder.appendWhereClause("gender.gender_value");
+        }
+        if (dto.getFamilyStatus() != null) {
+            parameters.add(dto.getFamilyStatus().name());
+            builder.appendWhereClause("family_status.family_status_value");
+        }
+        if (StringUtils.isNotBlank(dto.getCitizenship())) {
+            parameters.add(dto.getCitizenship());
+            builder.appendWhereClause("c.citizenship");
+        }
+        if (StringUtils.isNotBlank(dto.getCountry())) {
+            parameters.add(dto.getCountry());
+            builder.appendWhereClause("a.country");
+        }
+        if (StringUtils.isNotBlank(dto.getCity())) {
+            parameters.add(dto.getCity());
+            builder.appendWhereClause("a.city");
+        }
+        if (StringUtils.isNotBlank(dto.getStreet())) {
+            parameters.add(dto.getStreet());
+            builder.appendWhereClause("a.street");
+        }
+        if (StringUtils.isNotBlank(dto.getHouse())) {
+            parameters.add(dto.getHouse());
+            builder.appendWhereClause("a.house");
+        }
+        if (StringUtils.isNotBlank(dto.getApartment())) {
+            parameters.add(dto.getApartment());
+            builder.appendWhereClause("a.apartment");
+        }
+        if (StringUtils.isNotBlank(dto.getZipCOde())) {
+            parameters.add(dto.getZipCOde());
+            builder.appendWhereClause("a.zip_code");
+        }
         builder.appendLimit(from, count);
 
 
         ArrayList<Contact> contacts = new ArrayList<>();
         Connection cn = null;
-        Statement st = null;
+        PreparedStatement st = null;
         ResultSet rs = null;
 
         try {
             cn = transaction.getConnection();
-            st = cn.createStatement();
-            rs = st.executeQuery(builder.getQuery().toString());
+            st = cn.prepareStatement(builder.getQuery().toString());
+
+            for (int i = 0; i < parameters.size(); i++) {
+                if (parameters.get(i) != null) {
+                    if (parameters.get(i) instanceof String) {
+                        st.setString(i + 1, (String) parameters.get(i));
+                    } else if (parameters.get(i) instanceof java.sql.Date) {
+                        st.setDate(i + 1, (java.sql.Date) parameters.get(i));
+                    } else throw new DaoException("Exception during retrieving contacts from the database");
+                }
+            }
+
+
+            rs = st.executeQuery();
             while (rs.next()) {
                 long foundContactId = rs.getLong("contact_id");
                 String foundName = rs.getString("name");
@@ -372,10 +410,9 @@ public class JdbcContactDao implements IContactDao {
     }
 
 
-
     @Override
     public ArrayList<Contact> getByBirthDate(Date date) throws DaoException {
-        if (date == null) throw new DaoException("Date is null value");
+        if (date == null) throw new DaoException("Date is null");
         ;
         ArrayList<Contact> contacts = new ArrayList<>();
         Connection cn = null;
@@ -472,62 +509,91 @@ public class JdbcContactDao implements IContactDao {
 
     @Override
     public int getContactsSearchResultCount(SearchDTO dto) throws DaoException {
-        if (dto == null) throw new DaoException("Search DTO is null value");
+        if (dto == null) throw new DaoException("Search DTO is null");
+        DynamicPreparedQueryBuilder builder = new DynamicPreparedQueryBuilder(SELECT_COUNT_BY_FIELDS_BASE_QUERY);
+        ArrayList<Object> parameters = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
 
-        DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
-        DynamicQueryBuilder builder = new DynamicQueryBuilder(SELECT_COUNT_BY_FIELDS_BASE_QUERY);
-
-        if (StringUtils.isNotBlank(dto.getSurname()))
-            builder.appendClause("c.surname", dto.getSurname());
-        if (StringUtils.isNotBlank(dto.getName()))
-            builder.appendClause("c.name", dto.getName());
-        if (StringUtils.isNotBlank(dto.getPatronymic()))
-            builder.appendClause("c.patronymic", dto.getPatronymic());
-        if (dto.getFromDate() != null || dto.getToDate() != null) {
-            builder.appendBetween("c.date_of_birth");
-            if (dto.getFromDate() != null) {
-                String date = fmt.print(new DateTime(dto.getFromDate()));
-                if (date != null)
-                    builder.appendBetweenFirstValue("'" + date + "'");
-            } else
-                builder.appendBetweenFirstValue("'1000-01-01'");
-
-
-            if (dto.getFromDate() != null) {
-                String date = fmt.print(new DateTime(dto.getToDate()));
-                if (date != null)
-                    builder.appendBetweenSecondValue("'" + date + "'");
-            } else {
-                builder.appendBetweenSecondValue("'9999-12-31'");
-            }
+        if (StringUtils.isNotBlank(dto.getSurname())) {
+            parameters.add(dto.getSurname());
+            builder.appendWhereClause("c.surname");
         }
-        if (dto.getGender() != null)
-            builder.appendClause("gender.gender_value", dto.getGender().name());
-        if (dto.getFamilyStatus() != null)
-            builder.appendClause("family_status.family_status_value", dto.getFamilyStatus().name());
-        if (StringUtils.isNotEmpty(dto.getCitizenship()))
-            builder.appendClause("c.citizenship", dto.getCitizenship());
-        if (StringUtils.isNotEmpty(dto.getCountry()))
-            builder.appendClause("a.country", dto.getCountry());
-        if (StringUtils.isNotEmpty(dto.getCity()))
-            builder.appendClause("a.city", dto.getCity());
-        if (StringUtils.isNotEmpty(dto.getStreet()))
-            builder.appendClause("a.street", dto.getStreet());
-        if (StringUtils.isNotEmpty(dto.getHouse()))
-            builder.appendClause("a.house", dto.getHouse());
-        if (StringUtils.isNotEmpty(dto.getApartment()))
-            builder.appendClause("a.apartment", dto.getApartment());
-        if (StringUtils.isNotEmpty(dto.getZipCOde()))
-            builder.appendClause("a.zip_code", dto.getZipCOde());
+
+        if (StringUtils.isNotBlank(dto.getName())) {
+            parameters.add(dto.getName());
+            builder.appendWhereClause("c.name");
+        }
+        if (StringUtils.isNotBlank(dto.getPatronymic())) {
+            parameters.add(dto.getPatronymic());
+            builder.appendWhereClause("c.patronymic");
+        }
+        if (dto.getFromDate() != null || dto.getToDate() != null) {
+            if (dto.getFromDate() != null) {
+                parameters.add(new java.sql.Date(dto.getFromDate().getTime()));
+            } else {
+                DateTime date = formatter.parseDateTime("1000-01-01");
+                parameters.add(new java.sql.Date(date.toDate().getTime()));
+            }
+            if (dto.getToDate() != null) {
+                parameters.add(new java.sql.Date(dto.getToDate().getTime()));
+            } else {
+                DateTime date = formatter.parseDateTime("9999-12-31");
+                parameters.add(new java.sql.Date(date.toDate().getTime()));
+            }
+            builder.appendBetween("c.date_of_birth");
+        }
+        if (dto.getGender() != null) {
+            parameters.add(dto.getGender().name());
+            builder.appendWhereClause("gender.gender_value");
+        }
+        if (dto.getFamilyStatus() != null) {
+            parameters.add(dto.getFamilyStatus().name());
+            builder.appendWhereClause("family_status.family_status_value");
+        }
+        if (StringUtils.isNotBlank(dto.getCitizenship())) {
+            parameters.add(dto.getCitizenship());
+            builder.appendWhereClause("c.citizenship");
+        }
+        if (StringUtils.isNotBlank(dto.getCountry())) {
+            parameters.add(dto.getCountry());
+            builder.appendWhereClause("a.country");
+        }
+        if (StringUtils.isNotBlank(dto.getCity())) {
+            parameters.add(dto.getCity());
+            builder.appendWhereClause("a.city");
+        }
+        if (StringUtils.isNotBlank(dto.getStreet())) {
+            parameters.add(dto.getStreet());
+            builder.appendWhereClause("a.street");
+        }
+        if (StringUtils.isNotBlank(dto.getHouse())) {
+            parameters.add(dto.getHouse());
+            builder.appendWhereClause("a.house");
+        }
+        if (StringUtils.isNotBlank(dto.getApartment())) {
+            parameters.add(dto.getApartment());
+            builder.appendWhereClause("a.apartment");
+        }
+        if (StringUtils.isNotBlank(dto.getZipCOde())) {
+            parameters.add(dto.getZipCOde());
+            builder.appendWhereClause("a.zip_code");
+        }
 
         Connection cn = null;
-        Statement st = null;
+        PreparedStatement st = null;
         ResultSet rs = null;
         int count = 0;
         try {
             cn = transaction.getConnection();
-            st = cn.createStatement();
-            rs = st.executeQuery(builder.getQuery().toString());
+            st = cn.prepareStatement(builder.getQuery().toString());
+            for (int i = 0; i < parameters.size(); i++) {
+                if (parameters.get(i) instanceof String) {
+                    st.setString(i + 1, (String) parameters.get(i));
+                } else if (parameters.get(i) instanceof java.sql.Date) {
+                    st.setDate(i + 1, (java.sql.Date) parameters.get(i));
+                } else throw new DaoException("Exception during retrieving contacts from the database");
+            }
+            rs = st.executeQuery();
             if (rs.next()) {
                 count = rs.getInt(1);
             }
