@@ -19,15 +19,16 @@ import java.util.ArrayList;
  * Command for deleting selected contacts.
  */
 public class DoDeleteContact implements Command {
-
-
+    private static Logger logger = LoggerFactory.getLogger(DoDeleteContact.class);
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        logger.info("Execute command");
+
         ArrayList<Long> selectedContactsId = null;
         try {
             selectedContactsId = ServiceFactory.getServiceFactory().getRequestProcessingService().processDeleteContactRequest(request);
         } catch (ValidationException e) {
-
+            logger.error("Error during request processing: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_BAD_REQUEST);
             return null;
         }
@@ -35,6 +36,7 @@ public class DoDeleteContact implements Command {
         try {
             dataService.deleteContacts(selectedContactsId);
         } catch (DataException e) {
+            logger.error("Error during deleting contacts: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return null;
         }

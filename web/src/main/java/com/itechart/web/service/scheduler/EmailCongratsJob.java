@@ -13,6 +13,8 @@ import org.apache.commons.mail.EmailException;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,14 +24,18 @@ import java.util.Date;
  * Created by Aleksandr on 18.03.2017.
  */
 public class EmailCongratsJob implements Job {
-
+    private Logger logger = LoggerFactory.getLogger(SchedulingService.class);
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        logger.info("Execute daily congratulation job");
         ArrayList<Contact> contacts = null;
         try {
-            contacts = ServiceFactory.getServiceFactory().getDataService().getContactsWithBirthday(new Date());
+            Date date = new Date();
+            logger.info("Fetch contacts with birth day: {}", date.toString());
+            contacts = ServiceFactory.getServiceFactory().getDataService().getContactsWithBirthday(date);
         } catch (DataException e) {
+            logger.error("Error during fetching contacts", e.getMessage());
             e.printStackTrace();
         }
         AbstractEmailingService emailingService = ServiceFactory.getServiceFactory().getEmailService();
@@ -42,8 +48,10 @@ public class EmailCongratsJob implements Job {
         if (contacts != null) {
             for (Contact con : contacts) {
                 try {
+                    logger.info("Send email, email address {}, subject: {}, body: {}", con.getEmail(), subject, body);
                     emailingService.sendEmail(con.getEmail(), subject, body);
                 } catch (EmailException e) {
+                    logger.error("Error during sending email", e.getMessage());
                     e.printStackTrace();
                 }
 

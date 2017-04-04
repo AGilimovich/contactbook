@@ -4,6 +4,8 @@ import com.itechart.data.db.DBResourceManager;
 import com.itechart.data.entity.File;
 import com.itechart.data.exception.DaoException;
 import com.itechart.data.transaction.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,6 +15,8 @@ import java.util.ArrayList;
  */
 public class JdbcFileDao implements IFileDao {
     private Transaction transaction;
+    private Logger logger = LoggerFactory.getLogger(JdbcFileDao.class);
+
 
     private final String SELECT_BY_ID_QUERY = "SELECT * FROM file WHERE file_id = ?";
 
@@ -32,6 +36,7 @@ public class JdbcFileDao implements IFileDao {
 
     @Override
     public File getFileById(long id) throws DaoException {
+        logger.info("Fetch file by id: {}", id);
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -58,6 +63,7 @@ public class JdbcFileDao implements IFileDao {
 
     @Override
     public ArrayList<File> getFilesByName(String name) throws DaoException {
+        logger.info("Fetch files by name: {}", name);
         if (name == null) throw new DaoException("Name is null");
         Connection cn = null;
         PreparedStatement st = null;
@@ -86,6 +92,7 @@ public class JdbcFileDao implements IFileDao {
 
     @Override
     public void update(File file) throws DaoException {
+        logger.info("Update file: {}", file);
         if (file == null) throw new DaoException("File is null");
         Connection cn = null;
         PreparedStatement st = null;
@@ -105,6 +112,7 @@ public class JdbcFileDao implements IFileDao {
 
     @Override
     public long save(File file) throws DaoException {
+        logger.info("Save file: {}", file);
         if (file == null) throw new DaoException("File is null");
         Connection cn = null;
         PreparedStatement st = null;
@@ -131,6 +139,7 @@ public class JdbcFileDao implements IFileDao {
 
     @Override
     public void delete(long id) throws DaoException {
+        logger.info("Delete file with id: {}", id);
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -147,6 +156,7 @@ public class JdbcFileDao implements IFileDao {
 
     @Override
     public File getFileByAttachmentId(long attachId) throws DaoException {
+        logger.info("Fetch file for attachment with id: {}", attachId);
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;

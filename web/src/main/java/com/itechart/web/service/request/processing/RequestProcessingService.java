@@ -13,9 +13,12 @@ import com.itechart.web.service.validation.AbstractValidationService;
 import com.itechart.web.service.validation.ValidationException;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,9 +26,11 @@ import java.util.Map;
  * Service layer for processing different http requests.
  */
 public class RequestProcessingService implements AbstractRequestProcessingService {
+    private Logger logger = LoggerFactory.getLogger(RequestProcessingService.class);
 
     @Override
     public FullContactDTO processMultipartContactRequest(HttpServletRequest request) throws FileSizeException, ValidationException {
+        logger.info("Processing multipart request");
         MultipartRequestHandler handler = new MultipartRequestHandler();
         handler.handle(request);
         //get map of form field names and corresponding values
@@ -45,6 +50,9 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
     @Override
     public ArrayList<Long> processDeleteContactRequest(HttpServletRequest request) throws ValidationException {
         String[] idArrayParam = request.getParameterValues("isSelected");
+        if (idArrayParam != null)
+            logger.info("Processing request:  delete contacts with id's: {}", Arrays.toString(idArrayParam));
+        else logger.info("Processing request:  delete contacts, no selected contacts");
         AbstractValidationService validationService = ServiceFactory.getServiceFactory().getValidationService();
         ArrayList<Long> selectedIdList = new ArrayList<>();
         if (idArrayParam != null) {
@@ -62,6 +70,7 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
     @Override
     public long processFetchSingleContactRequest(HttpServletRequest request) throws ValidationException {
         String idParam = request.getParameter("id");
+        logger.info("Processing request: fetch contact with id: {}", idParam);
         AbstractValidationService validationService = ServiceFactory.getServiceFactory().getValidationService();
         if (StringUtils.isNotEmpty(idParam)) {
             if (validationService.validateId(idParam)) {
@@ -74,6 +83,7 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
 
     @Override
     public SearchDTO processSearchContactsRequest(HttpServletRequest request) throws ValidationException {
+        logger.info("Processing request: search for contacts");
         Map<String, String> parameters = new HashMap<>();
         parameters.put("surname", request.getParameter("surname"));
         parameters.put("name", request.getParameter("name"));
@@ -96,10 +106,11 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
     @Override
     public ArrayList<Email> processSendEmailRequest(HttpServletRequest request) throws ValidationException {
         AbstractValidationService validationService = ServiceFactory.getServiceFactory().getValidationService();
-
         String emailAddressesString = request.getParameter("emailAddresses");
         String subject = request.getParameter("subject");
         String body = request.getParameter("email-body");
+        logger.info("Processing request: send email with email addresses: {}, subject: {},email-body: {}", emailAddressesString, subject, body);
+
         ArrayList<String> emailAddresses = new EmailAddressesParser().getEmailAddresses(emailAddressesString);
 
         ArrayList<Email> emails = new ArrayList<>();
@@ -120,6 +131,9 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
     public ArrayList<Long> processShowEmailViewRequest(HttpServletRequest request) throws ValidationException {
         AbstractValidationService validationService = ServiceFactory.getServiceFactory().getValidationService();
         String[] selectedIdArrayParam = request.getParameterValues("isSelected");
+        if (selectedIdArrayParam != null)
+            logger.info("Processing request: show email view for contacts with id's: {}", Arrays.toString(selectedIdArrayParam));
+        else logger.info("Processing request: show email view, no selected contacts ");
         ArrayList<Long> selectedIdList = new ArrayList<>();
         if (selectedIdArrayParam != null) {
             for (String id : selectedIdArrayParam) {

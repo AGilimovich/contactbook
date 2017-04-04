@@ -37,6 +37,20 @@ public class Address {
         this.zipCode = address.getZipCode();
     }
 
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id=" + id +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", house='" + house + '\'' +
+                ", apartment='" + apartment + '\'' +
+                ", zipCode='" + zipCode + '\'' +
+                ", contactId=" + contactId +
+                '}';
+    }
+
     public long getContactId() {
         return contactId;
     }

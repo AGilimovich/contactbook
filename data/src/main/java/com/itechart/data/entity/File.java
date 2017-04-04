@@ -26,6 +26,15 @@ public class File {
             this.storedName = file.getStoredName();
     }
 
+    @Override
+    public String toString() {
+        return "File{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", storedName='" + storedName + '\'' +
+                '}';
+    }
+
     public long getId() {
         return id;
     }

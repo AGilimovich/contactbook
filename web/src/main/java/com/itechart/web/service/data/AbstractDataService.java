@@ -26,9 +26,9 @@ public interface AbstractDataService {
 
     ArrayList<Contact> getContactsWithBirthday(Date date) throws DataException;
 
-    ArrayList<Contact> getAllContactsByFields(SearchDTO dto) throws DataException;
+//    ArrayList<Contact> getAllContactsByFields(SearchDTO dto) throws DataException;
 
-    ArrayList<Contact> getContactsByFieldsForPage(SearchDTO dto, int page, int count) throws DataException;
+    ArrayList<Contact> getContactsSearchResultForPage(SearchDTO dto, int page, int count) throws DataException;
 
     int getContactsSearchResultCount(SearchDTO dto) throws DataException;
 

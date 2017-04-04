@@ -10,6 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,6 +21,8 @@ import java.util.Date;
  * Class for persisting and modifying data in the database.
  */
 public class JdbcContactDao implements IContactDao {
+    private Logger logger = LoggerFactory.getLogger(JdbcContactDao.class);
+
     private Transaction transaction;
 
     private final String SELECT_ALL_CONTACTS_QUERY = "SELECT c.*, g.gender_value, f_s.family_status_value " +
@@ -89,6 +93,8 @@ public class JdbcContactDao implements IContactDao {
     }
 
     public long save(Contact contact) throws DaoException {
+        logger.info("Save contact: {}", contact);
+
         if (contact == null) throw new DaoException("Contact is null");
         Connection cn = null;
         PreparedStatement st = null;
@@ -134,6 +140,7 @@ public class JdbcContactDao implements IContactDao {
     }
 
     public void delete(long id) throws DaoException {
+        logger.info("Delete contact with id: {}", id);
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -149,6 +156,7 @@ public class JdbcContactDao implements IContactDao {
     }
 
     public void update(Contact contact) throws DaoException {
+        logger.info("Update contact: {}", contact);
         if (contact == null) return;
         Connection cn = null;
         PreparedStatement st = null;
@@ -191,6 +199,7 @@ public class JdbcContactDao implements IContactDao {
 
     @Override
     public ArrayList<Contact> getAll() throws DaoException {
+        logger.info("Fetch all contacts");
         ArrayList<Contact> contacts = new ArrayList<>();
         Connection cn = null;
         Statement st = null;
@@ -237,6 +246,7 @@ public class JdbcContactDao implements IContactDao {
 
     @Override
     public Contact getContactById(long id) throws DaoException {
+        logger.info("Fetch contact with id: {}", id);
         Contact contact = null;
         Connection cn = null;
         PreparedStatement st = null;
@@ -281,6 +291,8 @@ public class JdbcContactDao implements IContactDao {
 
     @Override
     public ArrayList<Contact> findContactsByFieldsLimit(SearchDTO dto, int from, int count) throws DaoException {
+        logger.info("Fetch contact by fields: {}, starting from index: {}, count: {}", dto, from, count);
+
         if (dto == null) throw new DaoException("Search DTO is null");
         DynamicPreparedQueryBuilder builder = new DynamicPreparedQueryBuilder(SELECT_BY_FIELDS_BASE_QUERY);
         ArrayList<Object> parameters = new ArrayList<>();
@@ -412,6 +424,8 @@ public class JdbcContactDao implements IContactDao {
 
     @Override
     public ArrayList<Contact> getByBirthDate(Date date) throws DaoException {
+        logger.info("Fetch contact by birth date: {}", date);
+
         if (date == null) throw new DaoException("Date is null");
         ;
         ArrayList<Contact> contacts = new ArrayList<>();
@@ -442,6 +456,7 @@ public class JdbcContactDao implements IContactDao {
 
     @Override
     public ArrayList<Contact> getContactsLimit(int startingFrom, int count) throws DaoException {
+        logger.info("Fetch contact starting from index: {}, count: {}", startingFrom, count);
         ArrayList<Contact> contacts = new ArrayList<>();
         Connection cn = null;
         PreparedStatement st = null;
@@ -488,6 +503,7 @@ public class JdbcContactDao implements IContactDao {
 
     @Override
     public int getContactsCount() throws DaoException {
+        logger.info("Fetch contact's count");
         Connection cn = null;
         Statement st = null;
         ResultSet rs = null;
@@ -509,6 +525,7 @@ public class JdbcContactDao implements IContactDao {
 
     @Override
     public int getContactsSearchResultCount(SearchDTO dto) throws DaoException {
+        logger.info("Fetch search result contacts count: {}", dto);
         if (dto == null) throw new DaoException("Search DTO is null");
         DynamicPreparedQueryBuilder builder = new DynamicPreparedQueryBuilder(SELECT_COUNT_BY_FIELDS_BASE_QUERY);
         ArrayList<Object> parameters = new ArrayList<>();

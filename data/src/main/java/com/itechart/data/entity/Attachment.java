@@ -30,6 +30,18 @@ public class Attachment {
     public Attachment() {
     }
 
+    @Override
+    public String toString() {
+        return "Attachment{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", uploadDate=" + uploadDate +
+                ", comment='" + comment + '\'' +
+                ", file=" + file +
+                ", contact=" + contact +
+                '}';
+    }
+
     public void update(Attachment attachment){
         if (attachment == null) return;
         this.name = attachment.getName();

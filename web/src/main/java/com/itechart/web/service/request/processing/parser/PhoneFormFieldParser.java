@@ -1,6 +1,7 @@
 package com.itechart.web.service.request.processing.parser;
 
-import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,8 +14,10 @@ import java.util.regex.Pattern;
 public class PhoneFormFieldParser {
     private final String formFieldRegex = "(\\w+)=(\\+*\\w*)&?";
     private final Pattern formFieldPattern = Pattern.compile(formFieldRegex);
+    private Logger logger = LoggerFactory.getLogger(PhoneFormFieldParser.class);
 
     public Map<String, String> parse(String fieldValue) {
+        logger.info("Parse attachment form parameter: {}", fieldValue);
         Matcher matcher = formFieldPattern.matcher(fieldValue);
         Map<String, String> parameters = new HashMap<>();
         while (matcher.find()) {

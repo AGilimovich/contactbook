@@ -2,8 +2,8 @@ package com.itechart.web.command;
 
 import com.itechart.data.dto.MainPageContactDTO;
 import com.itechart.web.command.dispatcher.ErrorDispatcher;
-import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.ServiceFactory;
+import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.data.exception.DataException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -19,14 +19,11 @@ import java.util.ArrayList;
  * Implementation of command which shows contacts according to request.
  */
 public class ShowContactsView implements Command {
-    private static final Logger log = LoggerFactory.getLogger(DoCreateContact.class);
+    private Logger logger = LoggerFactory.getLogger(ShowContactsView.class);
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        // TODO: 03.04.2017 logging
-        log.debug("111{}", request);
-        log.info("1{}", request);
-
+        logger.info("Execute command");
 
         if (request.getSession().getAttribute("isSearch") != null) {
             if ((boolean) request.getSession().getAttribute("isSearch")) {
@@ -65,6 +62,7 @@ public class ShowContactsView implements Command {
             mainPageContactDTOs = dataService.getMainPageContactDTO(pageNumber, contactsOnPage);
             contactsInDBCount = dataService.getContactsCount();
         } catch (DataException e) {
+            logger.error("Error during fetching contacts: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return null;
         }

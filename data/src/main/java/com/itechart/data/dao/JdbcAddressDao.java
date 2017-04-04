@@ -5,6 +5,8 @@ import com.itechart.data.entity.Address;
 import com.itechart.data.exception.DaoException;
 import com.itechart.data.transaction.Transaction;
 import com.mysql.jdbc.Statement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,6 +17,8 @@ import java.sql.SQLException;
  * DAO class for address entity.
  */
 public class JdbcAddressDao implements IAddressDao {
+    private Logger logger = LoggerFactory.getLogger(JdbcAddressDao.class);
+
     private Transaction transaction;
 
     private final String INSERT_ADDRESS_QUERY = "INSERT INTO address(country, city, street, house, apartment, zip_code, contact_id) VALUES(?, ?, ?, ?, ?, ?, ?)";
@@ -29,6 +33,7 @@ public class JdbcAddressDao implements IAddressDao {
 
     @Override
     public long save(Address address) throws DaoException {
+        logger.info("Save address: {}", address);
         if (address == null) throw new DaoException("Address is null");
         Connection cn = null;
         PreparedStatement st = null;
@@ -58,6 +63,7 @@ public class JdbcAddressDao implements IAddressDao {
 
     @Override
     public void deleteForContact(long contactId) throws DaoException {
+        logger.info("Delete address for contact with id: {}", contactId);
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -74,6 +80,7 @@ public class JdbcAddressDao implements IAddressDao {
 
     @Override
     public void update(Address address) throws DaoException {
+        logger.info("Update address: {}", address);
         if (address == null) throw new DaoException("Address is null");
         Connection cn = null;
         PreparedStatement st = null;
@@ -99,6 +106,7 @@ public class JdbcAddressDao implements IAddressDao {
 
     @Override
     public Address getAddressByContactId(long contactId) throws DaoException {
+        logger.info("Fetch address by contact id: {}", contactId);
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;

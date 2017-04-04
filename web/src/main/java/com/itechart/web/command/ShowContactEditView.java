@@ -5,6 +5,8 @@ import com.itechart.web.command.dispatcher.ErrorDispatcher;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.exception.DataException;
 import com.itechart.web.service.validation.ValidationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,14 +18,16 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ShowContactEditView implements Command {
 
+    private Logger logger = LoggerFactory.getLogger(ShowContactEditView.class);
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        logger.info("Execute command");
         long id = 0;
         try {
             id = ServiceFactory.getServiceFactory().getRequestProcessingService().processFetchSingleContactRequest(request);
         } catch (ValidationException e) {
-            e.printStackTrace();
+            logger.error("Error during request processing: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_BAD_REQUEST);
             return null;
         }
@@ -32,6 +36,7 @@ public class ShowContactEditView implements Command {
         try {
             fullContactDTO = ServiceFactory.getServiceFactory().getDataService().getFullContactById(id);
         } catch (DataException e) {
+            logger.error("Error during fetching contact: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return null;
         }

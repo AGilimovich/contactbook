@@ -19,17 +19,19 @@ import javax.servlet.http.HttpServletResponse;
  * Created by Aleksandr on 14.03.2017.
  */
 public class DoUpdateContact implements Command {
-    private Logger logger = LoggerFactory.getLogger(DoCreateContact.class);
+    private Logger logger = LoggerFactory.getLogger(DoUpdateContact.class);
 
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        logger.info("Execute command");
         FullContactDTO reconstructedFullContactDTO = null;
         try {
             reconstructedFullContactDTO = ServiceFactory.getServiceFactory().getRequestProcessingService().processMultipartContactRequest(request);
         } catch (FileSizeException e) {
+            logger.error("Error during request processing: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE);
             return null;
         } catch (ValidationException e) {
-            logger.error("Validation Error: {}", e.getMessage());
+            logger.error("Error during request processing: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_BAD_REQUEST);
             return null;
         }
@@ -42,6 +44,7 @@ public class DoUpdateContact implements Command {
         try {
             dataService.updateContact(reconstructedFullContactDTO, contactToUpdate);
         } catch (DataException e) {
+            logger.error("Error during contact updating: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return null;
         }

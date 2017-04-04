@@ -1,7 +1,10 @@
 package com.itechart.web.service.request.processing.builder;
 
 import com.itechart.data.entity.File;
+import com.itechart.web.service.request.processing.parser.AttachmentFormFieldParser;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -9,8 +12,12 @@ import java.util.Map;
  * Created by Aleksandr on 25.03.2017.
  */
 public class PhotoFileBuilder {
+    private Logger logger = LoggerFactory.getLogger(PhotoFileBuilder.class);
+
     public File buildFile(Map<String, String> parameters) {
-        String realNameParam = parameters.get("photoFile_real");
+        logger.info("Build photo file entity with parameters: {}", parameters);
+
+        String realNameParam = StringUtils.trim(parameters.get("photoFile_real"));
         String storedNameParam = parameters.get("photoFile_stored");
         File file = new File();
 

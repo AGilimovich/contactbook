@@ -13,16 +13,17 @@ import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.exception.DataException;
 import com.itechart.web.service.files.AbstractFileService;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by Aleksandr on 22.03.2017.
+ * Data service layer using transactions.
  */
 public class TransactionalDataService implements AbstractDataService {
-    private static final Logger log = Logger.getLogger(TransactionalDataService.class);
+    private static final Logger logger = LoggerFactory.getLogger(TransactionalDataService.class);
     private TransactionManager tm;
 
     public TransactionalDataService(TransactionManager tm) {
@@ -31,6 +32,7 @@ public class TransactionalDataService implements AbstractDataService {
 
     @Override
     public void deleteContact(long contactId) throws DataException {
+        logger.info("Delete contact with id: {}", contactId);
         Transaction transaction = tm.getTransaction();
         // JdbcPhoneDao phoneDao = new JdbcPhoneDao(transaction);
         IAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
@@ -58,7 +60,7 @@ public class TransactionalDataService implements AbstractDataService {
             }
             transaction.commitTransaction();
         } catch (DaoException e) {
-            log.error(e.getCause().getMessage());
+            logger.error("Error deleting contact: {}", e.getCause().getMessage());
             transaction.rollbackTransaction();
             throw new DataException(e.getMessage());
         }
@@ -66,6 +68,7 @@ public class TransactionalDataService implements AbstractDataService {
 
     @Override
     public void deleteContacts(ArrayList<Long> contactId) throws DataException {
+        logger.info("Delete contacts with id's: {}", contactId);
         for (long id : contactId) {
             deleteContact(id);
         }
@@ -74,6 +77,7 @@ public class TransactionalDataService implements AbstractDataService {
 
     @Override
     public void saveNewContact(FullContactDTO fullContactDTO) throws DataException {
+        logger.info("Save new contact");
         Transaction transaction = tm.getTransaction();
         IPhoneDao phoneDao = new JdbcPhoneDao(transaction);
         IAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
@@ -118,7 +122,7 @@ public class TransactionalDataService implements AbstractDataService {
             }
             transaction.commitTransaction();
         } catch (DaoException e) {
-            log.error(e.getCause().getMessage());
+            logger.error("Error saving contact: {}", e.getCause().getMessage());
             transaction.rollbackTransaction();
             fileService.deleteFiles(savedFiles);
             throw new DataException(e.getMessage());
@@ -128,6 +132,7 @@ public class TransactionalDataService implements AbstractDataService {
 
     @Override
     public void updateContact(FullContactDTO reconstructedContact, FullContactDTO contactToUpdate) throws DataException {
+        logger.info("Update contact");
         Transaction transaction = tm.getTransaction();
         IPhoneDao phoneDao = new JdbcPhoneDao(transaction);
         IAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
@@ -190,7 +195,7 @@ public class TransactionalDataService implements AbstractDataService {
 
             transaction.commitTransaction();
         } catch (DaoException e) {
-            log.error(e.getCause().getMessage());
+            logger.error("Error updating contact: {}", e.getCause().getMessage());
             transaction.rollbackTransaction();
             fileService.deleteFiles(savedFiles);
             throw new DataException(e.getMessage());
@@ -199,6 +204,7 @@ public class TransactionalDataService implements AbstractDataService {
 
     @Override
     public ArrayList<Contact> getContactsWithBirthday(Date date) throws DataException {
+        logger.info("Fetch contacts with birth date: {}", date);
         Transaction transaction = tm.getTransaction();
         IContactDao contactDao = new JdbcContactDao(transaction);
         ArrayList<Contact> contacts = null;
@@ -207,31 +213,32 @@ public class TransactionalDataService implements AbstractDataService {
             transaction.commitTransaction();
 
         } catch (DaoException e) {
-            log.error(e.getCause().getMessage());
+            logger.error("Error fetching contacts by birthday: {}", e.getCause().getMessage());
             transaction.rollbackTransaction();
             throw new DataException(e.getMessage());
         }
         return contacts;
     }
 
-    @Override
-    public ArrayList<Contact> getAllContactsByFields(SearchDTO dto) throws DataException {
-        Transaction transaction = tm.getTransaction();
-        IContactDao contactDao = new JdbcContactDao(transaction);
-        ArrayList<Contact> contacts = new ArrayList<>();
-        // TODO: 03.04.2017
-//        try {
-//            contacts = contactDao.findContactsByFields(dto);
-//            transaction.commitTransaction();
-//        } catch (DaoException e) {
-//            transaction.rollbackTransaction();
-//            throw new DataException(e.getMessage());
-//        }
-        return contacts;
-    }
+//    @Override
+//    public ArrayList<Contact> getAllContactsByFields(SearchDTO dto) throws DataException {
+//        Transaction transaction = tm.getTransaction();
+//        IContactDao contactDao = new JdbcContactDao(transaction);
+//        ArrayList<Contact> contacts = new ArrayList<>();
+//        // TODO: 03.04.2017
+////        try {
+////            contacts = contactDao.findContactsByFields(dto);
+////            transaction.commitTransaction();
+////        } catch (DaoException e) {
+////            transaction.rollbackTransaction();
+////            throw new DataException(e.getMessage());
+////        }
+//        return contacts;
+//    }
 
     @Override
-    public ArrayList<Contact> getContactsByFieldsForPage(SearchDTO dto, int page, int count) throws DataException {
+    public ArrayList<Contact> getContactsSearchResultForPage(SearchDTO dto, int page, int count) throws DataException {
+        logger.info("Fetch search result contacts: {} for page: {}, count: {}", dto, page, count);
         Transaction transaction = tm.getTransaction();
         IContactDao contactDao = new JdbcContactDao(transaction);
         ArrayList<Contact> contacts = new ArrayList<>();
@@ -239,6 +246,7 @@ public class TransactionalDataService implements AbstractDataService {
             contacts = contactDao.findContactsByFieldsLimit(dto, page * count, count);
             transaction.commitTransaction();
         } catch (DaoException e) {
+            logger.error("Error fetching search result contacts: {}", e.getCause().getMessage());
             transaction.rollbackTransaction();
             throw new DataException(e.getMessage());
         }
@@ -247,12 +255,13 @@ public class TransactionalDataService implements AbstractDataService {
 
     @Override
     public int getContactsSearchResultCount(SearchDTO dto) throws DataException {
+        logger.info("Fetch search result contacts count: {}", dto);
         Transaction transaction = tm.getTransaction();
         IContactDao contactDao = new JdbcContactDao(transaction);
         try {
             return contactDao.getContactsSearchResultCount(dto);
         } catch (DaoException e) {
-            log.error(e.getCause().getMessage());
+            logger.error("Error fetching search result contacts count: {}", e.getCause().getMessage());
             transaction.rollbackTransaction();
             throw new DataException(e.getMessage());
         }
@@ -260,6 +269,7 @@ public class TransactionalDataService implements AbstractDataService {
 
     @Override
     public Contact getContactById(long contactId) throws DataException {
+        logger.info("Fetch contact with id: {}", contactId);
         Transaction transaction = tm.getTransaction();
         IContactDao contactDao = new JdbcContactDao(transaction);
         Contact contact = null;
@@ -267,7 +277,8 @@ public class TransactionalDataService implements AbstractDataService {
             contact = contactDao.getContactById(contactId);
             transaction.commitTransaction();
         } catch (DaoException e) {
-            log.error(e.getCause().getMessage());
+            logger.error("Error fetching contact by id: {}", e.getCause().getMessage());
+
             transaction.rollbackTransaction();
             throw new DataException(e.getMessage());
         }
@@ -276,6 +287,7 @@ public class TransactionalDataService implements AbstractDataService {
 
     @Override
     public Address getAddressByContactId(long contactId) throws DataException {
+        logger.info("Fetch address for contact with id: {}", contactId);
         Transaction transaction = tm.getTransaction();
         IAddressDao addressDao = new JdbcAddressDao(transaction);
         Address address = null;
@@ -283,7 +295,7 @@ public class TransactionalDataService implements AbstractDataService {
             address = addressDao.getAddressByContactId(contactId);
             transaction.commitTransaction();
         } catch (DaoException e) {
-            log.error(e.getCause().getMessage());
+            logger.error("Error fetching address by contact id: {}", e.getCause().getMessage());
             transaction.rollbackTransaction();
             throw new DataException(e.getMessage());
         }
@@ -292,6 +304,7 @@ public class TransactionalDataService implements AbstractDataService {
 
     @Override
     public File getPhotoById(long photoId) throws DataException {
+        logger.info("Fetch photo with id: {}", photoId);
         Transaction transaction = tm.getTransaction();
         IFileDao fileDao = new JdbcFileDao(transaction);
         File photo = null;
@@ -299,7 +312,7 @@ public class TransactionalDataService implements AbstractDataService {
             photo = fileDao.getFileById(photoId);
             transaction.commitTransaction();
         } catch (DaoException e) {
-            log.error(e.getCause().getMessage());
+            logger.error("Error fetching photo file: {}", e.getCause().getMessage());
             transaction.rollbackTransaction();
             throw new DataException(e.getMessage());
         }
@@ -308,6 +321,7 @@ public class TransactionalDataService implements AbstractDataService {
 
     @Override
     public ArrayList<MainPageContactDTO> getMainPageContactDTO(int page, int count) throws DataException {
+        logger.info("Fetch contact DTOs for page: {}, count: {}", page, count);
         Transaction transaction = tm.getTransaction();
         IContactDao contactDao = new JdbcContactDao(transaction);
         IAddressDao addressDao = new JdbcAddressDao(transaction);
@@ -324,7 +338,7 @@ public class TransactionalDataService implements AbstractDataService {
             }
             transaction.commitTransaction();
         } catch (DaoException e) {
-            log.error(e.getCause().getMessage());
+            logger.error("Error fetching main page contact DTOs: {}", e.getCause().getMessage());
             transaction.rollbackTransaction();
             throw new DataException(e.getMessage());
         }
@@ -334,6 +348,7 @@ public class TransactionalDataService implements AbstractDataService {
 
     @Override
     public FullContactDTO getFullContactById(long contactId) throws DataException {
+        logger.info("Fetch full contact DTO with id: {}", contactId);
         Transaction transaction = tm.getTransaction();
         IContactDao contactDao = new JdbcContactDao(transaction);
         IAddressDao addressDao = new JdbcAddressDao(transaction);
@@ -361,7 +376,7 @@ public class TransactionalDataService implements AbstractDataService {
             transaction.commitTransaction();
 
         } catch (DaoException e) {
-            log.error(e.getCause().getMessage());
+            logger.error("Error fetching full contact DTO: {}", e.getCause().getMessage());
             transaction.rollbackTransaction();
             throw new DataException(e.getMessage());
         }
@@ -371,15 +386,19 @@ public class TransactionalDataService implements AbstractDataService {
 
     @Override
     public int getContactsCount() throws DataException {
+        logger.info("Fetch contacts count");
         Transaction transaction = tm.getTransaction();
         IContactDao contactDao = new JdbcContactDao(transaction);
+        int count = 0;
         try {
-            return contactDao.getContactsCount();
+            count = contactDao.getContactsCount();
+            transaction.commitTransaction();
         } catch (DaoException e) {
-            log.error(e.getCause().getMessage());
+            logger.error("Error fetching contacts count: {}", e.getCause().getMessage());
             transaction.rollbackTransaction();
             throw new DataException(e.getMessage());
         }
+        return count;
     }
 
 }

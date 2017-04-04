@@ -16,19 +16,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Created by Aleksandr on 14.03.2017.
+ * Creates new contact.
  */
 public class DoCreateContact implements Command {
-
+    private static Logger logger = LoggerFactory.getLogger(DoCreateContact.class);
 
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        logger.info("Execute command");
         FullContactDTO fullContactDTO = null;
         try {
             fullContactDTO = ServiceFactory.getServiceFactory().getRequestProcessingService().processMultipartContactRequest(request);
         } catch (FileSizeException e) {
+            logger.error("Error during request processing: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE);
             return null;
         } catch (ValidationException e) {
+            logger.error("Error during request processing: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_BAD_REQUEST);
             return null;
         }
@@ -39,6 +42,7 @@ public class DoCreateContact implements Command {
         try {
             dataService.saveNewContact(fullContactDTO);
         } catch (DataException e) {
+            logger.error("Error during saving contact: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return null;
         }

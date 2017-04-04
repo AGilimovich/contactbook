@@ -36,11 +36,13 @@ public class CommandFactory {
         Class<? extends Command> commandClass = commands.get(path);
         if (commandClass != null)
             try {
-                logger.info("Request for path: {}", request.getRequestURI());
+                logger.info("Get command for path: {}", request.getRequestURI());
                 return commandClass.newInstance();
             } catch (InstantiationException e) {
+                logger.error("Error instantiating command object", e.getMessage());
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
+                logger.error("Error instantiating command object", e.getMessage());
                 e.printStackTrace();
             }
 

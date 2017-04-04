@@ -6,40 +6,41 @@ import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.File;
 import com.itechart.web.command.dispatcher.ErrorDispatcher;
-import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.ServiceFactory;
+import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.data.exception.DataException;
 import com.itechart.web.service.validation.ValidationException;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
  * Created by Aleksandr on 18.03.2017.
  */
 public class DoSearch implements Command {
-
+    private static Logger logger = LoggerFactory.getLogger(DoSearch.class);
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        logger.info("Execute command");
         SearchDTO dto = null;
         if (request.getSession().getAttribute("searchDTO") == null) {
             try {
                 dto = ServiceFactory.getServiceFactory().getRequestProcessingService().processSearchContactsRequest(request);
             } catch (ValidationException e) {
-                e.printStackTrace();
+                logger.error("Error during request processing: {}", e.getMessage());
                 ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_BAD_REQUEST);
                 return null;
             }
         } else
             dto = (SearchDTO) request.getSession().getAttribute("searchDTO");
         AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
-
 
         //default values
         int pageNumber = 0;
@@ -63,7 +64,7 @@ public class DoSearch implements Command {
         int contactsCount = 0;
         ArrayList<MainPageContactDTO> mainPageContactDTOs = new ArrayList<>();
         try {
-            ArrayList<Contact> contacts = dataService.getContactsByFieldsForPage(dto, pageNumber, contactsOnPage);
+            ArrayList<Contact> contacts = dataService.getContactsSearchResultForPage(dto, pageNumber, contactsOnPage);
             contactsCount = dataService.getContactsSearchResultCount(dto);
             for (Contact contact : contacts) {
                 Address address = dataService.getAddressByContactId(contact.getContactId());
@@ -72,6 +73,7 @@ public class DoSearch implements Command {
                 mainPageContactDTOs.add(mainPageContactDTO);
             }
         } catch (DataException e) {
+            logger.error("Error during fetching contacts: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return null;
         }

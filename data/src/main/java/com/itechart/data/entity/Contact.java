@@ -29,6 +29,24 @@ public class Contact {
     public Contact() {
     }
 
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "contactId=" + contactId +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", patronymic='" + patronymic + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", gender=" + gender +
+                ", citizenship='" + citizenship + '\'' +
+                ", familyStatus=" + familyStatus +
+                ", website='" + website + '\'' +
+                ", email='" + email + '\'' +
+                ", placeOfWork='" + placeOfWork + '\'' +
+                ", photo=" + photo +
+                '}';
+    }
+
     public String getName() {
         return name;
     }

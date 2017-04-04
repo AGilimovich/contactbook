@@ -25,6 +25,19 @@ public class Phone {
     public Phone() {
     }
 
+    @Override
+    public String toString() {
+        return "Phone{" +
+                "id=" + id +
+                ", countryCode='" + countryCode + '\'' +
+                ", operatorCode='" + operatorCode + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", phoneType=" + phoneType +
+                ", comment='" + comment + '\'' +
+                ", contact=" + contact +
+                '}';
+    }
+
     public enum PhoneType {
         HOME("Домашний"), MOBILE("Мобильный");
         private String description;

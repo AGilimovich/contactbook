@@ -1,10 +1,14 @@
 package com.itechart.web.service.request.processing.builder;
 
+import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.Phone;
 import com.itechart.web.service.ServiceFactory;
+import com.itechart.web.service.request.processing.parser.AttachmentFormFieldParser;
 import com.itechart.web.service.validation.AbstractValidationService;
 import com.itechart.web.service.validation.ValidationException;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -12,14 +16,17 @@ import java.util.Map;
  * Parses phone objects from request parameters.
  */
 public class PhoneBuilder {
+    private Logger logger = LoggerFactory.getLogger(PhoneBuilder.class);
+
 
     public Phone buildPhone(Map<String, String> parameters) throws ValidationException {
-        String idParam = parameters.get("id");
-        String countryCodeParam = parameters.get("countryCode");
-        String operatorCodeParam = parameters.get("operatorCode");
-        String phoneNumberParam = parameters.get("number");
-        String phoneTypeParam = parameters.get("type");
-        String commentParam = parameters.get("comment");
+        logger.info("Build phone entity with parameters: {}", parameters);
+        String idParam = StringUtils.trim(parameters.get("id"));
+        String countryCodeParam = StringUtils.trim(parameters.get("countryCode"));
+        String operatorCodeParam = StringUtils.trim(parameters.get("operatorCode"));
+        String phoneNumberParam = StringUtils.trim(parameters.get("number"));
+        String phoneTypeParam = StringUtils.trim(parameters.get("type"));
+        String commentParam = StringUtils.trim(parameters.get("comment"));
         AbstractValidationService validationService = ServiceFactory.getServiceFactory().getValidationService();
         Phone phone = new Phone();
         if (StringUtils.isNotBlank(idParam)) {
@@ -36,8 +43,18 @@ public class PhoneBuilder {
             else throw new ValidationException("Illegal phone parameters");
         }
 
-        if (StringUtils.isNotBlank(phoneTypeParam))
-            phone.setPhoneType(Phone.PhoneType.valueOf(phoneTypeParam.toUpperCase()));
+        if (StringUtils.isNotBlank(phoneTypeParam)) {
+            try {
+                phone.setPhoneType(Phone.PhoneType.valueOf(phoneTypeParam.toUpperCase()));
+            } catch (Exception e){
+                throw new ValidationException("Phone type parameter has illegal value", e);
+            }
+        }
+
+
+
+
+
         if (StringUtils.isNotBlank(commentParam)) {
             phone.setComment(commentParam);
         }

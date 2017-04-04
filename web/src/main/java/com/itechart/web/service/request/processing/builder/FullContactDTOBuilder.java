@@ -7,6 +7,8 @@ import com.itechart.web.service.request.processing.parser.AttachmentFormFieldPar
 import com.itechart.web.service.request.processing.parser.PhoneFormFieldParser;
 import com.itechart.web.service.validation.ValidationException;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -17,6 +19,7 @@ import java.util.regex.Pattern;
  * Class for building DTO object.
  */
 public class FullContactDTOBuilder {
+    private Logger logger = LoggerFactory.getLogger(FullContactDTOBuilder.class);
 
     private Contact contact;
     private Address address;
@@ -44,24 +47,29 @@ public class FullContactDTOBuilder {
     }
 
     private void buildPhoto(Map<String, String> storedFiles) {
+        logger.info("Build photo from stored files map: {}", storedFiles);
         if (storedFiles == null) return;
         PhotoFileBuilder builder = new PhotoFileBuilder();
         photo = builder.buildFile(storedFiles);
     }
 
     private void buildContact(Map<String, String> formFields) throws ValidationException {
+        logger.info("Build contact from form fields: {}", formFields);
         if (formFields == null) return;
         ContactBuilder contactBuilder = new ContactBuilder();
         contact = contactBuilder.buildContact(formFields);
     }
 
     private void buildAddress(Map<String, String> formFields) {
+        logger.info("Build address from form fields: {}", formFields);
         if (formFields == null) return;
         AddressBuilder addressBuilder = new AddressBuilder();
         address = addressBuilder.buildAddress(formFields);
     }
 
     private void buildPhones(Map<String, String> formFields) throws ValidationException {
+        logger.info("Build phones from form fields: {}", formFields);
+
         if (formFields == null) return;
 
         PhoneFormFieldParser parser = new PhoneFormFieldParser();
@@ -96,6 +104,7 @@ public class FullContactDTOBuilder {
     }
 
     private void buildAttachments(Map<String, String> formFields, Map<String, String> storedFiles) throws ValidationException {
+        logger.info("Build attachments from form fields: {} and stored files map: {}", formFields, storedFiles);
         if (formFields == null || storedFiles == null) return;
         AttachmentBuilder attachmentBuilder = new AttachmentBuilder();
         AttachFileBuilder fileBuilder = new AttachFileBuilder();

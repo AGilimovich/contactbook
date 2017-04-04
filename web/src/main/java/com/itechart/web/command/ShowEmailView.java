@@ -11,6 +11,8 @@ import com.itechart.web.service.template.Template;
 import com.itechart.web.service.template.TemplatesProvidingService;
 import com.itechart.web.service.validation.ValidationException;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,9 +25,11 @@ import java.util.Map;
  * Command for invoking emailing view.
  */
 public class ShowEmailView implements Command {
+    private Logger logger = LoggerFactory.getLogger(ShowEmailView.class);
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        logger.info("Execute command");
         ArrayList<Long> selectedContacts = null;
         ArrayList<Contact> contacts = new ArrayList<>();
         ArrayList<String> emailList = new ArrayList<>();
@@ -43,6 +47,7 @@ public class ShowEmailView implements Command {
                                 emailList.add(contact.getEmail());
                         }
                     } catch (DataException e) {
+                        logger.error("Error during fetching contacts: {}", e.getMessage());
                         ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                         return null;
                     }
@@ -52,6 +57,7 @@ public class ShowEmailView implements Command {
 
 
         } catch (ValidationException e) {
+            logger.error("Error during request processing: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_BAD_REQUEST);
             return null;
         }

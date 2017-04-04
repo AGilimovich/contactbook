@@ -22,7 +22,7 @@ import java.util.Map;
 public class MultipartRequestHandler {
     private Map<String, String> formFields;
     private Map<String, FileItem> fileParts;
-
+    private Logger logger = LoggerFactory.getLogger(MultipartRequestHandler.class);
 
     /**
      * Creates maps of form fields names and their values, file items and their field names.
@@ -30,6 +30,7 @@ public class MultipartRequestHandler {
      * @param request from client.
      */
     public void handle(HttpServletRequest request) throws FileSizeException {
+        logger.info("Handle multipart request");
         DiskFileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
         upload.setFileSizeMax(PropertiesManager.MAX_FILE_SIZE());

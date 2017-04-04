@@ -4,6 +4,8 @@ import com.itechart.data.db.DBResourceManager;
 import com.itechart.data.entity.Phone;
 import com.itechart.data.exception.DaoException;
 import com.itechart.data.transaction.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import java.util.ArrayList;
  * Created by Aleksandr on 13.03.2017.
  */
 public class JdbcPhoneDao implements IPhoneDao {
+    private Logger logger = LoggerFactory.getLogger(JdbcFileDao.class);
+
     private final String SELECT_PHONES_FOR_CONTACT_QUERY = "SELECT p.phone_id, p.country_code, p.operator_code, p.phone_number, phone_type.phone_type_value, p.comment, p.contact_id" +
             " FROM phone AS p LEFT OUTER JOIN phone_type ON p.phone_type = phone_type.phone_type_id" +
             " WHERE p.contact_id = ?;";
@@ -36,6 +40,8 @@ public class JdbcPhoneDao implements IPhoneDao {
 
     @Override
     public ArrayList<Phone> getAllForContact(long id) throws DaoException {
+        logger.info("Fetch all phones for contact with id: {}", id);
+
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -67,6 +73,7 @@ public class JdbcPhoneDao implements IPhoneDao {
 
     @Override
     public Phone getPhoneById(long id) throws DaoException {
+        logger.info("Fetch phone with id: {}", id);
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -98,6 +105,7 @@ public class JdbcPhoneDao implements IPhoneDao {
 
     @Override
     public long save(Phone phone) throws DaoException {
+        logger.info("Save phone: {}", phone);
         if (phone == null) throw new DaoException("Phone is null");
         Connection cn = null;
         PreparedStatement st = null;
@@ -129,6 +137,7 @@ public class JdbcPhoneDao implements IPhoneDao {
 
     @Override
     public void delete(long id) throws DaoException {
+        logger.info("Delete phone with id: {}", id);
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -145,6 +154,7 @@ public class JdbcPhoneDao implements IPhoneDao {
 
     @Override
     public void update(Phone phone) throws DaoException {
+        logger.info("Update phone: {}", phone);
         if (phone == null) throw new DaoException("Phone is null");
         Connection cn = null;
         PreparedStatement st = null;
@@ -170,6 +180,7 @@ public class JdbcPhoneDao implements IPhoneDao {
 
     @Override
     public void deleteForContact(long contactId) throws DaoException {
+        logger.info("Delete phones for contact with id: {}", contactId);
         Connection cn = null;
         PreparedStatement st = null;
         try {

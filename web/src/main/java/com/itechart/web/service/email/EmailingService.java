@@ -4,13 +4,14 @@ import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
-
-import java.util.ResourceBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Aleksandr on 18.03.2017.
  */
 public class EmailingService implements AbstractEmailingService {
+    private Logger logger = LoggerFactory.getLogger(EmailingService.class);
     private String hostName;
     private int SMTPPort;
     private String userName;
@@ -28,6 +29,7 @@ public class EmailingService implements AbstractEmailingService {
     }
 
     public void sendEmail(String emailAddress, String subject, String body) throws EmailException {
+        logger.info("Sending email with parameters: address: {}, subject: {}, body: {}", emailAddress, subject, body);
         Email email = new SimpleEmail();
         email.setHostName(hostName);
         email.setSmtpPort(SMTPPort);

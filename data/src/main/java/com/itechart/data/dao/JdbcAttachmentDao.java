@@ -4,6 +4,8 @@ import com.itechart.data.db.DBResourceManager;
 import com.itechart.data.entity.Attachment;
 import com.itechart.data.exception.DaoException;
 import com.itechart.data.transaction.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -14,6 +16,7 @@ import java.util.Date;
  * Created by Aleksandr on 13.03.2017.
  */
 public class JdbcAttachmentDao implements IAttachmentDao {
+    private Logger logger = LoggerFactory.getLogger(JdbcAddressDao.class);
 
     private final String SELECT_ATTACHMENTS_FOR_CONTACT_QUERY = "SELECT attach_id, attach_name, upload_date, comment, file, contact_id FROM attachment WHERE contact_id = ?";
     private final String SELECT_ATTACHMENTS_BY_ID_QUERY = "SELECT attach_id, attach_name, upload_date, comment, file, contact_id FROM attachment WHERE attach_id = ?";
@@ -30,6 +33,8 @@ public class JdbcAttachmentDao implements IAttachmentDao {
 
     @Override
     public ArrayList<Attachment> getAllForContact(long id) throws DaoException {
+        logger.info("Fetch attachments for contact with id: {}", id);
+
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -62,7 +67,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
 
     @Override
     public Attachment getAttachmentById(long id) throws DaoException {
-
+        logger.info("Fetch attachment with id: {}", id);
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -91,6 +96,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
 
     @Override
     public long save(Attachment attachment) throws DaoException {
+        logger.info("Save attachment: {}", attachment);
         if (attachment == null) throw new DaoException("Attachment is null");
         Connection cn = null;
         PreparedStatement st = null;
@@ -122,6 +128,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
 
     @Override
     public void delete(long id) throws DaoException {
+        logger.info("Delete attachment with id: {}", id);
         Connection cn = null;
         PreparedStatement st = null;
         try {
@@ -139,6 +146,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
 
     @Override
     public void update(Attachment attachment) throws DaoException {
+        logger.info("Update attachment: {}", attachment);
         if (attachment == null) throw new DaoException("Attachment is null");
         Connection cn = null;
         PreparedStatement st = null;
@@ -158,13 +166,14 @@ public class JdbcAttachmentDao implements IAttachmentDao {
     }
 
     @Override
-    public void deleteForUser(long userId) throws DaoException {
+    public void deleteForUser(long contactId) throws DaoException {
+        logger.info("Delete attachments for contact with id: {}", contactId);
         Connection cn = null;
         PreparedStatement st = null;
         try {
             cn = transaction.getConnection();
             st = cn.prepareStatement(DELETE_FOR_USER_QUERY);
-            st.setLong(1, userId);
+            st.setLong(1, contactId);
             st.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException("Exception during deleting attachments from the database", e);

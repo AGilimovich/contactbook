@@ -25,6 +25,27 @@ public class SearchDTO {
     private String apartment;
     private String zipCOde;
 
+    @Override
+    public String toString() {
+        return "SearchDTO{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", patronymic='" + patronymic + '\'' +
+                ", fromDate=" + fromDate +
+                ", toDate=" + toDate +
+                ", gender=" + gender +
+                ", familyStatus=" + familyStatus +
+                ", citizenship='" + citizenship + '\'' +
+                ", placeOfWork='" + placeOfWork + '\'' +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", house='" + house + '\'' +
+                ", apartment='" + apartment + '\'' +
+                ", zipCOde='" + zipCOde + '\'' +
+                '}';
+    }
+
     public String getName() {
         return name;
     }

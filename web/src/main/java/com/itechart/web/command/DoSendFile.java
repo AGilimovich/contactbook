@@ -2,6 +2,8 @@ package com.itechart.web.command;
 
 import com.itechart.web.command.dispatcher.ErrorDispatcher;
 import com.itechart.web.service.ServiceFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,17 +15,19 @@ import java.io.IOException;
  * Command for sending requested files.
  */
 public class DoSendFile implements Command {
+    private static Logger logger = LoggerFactory.getLogger(DoSendFile.class);
 
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        logger.info("Execute command");
         byte[] file = ServiceFactory.getServiceFactory().getFileService().getFile(request.getParameter("id"));
         if (file != null) {
             try {
                 response.getOutputStream().write(file);
                 response.getOutputStream().flush();
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("Error sending file: {}", e.getMessage());
             }
         }
         else {

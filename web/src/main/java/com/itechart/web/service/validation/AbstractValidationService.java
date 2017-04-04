@@ -9,4 +9,6 @@ public interface AbstractValidationService {
     boolean validatePhone(String countryCode, String operatorCode, String phoneNumber);
 
     boolean validateId(String id);
+
+    boolean validateName(String credential);
 }

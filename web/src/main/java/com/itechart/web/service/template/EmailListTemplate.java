@@ -14,6 +14,7 @@ public class EmailListTemplate implements Template {
     }
 
 
+
     @Override
     public String getDescription() {
         return description;
