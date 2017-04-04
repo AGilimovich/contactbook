@@ -44,6 +44,7 @@
     padding: 20px;
     border: 1px solid #888;
     width: 25%;
+    min-width: 320px;
     text-align: center;
 }
 
@@ -93,6 +94,7 @@
 }
 
 .photo-popup-content {
+    min-width: 200px;
     width: 15% !important;
     margin: 15% auto;
 }
