@@ -11,6 +11,7 @@ var deleteContactTooltip = document.getElementById("delete-contact-tooltip");
 
 
 function selectAllContacts() {
+    'use strict'
     if (selectAllCheckbox.checked == true) {
         for (var i = 0; i < checkboxes.length; i++)
             checkboxes[i].checked = true;
@@ -21,6 +22,7 @@ function selectAllContacts() {
 }
 
 btnDelete.onclick = function () {
+    'use strict'
     var count = 0;
     for (var i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked) {
@@ -42,5 +44,6 @@ var btnSubmitCount = document.getElementById("btn-submit-item-count");
 // var displayItemsSelector = document.getElementById("display-items");
 
 var submitCount = function () {
+    'use strict'
     btnSubmitCount.click();
 }

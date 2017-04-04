@@ -42,6 +42,7 @@ var inputPhoneComment = document.getElementsByName("inputPhoneComment");
 var hiddenPhoneTable = document.getElementById("hidden-phone-table");
 
 function Phone(id, countryCode, operatorCode, phoneNumber, phoneType, phoneComment, status) {
+    'use strict'
     this.id = id;
     this.countryCode = countryCode;
     this.operatorCode = operatorCode;
@@ -108,6 +109,7 @@ function Phone(id, countryCode, operatorCode, phoneNumber, phoneType, phoneComme
 var save;
 // action - show phone creating popup window
 btnAddPhone.onclick = function () {
+    'use strict'
     //reset input values of popup form
     inputCountryCode[0].value = "";
     inputOperatorCode[0].value = "";
@@ -124,12 +126,14 @@ btnAddPhone.onclick = function () {
 
 //action - hide phone creating or editing popup
 btnUndoPhone.onclick = function () {
+    'use strict'
     phonePopup.className = "popup";
 }
 
 
 //action - delete selected phones
 btnDeletePhones.onclick = function () {
+    'use strict'
     var counter = 0;
     for (var i = 0; i < phonesCheckBoxes.length;) {
         if (phonesCheckBoxes[i].checked) {
@@ -157,6 +161,7 @@ btnDeletePhones.onclick = function () {
 
 
 function deleteHiddenInput(phone) {
+    'use strict'
     var hiddenInput = phone.getHiddenInput();
     if (typeof hiddenInput != "undefined") {
         if (phone.getStatus() == STATUS.NEW) {
@@ -172,7 +177,7 @@ function deleteHiddenInput(phone) {
 
 //action - show phone editing popup; fills inputs with values
 btnEditPhone.onclick = function () {
-
+    'use strict'
     //reload arrays containing phones data
     var phonesCheckBoxes = document.getElementsByName("phoneIsSelected");
     var countryCode = document.getElementsByName("countryCode");
@@ -180,7 +185,6 @@ btnEditPhone.onclick = function () {
     var phoneNumber = document.getElementsByName("phoneNumber");
     var phoneType = document.getElementsByName("phoneType");
     var phoneComment = document.getElementsByName("phoneComment");
-
 
     var countSelected = 0;
     var checkedIndex;
@@ -215,9 +219,6 @@ btnEditPhone.onclick = function () {
             inputPhoneTypeMobile.checked = true;
         } else inputPhoneTypeHome.checked = true;
         inputPhoneComment[0].value = phoneComment[checkedIndex].innerHTML;
-        // btnSavePhone.onclick = function () {
-        //     editExisting(checkedIndex);
-        // }
         save = function () {
             editExisting(checkedIndex);
             return false;
@@ -227,11 +228,13 @@ btnEditPhone.onclick = function () {
 }
 
 function deletePlus(text) {
+    'use strict'
     return text.replace("+", "");
 }
 
 //function for creation of a new row in phone table and filling it with data
 function createRow(table, phone) {
+    'use strict'
     var rows = table.rows;
     var row = table.insertRow(-1);
 
@@ -299,6 +302,7 @@ function createRow(table, phone) {
 // contains to methods: 1) append parameter to string;
 //                      2)return result string
 function Appendable(n, v) {
+    'use strict'
     var val = n + "=" + v;
     this.append = function (name, value) {
         val += ("&" + name + "=" + value);
@@ -311,6 +315,7 @@ function Appendable(n, v) {
 
 //function for creating hidden input element
 function createHiddenInputForPhone(phone) {
+    'use strict'
     var value = new Appendable("id", phone.getId()).append("countryCode", phone.getCountryCode()).append("operatorCode", phone.getOperatorCode()).append("number", phone.getPhoneNumber()).append("type", phone.getPhoneType()).append("comment", phone.getPhoneComment()).append("status", phone.getStatus()).value();
     var phoneHiddenInput = document.createElement("input");
     phoneHiddenInput.setAttribute("name", "phone[" + phone.getId() + "]");
@@ -322,6 +327,7 @@ function createHiddenInputForPhone(phone) {
 
 //function for adding new phone to table and hidden input using data from inputs
 function saveNew() {
+    'use strict'
     //get data from inputs of popup window
     countryCode = "+" + inputCountryCode[0].value;
     operatorCode = inputOperatorCode[0].value;
@@ -341,8 +347,8 @@ function saveNew() {
 
 //function for editing existing phone
 function editExisting(index) {
+    'use strict'
     var phone = phones[index];
-
     //edit data in the phone table
     var row = phoneTable.rows[index];
     var cellCountryCode = row.cells[1];
@@ -372,6 +378,7 @@ function editExisting(index) {
 
 //function for setting new value to hidden input
 function editHiddenInput(phone) {
+    'use strict'
     var hiddenInput = phone.getHiddenInput();
     var value = new Appendable("id", phone.getId()).append("countryCode", phone.getCountryCode()).append("operatorCode", phone.getOperatorCode()).append("number", phone.getPhoneNumber()).append("type", phone.getPhoneType()).append("comment", phone.getPhoneComment()).append("status", phone.getStatus()).value();
     hiddenInput.setAttribute("value", value);

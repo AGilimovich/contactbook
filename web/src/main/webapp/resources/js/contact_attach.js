@@ -41,6 +41,7 @@ var nameLabel = document.getElementById("file-name-label");
 var attachments = [];
 
 function findIndexOfAttachment(attachment) {
+    'use strict'
     for (var i = 0; i < attachments.length; i++) {
         if (attachments[i] === attachment) return i;
 
@@ -61,6 +62,7 @@ var STATUS = {
 
 //Create array of attachments received from server
 window.onload = function () {
+    'use strict'
     //create array of attachment objects
     if (typeof attachCheckBoxes !== "undefined" && attachCheckBoxes.length > 0) {
         //get attachments
@@ -87,6 +89,7 @@ window.onload = function () {
 }
 
 function Attachment(id, name, uploadDate, comment, status) {
+    'use strict'
     this.id = id;
     this.name = name;
     this.uploadDate = uploadDate;
@@ -149,6 +152,7 @@ function Attachment(id, name, uploadDate, comment, status) {
 var saveAttach;
 
 btnAddAttach.onclick = function () {
+    'use strict'
     var newInput = newAttachFileInput();
     newInput.required = true;
     //reset values of of popup form inputs
@@ -173,6 +177,7 @@ btnAddAttach.onclick = function () {
 }
 
 btnDeleteAttaches.onclick = function () {
+    'use strict'
     var counter = 0;
     for (var i = 0; i < attachCheckBoxes.length;) {
         if (attachCheckBoxes[i].checked) {
@@ -195,7 +200,7 @@ btnDeleteAttaches.onclick = function () {
 }
 
 btnEditAttach.onclick = function () {
-
+    'use strict'
     var countSelected = 0;
     var checkedIndex;
     // iterate through checkboxes to find checked one
@@ -250,11 +255,13 @@ btnEditAttach.onclick = function () {
 }
 
 cancelAttachCreation = function (input) {
+    'use strict'
     input.parentNode.removeChild(input);
     attachPopup.className = "popup";
 }
 
 cancelAttachEditing = function (attachment) {
+    'use strict'
     var fileInput = attachment.getAttachFileInput();
     if (typeof fileInput !== "undefined")
         fileInput.className = "hidden";
@@ -262,8 +269,7 @@ cancelAttachEditing = function (attachment) {
 }
 
 function saveNewAttach(input) {
-    // var attachmentName = input.files[0].name;
-
+    'use strict'
     var attachmentName = inputAttachName.value;
     var attachmentUploadDate = dateToString(new Date());
     var attachmentComment = inputAttachComment[0].value;
@@ -280,6 +286,7 @@ function saveNewAttach(input) {
 }
 
 function editExistingAttach(attachment) {
+    'use strict'
     if (attachment.getStatus() !== STATUS.NEW)
         attachment.setStatus(STATUS.EDITED);
     var attachmentName = inputAttachName.value;
@@ -297,6 +304,7 @@ function editExistingAttach(attachment) {
 //--------------------------------------------------------
 
 function newAttachTableRow(attachment) {
+    'use strict'
     var rows = attachTable.rows;
     var row = attachTable.insertRow(-1);
 
@@ -336,6 +344,7 @@ function newAttachTableRow(attachment) {
 
 
 function newAttachMetaInput(attachment) {
+    'use strict'
     var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
     var attachHiddenMetaInput = document.createElement("input");
     attachHiddenMetaInput.setAttribute("name", "attachMeta[" + attachment.getId() + "]");
@@ -345,6 +354,7 @@ function newAttachMetaInput(attachment) {
 }
 
 function newAttachFileInput() {
+    'use strict'
     var newInput = document.createElement("input");
     newInput.setAttribute("type", "file");
     newInput.className = "form-control";
@@ -354,13 +364,14 @@ function newAttachFileInput() {
 }
 
 function changeFormAttribute(input, newForm) {
+    'use strict'
     input.setAttribute("form", newForm);
 
 }
 
 function editAttachTableRow(attachment) {
+    'use strict'
     //edit data in the attach table
-
     var row = attachTable.rows[findIndexOfAttachment(attachment)];
     var cellAttachName = row.cells[1];
     var cellAttachUploadDate = row.cells[2];
@@ -372,21 +383,24 @@ function editAttachTableRow(attachment) {
 }
 
 function editAttachMetaInput(attachment) {
+    'use strict'
     var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
     attachment.getAttachMetaInput().setAttribute("value", value);
 }
 
 function deleteAttachTableRow(row) {
+    'use strict'
     attachTable.deleteRow(row);
 }
 
 function setDeleteAttachMetaInput(attachment) {
-    // attachMetaInput.parentNode.removeChild(attachMetaInput);
+    'use strict'
     var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append(attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
     attachment.getAttachMetaInput().setAttribute("value", value);
 }
 
 function deleteAttachFile(attachment) {
+    'use strict'
     var fileInput = attachment.getAttachFileInput();
     if (typeof fileInput !== "undefined")
         fileInput.parentNode.removeChild(attachment.getAttachFileInput());
@@ -394,6 +408,7 @@ function deleteAttachFile(attachment) {
 
 //utility function for converting date to string in the format "dd.MM.YYYY HH:mm:ss"
 function dateToString(date) {
+    'use strict'
     //function adds zeros if value < 10
     function addZero(i) {
         if (i < 10) {
@@ -401,6 +416,5 @@ function dateToString(date) {
         }
         return i;
     }
-
     return addZero(date.getDate()) + "." + (addZero(date.getMonth() + 1)) + "." + date.getFullYear() + " " + addZero(date.getHours()) + ":" + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds());
 }

@@ -7,6 +7,7 @@ var form = document.getElementById("form");
 var previousSelectedIndex = 0;
 
 function showTemplate(index) {
+    'use strict'
     var previousTemplateBody = document.getElementById("email-body[" + previousSelectedIndex + "]");
     previousTemplateBody.className = "text-field white-space-pre hidden";
     previousTemplateBody.disabled = true;
