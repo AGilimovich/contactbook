@@ -6,11 +6,13 @@ import com.itechart.web.properties.PropertiesManager;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.email.Email;
 import com.itechart.web.service.email.EmailAddressesParser;
+import com.itechart.web.service.files.AbstractFileService;
 import com.itechart.web.service.request.processing.builder.FullContactDTOBuilder;
 import com.itechart.web.service.request.processing.builder.SearchDTOBuilder;
 import com.itechart.web.service.request.processing.exception.FileSizeException;
 import com.itechart.web.service.validation.AbstractValidationService;
 import com.itechart.web.service.validation.ValidationException;
+import com.itechart.web.service.validation.ValidationService;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -31,6 +33,7 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
     @Override
     public FullContactDTO processMultipartContactRequest(HttpServletRequest request) throws FileSizeException, ValidationException {
         logger.info("Processing multipart request");
+        AbstractFileService fileService = ServiceFactory.getServiceFactory().getFileService();
         MultipartRequestHandler handler = new MultipartRequestHandler();
         handler.handle(request);
         //get map of form field names and corresponding values
@@ -42,8 +45,13 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         //store file parts and get map of field names and file names
         Map<String, String> storedFiles = writer.writeFileParts(fileParts);
 
-        FullContactDTOBuilder builder = new FullContactDTOBuilder(formFields, storedFiles);
-
+        FullContactDTOBuilder builder = new FullContactDTOBuilder();
+        try {
+            builder.build(formFields, storedFiles);
+        } catch (ValidationException e) {
+            fileService.deleteFiles(storedFiles.values());
+            throw e;
+        }
         return builder.getFullContact();
     }
 

@@ -425,7 +425,7 @@ public class JdbcContactDao implements IContactDao {
 
     @Override
     public ArrayList<Contact> getByBirthDate(Date date) throws DaoException {
-        logger.info("Fetch contact by birth day: {}.{}", new DateTime(date).getDayOfMonth(),new DateTime(date).getMonthOfYear());
+        logger.info("Fetch contact by birthday, day: {}, month: {}", new DateTime(date).getDayOfMonth(),new DateTime(date).getMonthOfYear());
 
         if (date == null) throw new DaoException("Date is null");
         ArrayList<Contact> contacts = new ArrayList<>();

@@ -67,7 +67,7 @@ public class FilePartWriter {
                         logger.info("Creating folder: {}", filePath);
                         folder.mkdirs();
                     } catch (SecurityException e) {
-                        logger.error("Exception during  new folder creating: {}", e.getMessage());
+                        logger.error("Exception during folder creating: {}", e.getMessage());
                     }
                 }
                 String fullFilePath = StringUtils.join(new Object[]{folder, storedFileName}, FileSystems.getDefault().getSeparator());

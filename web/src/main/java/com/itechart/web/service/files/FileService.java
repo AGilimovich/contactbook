@@ -12,6 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Created by Aleksandr on 25.03.2017.
@@ -42,7 +44,7 @@ public class FileService implements AbstractFileService {
     }
 
     @Override
-    public void deleteFiles(ArrayList<String> names) {
+    public void deleteFiles(Collection<String> names) {
         logger.info("Delete files with names: {}", names);
         if (names != null) {
             for (String name : names) {

@@ -34,8 +34,9 @@ public class FullContactDTOBuilder {
     private ArrayList<FullAttachmentDTO> deletedAttachments = new ArrayList<>();
 
 
-    public FullContactDTOBuilder(Map<String, String> formFields, Map<String, String> storedFiles) throws ValidationException {
 
+
+    public void build(Map<String, String> formFields, Map<String, String> storedFiles) throws ValidationException{
         // TODO: 01.04.2017 if was not stored??
         if (formFields != null && storedFiles != null) {
             buildContact(formFields);
@@ -45,6 +46,7 @@ public class FullContactDTOBuilder {
             buildAttachments(formFields, storedFiles);
         }
     }
+
 
     private void buildPhoto(Map<String, String> storedFiles) {
         logger.info("Build photo from stored files map: {}", storedFiles);

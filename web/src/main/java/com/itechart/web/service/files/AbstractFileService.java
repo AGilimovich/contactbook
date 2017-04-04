@@ -1,6 +1,6 @@
 package com.itechart.web.service.files;
 
-import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by Aleksandr on 27.03.2017.
@@ -9,7 +9,9 @@ public interface AbstractFileService {
 
     void deleteFile(String name);
 
-    void deleteFiles(ArrayList<String> names);
+
+    void deleteFiles(Collection<String> names);
+
 
     byte[] getFile(String name);
 }
