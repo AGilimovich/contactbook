@@ -1,6 +1,5 @@
 package com.itechart.web.service.files;
 
-import com.itechart.web.service.request.processing.parser.AttachmentFormFieldParser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -37,7 +36,6 @@ public class FileService implements AbstractFileService {
                 FileUtils.forceDelete(file);
             } catch (IOException e) {
                 logger.error("Error during deleting file: {}", e.getMessage());
-                e.printStackTrace();
             }
         }
 
@@ -62,7 +60,6 @@ public class FileService implements AbstractFileService {
                     return Files.readAllBytes(path);
                 } catch (IOException e) {
                     logger.error("Error during reading file: {}", e.getMessage());
-                    e.printStackTrace();
                 }
             }
         }

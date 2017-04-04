@@ -43,7 +43,6 @@ public class SearchDTOBuilder {
             try {
                 dateTime = format.parseDateTime(fromDateParam);
             } catch (Exception e) {
-                e.printStackTrace();
                 throw new ValidationException("Date has illegal format");
             }
             if (dateTime != null)
@@ -54,7 +53,6 @@ public class SearchDTOBuilder {
             try {
                 dateTime = format.parseDateTime(toDateParam);
             } catch (Exception e) {
-                e.printStackTrace();
                 throw new ValidationException("Date has illegal format");
             }
             if (dateTime != null)

@@ -212,7 +212,6 @@ public class TransactionalDataService implements AbstractDataService {
         try {
             contacts = contactDao.getByBirthDate(date);
             transaction.commitTransaction();
-
         } catch (DaoException e) {
             logger.error("Error fetching contacts by birthday: {}", e.getCause().getMessage());
             transaction.rollbackTransaction();

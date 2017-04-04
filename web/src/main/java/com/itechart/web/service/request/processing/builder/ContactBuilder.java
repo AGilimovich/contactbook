@@ -63,7 +63,6 @@ public class ContactBuilder {
             try {
                 dateTime = format.parseDateTime(dateOfBirthParam);
             } catch (Exception e) {
-                e.printStackTrace();
                 throw new ValidationException("Date has illegal format");
             }
             if (dateTime != null)

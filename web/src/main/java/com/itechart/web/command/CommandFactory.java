@@ -40,10 +40,8 @@ public class CommandFactory {
                 return commandClass.newInstance();
             } catch (InstantiationException e) {
                 logger.error("Error instantiating command object", e.getMessage());
-                e.printStackTrace();
             } catch (IllegalAccessException e) {
                 logger.error("Error instantiating command object", e.getMessage());
-                e.printStackTrace();
             }
 
         return null;

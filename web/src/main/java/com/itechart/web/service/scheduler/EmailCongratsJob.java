@@ -36,7 +36,6 @@ public class EmailCongratsJob implements Job {
             contacts = ServiceFactory.getServiceFactory().getDataService().getContactsWithBirthday(date);
         } catch (DataException e) {
             logger.error("Error during fetching contacts", e.getMessage());
-            e.printStackTrace();
         }
         AbstractEmailingService emailingService = ServiceFactory.getServiceFactory().getEmailService();
         AbstractTemplateProvidingService templateService = ServiceFactory.getServiceFactory().getEmailTemplateProvidingService();
@@ -52,7 +51,6 @@ public class EmailCongratsJob implements Job {
                     emailingService.sendEmail(con.getEmail(), subject, body);
                 } catch (EmailException e) {
                     logger.error("Error during sending email", e.getMessage());
-                    e.printStackTrace();
                 }
 
             }

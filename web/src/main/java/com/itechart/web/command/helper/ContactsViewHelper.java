@@ -1,6 +1,5 @@
 package com.itechart.web.command.helper;
 
-import com.itechart.web.command.DoSearch;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;

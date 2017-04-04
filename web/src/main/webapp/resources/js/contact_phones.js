@@ -138,8 +138,7 @@ btnDeletePhones.onclick = function () {
     for (var i = 0; i < phonesCheckBoxes.length;) {
         if (phonesCheckBoxes[i].checked) {
             counter++;
-            //todo popup acknowledge deleting
-          
+
             var phone = phones[i];
             if (phone.getStatus() != STATUS.NEW) {
                 phone.setStatus(STATUS.DELETED);
@@ -147,8 +146,6 @@ btnDeletePhones.onclick = function () {
             deleteHiddenInput(phone);
             phoneTable.deleteRow(i);
             phones.splice(i, 1);
-            // i = 0;
-            //todo deleting hidden inputs
         } else i++;
     }
     if (counter == 0) {

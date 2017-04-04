@@ -42,7 +42,6 @@ public class SchedulingService implements AbstractSchedulingService{
             scheduler.start();
         } catch (SchedulerException e) {
             logger.error("Error during starting scheduler: {}", e.getMessage());
-            e.printStackTrace();
         }
     }
 

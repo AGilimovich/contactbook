@@ -36,7 +36,6 @@ public class AttachmentBuilder {
             try {
                 dateTime = format.parseDateTime(uploadDateParam);
             } catch (Exception e) {
-                e.printStackTrace();
                 throw new ValidationException("Date has illegal format");
             }
             if (dateTime != null)

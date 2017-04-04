@@ -58,7 +58,7 @@ public class JdbcContactDao implements IContactDao {
 //            "AND (c.citizenship LIKE ?) AND (a.country LIKE ?) AND (a.city LIKE ?) AND (a.street LIKE ?) AND (a.house LIKE ?) AND (a.apartment LIKE ?) AND (a.zip_code LIKE ?)" +
 //            "LIMIT ?,?";
 
-    private final String SELECT_CONTACTS_BY_BIRTHDATE = "SELECT name, email FROM contact WHERE date_of_birth = ?";
+    private final String SELECT_CONTACTS_BY_BIRTHDATE = "SELECT name, email FROM contact WHERE DAY(date_of_birth) = ? AND MONTH (date_of_birth) = ?";
 
     private final String SELECT_CONTACTS_LIMIT_QUERY = "SELECT c.*, g.gender_value, f_s.family_status_value " +
             " FROM contact AS c INNER JOIN gender AS g ON c.gender = g.gender_id" +
@@ -425,10 +425,9 @@ public class JdbcContactDao implements IContactDao {
 
     @Override
     public ArrayList<Contact> getByBirthDate(Date date) throws DaoException {
-        logger.info("Fetch contact by birth date: {}", date);
+        logger.info("Fetch contact by birth day: {}.{}", new DateTime(date).getDayOfMonth(),new DateTime(date).getMonthOfYear());
 
         if (date == null) throw new DaoException("Date is null");
-        ;
         ArrayList<Contact> contacts = new ArrayList<>();
         Connection cn = null;
         PreparedStatement st = null;
@@ -436,7 +435,10 @@ public class JdbcContactDao implements IContactDao {
         try {
             cn = transaction.getConnection();
             st = cn.prepareStatement(SELECT_CONTACTS_BY_BIRTHDATE);
-            st.setDate(1, new java.sql.Date(date.getTime()));
+            st.setInt(1, new DateTime(date).getDayOfMonth());
+            st.setInt(2, new DateTime(date).getMonthOfYear());
+
+
             rs = st.executeQuery();
             while (rs.next()) {
                 String name = rs.getString("name");

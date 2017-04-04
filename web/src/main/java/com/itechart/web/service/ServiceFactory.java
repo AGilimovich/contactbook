@@ -17,6 +17,8 @@ import com.itechart.web.service.template.AbstractTemplateProvidingService;
 import com.itechart.web.service.template.TemplatesProvidingService;
 import com.itechart.web.service.validation.AbstractValidationService;
 import com.itechart.web.service.validation.ValidationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -29,7 +31,7 @@ import java.util.ResourceBundle;
  */
 public class ServiceFactory {
 
-
+    private Logger logger = LoggerFactory.getLogger(ServiceFactory.class);
     private static ServiceFactory instance;
 
     private String hostName;
@@ -49,11 +51,12 @@ public class ServiceFactory {
         emailFrom = bundle.getString("EMAIL");
         DataSource dataSource = null;
         try {
+            logger.info("Lookup datasource");
             Context initContext = new InitialContext();
             Context envContext = (Context) initContext.lookup("java:/comp/env");
             dataSource = (DataSource) envContext.lookup("jdbc/MySQLDatasource");
         } catch (NamingException e) {
-            e.printStackTrace();
+            logger.error("Error during context lookup: {}", e.getMessage());
         }
         transactionManager = new TransactionManager(dataSource);
 

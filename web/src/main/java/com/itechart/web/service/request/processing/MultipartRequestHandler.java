@@ -44,7 +44,7 @@ public class MultipartRequestHandler {
                         try {
                             formFields.put(item.getFieldName(), item.getString("UTF-8"));
                         } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
+                            logger.error("Error getting form field value: {}", e.getMessage());
                         }
                     } else {
                         fileParts.put(item.getFieldName(), item);
@@ -54,7 +54,8 @@ public class MultipartRequestHandler {
         } catch (FileUploadBase.SizeLimitExceededException e) {
             throw new FileSizeException("The file size exceeds maximum permitted value");
         } catch (FileUploadException e) {
-            e.printStackTrace();
+            logger.error("Error during file uploading: {}", e.getMessage());
+
         }
 
     }

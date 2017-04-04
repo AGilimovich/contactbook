@@ -50,10 +50,10 @@ public class FilePartWriter {
     }
 
     /**
-     * Storing file part on disk and gives it unique name.
+     * Stores file part on disk and gives it unique name.
      *
      * @param item to store.
-     * @return the name of stored file.
+     * @return the name of the stored file.
      */
     private String writeFilePart(FileItem item) {
         try {
@@ -65,10 +65,9 @@ public class FilePartWriter {
                 if (!folder.exists()) {
                     try {
                         logger.info("Creating folder: {}", filePath);
-                        folder.mkdir();
+                        folder.mkdirs();
                     } catch (SecurityException e) {
                         logger.error("Exception during  new folder creating: {}", e.getMessage());
-                        e.printStackTrace();
                     }
                 }
                 String fullFilePath = StringUtils.join(new Object[]{folder, storedFileName}, FileSystems.getDefault().getSeparator());
@@ -79,7 +78,6 @@ public class FilePartWriter {
             }
         } catch (Exception e) {
             logger.error("Exception during file writing: {}", e.getMessage());
-            e.printStackTrace();
         }
         return null;
     }
