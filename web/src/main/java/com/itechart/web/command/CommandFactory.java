@@ -33,10 +33,11 @@ public class CommandFactory {
 
     public static Command getCommand(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
+        if (path == null) return null;
         Class<? extends Command> commandClass = commands.get(path);
         if (commandClass != null)
             try {
-                logger.info("Get command for path: {}", request.getRequestURI());
+                logger.info("Get command for path: {}", path);
                 return commandClass.newInstance();
             } catch (InstantiationException e) {
                 logger.error("Error instantiating command object", e.getMessage());

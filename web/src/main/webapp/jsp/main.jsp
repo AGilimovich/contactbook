@@ -46,7 +46,7 @@
                 <button type="button" id="btn-delete-contacts" class="btn btn-danger btn-delete">
                     Удалить
                 </button>
-                <span class="tooltiptext" id="delete-contact-tooltip">Выберите как минимум один элемент</span>
+                <span class="tooltiptext" id="delete-contact-tooltip">Выберите контакты</span>
             </div>
             <button type="submit" id="btn-submit-delete"
                     formaction="${pageContext.request.contextPath}/delete" formmethod="post"

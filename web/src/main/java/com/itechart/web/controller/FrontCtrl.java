@@ -3,10 +3,6 @@ package com.itechart.web.controller;
 import com.itechart.web.command.Command;
 import com.itechart.web.command.CommandFactory;
 import com.itechart.web.command.dispatcher.ErrorDispatcher;
-import com.itechart.web.properties.PropertiesManager;
-import com.itechart.web.service.ServiceFactory;
-import com.itechart.web.service.scheduler.AbstractSchedulingService;
-import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -28,20 +24,26 @@ public class FrontCtrl extends HttpServlet {
 
     public void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Command command = CommandFactory.getCommand(request);
-        String page = command.execute(this, request, response);
-        if (!response.isCommitted()) {
-            if (page != null)
-                dispatch(request, response, page);
-            else
-                ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_NOT_FOUND);
+        String page = null;
+        if (command != null) {
+            page = command.execute(this, request, response);
+            if (!response.isCommitted()) {
+                if (page != null)
+                    dispatch(request, response, page);
+                else
+                    ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_NOT_FOUND);
+            }
+        } else {
+            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_NOT_FOUND);
         }
+
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
 

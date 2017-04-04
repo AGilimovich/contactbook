@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Service layer for processing different http requests.
+ * Service layer. Process different requests.
  */
 public class RequestProcessingService implements AbstractRequestProcessingService {
     private Logger logger = LoggerFactory.getLogger(RequestProcessingService.class);

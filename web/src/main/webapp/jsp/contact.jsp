@@ -128,13 +128,13 @@
                 <div class="table-btns">
                     <div class="tooltip-error">
                         <button type="button" id="btn-delete-phones" class="btn">Удалить</button>
-                        <span class="tooltiptext" id="delete-phone-tooltip">Выберите как минимум один элемент</span>
+                        <span class="tooltiptext" id="delete-phone-tooltip">Выберите телефоны</span>
                     </div>
 
                     <button type="button" id="btn-add-phone" class="btn">Добавить</button>
                     <div class="tooltip-error">
                         <button type="button" id="btn-edit-phone" class="btn">Редактировать</button>
-                        <span class="tooltiptext" id="edit-phone-tooltip">Выберите один элемент</span>
+                        <span class="tooltiptext" id="edit-phone-tooltip">Выберите один телефон</span>
                     </div>
                 </div>
 
@@ -162,13 +162,13 @@
                 <div class="table-btns">
                     <div class="tooltip-error">
                         <button type="button" id="btn-delete-attach" class="btn">Удалить</button>
-                        <span class="tooltiptext" id="delete-attach-tooltip">Выберите как минимум один элемент</span>
+                        <span class="tooltiptext" id="delete-attach-tooltip">Выберите присоединения</span>
                     </div>
 
                     <button type="button" id="btn-add-attach" class="btn">Добавить</button>
                     <div class="tooltip-error">
                         <button type="button" id="btn-edit-attach" class="btn">Редактировать</button>
-                        <span class="tooltiptext" id="edit-attach-tooltip">Выберите один элемент</span>
+                        <span class="tooltiptext" id="edit-attach-tooltip">Выберите одно присоединение</span>
                     </div>
 
 
