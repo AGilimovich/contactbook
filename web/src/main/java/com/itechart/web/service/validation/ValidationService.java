@@ -62,7 +62,7 @@ public class ValidationService implements AbstractValidationService {
     public boolean validateName(String name) {
         logger.info("Validating credential: {}", name);
         if (StringUtils.isBlank(name)) return false;
-        String nameRegex = "[[А-ЯЁ][-А-яЁё][a-zA-Z]\\s]{1,50}";
+        String nameRegex = "[[А-ЯЁ][-А-яЁё][a-zA-Z]]{1,50}";
         Pattern pattern = Pattern.compile(nameRegex);
         if (pattern.matcher(name).matches())
             return true;

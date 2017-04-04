@@ -139,7 +139,7 @@ btnDeletePhones.onclick = function () {
         if (phonesCheckBoxes[i].checked) {
             counter++;
             //todo popup acknowledge deleting
-            // deleteHiddenInput(phonesCheckBoxes[i].value);
+          
             var phone = phones[i];
             if (phone.getStatus() != STATUS.NEW) {
                 phone.setStatus(STATUS.DELETED);
@@ -391,6 +391,35 @@ phoneForm.onsubmit = function () {
     return save();
 }
 
+var countryCodeInput = document.getElementById("country-code-input");
+var operatorCodeInput = document.getElementById("operator-code-input");
+var phoneNumberInput = document.getElementById("phone-number-input");
+countryCodeInput.oninvalid = function () {
+    'use strict'
+    countryCodeInput.setCustomValidity('Код страны должен содержать 3 цифры');
+}
+countryCodeInput.oninput = function () {
+    'use strict'
+    countryCodeInput.setCustomValidity('');
+}
+
+operatorCodeInput.oninvalid = function () {
+    'use strict'
+    operatorCodeInput.setCustomValidity('Код оператора должен содержать 2 цифры');
+}
+operatorCodeInput.oninput = function () {
+    'use strict'
+    operatorCodeInput.setCustomValidity('');
+}
+
+phoneNumberInput.oninvalid = function () {
+    'use strict'
+    phoneNumberInput.setCustomValidity('Телефонный номер должен содержать 7 цифр');
+}
+phoneNumberInput.oninput = function () {
+    'use strict'
+    phoneNumberInput.setCustomValidity('');
+}
 
 
 

@@ -183,10 +183,11 @@ btnDeleteAttaches.onclick = function () {
         if (attachCheckBoxes[i].checked) {
             counter++;
             var attachment = attachments[i];
-            //todo popup acknowledge deleting
-            attachment.setStatus(STATUS.DELETED);
+            if (attachment.getStatus() != STATUS.NEW) {
+                attachment.setStatus(STATUS.DELETED);
+            }
             deleteAttachTableRow(i);
-            setDeleteAttachMetaInput(attachment);
+            deleteAttachMetaInput(attachment);
             deleteAttachFile(attachment);
             attachments.splice(i, 1);
         } else i++;
@@ -330,9 +331,6 @@ function newAttachTableRow(attachment) {
     attachment.setAttachCheckBox(checkbox);
 
     cellName.setAttribute("name", "attachName");
-    // var attachmentLink = document.createElement("a");
-    // attachmentLink.setAttribute("name", "attachLink");
-    // cellName.appendChild(attachmentLink);
     cellName.innerText = attachment.getName();
 
     cellUploadDate.innerText = attachment.getUploadDate();
@@ -358,6 +356,7 @@ function newAttachFileInput() {
     var newInput = document.createElement("input");
     newInput.setAttribute("type", "file");
     newInput.className = "form-control";
+    setValidationMessageToInput(newInput);
     //newInput.setAttribute("form", "main-form");
     divInputFileContainer.appendChild(newInput);
     return newInput;
@@ -393,10 +392,18 @@ function deleteAttachTableRow(row) {
     attachTable.deleteRow(row);
 }
 
-function setDeleteAttachMetaInput(attachment) {
+function deleteAttachMetaInput(attachment) {
     'use strict'
-    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
-    attachment.getAttachMetaInput().setAttribute("value", value);
+    var input = attachment.getAttachMetaInput()
+    if (typeof input != "undefined") {
+        if (attachment.getStatus() == STATUS.NEW) {
+            input.parentNode.removeChild(input);
+        } else {
+            var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
+            attachment.getAttachMetaInput().setAttribute("value", value);
+        }
+    }
+
 }
 
 function deleteAttachFile(attachment) {
@@ -423,4 +430,30 @@ function dateToString(date) {
 var attachForm = document.getElementById("attachForm");
 attachForm.onsubmit = function () {
     return saveAttach();
+}
+
+
+inputAttachName.oninvalid = function () {
+    'use strict'
+    inputAttachName.setCustomValidity('Имя не может быть пустым');
+}
+inputAttachName.oninput = function () {
+    'use strict'
+    inputAttachName.setCustomValidity('');
+}
+
+
+function setValidationMessageToInput(input) {
+    'use strict'
+    input.oninvalid = function () {
+        input.setCustomValidity('Файл не выбран');
+    };
+    input.onchange = function () {
+        input.setCustomValidity('');
+        inputAttachName.setCustomValidity('');
+    }
+    input.onclick = function () {
+        input.setCustomValidity('');
+        inputAttachName.setCustomValidity('');
+    }
 }

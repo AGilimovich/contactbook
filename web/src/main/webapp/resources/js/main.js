@@ -1,7 +1,3 @@
-/**
- * Created by Aleksandr on 15.03.2017.
- */
-
 var selectAllCheckbox = document.getElementById("selectAll");
 var checkboxes = document.getElementsByName("isSelected");
 var btnDelete = document.getElementById("btn-delete-contacts");

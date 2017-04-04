@@ -15,7 +15,7 @@
         <div class="navbar-header">
             <a href="../${pageContext.request.contextPath}?search=false" class="navbar-brand">Справочник контактов</a>
         </div>
-        <div  id="myNavbar">
+        <div id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
                 <li class="active"><a href="${pageContext.request.contextPath}/search"><span
                         class="glyphicon glyphicon-search"></span> Поиск
@@ -168,6 +168,8 @@
         </div>
     </form>
 </div>
-<script src="${pageContext.request.contextPath}/resources/js/main.js"></script>
+<footer>
+    <script src="${pageContext.request.contextPath}/resources/js/main.js"></script>
+</footer>
 </body>
 </html>

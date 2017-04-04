@@ -43,22 +43,22 @@
                     <div class="col-md-6">
 
                         <p class="form-text"><span>Имя</span><span class="red-text">*</span>:</p>
-                        <input type="text" name="name" value="${contact.name}" class="form-control" required>
+                        <input id="name-input" type="text" name="name" value="${contact.name}" class="form-control" pattern="^[A-Za-zА-Яа-яЁё]{1,50}$" required>
 
 
                         <p class="form-text"><span>Фамилия</span><span class="red-text">*</span>:</p>
-                        <input type="text" name="surname" value="${contact.surname}" class="form-control" required>
+                        <input id="surname-input" type="text" name="surname" value="${contact.surname}" class="form-control" pattern="^[A-Za-zА-Яа-яЁё]{1,50}$" required>
 
                         <p class="notification">* Поля, обязательные для заполнения</p>
 
                         <p class="form-text">Отчество:</p>
-                        <input type="text" name="patronymic" value="${contact.patronymic}" class="form-control">
+                        <input id="patronymic-input" type="text" name="patronymic" value="${contact.patronymic}" pattern="^[A-Za-zА-Яа-яЁё]{1,50}$" class="form-control">
 
 
                         <p class="form-text">Дата рождения:</p>
                         <fmt:formatDate value="${contact.dateOfBirth}" var="formattedDateOfBirth"
                                         type="date" pattern="dd.MM.yyyy"/>
-                        <input type="text" name="dateOfBirth" value="${formattedDateOfBirth}" placeholder="ДД.ММ.ГГГГ"
+                        <input id="date-input" type="text" name="dateOfBirth" value="${formattedDateOfBirth}" placeholder="ДД.ММ.ГГГГ"
                                pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}" class="form-control">
 
 
@@ -93,7 +93,7 @@
                         <input type="text" name="website" value="${contact.website}" class="form-control">
 
                         <p class="form-text">Email:</p>
-                        <input type="email" name="email" value="${contact.email}" class="form-control">
+                        <input id="email-input" type="email" name="email" value="${contact.email}" class="form-control">
 
                         <p class="form-text">Текущее место работы:</p>
                         <input type="text" name="placeOfWork" value="${contact.placeOfWork}" class="form-control">
@@ -250,15 +250,15 @@
             <form id="phone-form">
 
                 <p class="form-text">Код страны:</p>
-                <input type="tel" pattern="\d{3}" class="form-control input-margin input-inline" name="inputCountryCode"
+                <input id="country-code-input" type="tel" pattern="\d{3}" class="form-control input-margin input-inline" name="inputCountryCode"
                        placeholder="XXX" required>
 
                 <p class="form-text">Код оператора:</p>
-                <input type="tel" pattern="\d{2}" class="form-control input-margin" name="inputOperatorCode"
+                <input id="operator-code-input" type="tel" pattern="\d{2}" class="form-control input-margin" name="inputOperatorCode"
                        placeholder="XX" required>
 
                 <p class="form-text">Телефонный номер:</p>
-                <input type="tel" pattern="\d{7}" class="form-control input-margin" name="inputPhoneNumber"
+                <input id="phone-number-input" type="tel" pattern="\d{7}" class="form-control input-margin" name="inputPhoneNumber"
                        placeholder="XXXXXXX" required>
                 <p class="form-text">Тип телефона:</p>
                 <div class="row">
@@ -314,6 +314,7 @@
     <script src="${pageContext.request.contextPath}/resources/js/contact_phones.js" charset="utf-8"></script>
     <script src="${pageContext.request.contextPath}/resources/js/contact_attach.js" charset="utf-8"></script>
     <script src="${pageContext.request.contextPath}/resources/js/contact_photo.js" charset="utf-8"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/contact_main.js" charset="utf-8"></script>
 </footer>
 
 

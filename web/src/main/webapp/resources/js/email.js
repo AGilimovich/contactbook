@@ -1,10 +1,6 @@
 var form = document.getElementById("form");
 
- // var emailBodies = document.getElementsByName("email-body");
-
-
-
-var previousSelectedIndex = 0;
+ var previousSelectedIndex = 0;
 
 function showTemplate(index) {
     'use strict'

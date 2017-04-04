@@ -177,7 +177,8 @@ public class TransactionalDataService implements AbstractDataService {
             }
             for (FullAttachmentDTO fullAttachmentToDelete : contactToUpdate.getDeletedAttachments()) {
                 File file = fileDao.getFileByAttachmentId(fullAttachmentToDelete.getAttachment().getId());
-                filesToDelete.add(file.getStoredName());
+                if (file != null)
+                    filesToDelete.add(file.getStoredName());
                 attachmentDao.delete(fullAttachmentToDelete.getAttachment().getId());
                 fileDao.delete(file.getId());
             }

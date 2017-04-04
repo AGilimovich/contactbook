@@ -47,8 +47,8 @@
                             <p>Дата рождения:</p>
                         </div>
                         <div class="row">
-                            <span>с </span><input type="text" placeholder="ДД.ММ.ГГГГ" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}" name="fromDate" class="date form-control"> <span>по</span>
-                            <input id='toDate' name="toDate"
+                            <span>с </span><input type="text" placeholder="ДД.ММ.ГГГГ" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}" id="from-date" name="fromDate" class="date form-control"> <span>по</span>
+                            <input id="to-date" name="toDate"
                                    type="text" placeholder="ДД.ММ.ГГГГ" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}"
                                    class="date form-control">
                         </div>
@@ -137,5 +137,8 @@
 
     </form>
 </div>
+<footer>
+    <script src="${pageContext.request.contextPath}/resources/js/search.js"></script>
+</footer>
 </body>
 </html>
