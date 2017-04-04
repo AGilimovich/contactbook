@@ -8,7 +8,6 @@
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
-    <script src="${pageContext.request.contextPath}/resources/js/main.js" defer></script>
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -170,5 +169,6 @@
         </div>
     </form>
 </div>
+<script src="${pageContext.request.contextPath}/resources/js/main.js"></script>
 </body>
 </html>

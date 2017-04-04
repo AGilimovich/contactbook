@@ -24,10 +24,6 @@ public class FrontCtrl extends HttpServlet {
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        int scheduledHours = Integer.valueOf(PropertiesManager.scheduledHours());
-        int scheduledMinutes = Integer.valueOf(PropertiesManager.scheduledMinutes());
-        AbstractSchedulingService schedulingService = ServiceFactory.getServiceFactory().getEmailCongratsService();
-        schedulingService.startScheduler(scheduledHours, scheduledMinutes);
     }
 
     public void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

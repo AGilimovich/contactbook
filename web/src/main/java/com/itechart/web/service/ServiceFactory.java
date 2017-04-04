@@ -60,11 +60,7 @@ public class ServiceFactory {
 
     }
 
-    /**
-     * Static factory method.
-     *
-     * @return
-     */
+
     public static ServiceFactory getServiceFactory() {
         if (instance == null) {
             synchronized (ServiceFactory.class) {

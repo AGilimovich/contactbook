@@ -20,7 +20,7 @@
 
 <div class="container-fluid">
 
-    <form action="/find" method="post">
+    <form action="${pageContext.request.contextPath}/find" method="post">
         <div class="top-buffer row">
             <div class="col-md-12">
                 <div class="row well">

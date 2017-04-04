@@ -6,7 +6,6 @@
     <title>Title</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/email.css">
-    <script src="${pageContext.request.contextPath}/resources/js/email.js" charset="utf-8" defer></script>
 
 </head>
 <body>
@@ -21,7 +20,7 @@
     </div>
 </nav>
 <div class="container-fluid ">
-    <form id="form" action="/send" method="post">
+    <form id="form" action="${pageContext.request.contextPath}/send" method="post">
         <div class="row">
             <div class="col-md-6 well offset20px">
                 <div class="row buffer-top">
@@ -67,5 +66,9 @@
         </div>
     </form>
 </div>
+
+<footer>
+    <script src="${pageContext.request.contextPath}/resources/js/email.js" charset="utf-8"></script>
+</footer>
 </body>
 </html>

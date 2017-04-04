@@ -45,8 +45,23 @@
         <res-auth>Container</res-auth>
     </resource-ref>
 
+    <listener>
+        <listener-class>com.itechart.web.listener.ContextListener</listener-class>
+    </listener>
 
 
+    <context-param>
+        <param-name>shutdown-on-unload</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>start-scheduler-on-load</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.quartz.ee.servlet.QuartzInitializerListener</listener-class>
+    </listener>
 
 
 

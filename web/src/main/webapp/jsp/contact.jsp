@@ -6,9 +6,7 @@
     <title>Title</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/contact.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap.css">
-    <script src="${pageContext.request.contextPath}/resources/js/contact_phones.js" charset="utf-8" defer></script>
-    <script src="${pageContext.request.contextPath}/resources/js/contact_attach.js" charset="utf-8" defer></script>
-    <script src="${pageContext.request.contextPath}/resources/js/contact_photo.js" charset="utf-8" defer></script>
+
 
 </head>
 <body>
@@ -318,6 +316,11 @@
     </div>
 
 </div>
+<footer>
+    <script src="${pageContext.request.contextPath}/resources/js/contact_phones.js" charset="utf-8"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/contact_attach.js" charset="utf-8"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/contact_photo.js" charset="utf-8"></script>
+</footer>
 
 
 </body>
