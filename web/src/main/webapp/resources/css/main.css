@@ -50,11 +50,12 @@ body {
 }
 
 #link-email {
-    background-color: #e7e7e7;
-    border: inherit;
-    outline: inherit;
-    color: inherit;
-    margin-left: 5px;
+    cursor: hand;
+    /*background-color: #e7e7e7;*/
+    /*border: inherit;*/
+    /*outline: inherit;*/
+    /*color: inherit;*/
+    /*margin-left: 5px;*/
 }
 
 /*-----------------TOOLTIP--------------*/

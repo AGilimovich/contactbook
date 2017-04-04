@@ -256,29 +256,30 @@ public class JdbcContactDao implements IContactDao {
             st = cn.prepareStatement(SELECT_BY_ID_QUERY);
             st.setLong(1, id);
             rs = st.executeQuery();
-            rs.next();
-            long contactId = rs.getLong("contact_id");
-            String name = rs.getString("name");
-            String surname = rs.getString("surname");
-            String patronymic = rs.getString("patronymic");
-            Date dateOfBirth = rs.getDate("date_of_birth");
-            Contact.Gender gender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
-            String citizenship = rs.getString("citizenship");
-            Contact.FamilyStatus familyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
-            String website = rs.getString("website");
-            String email = rs.getString("email");
-            String placeOfWork = rs.getString("place_of_work");
-            long photo = rs.getLong("photo");
-            contact = new Contact(contactId, name, surname);
-            contact.setPatronymic(patronymic);
-            contact.setDateOfBirth(dateOfBirth);
-            contact.setGender(gender);
-            contact.setCitizenship(citizenship);
-            contact.setFamilyStatus(familyStatus);
-            contact.setWebsite(website);
-            contact.setEmail(email);
-            contact.setPlaceOfWork(placeOfWork);
-            contact.setPhoto(photo);
+            if (rs.next()) {
+                long contactId = rs.getLong("contact_id");
+                String name = rs.getString("name");
+                String surname = rs.getString("surname");
+                String patronymic = rs.getString("patronymic");
+                Date dateOfBirth = rs.getDate("date_of_birth");
+                Contact.Gender gender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
+                String citizenship = rs.getString("citizenship");
+                Contact.FamilyStatus familyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
+                String website = rs.getString("website");
+                String email = rs.getString("email");
+                String placeOfWork = rs.getString("place_of_work");
+                long photo = rs.getLong("photo");
+                contact = new Contact(contactId, name, surname);
+                contact.setPatronymic(patronymic);
+                contact.setDateOfBirth(dateOfBirth);
+                contact.setGender(gender);
+                contact.setCitizenship(citizenship);
+                contact.setFamilyStatus(familyStatus);
+                contact.setWebsite(website);
+                contact.setEmail(email);
+                contact.setPlaceOfWork(placeOfWork);
+                contact.setPhoto(photo);
+            }
         } catch (SQLException e) {
             throw new DaoException("Exception during retrieving contact from the database", e);
         } finally {

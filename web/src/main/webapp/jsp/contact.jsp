@@ -42,11 +42,11 @@
                 <div class="row">
                     <div class="col-md-6">
 
-                        <p class="form-text"><span>Имя</span><span style="color: red">*</span>:</p>
+                        <p class="form-text"><span>Имя</span><span class="red-text">*</span>:</p>
                         <input type="text" name="name" value="${contact.name}" class="form-control" required>
 
 
-                        <p class="form-text"><span>Фамилия</span><span style="color: red">*</span>:</p>
+                        <p class="form-text"><span>Фамилия</span><span class="red-text">*</span>:</p>
                         <input type="text" name="surname" value="${contact.surname}" class="form-control" required>
 
                         <p class="notification">* Поля, обязательные для заполнения</p>
@@ -58,8 +58,8 @@
                         <p class="form-text">Дата рождения:</p>
                         <fmt:formatDate value="${contact.dateOfBirth}" var="formattedDateOfBirth"
                                         type="date" pattern="dd.MM.yyyy"/>
-                        <input type="text" name="dateOfBirth" value="${formattedDateOfBirth}" placeholder="ДД.ММ.ГГГГ" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}" class="form-control">
-
+                        <input type="text" name="dateOfBirth" value="${formattedDateOfBirth}" placeholder="ДД.ММ.ГГГГ"
+                               pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}" class="form-control">
 
 
                         <p class="form-text">Пол:</p>
@@ -172,10 +172,6 @@
                     </div>
 
 
-
-
-
-
                 </div>
                 <table id="attach-table" class="tbl" width="100%">
                     <c:forEach var="attachment" items="${attachments}" varStatus="counter">
@@ -183,12 +179,13 @@
                             <td width="6%"><input type="checkbox" name="attachIsSelected"
                                                   value="${attachment.getAttachment().id}"></td>
                             <td width="20%" name="attachName"><a name="attachLink"
-                                                                 href="/file?id=${attachment.getFile().storedName}" download="${attachment.getAttachment().name}">${attachment.getAttachment().name}</a>
+                                                                 href="/file?id=${attachment.getFile().storedName}"
+                                                                 download="${attachment.getAttachment().name}">${attachment.getAttachment().name}</a>
                             </td>
 
                             <td align="center" width="20%" name="attachUploadDate">
                                 <fmt:formatDate value="${attachment.getAttachment().uploadDate}" var="formattedDate"
-                                                type="date" pattern="dd-MM-yyyy HH:mm:ss"/>
+                                                type="date" pattern="dd.MM.yyyy HH:mm:ss"/>
                                     ${formattedDate}
                             </td>
                             <td width="54%" name="attachComment">${attachment.getAttachment().comment}</td>
@@ -234,13 +231,9 @@
         <div id="photo-popup" class="popup">
             <div class="popup-content photo-popup-content">
                 <p>Путь к картинке:</p>
-                <%--<input type="file" name="photoFile" accept="image/jpeg,image/png,image/gif" class="form-control"--%>
-                <%--onchange="loadImg()">--%>
-                <input type="button" id="loadFile" class="btn" value="Найти"
-                       onclick="document.getElementById('inputPhotoFile').click();"/>
-                <input id="inputPhotoFile" style="display:none;" type="file" name="photoFile"
-                       accept="image/jpeg,image/png,image/gif" class="form-control"
-                       onchange="loadImg()">
+                <input type="button" id="loadFile" class="btn" value="Найти"/>
+                <input id="inputPhotoFile" type="file" name="photoFile"
+                       accept="image/jpeg,image/png,image/gif" class="form-control">
                 <div class="row controls-group">
 
                     <button id="btn-save-photo" class="btn popup-button" type="button">Сохранить</button>
@@ -254,7 +247,7 @@
     <%--Add phone POPUP--%>
     <div id="phone-popup" class="popup">
         <div class="popup-content">
-            <form onsubmit="return save();">
+            <form id="phone-form">
 
                 <p class="form-text">Код страны:</p>
                 <input type="tel" pattern="\d{3}" class="form-control input-margin input-inline" name="inputCountryCode"
@@ -298,11 +291,12 @@
     <%--Add attach POPUP--%>
     <div id="attach-popup" class="popup">
         <div class="popup-content attach-popup">
-            <form onsubmit="return saveAttach()">
+            <form id="attachForm">
                 <div id="file-container">
                 </div>
                 <p class="form-text" id="file-name-label">Имя файла:</p>
-                <input type="text" id="file-name-input" class="form-control input-margin" name="inputAttachName" required>
+                <input type="text" id="file-name-input" class="form-control input-margin" name="inputAttachName"
+                       required>
 
                 <p class="form-text">Комментарий:</p>
                 <input type="text" class="form-control input-margin" name="inputAttachComment">

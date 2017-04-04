@@ -45,7 +45,7 @@ public class FileService implements AbstractFileService {
 
     @Override
     public void deleteFiles(ArrayList<String> names) {
-        logger.info("Delete file with names: {}", names);
+        logger.info("Delete files with names: {}", names);
         if (names != null) {
             for (String name : names) {
                 deleteFile(name);

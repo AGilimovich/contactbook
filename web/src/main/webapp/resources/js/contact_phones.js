@@ -385,6 +385,11 @@ function editHiddenInput(phone) {
 }
 
 
+var phoneForm = document.getElementById("phone-form");
+phoneForm.onsubmit = function () {
+    'use strict'
+    return save();
+}
 
 
 

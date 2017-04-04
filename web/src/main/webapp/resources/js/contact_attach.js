@@ -395,7 +395,7 @@ function deleteAttachTableRow(row) {
 
 function setDeleteAttachMetaInput(attachment) {
     'use strict'
-    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append(attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
+    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
     attachment.getAttachMetaInput().setAttribute("value", value);
 }
 
@@ -416,5 +416,11 @@ function dateToString(date) {
         }
         return i;
     }
+
     return addZero(date.getDate()) + "." + (addZero(date.getMonth() + 1)) + "." + date.getFullYear() + " " + addZero(date.getHours()) + ":" + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds());
+}
+
+var attachForm = document.getElementById("attachForm");
+attachForm.onsubmit = function () {
+    return saveAttach();
 }

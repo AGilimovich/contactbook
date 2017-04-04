@@ -21,7 +21,7 @@
                         class="glyphicon glyphicon-search"></span> Поиск
                     контактов</a></li>
                 <li>
-                    <a href="javascript:{}" onclick="document.getElementById('main-form').submit();">
+                    <a id="link-email">
                         <span class="glyphicon glyphicon-envelope"></span> Отправка Email
                     </a>
                 </li>
@@ -60,8 +60,7 @@
             <table class="table">
                 <tr>
                     <td class="table-checkbox" width="5%" align="middle">
-                        <input type="checkbox" class="${contacts.size()>0 ? '':'hidden'}" id="selectAll"
-                               onchange="selectAllContacts()">
+                        <input type="checkbox" class="${contacts.size()>0 ? '':'hidden'}" id="selectAll">
                     </td>
                 </tr>
                 <c:forEach var="contact" items="${contacts}" varStatus="status">
@@ -157,7 +156,7 @@
             <div class="col-md-2">
                 <div class="items-display">
                     <span>Отображать контактов:</span>
-                    <select id="display-items" name="contactsOnPage" class="form-control" onchange="submitCount()">
+                    <select id="display-items" name="contactsOnPage" class="form-control">
                         <option value="10" ${contactsOnPage == 10 ? 'selected': ''}>10</option>
                         <option value="20" ${contactsOnPage == 20 ? 'selected': ''}>20</option>
                     </select>

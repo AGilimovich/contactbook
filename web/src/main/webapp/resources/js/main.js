@@ -47,3 +47,20 @@ var submitCount = function () {
     'use strict'
     btnSubmitCount.click();
 }
+
+var emailLink = document.getElementById("link-email");
+var mainForm = document.getElementById('main-form')
+emailLink.onclick = function () {
+    'use strict'
+    mainForm.submit();
+}
+
+selectAllCheckbox.onchange = function () {
+    'use strict'
+    selectAllContacts();
+}
+var displayItemsSelect = document.getElementById("display-items");
+displayItemsSelect.onchange = function () {
+    'use strict'
+    submitCount();
+}

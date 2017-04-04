@@ -83,15 +83,16 @@ public class JdbcPhoneDao implements IPhoneDao {
             st = cn.prepareStatement(SELECT_PHONE_FOR_ID_QUERY);
             st.setLong(1, id);
             rs = st.executeQuery();
-            rs.next();
-            long phone_id = rs.getLong("phone_id");
-            String countryCode = rs.getString("country_code");
-            String operatorCode = rs.getString("operator_code");
-            String phoneNumber = rs.getString("phone_number");
-            Phone.PhoneType phoneType = Phone.PhoneType.valueOf(rs.getString("phone_type_value").toUpperCase());
-            String phone_comment = rs.getString("comment");
-            long contact = rs.getLong("contact_id");
-            phone = new Phone(phone_id, countryCode, operatorCode, phoneNumber, phoneType, phone_comment, contact);
+            if (rs.next()) {
+                long phone_id = rs.getLong("phone_id");
+                String countryCode = rs.getString("country_code");
+                String operatorCode = rs.getString("operator_code");
+                String phoneNumber = rs.getString("phone_number");
+                Phone.PhoneType phoneType = Phone.PhoneType.valueOf(rs.getString("phone_type_value").toUpperCase());
+                String phone_comment = rs.getString("comment");
+                long contact = rs.getLong("contact_id");
+                phone = new Phone(phone_id, countryCode, operatorCode, phoneNumber, phoneType, phone_comment, contact);
+            }
 
         } catch (SQLException e) {
             throw new DaoException("Exception during retrieving phone from the database", e);

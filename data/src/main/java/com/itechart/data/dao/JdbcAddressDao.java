@@ -117,16 +117,17 @@ public class JdbcAddressDao implements IAddressDao {
             st = cn.prepareStatement(SELECT_ADDRESS_BY_CONTACT_ID_QUERY);
             st.setLong(1, contactId);
             rs = st.executeQuery();
-            rs.next();
-            int addressId = rs.getInt("address_id");
-            String country = rs.getString("country");
-            String city = rs.getString("city");
-            String street = rs.getString("street");
-            String house = rs.getString("house");
-            String apartment = rs.getString("apartment");
-            String zipCode = rs.getString("zip_code");
-            long extractedContactId = rs.getLong("contact_id");
-            a = new Address(addressId, country, city, street, house, apartment, zipCode, extractedContactId);
+            if (rs.next()) {
+                int addressId = rs.getInt("address_id");
+                String country = rs.getString("country");
+                String city = rs.getString("city");
+                String street = rs.getString("street");
+                String house = rs.getString("house");
+                String apartment = rs.getString("apartment");
+                String zipCode = rs.getString("zip_code");
+                long extractedContactId = rs.getLong("contact_id");
+                a = new Address(addressId, country, city, street, house, apartment, zipCode, extractedContactId);
+            }
         } catch (SQLException e) {
             throw new DaoException("Exception during retrieving address from the database", e);
         } finally {

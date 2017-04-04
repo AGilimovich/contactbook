@@ -35,7 +35,7 @@
                 </div>
                 <div class="row">
                         <p class="form-text">Шаблон:</p>
-                        <select name="template" value="${template.getValue().getDescription()}" class="form-control"
+                        <select id="template-select" name="template" value="${template.getValue().getDescription()}" class="form-control"
                                 onchange="showTemplate(this.selectedIndex);">
                             <c:forEach var="template" items="${templates}" varStatus="status">
                                 <option value="${status.index}">${template.getValue().getDescription()}</option>

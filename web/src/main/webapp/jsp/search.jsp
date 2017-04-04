@@ -96,7 +96,7 @@
         <div class="top-buffer row">
             <div class="col-md-12">
                 <div class="row well">
-                    <h3 style="margin-left:15px">Адрес проживания</h3>
+                    <h3 class="margin-left-15px">Адрес проживания</h3>
 
                     <div class="col-md-3">
                         <p>Страна:</p>

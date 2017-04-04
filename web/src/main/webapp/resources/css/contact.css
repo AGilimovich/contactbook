@@ -108,6 +108,14 @@
     margin: 10px 20px !important;
 }
 
+#inputPhotoFile {
+    display: none;
+}
+
+.red-text {
+    color: red;
+}
+
 /*-----------------TOOLTIP--------------*/
 /* Tooltip container */
 .tooltip-error {
