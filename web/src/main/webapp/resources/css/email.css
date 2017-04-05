@@ -35,3 +35,7 @@ select {
     margin-top: 12px;
     margin-bottom: 3px;
 }
+
+.cancel-anchor {
+    color: #333;
+}

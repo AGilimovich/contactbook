@@ -23,29 +23,30 @@
             <div class="col-lg-6 col-md-8 well offset20px">
                 <div class="row buffer-top">
                     <p class="form-text">Кому:</p>
-                    <input type="text" name="emailAddresses" value="${emailListTemplate.getTemplate().render()}"
-                           class="form-control"
-                           required>
+                    <input id="input-email-addresses" type="text" name="emailAddresses" required
+                           value="${emailListTemplate.getTemplate().render()}"
+                           class="form-control">
                 </div>
                 <div class="row">
                     <p class="form-text">Тема:</p>
-                    <input type="text" name="subject" value="${email.subject}" class="form-control">
+                    <input id="input-subject" type="text" name="subject" value="${email.subject}" class="form-control">
                 </div>
                 <div class="row">
-                        <p class="form-text">Шаблон:</p>
-                        <select id="template-select" name="template" value="${template.getValue().getDescription()}" class="form-control"
-                                onchange="showTemplate(this.selectedIndex);">
-                            <c:forEach var="template" items="${templates}" varStatus="status">
-                                <option value="${status.index}">${template.getValue().getDescription()}</option>
-                            </c:forEach>
-                        </select>
+                    <p class="form-text">Шаблон:</p>
+                    <select id="template-select" name="template" value="${template.getValue().getDescription()}"
+                            class="form-control"
+                            onchange="showTemplate(this.selectedIndex);">
+                        <c:forEach var="template" items="${templates}" varStatus="status">
+                            <option value="${status.index}">${template.getValue().getDescription()}</option>
+                        </c:forEach>
+                    </select>
                 </div>
 
                 <div class="row">
                     <p class="form-text">Текст:</p>
                     <c:forEach var="template" items="${templates}" varStatus="status">
                         <textarea name="email-body"
-                                  id="email-body[${status.index}]" ${status.index == 0?'' : 'disabled'}
+                                  id="email-body[${status.index}]" ${status.index == 0? 'required' : 'disabled'}
 
                                   class="${status.index == 0?'text-field white-space-pre' : 'text-field white-space-pre hidden'}">${template.getValue().getTemplate().render()}</textarea>
                     </c:forEach>
@@ -54,16 +55,20 @@
                 </div>
                 <div class="row">
                     <div class="control-group buffer-top">
-                        <button class="btn btn-success" type="submit">Отправить</button>
-                        <a href="${pageContext.request.contextPath}/">
+                        <button class="btn btn-success" id="btn-send-email" type="button">Отправить</button>
+                        <a class="cancel-anchor" href="${pageContext.request.contextPath}/">
                             <button class="btn" type="button">Отменить</button>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="hidden">
+            <button type="submit" id="btn-submit-form"></button>
+        </div>
     </form>
 </div>
+
 
 <footer>
     <script src="${pageContext.request.contextPath}/resources/js/email.js" charset="utf-8"></script>

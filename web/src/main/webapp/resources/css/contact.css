@@ -47,7 +47,7 @@
     padding: 20px;
     border: 1px solid #888;
     width: 25%;
-    min-width: 320px;
+    min-width: 360px;
     text-align: center;
 }
 
@@ -75,7 +75,7 @@
 }
 
 .controls-group > button {
-    margin: 0 5px;
+    margin: 0 20px;
 }
 
 .notification {
@@ -88,8 +88,12 @@
     margin-bottom: 3px;
 }
 
-.input-margin {
-    margin: 5px 0;
+#input-phone-type-mobile, #input-phone-type-home{
+    margin: 5px 0 5px 15px;
+}
+
+#gender-radio-female{
+    margin-left: 15px;
 }
 
 .input-inline {
@@ -100,6 +104,10 @@
     min-width: 200px;
     width: 15% !important;
     margin: 15% auto;
+    min-width: 290px;
+}
+.cancel-anchor {
+    color: #333;
 }
 
 #loadFile {

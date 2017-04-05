@@ -41,33 +41,37 @@
                     <div class="col-md-6">
 
                         <p class="form-text"><span>Имя</span><span class="red-text">*</span>:</p>
-                        <input id="name-input" type="text" name="name" value="${contact.name}" class="form-control" pattern="^[A-Za-zА-Яа-яЁё]{1,50}$" required>
+                        <input id="name-input" type="text" name="name" value="${contact.name}" class="form-control"
+                               pattern="^[A-Za-zА-Яа-яЁё]{1,50}$" required>
 
 
                         <p class="form-text"><span>Фамилия</span><span class="red-text">*</span>:</p>
-                        <input id="surname-input" type="text" name="surname" value="${contact.surname}" class="form-control" pattern="^[A-Za-zА-Яа-яЁё]{1,50}$" required>
+                        <input id="surname-input" type="text" name="surname" value="${contact.surname}"
+                               class="form-control" pattern="^[A-Za-zА-Яа-яЁё]{1,50}$" required>
 
                         <p class="notification">* Поля, обязательные для заполнения</p>
 
                         <p class="form-text">Отчество:</p>
-                        <input id="patronymic-input" type="text" name="patronymic" value="${contact.patronymic}" pattern="^[A-Za-zА-Яа-яЁё]{1,50}$" class="form-control">
+                        <input id="patronymic-input" type="text" name="patronymic" value="${contact.patronymic}"
+                               pattern="^[A-Za-zА-Яа-яЁё]{1,50}$" class="form-control">
 
 
                         <p class="form-text">Дата рождения:</p>
                         <fmt:formatDate value="${contact.dateOfBirth}" var="formattedDateOfBirth"
                                         type="date" pattern="dd.MM.yyyy"/>
-                        <input id="date-input" type="text" name="dateOfBirth" value="${formattedDateOfBirth}" placeholder="ДД.ММ.ГГГГ"
-                               pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}" class="form-control">
+                        <input id="date-input" type="text" name="dateOfBirth" value="${formattedDateOfBirth}"
+                               placeholder="ДД.ММ.ГГГГ"
+                               pattern="^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$" class="form-control">
 
 
                         <p class="form-text">Пол:</p>
 
 
-                        <input type="radio" name="gender"
+                        <input id="gender-radio-male" type="radio" name="gender"
                                value="male" ${contact.gender.name() =='MALE'?'checked':''} ${contact == null ?'checked':''}>
                         м
 
-                        <input type="radio" name="gender"
+                        <input id="gender-radio-female" type="radio" name="gender"
                                value="female" ${contact.gender.name() =='FEMALE'?'checked':''}> ж
 
                         <p class="form-text">Гражданство:</p>
@@ -75,23 +79,28 @@
 
                         <p class="form-text">Семейное положение:</p>
 
-                        <div class="row">
-                            <div class="col-md-1"><input type="radio" name="familyStatus"
-                                                         value="married" ${contact.familyStatus.name() =='MARRIED'?'checked':''} ${contact == null ?'checked':''}>
-                            </div>
-                            <div class="col-md-4"><span>женат / замужем</span></div>
-                            <div class="col-md-1"><input type="radio" name="familyStatus"
-                                                         value="single" ${contact.familyStatus.name() =='SINGLE'?'checked':''} >
-                            </div>
-                            <div class="col-md-5">
-                                холост / не замужем
-                            </div>
+                        <div>
+                            <input type="radio" name="familyStatus"
+                                   value="married" ${contact.familyStatus.name() =='MARRIED'?'checked':''} ${contact == null ?'checked':''}>
+
+                            <span>женат / замужем</span>
                         </div>
+                        <div>
+
+                            <input type="radio" name="familyStatus"
+                                   value="single" ${contact.familyStatus.name() =='SINGLE'?'checked':''} >
+
+
+                            <span>холост / не замужем</span>
+                        </div>
+
                         <p class="form-text">Веб-сайт:</p>
                         <input type="text" name="website" value="${contact.website}" class="form-control">
 
                         <p class="form-text">Email:</p>
-                        <input id="email-input" type="email" pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$" name="email" value="${contact.email}" class="form-control">
+                        <input id="email-input" type="email"
+                               pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$"
+                               name="email" value="${contact.email}" class="form-control">
 
                         <p class="form-text">Текущее место работы:</p>
                         <input type="text" name="placeOfWork" value="${contact.placeOfWork}" class="form-control">
@@ -197,7 +206,7 @@
         <div class="row">
             <div class="controls-group">
                 <button class="btn" type="submit">Сохранить</button>
-                <a href="${pageContext.request.contextPath}/">
+                <a class="cancel-anchor" href="${pageContext.request.contextPath}/">
                     <button type="button" class="btn">Отменить</button>
                 </a>
             </div>
@@ -248,32 +257,31 @@
             <form id="phone-form">
 
                 <p class="form-text">Код страны:</p>
-                <input id="country-code-input" type="tel" pattern="\d{3}" class="form-control input-margin input-inline" name="inputCountryCode"
+                <input id="country-code-input" type="tel" pattern="\d{3}" class="form-control input-margin input-inline"
+                       name="inputCountryCode"
                        placeholder="XXX" required>
 
                 <p class="form-text">Код оператора:</p>
-                <input id="operator-code-input" type="tel" pattern="\d{2}" class="form-control input-margin" name="inputOperatorCode"
+                <input id="operator-code-input" type="tel" pattern="\d{2}" class="form-control input-margin"
+                       name="inputOperatorCode"
                        placeholder="XX" required>
 
                 <p class="form-text">Телефонный номер:</p>
-                <input id="phone-number-input" type="tel" pattern="\d{7}" class="form-control input-margin" name="inputPhoneNumber"
+                <input id="phone-number-input" type="tel" pattern="\d{7}" class="form-control input-margin"
+                       name="inputPhoneNumber"
                        placeholder="XXXXXXX" required>
                 <p class="form-text">Тип телефона:</p>
-                <div class="row">
-                    <div class="col-md-1 col-md-offset-2">
-                        <input type="radio" id="input-phone-type-home" class="input-margin" name="inputPhoneType"
-                               value="home" checked>
-                    </div>
-                    <div class="col-md-2">Домашний</div>
-
-                    <div class="col-md-1 col-md-offset-1">
-                        <input type="radio" id="input-phone-type-mobile" class="input-margin" name="inputPhoneType"
-                               value="mobile">
-                    </div>
-                    <div class="col-md-2">Мобильный</div>
 
 
-                </div>
+                <input type="radio" id="input-phone-type-home" class="input-margin" name="inputPhoneType"
+                       value="home" checked>
+
+                <span>Домашний</span>
+                <input type="radio" id="input-phone-type-mobile" class="input-margin" name="inputPhoneType"
+                       value="mobile">
+                <span>Мобильный</span>
+
+
                 <p class="form-text">Комментарий:</p>
                 <input type="text" class="form-control input-margin" name="inputPhoneComment">
 

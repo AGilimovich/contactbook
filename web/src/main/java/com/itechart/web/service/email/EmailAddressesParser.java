@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * Class for parsing list of emails from string.
  */
 public class EmailAddressesParser {
-    private final String emailRegex = "([\\w\\.]+@\\w+\\.\\w+),?\\s*";
+    private final String emailRegex = "([^,]+),?\\s*";
     private Pattern pattern = Pattern.compile(emailRegex);
     private Logger logger = LoggerFactory.getLogger(EmailAddressesParser.class);
 
@@ -22,7 +22,7 @@ public class EmailAddressesParser {
         ArrayList<String> addresses = new ArrayList<>();
         Matcher matcher = pattern.matcher(emailAddresses);
         while (matcher.find()) {
-            addresses.add(matcher.group(1));
+            addresses.add(StringUtils.trim(matcher.group(1)));
         }
         return addresses;
 
