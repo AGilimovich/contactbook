@@ -67,7 +67,8 @@ window.onload = function () {
     if (typeof attachCheckBoxes !== "undefined" && attachCheckBoxes.length > 0) {
         //get attachments
         for (var i = 0; i < attachCheckBoxes.length; i++) {
-            var attachment = new Attachment(attachCheckBoxes[i].value, attachName[i].innerText, uploadDate[i].innerText, attachComment[i].innerText, STATUS.NONE);
+            var extractor = new FileNameExtractor(attachName[i].innerText);
+            var attachment = new Attachment(attachCheckBoxes[i].value, extractor.getName(), extractor.getExtension(), uploadDate[i].innerText, attachComment[i].innerText, STATUS.NONE);
             attachment.setAttachMetaInput(document.getElementsByName("attachMeta[" + i + "]")[0]);
             attachment.setAttachCheckBox(attachCheckBoxes[i]);
             attachments.push(attachment);
@@ -88,10 +89,11 @@ window.onload = function () {
     }
 }
 
-function Attachment(id, name, uploadDate, comment, status) {
+function Attachment(id, name, extension, uploadDate, comment, status) {
     'use strict'
     this.id = id;
     this.name = name;
+    this.extension = extension;
     this.uploadDate = uploadDate;
     this.comment = comment;
     this.status = status;
@@ -118,6 +120,9 @@ function Attachment(id, name, uploadDate, comment, status) {
         getName: function () {
             return name;
         },
+        getExtension: function () {
+            return extension;
+        },
         getComment: function () {
             return comment;
         },
@@ -132,6 +137,9 @@ function Attachment(id, name, uploadDate, comment, status) {
         },
         setName: function (n) {
             name = n;
+        },
+        setExtension: function (e) {
+            extension = e;
         },
         setComment: function (c) {
             comment = c;
@@ -163,7 +171,10 @@ btnAddAttach.onclick = function () {
     //     saveNewAttach(newInput);
     // }
     newInput.onchange = function () {
-        inputAttachName.value = newInput.files[0].name;
+        //todo
+        // inputAttachName.value = newInput.files[0].name;
+        inputAttachName.value = new FileNameExtractor(newInput.files[0].name).getName();
+
     }
     saveAttach = function () {
         saveNewAttach(newInput);
@@ -228,13 +239,17 @@ btnEditAttach.onclick = function () {
     }
     else {
         //fill inputs with values
-        inputAttachName.value = attachName[checkedIndex].innerText;
+        // inputAttachName.value = attachName[checkedIndex].innerText;
+        inputAttachName.value = new FileNameExtractor(attachName[checkedIndex].innerText).getName();
         inputAttachComment[0].value = attachComment[checkedIndex].innerText;
         var attachment = attachments[checkedIndex];
         var fileInput = attachment.getAttachFileInput();
         if (typeof fileInput !== "undefined") {
             fileInput.onchange = function () {
-                inputAttachName.value = fileInput.files[0].name;
+                //todo
+                // inputAttachName.value = fileInput.files[0].name;
+                inputAttachName.value = new FileNameExtractor(fileInput.files[0].name).getName();
+
             }
         }
         if (typeof fileInput !== "undefined")
@@ -272,11 +287,12 @@ cancelAttachEditing = function (attachment) {
 function saveNewAttach(input) {
     'use strict'
     var attachmentName = inputAttachName.value;
+    var attachmentExtension = new FileNameExtractor(input.files[0].name).getExtension();
     var attachmentUploadDate = dateToString(new Date());
     var attachmentComment = inputAttachComment[0].value;
     var attachmentId = new Date().getTime();
     input.setAttribute("name", "attachFile[" + attachmentId + "]");
-    var attachment = new Attachment(attachmentId, attachmentName, attachmentUploadDate, attachmentComment, STATUS.NEW);
+    var attachment = new Attachment(attachmentId, attachmentName, attachmentExtension, attachmentUploadDate, attachmentComment, STATUS.NEW);
     attachment.setAttachFileInput(input);
     newAttachTableRow(attachment);
     newAttachMetaInput(attachment);
@@ -293,12 +309,16 @@ function editExistingAttach(attachment) {
     var attachmentName = inputAttachName.value;
     var attachmentComment = inputAttachComment[0].value;
     attachment.setName(attachmentName);
+    var fileInput = attachment.getAttachFileInput();
+    if (typeof fileInput !== "undefined") {
+        attachment.setExtension(new FileNameExtractor(fileInput.files[0].name).getExtension());
+        fileInput.className = "hidden";
+    }
     attachment.setComment(attachmentComment);
     editAttachMetaInput(attachment);
     editAttachTableRow(attachment);
-    var fileInput = attachment.getAttachFileInput();
-    if (typeof fileInput !== "undefined")
-        fileInput.className = "hidden";
+
+
     attachPopup.className = "popup";
 }
 
@@ -331,7 +351,7 @@ function newAttachTableRow(attachment) {
     attachment.setAttachCheckBox(checkbox);
 
     cellName.setAttribute("name", "attachName");
-    cellName.innerText = attachment.getName();
+    cellName.innerText = attachment.getName() + "." + attachment.getExtension();
 
     cellUploadDate.innerText = attachment.getUploadDate();
     cellUploadDate.setAttribute("name", "attachUploadDate");
@@ -343,7 +363,7 @@ function newAttachTableRow(attachment) {
 
 function newAttachMetaInput(attachment) {
     'use strict'
-    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
+    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()+"."+attachment.getExtension()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
     var attachHiddenMetaInput = document.createElement("input");
     attachHiddenMetaInput.setAttribute("name", "attachMeta[" + attachment.getId() + "]");
     attachHiddenMetaInput.setAttribute("value", value);
@@ -376,14 +396,15 @@ function editAttachTableRow(attachment) {
     var cellAttachUploadDate = row.cells[2];
     var cellAttachComment = row.cells[3];
 
-    cellAttachName.innerText = inputAttachName.value;
+    cellAttachName.innerText = attachment.getName()+'.'+ attachment.getExtension();
+    // inputAttachName.value;
     cellAttachComment.innerText = inputAttachComment[0].value;
     cellAttachUploadDate.innerText;
 }
 
 function editAttachMetaInput(attachment) {
     'use strict'
-    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
+    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()+"."+attachment.getExtension()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
     attachment.getAttachMetaInput().setAttribute("value", value);
 }
 
@@ -399,7 +420,7 @@ function deleteAttachMetaInput(attachment) {
         if (attachment.getStatus() == STATUS.NEW) {
             input.parentNode.removeChild(input);
         } else {
-            var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
+            var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()+"."+attachment.getExtension()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
             attachment.getAttachMetaInput().setAttribute("value", value);
         }
     }
@@ -413,7 +434,7 @@ function deleteAttachFile(attachment) {
         fileInput.parentNode.removeChild(attachment.getAttachFileInput());
 }
 
-//utility function for converting date to string in the format "dd.MM.YYYY HH:mm:ss"
+//function for converting date to string in the format "dd.MM.yyyy hh:mm:ss"
 function dateToString(date) {
     'use strict'
     //function adds zeros if value < 10
@@ -457,3 +478,24 @@ function setValidationMessageToInput(input) {
         inputAttachName.setCustomValidity('');
     }
 }
+
+function FileNameExtractor(fullName) {
+    'use strict'
+    this.fullName = fullName;
+    var regex = /([^\/\\:&*"<>]+)\.([^\s\/\\:&*"<>]+)/;
+    return {
+        getName: function () {
+            var match = regex.exec(fullName);
+            if (match !== null)
+                return match[1];
+            else return fullName;
+        },
+        getExtension: function () {
+            var match = regex.exec(fullName);
+            if (match !== null)
+                return match[2];
+            else return null;
+        }
+    }
+}
+
