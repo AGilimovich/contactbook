@@ -16,7 +16,7 @@ import java.util.Date;
  * Created by Aleksandr on 13.03.2017.
  */
 public class JdbcAttachmentDao implements IAttachmentDao {
-    private Logger logger = LoggerFactory.getLogger(JdbcAddressDao.class);
+    private Logger logger = LoggerFactory.getLogger(JdbcAttachmentDao.class);
 
     private final String SELECT_ATTACHMENTS_FOR_CONTACT_QUERY = "SELECT attach_id, attach_name, upload_date, comment, file, contact_id FROM attachment WHERE contact_id = ?";
     private final String SELECT_ATTACHMENTS_BY_ID_QUERY = "SELECT attach_id, attach_name, upload_date, comment, file, contact_id FROM attachment WHERE attach_id = ?";

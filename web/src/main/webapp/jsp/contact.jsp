@@ -157,8 +157,8 @@
                             <td width="1%" align="right">(</td>
                             <td name="operatorCode" width="3%" align="center">${phone.operatorCode}</td>
                             <td width="1%" align="left">)</td>
-                            <td name="phoneNumber" width="14%">${phone.phoneNumber}</td>
-                            <td name="phoneType" align="center" width="20%">${phone.phoneType.toString()}</td>
+                            <td name="phoneNumber" width="19%">${phone.phoneNumber}</td>
+                            <td name="phoneType" align="center" width="15%">${phone.phoneType.toString()}</td>
                             <td name="phoneComment" width="50%">${phone.comment}</td>
                         </tr>
                     </c:forEach>
@@ -183,22 +183,22 @@
 
 
                 </div>
-                <table id="attach-table" class="tbl" width="100%">
+                <table id="attach-table" class="tbl tbl-attach" width="100%">
                     <c:forEach var="attachment" items="${attachments}" varStatus="counter">
                         <tr>
                             <td width="6%"><input type="checkbox" name="attachIsSelected"
                                                   value="${attachment.getAttachment().id}"></td>
-                            <td width="20%" name="attachName"><a name="attachLink"
+                            <td width="25%" name="attachName"><a name="attachLink"
                                                                  href="/file?id=${attachment.getFile().storedName}"
                                                                  download="${attachment.getAttachment().name}">${attachment.getAttachment().name}</a>
                             </td>
 
-                            <td align="center" width="20%" name="attachUploadDate">
+                            <td align="center" width="19%" name="attachUploadDate">
                                 <fmt:formatDate value="${attachment.getAttachment().uploadDate}" var="formattedDate"
                                                 type="date" pattern="dd.MM.yyyy HH:mm:ss"/>
                                     ${formattedDate}
                             </td>
-                            <td width="54%" name="attachComment">${attachment.getAttachment().comment}</td>
+                            <td width="50%" name="attachComment">${attachment.getAttachment().comment}</td>
                         </tr>
                     </c:forEach>
                 </table>

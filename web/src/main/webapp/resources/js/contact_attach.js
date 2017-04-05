@@ -34,7 +34,6 @@ var divInputFileContainer = document.getElementById("file-container");
 var btnUndoAttach = document.getElementById("btn-undo-attach");
 var inputAttachName = document.getElementById("file-name-input");
 var inputAttachComment = document.getElementsByName("inputAttachComment");
-var nameLabel = document.getElementById("file-name-label");
 //-------------------------------
 
 
@@ -288,7 +287,8 @@ function saveNewAttach(input) {
     'use strict'
     var attachmentName = inputAttachName.value;
     var attachmentExtension = new FileNameExtractor(input.files[0].name).getExtension();
-    var attachmentUploadDate = dateToString(new Date());
+    // var attachmentUploadDate = dateToString(new Date());
+    var attachmentUploadDate = null;
     var attachmentComment = inputAttachComment[0].value;
     var attachmentId = new Date().getTime();
     input.setAttribute("name", "attachFile[" + attachmentId + "]");
@@ -353,7 +353,7 @@ function newAttachTableRow(attachment) {
     cellName.setAttribute("name", "attachName");
     cellName.innerText = attachment.getName() + "." + attachment.getExtension();
 
-    cellUploadDate.innerText = attachment.getUploadDate();
+    // cellUploadDate.innerText = attachment.getUploadDate();
     cellUploadDate.setAttribute("name", "attachUploadDate");
 
     cellComment.innerText = attachment.getComment();
@@ -363,7 +363,9 @@ function newAttachTableRow(attachment) {
 
 function newAttachMetaInput(attachment) {
     'use strict'
-    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()+"."+attachment.getExtension()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
+    // var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()+"."+attachment.getExtension()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
+    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()+"."+attachment.getExtension()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
+
     var attachHiddenMetaInput = document.createElement("input");
     attachHiddenMetaInput.setAttribute("name", "attachMeta[" + attachment.getId() + "]");
     attachHiddenMetaInput.setAttribute("value", value);

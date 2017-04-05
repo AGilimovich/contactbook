@@ -81,7 +81,7 @@ PRIMARY KEY(`address_id`)
 CREATE TABLE `attachment` (
     `attach_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `attach_name` VARCHAR(50),
-    `upload_date` TIMESTAMP NOT NULL,
+    `upload_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `comment` TEXT(500),
     `file` BIGINT UNSIGNED,
     `contact_id` BIGINT UNSIGNED NOT NULL,

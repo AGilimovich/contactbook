@@ -17,7 +17,7 @@ public class PhoneFormFieldParser {
     private Logger logger = LoggerFactory.getLogger(PhoneFormFieldParser.class);
 
     public Map<String, String> parse(String fieldValue) {
-        logger.info("Parse attachment form parameter: {}", fieldValue);
+        logger.info("Parse phone form parameter: {}", fieldValue);
         Matcher matcher = formFieldPattern.matcher(fieldValue);
         Map<String, String> parameters = new HashMap<>();
         while (matcher.find()) {
