@@ -17,11 +17,15 @@
 </nav>
 
 <div class="container-fluid">
-
+    <div class="row">
+        <a class="cancel-anchor close" href="${pageContext.request.contextPath}/">
+        </a>
+    </div>
     <form action="${pageContext.request.contextPath}/find" method="post">
-        <div class="top-buffer row">
+        <div class="top-buffer row ">
             <div class="col-md-12">
                 <div class="row well">
+
                     <div class="col-md-4">
                         <p class="p-margin">Фамилия:</p>
                         <input type="text" id="surname-input" name="surname" pattern="^[A-Za-zА-Яа-яЁё]{1,50}$" class="form-control">

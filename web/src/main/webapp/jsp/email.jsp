@@ -24,8 +24,6 @@
             <div class="col-lg-6 col-md-8 well offset20px">
                 <div class="row">
                     <a class="cancel-anchor close" href="${pageContext.request.contextPath}/">
-                        <button class="btn-close" type="button">
-                        </button>
                     </a>
                 </div>
                 <div class="row buffer-top">

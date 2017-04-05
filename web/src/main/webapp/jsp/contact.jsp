@@ -27,8 +27,6 @@
         <div class="row">
 
                 <a class="cancel-anchor close" href="${pageContext.request.contextPath}/">
-                    <button class="btn-close" type="button">
-                    </button>
                 </a>
 
             <!--Photo-->
