@@ -101,12 +101,16 @@ public class TransactionalDataService implements AbstractDataService {
             long contactId = contactDao.save(contactToSave);
             //set contact id in address object and save it
             Address addressToSave = fullContactDTO.getAddress();
-            addressToSave.setContactId(contactId);
-            addressDao.save(addressToSave);
+            if (addressToSave != null) {
+                addressToSave.setContactId(contactId);
+                addressDao.save(addressToSave);
+            }
             //set contact id in every phone object and save it
             for (Phone phoneToSave : fullContactDTO.getPhones()) {
-                phoneToSave.setContact(contactId);
-                phoneDao.save(phoneToSave);
+                if (phoneToSave != null) {
+                    phoneToSave.setContact(contactId);
+                    phoneDao.save(phoneToSave);
+                }
             }
             //save attachments with files
             for (FullAttachmentDTO fullAttachmentToSave : fullContactDTO.getAttachments()) {
@@ -156,25 +160,28 @@ public class TransactionalDataService implements AbstractDataService {
                     fileDao.update(contactToUpdate.getPhoto());
                 }
             }
-
-            contactDao.update(contactToUpdate.getContact());
-            addressDao.update(contactToUpdate.getAddress());
-
+            if (contactToUpdate.getContact() != null) {
+                contactDao.update(contactToUpdate.getContact());
+            }
+            if (contactToUpdate.getAddress() != null) {
+                addressDao.update(contactToUpdate.getAddress());
+            }
 
             for (Phone phoneToCreate : contactToUpdate.getNewPhones()) {
-                if (contactToUpdate.getContact() != null) {
+                if (phoneToCreate != null && contactToUpdate.getContact() != null) {
                     phoneToCreate.setContact(contactToUpdate.getContact().getContactId());
                     phoneDao.save(phoneToCreate);
+
                 }
             }
             for (Phone phoneToUpdate : contactToUpdate.getUpdatedPhones()) {
-                if (contactToUpdate.getContact() != null) {
+                if (phoneToUpdate != null || contactToUpdate.getContact() != null) {
                     phoneToUpdate.setContact(contactToUpdate.getContact().getContactId());
                     phoneDao.update(phoneToUpdate);
                 }
             }
             for (Phone phoneToDelete : contactToUpdate.getDeletedPhones()) {
-                if (contactToUpdate.getContact() != null) {
+                if (phoneToDelete != null || contactToUpdate.getContact() != null) {
                     phoneToDelete.setContact(contactToUpdate.getContact().getContactId());
                     phoneDao.delete(phoneToDelete.getId());
                 }
@@ -182,15 +189,19 @@ public class TransactionalDataService implements AbstractDataService {
 
 
             for (FullAttachmentDTO fullAttachmentToUpdate : contactToUpdate.getUpdatedAttachments()) {
-                attachmentDao.update(fullAttachmentToUpdate.getAttachment());
+                Attachment attachment = fullAttachmentToUpdate.getAttachment();
+                if (attachment != null) {
+                    attachmentDao.update(attachment);
+                }
             }
             for (FullAttachmentDTO fullAttachmentToDelete : contactToUpdate.getDeletedAttachments()) {
                 if (fullAttachmentToDelete.getAttachment() != null) {
                     File file = fileDao.getFileByAttachmentId(fullAttachmentToDelete.getAttachment().getId());
-                    if (file != null)
+                    if (file != null) {
                         filesToDelete.add(file.getStoredName());
-                    attachmentDao.delete(fullAttachmentToDelete.getAttachment().getId());
-                    fileDao.delete(file.getId());
+                        attachmentDao.delete(fullAttachmentToDelete.getAttachment().getId());
+                        fileDao.delete(file.getId());
+                    }
                 }
             }
             for (FullAttachmentDTO fullAttachmentToCreate : contactToUpdate.getNewAttachments()) {
@@ -202,6 +213,7 @@ public class TransactionalDataService implements AbstractDataService {
                     attachmentToSave.setContact(contactToUpdate.getContact().getContactId());
                     attachmentToSave.setFile(fileId);
                     attachmentDao.save(attachmentToSave);
+
                 }
             }
 

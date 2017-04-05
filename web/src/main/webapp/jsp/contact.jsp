@@ -83,14 +83,14 @@
                         <p class="form-text">Семейное положение:</p>
 
                         <div>
-                            <input type="radio" name="familyStatus"
+                            <input class="family-status-radio" type="radio" name="familyStatus"
                                    value="married" ${contact.familyStatus.name() =='MARRIED'?'checked':''} ${contact == null ?'checked':''}>
 
                             <span>женат / замужем</span>
                         </div>
                         <div>
 
-                            <input type="radio" name="familyStatus"
+                            <input class="family-status-radio" type="radio" name="familyStatus"
                                    value="single" ${contact.familyStatus.name() =='SINGLE'?'checked':''} >
 
 

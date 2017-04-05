@@ -139,13 +139,15 @@ public class FullContactDTOBuilder {
                             File file = null;
                             if (fileFieldNumber != null) {
                                 FileItem attachFileItem = fileParts.get("attachFile[" + fileFieldNumber + "]");
-                                String storedName = writer.writeFilePart(attachFileItem);
-                                storedFiles.add(storedName);
-                                Map<String, String> filePartsParameters = new HashMap() {{
-                                    put("realName", attachFileItem.getName());
-                                    put("storedName", storedName);
-                                }};
-                                file = fileBuilder.buildFile(filePartsParameters);
+                                if (attachFileItem != null) {
+                                    String storedName = writer.writeFilePart(attachFileItem);
+                                    storedFiles.add(storedName);
+                                    Map<String, String> filePartsParameters = new HashMap() {{
+                                        put("realName", attachFileItem.getName());
+                                        put("storedName", storedName);
+                                    }};
+                                    file = fileBuilder.buildFile(filePartsParameters);
+                                }
                             }
                             if (file == null) return;
                             newAttachments.add(new FullAttachmentDTO(attachment, file));
