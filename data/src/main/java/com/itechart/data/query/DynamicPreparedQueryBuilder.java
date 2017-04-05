@@ -1,5 +1,7 @@
 package com.itechart.data.query;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Created by Aleksandr on 03.04.2017.
  */
@@ -14,6 +16,7 @@ public class DynamicPreparedQueryBuilder {
     }
 
     public void appendWhereClause(String name) {
+        if (StringUtils.isBlank(name)) return;
         if (isFirst) {
             query.append(" WHERE ").append(name).append("=").append("?");
             isFirst = false;
@@ -22,11 +25,12 @@ public class DynamicPreparedQueryBuilder {
     }
 
     public void appendBetween(String name) {
+        if (StringUtils.isBlank(name)) return;
         if (isFirst) {
             query.append(" WHERE ").append(name).append(" BETWEEN ").append("?").append(" AND ").append("?");
             isFirst = false;
         } else
-            query.append(name).append(" BETWEEN ").append("?").append(" AND ").append("?");
+            query.append(" AND ").append(name).append(" BETWEEN ").append("?").append(" AND ").append("?");
     }
 
     public void appendLimit(int from, int count) {

@@ -63,7 +63,7 @@ public class JdbcPhoneDao implements IPhoneDao {
                 phones.add(phone);
             }
         } catch (SQLException e) {
-            throw new DaoException("Exception during retrieving phones from the database", e);
+            throw new DaoException("Exception during phones retrieval from the database", e);
 
         } finally {
             DBResourceManager.closeResources(null, st, rs);
@@ -95,7 +95,7 @@ public class JdbcPhoneDao implements IPhoneDao {
             }
 
         } catch (SQLException e) {
-            throw new DaoException("Exception during retrieving phone from the database", e);
+            throw new DaoException("Exception during phone retrieval from the database", e);
         } finally {
             DBResourceManager.closeResources(null, st, rs);
         }

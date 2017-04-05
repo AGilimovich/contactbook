@@ -10,8 +10,8 @@
 }
 
 .date {
-    margin-bottom: 10px;
-    max-width: 200px;
+    margin: 0 10px 10px 10px;
+    max-width: 120px;
     display: inline-block;
 }
 
@@ -26,4 +26,8 @@
 
 .margin-left-15px {
     margin-left: 15px;
+}
+
+.p-margin {
+    margin: 15px 0 5px 0;
 }

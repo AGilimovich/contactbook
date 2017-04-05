@@ -10,11 +10,9 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a href="../?search=false" class="navbar-brand">Справочник контактов</a>
+            <a href="../?search=false" class="navbar-brand">На главную</a>
         </div>
-        <div class="navbar-header">
-            <span class="navbar-brand">> Поиск контакта</span>
-        </div>
+
     </div>
 </nav>
 
@@ -25,68 +23,65 @@
             <div class="col-md-12">
                 <div class="row well">
                     <div class="col-md-4">
-                        <p>Фамилия:</p>
-                        <input type="text" name="surname" class="form-control">
+                        <p class="p-margin">Фамилия:</p>
+                        <input type="text" id="surname-input" name="surname" pattern="^[A-Za-zА-Яа-яЁё]{1,50}$" class="form-control">
                     </div>
                     <div class="col-md-4">
-                        <p>Имя:</p>
-                        <input type="text" name="name" class="form-control">
+                        <p class="p-margin">Имя:</p>
+                        <input type="text" id="name-input" name="name" pattern="^[A-Za-zА-Яа-яЁё]{1,50}$" class="form-control">
                     </div>
                     <div class="col-md-4">
-                        <p>Отчество:</p>
-                        <input type="text" name="patronymic" class="form-control">
+                        <p class="p-margin">Отчество:</p>
+                        <input type="text" id="patronymic-input"  name="patronymic" pattern="^[A-Za-zА-Яа-яЁё]{1,50}$" class="form-control">
                     </div>
                 </div>
             </div>
         </div>
         <div class="top-buffer row">
-            <div class="col-md-12">
+            <div class="col-lg-12">
                 <div class="row well">
-                    <div class="col-md-4">
-                        <div class="row">
-                            <p>Дата рождения:</p>
-                        </div>
-                        <div class="row">
+                    <div class="col-lg-4">
+
+                            <p class="p-margin">Дата рождения:</p>
+
+
                             <span>с </span><input type="text" placeholder="ДД.ММ.ГГГГ" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}" id="from-date" name="fromDate" class="date form-control"> <span>по</span>
                             <input id="to-date" name="toDate"
                                    type="text" placeholder="ДД.ММ.ГГГГ" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}"
                                    class="date form-control">
-                        </div>
+
                     </div>
-                    <div class="col-md-1 ">
-                        <div class="row">
-                            <p>Пол:</p>
-                        </div>
-                        <div class="row">
+                    <div class="col-lg-1">
+
+                            <p class="p-margin">Пол:</p>
+
+
                             <select name="gender" class="gender form-control">
                                 <option value="any">любой</option>
                                 <option value="male">м</option>
                                 <option value="female">ж</option>
                             </select>
-                        </div>
+
                     </div>
-                    <div class="col-md-2 col-md-offset-1">
-                        <div class="row">
-                            <p>Семейное положение:</p>
-                        </div>
-                        <div class="row">
+                    <div class="col-lg-2 col-lg-offset-1">
+
+                            <p class="p-margin">Семейное положение:</p>
+
+
 
                             <select name="familyStatus" class="family form-control">
                                 <option value="any" selected>любое</option>
                                 <option value="single">холост/не замужем</option>
                                 <option value="married">женат/замужем</option>
                             </select>
-                        </div>
+
 
                     </div>
-                    <div class="col-md-4">
-                        <div class="row">
-                            <p>Гражданство:</p>
-                        </div>
-                        <div class="row">
+                    <div class="col-lg-3 col-lg-offset-1">
 
+                            <p class="p-margin">Гражданство:</p>
                             <input type="text" name="citizenship" class="form-control">
-                        </div>
+
 
                     </div>
                 </div>
@@ -99,30 +94,30 @@
                     <h3 class="margin-left-15px">Адрес проживания</h3>
 
                     <div class="col-md-3">
-                        <p>Страна:</p>
+                        <p class="p-margin">Страна:</p>
                         <input type="text" name="country" class="form-control">
                     </div>
                     <div class="col-md-3">
-                        <p>Город:</p>
+                        <p class="p-margin">Город:</p>
                         <input type="text" name="city" class="form-control">
                     </div>
                     <div class="col-md-2">
-                        <p>Улица:</p>
+                        <p class="p-margin">Улица:</p>
                         <input type="text" name="street" class="form-control">
                     </div>
                     <div class="col-md-1">
 
-                        <p>Дом:</p>
+                        <p class="p-margin">Дом:</p>
                         <input type="text" name="house" class="form-control">
                     </div>
                     <div class="col-md-1">
 
-                        <p>Квартира:</p>
+                        <p class="p-margin">Квартира:</p>
                         <input type="text" name="apartment" class="form-control">
                     </div>
                     <div class="col-md-2">
 
-                        <p>Почтовый индекс:</p>
+                        <p class="p-margin">Почтовый индекс:</p>
                         <input type="text" name="zipCode" class="form-control">
                     </div>
                 </div>

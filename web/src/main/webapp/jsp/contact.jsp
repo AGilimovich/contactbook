@@ -13,11 +13,9 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a href="${pageContext.request.contextPath}/" class="navbar-brand">Справочник контактов</a>
+            <a href="${pageContext.request.contextPath}/" class="navbar-brand">На главную</a>
         </div>
-        <div class="navbar-header">
-            <span class="navbar-brand">> Создание/редактирование контакта</span>
-        </div>
+
     </div>
 </nav>
 
@@ -29,7 +27,7 @@
         <div class="row">
 
             <!--Photo-->
-            <div class="col-md-2">
+            <div class="col-lg-3 col-md-3">
 
                 <div class="photo-container">
                     <img src="${pageContext.request.contextPath}/image?id=${photo.storedName}" height="100%" alt="photo"
@@ -38,7 +36,7 @@
 
             </div>
             <!--Form-->
-            <div class="col-md-4">
+            <div class="col-lg-4 col-md-9">
                 <div class="row">
                     <div class="col-md-6">
 
@@ -93,7 +91,7 @@
                         <input type="text" name="website" value="${contact.website}" class="form-control">
 
                         <p class="form-text">Email:</p>
-                        <input id="email-input" type="email" name="email" value="${contact.email}" class="form-control">
+                        <input id="email-input" type="email" pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$" name="email" value="${contact.email}" class="form-control">
 
                         <p class="form-text">Текущее место работы:</p>
                         <input type="text" name="placeOfWork" value="${contact.placeOfWork}" class="form-control">
@@ -122,7 +120,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-lg-5 col-md-12">
                 <h3>Список контактных телефонов</h3>
 
                 <div class="table-btns">

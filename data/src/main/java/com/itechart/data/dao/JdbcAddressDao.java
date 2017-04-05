@@ -129,7 +129,7 @@ public class JdbcAddressDao implements IAddressDao {
                 a = new Address(addressId, country, city, street, house, apartment, zipCode, extractedContactId);
             }
         } catch (SQLException e) {
-            throw new DaoException("Exception during retrieving address from the database", e);
+            throw new DaoException("Exception during address retrieval from the database", e);
         } finally {
             DBResourceManager.closeResources(null, st, rs);
         }

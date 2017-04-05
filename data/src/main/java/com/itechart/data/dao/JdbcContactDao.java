@@ -236,7 +236,7 @@ public class JdbcContactDao implements IContactDao {
                 contacts.add(contact);
             }
         } catch (SQLException e) {
-            throw new DaoException("Exception during retrieving contacts from the database", e);
+            throw new DaoException("Exception during contacts retrieval from the database", e);
         } finally {
             DBResourceManager.closeResources(null, st, rs);
 
@@ -281,7 +281,7 @@ public class JdbcContactDao implements IContactDao {
                 contact.setPhoto(photo);
             }
         } catch (SQLException e) {
-            throw new DaoException("Exception during retrieving contact from the database", e);
+            throw new DaoException("Exception during contact retrieval from the database", e);
         } finally {
             DBResourceManager.closeResources(null, st, rs);
         }
@@ -381,7 +381,7 @@ public class JdbcContactDao implements IContactDao {
                         st.setString(i + 1, (String) parameters.get(i));
                     } else if (parameters.get(i) instanceof java.sql.Date) {
                         st.setDate(i + 1, (java.sql.Date) parameters.get(i));
-                    } else throw new DaoException("Exception during retrieving contacts from the database");
+                    } else throw new DaoException("Exception during contacts retrieval from the database");
                 }
             }
 
@@ -414,7 +414,7 @@ public class JdbcContactDao implements IContactDao {
                 contacts.add(contact);
             }
         } catch (SQLException e) {
-            throw new DaoException("Exception during retrieving contacts from the database", e);
+            throw new DaoException("Exception during contacts retrieval from the database", e);
         } finally {
             DBResourceManager.closeResources(null, st, rs);
         }
@@ -449,7 +449,7 @@ public class JdbcContactDao implements IContactDao {
                 contacts.add(contact);
             }
         } catch (SQLException e) {
-            throw new DaoException("Exception during retrieving contact from the database", e);
+            throw new DaoException("Exception during contact retrieval from the database", e);
         } finally {
             DBResourceManager.closeResources(null, st, rs);
         }
@@ -497,7 +497,7 @@ public class JdbcContactDao implements IContactDao {
                 contacts.add(contact);
             }
         } catch (SQLException e) {
-            throw new DaoException("Exception during retrieving contacts from the database", e);
+            throw new DaoException("Exception during contacts retrieval from the database", e);
         } finally {
             DBResourceManager.closeResources(null, st, rs);
         }
@@ -519,7 +519,7 @@ public class JdbcContactDao implements IContactDao {
                 count = rs.getInt(1);
             }
         } catch (SQLException e) {
-            throw new DaoException("Exception during retrieving contacts count from the database", e);
+            throw new DaoException("Exception during contacts retrieval count from the database", e);
         } finally {
             DBResourceManager.closeResources(null, st, rs);
         }
@@ -551,6 +551,7 @@ public class JdbcContactDao implements IContactDao {
             if (dto.getFromDate() != null) {
                 parameters.add(new java.sql.Date(dto.getFromDate().getTime()));
             } else {
+                // TODO: 05.04.2017  
                 DateTime date = formatter.parseDateTime("1000-01-01");
                 parameters.add(new java.sql.Date(date.toDate().getTime()));
             }
@@ -611,14 +612,14 @@ public class JdbcContactDao implements IContactDao {
                     st.setString(i + 1, (String) parameters.get(i));
                 } else if (parameters.get(i) instanceof java.sql.Date) {
                     st.setDate(i + 1, (java.sql.Date) parameters.get(i));
-                } else throw new DaoException("Exception during retrieving contacts from the database");
+                } else throw new DaoException("Exception during contacts retrieval from the database");
             }
             rs = st.executeQuery();
             if (rs.next()) {
                 count = rs.getInt(1);
             }
         } catch (SQLException e) {
-            throw new DaoException("Exception during retrieving contacts from the database", e);
+            throw new DaoException("Exception during contacts retrieval from the database", e);
         } finally {
             DBResourceManager.closeResources(null, st, rs);
         }

@@ -12,17 +12,15 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a href="${pageContext.request.contextPath}/" class="navbar-brand">Справочник контактов</a>
+            <a href="${pageContext.request.contextPath}/" class="navbar-brand">На главную</a>
         </div>
-        <div class="navbar-header">
-            <span class="navbar-brand">> Отправка email</span>
-        </div>
+
     </div>
 </nav>
 <div class="container-fluid ">
     <form id="form" action="${pageContext.request.contextPath}/send" method="post">
         <div class="row">
-            <div class="col-md-6 well offset20px">
+            <div class="col-lg-6 col-md-8 well offset20px">
                 <div class="row buffer-top">
                     <p class="form-text">Кому:</p>
                     <input type="text" name="emailAddresses" value="${emailListTemplate.getTemplate().render()}"

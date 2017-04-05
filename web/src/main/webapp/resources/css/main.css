@@ -7,15 +7,20 @@ body {
 
 /*Container for contact's photo*/
 .photo-container {
-    height: 90px;
-    width: 90px;
+    height: 160px;
+    width: 160px;
     overflow: hidden;
 }
 
 /*Photo of contact*/
 .photo {
-    margin: auto;
-    display: block;
+    /*max-width: 100%;*/
+    /*max-height: 100%;*/
+    /*margin: auto;*/
+    /*display: block;*/
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
 }
 
 /*Pagination*/
@@ -51,13 +56,10 @@ body {
 
 #link-email {
     cursor: hand;
-    /*background-color: #e7e7e7;*/
-    /*border: inherit;*/
-    /*outline: inherit;*/
-    /*color: inherit;*/
-    /*margin-left: 5px;*/
 }
-
+.table .td-photo {
+    vertical-align: middle;
+}
 /*-----------------TOOLTIP--------------*/
 /* Tooltip container */
 .tooltip-error {

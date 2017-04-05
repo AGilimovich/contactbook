@@ -56,7 +56,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
             }
 
         } catch (SQLException e) {
-            throw new DaoException("Exception during retrieving attachments from the database", e);
+            throw new DaoException("Exception during attachments retrieval from the database", e);
 
         } finally {
             DBResourceManager.closeResources(null, st, rs);
@@ -86,7 +86,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
             attachment = new Attachment(attach_id, attach_name, uploadDate, comment, file, contact);
 
         } catch (SQLException e) {
-            throw new DaoException("Exception during retrieving attachment from the database", e);
+            throw new DaoException("Exception during attachment retrieval from the database", e);
         } finally {
             DBResourceManager.closeResources(null, st, rs);
         }

@@ -53,7 +53,7 @@ public class JdbcFileDao implements IFileDao {
                 file = new File(foundId, fileName, storedName);
             }
         } catch (SQLException e) {
-            throw new DaoException("Exception during retrieving file from the database", e);
+            throw new DaoException("Exception during file retrieval from the database", e);
         } finally {
             DBResourceManager.closeResources(null, st, rs);
         }
@@ -82,7 +82,7 @@ public class JdbcFileDao implements IFileDao {
                 files.add(file);
             }
         } catch (SQLException e) {
-            throw new DaoException("Exception during retrieving file from the database", e);
+            throw new DaoException("Exception during file retrieval from the database", e);
         } finally {
             DBResourceManager.closeResources(null, st, rs);
         }
@@ -173,7 +173,7 @@ public class JdbcFileDao implements IFileDao {
                 file = new File(foundId, fileName, storedName);
             }
         } catch (SQLException e) {
-            throw new DaoException("Exception during retrieving file from the database", e);
+            throw new DaoException("Exception during file retrieval from the database", e);
         } finally {
             DBResourceManager.closeResources(null, st, rs);
         }

@@ -65,12 +65,12 @@
                 </tr>
                 <c:forEach var="contact" items="${contacts}" varStatus="status">
 
-                    <tr valign="middle">
+                    <tr>
                         <td class="table-checkbox" width="5%" align="middle">
                             <input type="checkbox" name="isSelected" value="${contact.contactId}">
                         </td>
 
-                        <td width="150px">
+                        <td width="230px" class="td-photo">
                             <div class="photo-container">
                                 <img src="${pageContext.request.contextPath}/image?id=${contact.photo}" alt="photo"
                                      height="100%" class="photo">
@@ -155,7 +155,7 @@
             </div>
             <div class="col-md-2">
                 <div class="items-display">
-                    <span>Отображать контактов:</span>
+                    <span>Контактов на странице:</span>
                     <select id="display-items" name="contactsOnPage" class="form-control">
                         <option value="10" ${contactsOnPage == 10 ? 'selected': ''}>10</option>
                         <option value="20" ${contactsOnPage == 20 ? 'selected': ''}>20</option>
