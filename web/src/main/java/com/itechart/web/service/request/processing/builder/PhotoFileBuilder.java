@@ -17,8 +17,8 @@ public class PhotoFileBuilder {
     public File buildFile(Map<String, String> parameters) {
         logger.info("Build photo file entity with parameters: {}", parameters);
 
-        String realNameParam = StringUtils.trim(parameters.get("photoFile_real"));
-        String storedNameParam = parameters.get("photoFile_stored");
+        String realNameParam = StringUtils.trim(parameters.get("realName"));
+        String storedNameParam = parameters.get("storedName");
         File file = new File();
 
         if (StringUtils.isNotBlank(realNameParam)){

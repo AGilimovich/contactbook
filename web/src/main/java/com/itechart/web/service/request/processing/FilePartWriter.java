@@ -23,12 +23,7 @@ public class FilePartWriter {
         this.basePath = basePath;
     }
 
-    /**
-     * Stores all received file parts on disk.
-     *
-     * @param fileParts
-     * @return map of field names and names of files.
-     */
+
     public Map<String, String> writeFileParts(Map<String, FileItem> fileParts) {
         logger.info("Writing file parts");
         if (fileParts == null) return null;
@@ -49,13 +44,8 @@ public class FilePartWriter {
         return storedFiles;
     }
 
-    /**
-     * Stores file part on disk and gives it unique name.
-     *
-     * @param item to store.
-     * @return the name of the stored file.
-     */
-    private String writeFilePart(FileItem item) {
+
+    public String writeFilePart(FileItem item) {
         try {
             String storedFileName = UUID.randomUUID().toString();
             //create folder with name first character of generated UUID

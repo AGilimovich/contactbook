@@ -288,7 +288,7 @@ function saveNewAttach(input) {
     var attachmentName = inputAttachName.value;
     var attachmentExtension = new FileNameExtractor(input.files[0].name).getExtension();
     // var attachmentUploadDate = dateToString(new Date());
-    var attachmentUploadDate = null;
+    var attachmentUploadDate = "";
     var attachmentComment = inputAttachComment[0].value;
     var attachmentId = new Date().getTime();
     input.setAttribute("name", "attachFile[" + attachmentId + "]");
@@ -351,7 +351,9 @@ function newAttachTableRow(attachment) {
     attachment.setAttachCheckBox(checkbox);
 
     cellName.setAttribute("name", "attachName");
-    cellName.innerText = attachment.getName() + "." + attachment.getExtension();
+    var fullName;
+    attachment.getExtension() === '' ? fullName = attachment.getName() : fullName = attachment.getName() + "." + attachment.getExtension();
+    cellName.innerText = fullName;
 
     // cellUploadDate.innerText = attachment.getUploadDate();
     cellUploadDate.setAttribute("name", "attachUploadDate");
@@ -364,7 +366,10 @@ function newAttachTableRow(attachment) {
 function newAttachMetaInput(attachment) {
     'use strict'
     // var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()+"."+attachment.getExtension()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
-    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()+"."+attachment.getExtension()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
+    var fullName;
+    attachment.getExtension() === '' ? fullName = attachment.getName() : fullName = attachment.getName() + "." + attachment.getExtension();
+
+    var value = new Appendable("id", attachment.getId()).append("name", fullName).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
 
     var attachHiddenMetaInput = document.createElement("input");
     attachHiddenMetaInput.setAttribute("name", "attachMeta[" + attachment.getId() + "]");
@@ -397,8 +402,10 @@ function editAttachTableRow(attachment) {
     var cellAttachName = row.cells[1];
     var cellAttachUploadDate = row.cells[2];
     var cellAttachComment = row.cells[3];
-
-    cellAttachName.innerText = attachment.getName()+'.'+ attachment.getExtension();
+    var fullName;
+    attachment.getExtension() === '' ? fullName = attachment.getName() : fullName = attachment.getName() + "." + attachment.getExtension();
+    cellAttachName.innerText = fullName;
+   
     // inputAttachName.value;
     cellAttachComment.innerText = inputAttachComment[0].value;
     cellAttachUploadDate.innerText;
@@ -406,7 +413,9 @@ function editAttachTableRow(attachment) {
 
 function editAttachMetaInput(attachment) {
     'use strict'
-    var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()+"."+attachment.getExtension()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
+    var fullName;
+    attachment.getExtension() === '' ? fullName = attachment.getName() : fullName = attachment.getName() + "." + attachment.getExtension();
+    var value = new Appendable("id", attachment.getId()).append("name", fullName).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
     attachment.getAttachMetaInput().setAttribute("value", value);
 }
 
@@ -422,7 +431,9 @@ function deleteAttachMetaInput(attachment) {
         if (attachment.getStatus() == STATUS.NEW) {
             input.parentNode.removeChild(input);
         } else {
-            var value = new Appendable("id", attachment.getId()).append("name", attachment.getName()+"."+attachment.getExtension()).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
+            var fullName;
+            attachment.getExtension() === '' ? fullName = attachment.getName() : fullName = attachment.getName() + "." + attachment.getExtension();
+            var value = new Appendable("id", attachment.getId()).append("name", fullName).append("uploadDate", attachment.getUploadDate()).append("comment", attachment.getComment()).append("status", attachment.getStatus()).value();
             attachment.getAttachMetaInput().setAttribute("value", value);
         }
     }
@@ -496,7 +507,7 @@ function FileNameExtractor(fullName) {
             var match = regex.exec(fullName);
             if (match !== null)
                 return match[2];
-            else return null;
+            else return '';
         }
     }
 }

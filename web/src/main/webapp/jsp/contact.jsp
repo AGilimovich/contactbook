@@ -30,7 +30,7 @@
                 </a>
 
             <!--Photo-->
-            <div class="col-lg-3 col-md-3">
+            <div class="col-lg-2 col-md-3">
 
                 <div class="photo-container">
                     <img src="${pageContext.request.contextPath}/image?id=${photo.storedName}" height="100%" alt="photo"
@@ -132,7 +132,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-5 col-md-12">
+            <div class="col-lg-6 col-md-12">
                 <h3>Список контактных телефонов</h3>
 
                 <div class="table-btns">

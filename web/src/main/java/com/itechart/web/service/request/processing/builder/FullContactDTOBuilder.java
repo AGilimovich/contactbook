@@ -3,14 +3,19 @@ package com.itechart.web.service.request.processing.builder;
 import com.itechart.data.dto.FullAttachmentDTO;
 import com.itechart.data.dto.FullContactDTO;
 import com.itechart.data.entity.*;
+import com.itechart.web.properties.PropertiesManager;
+import com.itechart.web.service.request.processing.FilePartWriter;
 import com.itechart.web.service.request.processing.parser.AttachmentFormFieldParser;
 import com.itechart.web.service.request.processing.parser.PhoneFormFieldParser;
 import com.itechart.web.service.validation.ValidationException;
+import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,27 +37,34 @@ public class FullContactDTOBuilder {
     private ArrayList<FullAttachmentDTO> newAttachments = new ArrayList<>();
     private ArrayList<FullAttachmentDTO> updatedAttachments = new ArrayList<>();
     private ArrayList<FullAttachmentDTO> deletedAttachments = new ArrayList<>();
+    private FilePartWriter writer = new FilePartWriter(PropertiesManager.FILE_PATH());
+    private ArrayList<String> storedFiles = new ArrayList<>();
 
-
-
-
-    public void build(Map<String, String> formFields, Map<String, String> storedFiles) throws ValidationException{
-        // TODO: 01.04.2017 if was not stored??
-        if (formFields != null && storedFiles != null) {
+    public void build(Map<String, String> formFields, Map<String, FileItem> fileParts) throws ValidationException {
+        if (formFields != null) {
             buildContact(formFields);
-            buildPhoto(storedFiles);
             buildAddress(formFields);
             buildPhones(formFields);
-            buildAttachments(formFields, storedFiles);
+            buildPhoto(fileParts);
+            buildAttachments(formFields, fileParts);
         }
     }
 
 
-    private void buildPhoto(Map<String, String> storedFiles) {
-        logger.info("Build photo from stored files map: {}", storedFiles);
-        if (storedFiles == null) return;
-        PhotoFileBuilder builder = new PhotoFileBuilder();
-        photo = builder.buildFile(storedFiles);
+    private void buildPhoto(Map<String, FileItem> fileParts) {
+        logger.info("Build photo");
+        if (fileParts == null) return;
+        FileItem photoFileItem = fileParts.get("photoFile");
+        if (photoFileItem != null && photoFileItem.getSize() != 0) {
+            String storedName = writer.writeFilePart(photoFileItem);
+            storedFiles.add(storedName);
+            Map<String, String> parameters = new HashMap() {{
+                put("realName", photoFileItem.getName());
+                put("storedName", storedName);
+            }};
+            PhotoFileBuilder builder = new PhotoFileBuilder();
+            photo = builder.buildFile(parameters);
+        }
     }
 
     private void buildContact(Map<String, String> formFields) throws ValidationException {
@@ -105,9 +117,9 @@ public class FullContactDTOBuilder {
         }
     }
 
-    private void buildAttachments(Map<String, String> formFields, Map<String, String> storedFiles) throws ValidationException {
-        logger.info("Build attachments from form fields: {} and stored files map: {}", formFields, storedFiles);
-        if (formFields == null || storedFiles == null) return;
+    private void buildAttachments(Map<String, String> formFields, Map<String, FileItem> fileParts) throws ValidationException {
+        logger.info("Build attachments from form fields: {}", formFields);
+        if (formFields == null || fileParts == null) return;
         AttachmentBuilder attachmentBuilder = new AttachmentBuilder();
         AttachFileBuilder fileBuilder = new AttachFileBuilder();
         String fieldNameRegex = "attachMeta\\[(\\d+)\\]";
@@ -119,24 +131,32 @@ public class FullContactDTOBuilder {
             if ((matcher = fieldNamePattern.matcher(formParameter.getKey())).matches()) {
                 Map<String, String> parameters = parser.parse(formParameter.getValue());
                 String fileFieldNumber = matcher.group(1);
-                //add file name to parameters
-                //todo if attach new then build file, else no file were stored
-                File file = fileBuilder.buildFile(storedFiles, fileFieldNumber);
                 Attachment attachment = attachmentBuilder.buildAttachment(parameters);
-                FullAttachmentDTO fullAttachmentDTO = new FullAttachmentDTO(attachment, file);
                 String status = parameters.get("status");
                 if (StringUtils.isNotBlank(status)) {
                     switch (status) {
                         case "NEW":
-                            newAttachments.add(fullAttachmentDTO);
+                            File file = null;
+                            if (fileFieldNumber != null) {
+                                FileItem attachFileItem = fileParts.get("attachFile[" + fileFieldNumber + "]");
+                                String storedName = writer.writeFilePart(attachFileItem);
+                                storedFiles.add(storedName);
+                                Map<String, String> filePartsParameters = new HashMap() {{
+                                    put("realName", attachFileItem.getName());
+                                    put("storedName", storedName);
+                                }};
+                                file = fileBuilder.buildFile(filePartsParameters);
+                            }
+                            if (file == null) return;
+                            newAttachments.add(new FullAttachmentDTO(attachment, file));
                             break;
                         case "EDITED":
-                            updatedAttachments.add(fullAttachmentDTO);
+                            updatedAttachments.add(new FullAttachmentDTO(attachment, null));
                             break;
                         case "NONE":
                             break;
                         case "DELETED":
-                            deletedAttachments.add(fullAttachmentDTO);
+                            deletedAttachments.add(new FullAttachmentDTO(attachment, null));
                             break;
                         default:
                     }
@@ -156,6 +176,10 @@ public class FullContactDTOBuilder {
         fullContactDTO.setUpdatedAttachments(updatedAttachments);
         return fullContactDTO;
 
+    }
+
+    public Collection<String> getStoredFiles() {
+        return storedFiles;
     }
 
 

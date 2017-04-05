@@ -19,10 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Service layer. Process different requests.
@@ -41,15 +38,14 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         //get map of field names and corresponding file parts
         Map<String, FileItem> fileParts = handler.getFileParts();
 
-        FilePartWriter writer = new FilePartWriter(PropertiesManager.FILE_PATH());
-        //store file parts and get map of field names and file names
-        Map<String, String> storedFiles = writer.writeFileParts(fileParts);
+
 
         FullContactDTOBuilder builder = new FullContactDTOBuilder();
         try {
-            builder.build(formFields, storedFiles);
+            builder.build(formFields, fileParts);
         } catch (ValidationException e) {
-            fileService.deleteFiles(storedFiles.values());
+            Collection<String> storedFiles = builder.getStoredFiles();
+            fileService.deleteFiles(storedFiles);
             throw e;
         }
         return builder.getFullContact();
