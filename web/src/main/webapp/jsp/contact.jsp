@@ -26,6 +26,11 @@
           accept-charset="UTF-8" class="form-horizontal">
         <div class="row">
 
+                <a class="cancel-anchor close" href="${pageContext.request.contextPath}/">
+                    <button class="btn-close" type="button">
+                    </button>
+                </a>
+
             <!--Photo-->
             <div class="col-lg-3 col-md-3">
 
@@ -204,12 +209,12 @@
 
         <%--Buttons for form--%>
         <div class="row">
-            <div class="controls-group">
-                <button class="btn" type="submit">Сохранить</button>
-                <a class="cancel-anchor" href="${pageContext.request.contextPath}/">
-                    <button type="button" class="btn">Отменить</button>
-                </a>
-            </div>
+
+                <button class="btn btn-primary btn-save"  type="submit">Сохранить</button>
+                <%--<a class="cancel-anchor" href="${pageContext.request.contextPath}/">--%>
+                    <%--<button type="button" class="btn">Отменить</button>--%>
+                <%--</a>--%>
+
         </div>
 
 

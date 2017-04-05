@@ -18,9 +18,16 @@
     </div>
 </nav>
 <div class="container-fluid ">
+
     <form id="form" action="${pageContext.request.contextPath}/send" method="post">
         <div class="row">
             <div class="col-lg-6 col-md-8 well offset20px">
+                <div class="row">
+                    <a class="cancel-anchor close" href="${pageContext.request.contextPath}/">
+                        <button class="btn-close" type="button">
+                        </button>
+                    </a>
+                </div>
                 <div class="row buffer-top">
                     <p class="form-text">Кому:</p>
                     <input id="input-email-addresses" type="text" name="emailAddresses" required
@@ -55,10 +62,8 @@
                 </div>
                 <div class="row">
                     <div class="control-group buffer-top">
-                        <button class="btn btn-success" id="btn-send-email" type="button">Отправить</button>
-                        <a class="cancel-anchor" href="${pageContext.request.contextPath}/">
-                            <button class="btn" type="button">Отменить</button>
-                        </a>
+                        <button class="btn btn-primary" id="btn-send-email" type="button">Отправить</button>
+
                     </div>
                 </div>
             </div>

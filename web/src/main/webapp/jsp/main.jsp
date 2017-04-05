@@ -39,8 +39,7 @@
 
             <button type="submit" formaction="${pageContext.request.contextPath}/add" formmethod="get"
                     class="btn btn-primary btn-add">
-                Добавить <span
-                    class="glyphicon glyphicon-plus"></span></button>
+                Добавить </button>
 
             <div class="tooltip-error">
                 <button type="button" id="btn-delete-contacts" class="btn btn-danger btn-delete">
@@ -136,7 +135,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
                 <div class="pages">
                     <ul class="pagination">
                         <li class="page-item ${pageNumber == 0? ' hidden':''}">
@@ -153,9 +152,9 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                 <div class="items-display">
-                    <span>Контактов на странице:</span>
+                    <span class="display-items-span">Контактов на странице:</span>
                     <select id="display-items" name="contactsOnPage" class="form-control">
                         <option value="10" ${contactsOnPage == 10 ? 'selected': ''}>10</option>
                         <option value="20" ${contactsOnPage == 20 ? 'selected': ''}>20</option>

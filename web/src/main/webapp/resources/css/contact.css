@@ -74,8 +74,8 @@
     text-align: center;
 }
 
-.controls-group > button {
-    margin: 0 20px;
+.controls-group  button {
+    margin: 0 15px;
 }
 
 .notification {
@@ -127,6 +127,15 @@
     color: red;
 }
 
+.btn-save{
+    display: inline-block;
+    float: right;
+    width: 300px;
+    height: 37px;
+    margin-right: 50px;
+}
+
+
 /*-----------------TOOLTIP--------------*/
 /* Tooltip container */
 .tooltip-error {
@@ -173,4 +182,45 @@
 .show-tooltip {
     visibility: visible !important;
     opacity: 1 !important;
+}
+
+/*--------------*/
+.close {
+    position: relative;
+    right: 10px;
+    top: 5px;
+    width: 32px;
+    height: 32px;
+    opacity: 0.3;
+}
+
+.close:hover {
+    opacity: 1;
+}
+
+.close:before, .close:after {
+    position: absolute;
+    left: 15px;
+    content: ' ';
+    height: 33px;
+    width: 2px;
+    background-color: #333;
+}
+
+.close:before {
+    transform: rotate(45deg);
+}
+
+.close:after {
+    transform: rotate(-45deg);
+}
+
+/*make button invisible*/
+.btn-close, .btn-close:hover, .btn-close:active {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
 }
