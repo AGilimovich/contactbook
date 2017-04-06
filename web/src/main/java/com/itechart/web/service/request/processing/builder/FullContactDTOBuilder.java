@@ -55,13 +55,15 @@ public class FullContactDTOBuilder {
         logger.info("Build photo");
         if (fileParts == null) return;
         FileItem photoFileItem = fileParts.get("photoFile");
-        if (photoFileItem != null && photoFileItem.getSize() != 0) {
-            String storedName = writer.writeFilePart(photoFileItem);
-            storedFiles.add(storedName);
-            Map<String, String> parameters = new HashMap() {{
-                put("realName", photoFileItem.getName());
-                put("storedName", storedName);
-            }};
+        if (photoFileItem != null) {
+            String storedName = null;
+            if (photoFileItem.getSize() != 0) {
+                storedName = writer.writeFilePart(photoFileItem);
+                storedFiles.add(storedName);
+            }
+            Map<String, String> parameters = new HashMap<>();
+            parameters.put("realName", photoFileItem.getName());
+            parameters.put("storedName", storedName);
             PhotoFileBuilder builder = new PhotoFileBuilder();
             photo = builder.buildFile(parameters);
         }

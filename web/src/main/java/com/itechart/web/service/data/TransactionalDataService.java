@@ -89,14 +89,18 @@ public class TransactionalDataService implements AbstractDataService {
         try {
             //save photo
             Contact contactToSave = fullContactDTO.getContact();
-            if (StringUtils.isNotEmpty(fullContactDTO.getPhoto().getStoredName())) {
-                savedFiles.add(fullContactDTO.getPhoto().getStoredName());
+            if (fullContactDTO.getPhoto() != null) {
+                if (StringUtils.isNotEmpty(fullContactDTO.getPhoto().getStoredName())) {
+                    savedFiles.add(fullContactDTO.getPhoto().getStoredName());
+                }
+                long photoId = fileDao.save(fullContactDTO.getPhoto());
+                //set photo id in contact and save it
+                contactToSave.setPhoto(photoId);
             }
 
-            long photoId = fileDao.save(fullContactDTO.getPhoto());
 
-            //set photo id in contact and save it
-            contactToSave.setPhoto(photoId);
+
+
 
             long contactId = contactDao.save(contactToSave);
             //set contact id in address object and save it

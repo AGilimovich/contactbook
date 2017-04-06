@@ -109,7 +109,7 @@ PRIMARY KEY (`phone_id`)
 
 
 CREATE USER IF NOT EXISTS gilimovich@localhost IDENTIFIED BY '1234567';
-GRANT ALL PRIVILEGES ON * . * TO gilimovich@localhost;
+GRANT ALL PRIVILEGES ON `aleksandr_gilimovich`. * TO gilimovich@localhost;
 
 USE aleksandr_gilimovich;
 INSERT INTO gender(gender_value) VALUES ("male");
