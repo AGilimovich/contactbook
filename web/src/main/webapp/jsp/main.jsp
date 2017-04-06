@@ -39,7 +39,8 @@
 
             <button type="submit" formaction="${pageContext.request.contextPath}/add" formmethod="get"
                     class="btn btn-primary btn-add">
-                Добавить </button>
+                Добавить
+            </button>
 
             <div class="tooltip-error">
                 <button type="button" id="btn-delete-contacts" class="btn btn-danger btn-delete">
@@ -135,24 +136,35 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
+            <%--<div class="col-lg-10 col-md-9 col-sm-8 col-xs-8">--%>
                 <div class="pages">
+
                     <ul class="pagination">
                         <li class="page-item ${pageNumber == 0? ' hidden':''}">
-                            <a href="../${pageContext.request.contextPath}?pageNumber=${pageNumber-1}&search=${isSearch}">Предыдущая</a>
+                            <a href="..${pageContext.request.contextPath}?pageNumber=${pageNumber-1}&search=${isSearch}">Предыдущая</a>
                         </li>
-                        <c:forEach begin="1" end="${pagesCount}" varStatus="counter">
+                        <c:forEach begin="${pageNumber==0?1:pageNumber}" end="${pageNumber==pagesCount-1?pageNumber+1:pageNumber+2}" varStatus="counter">
                             <li class="page ${counter.index == pageNumber+1 ? ' active':''} ${pagesCount == 0 ?'hidden':''}">
-                                <a href="../${pageContext.request.contextPath}?pageNumber=${counter.index-1}&search=${isSearch}"> ${counter.index}</a>
+                                <a href="..${pageContext.request.contextPath}?pageNumber=${counter.index-1}&search=${isSearch}"> ${counter.index}</a>
                             </li>
                         </c:forEach>
-                        <li class="page-item ${pageNumber == pagesCount-1 || pagesCount==0? ' hidden':''}">
-                            <a href="../${pageContext.request.contextPath}?pageNumber=${pageNumber+1}&search=${isSearch}">Следующая</a>
+                        <li class="page-item">
+                            <div id="page-list" class="page-list">
+                                <c:forEach begin="1" end="${pagesCount}" varStatus="counter">
+                                    <a href="..${pageContext.request.contextPath}?pageNumber=${counter.index-1}&search=${isSearch}">${counter.index}</a>
+                                </c:forEach>
+                            </div>
+                            <a id="anchor-select-page">...</a>
+
                         </li>
+                        <li class="page-item ${pageNumber == pagesCount-1 || pagesCount==0? ' hidden':''}">
+                            <a href="..${pageContext.request.contextPath}?pageNumber=${pageNumber+1}&search=${isSearch}">Следующая</a>
+                        </li>
+
                     </ul>
                 </div>
-            </div>
-            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            <%--</div>--%>
+            <%--<div class="col-lg-2 col-md-3 col-sm-4 col-xs-4">--%>
                 <div class="items-display">
                     <span class="display-items-span">Контактов на странице:</span>
                     <select id="display-items" name="contactsOnPage" class="form-control">
@@ -164,7 +176,7 @@
                        formaction="../${pageContext.request.contextPath}?search=${isSearch}" class="hidden">
 
             </div>
-        </div>
+        <%--</div>--%>
     </form>
 </div>
 <footer>

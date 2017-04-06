@@ -60,3 +60,26 @@ displayItemsSelect.onchange = function () {
     'use strict'
     submitCount();
 }
+
+var anchorSelectPage = document.getElementById("anchor-select-page");
+var pageList = document.getElementById("page-list");
+anchorSelectPage.onclick = function () {
+    showPageList();
+}
+
+
+window.onclick = function(e){
+    if(e.target !== anchorSelectPage && e.target !== pageList) {
+       hidePageList()
+    }
+}
+
+
+function hidePageList(){
+    pageList.className = "page-list";
+}
+
+function showPageList(){
+    pageList.className = "page-list show-list";
+
+}

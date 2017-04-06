@@ -9,10 +9,9 @@ import com.itechart.web.service.validation.ValidationException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
-/**
- * Created by Aleksandr on 27.03.2017.
- */
+
 public interface AbstractRequestProcessingService {
+
     FullContactDTO processMultipartContactRequest(HttpServletRequest request) throws FileSizeException, ValidationException;
 
     ArrayList<Long> processDeleteContactRequest(HttpServletRequest request) throws ValidationException;
@@ -23,6 +22,7 @@ public interface AbstractRequestProcessingService {
 
     ArrayList<Email> processSendEmailRequest(HttpServletRequest request) throws ValidationException;
 
-
     ArrayList<Long> processShowEmailViewRequest(HttpServletRequest request) throws ValidationException;
+
+    int processChangeContactsCountRequest(HttpServletRequest request) throws ValidationException;
 }

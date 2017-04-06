@@ -57,9 +57,11 @@ body {
 #link-email {
     cursor: hand;
 }
+
 .table .td-photo {
     vertical-align: middle;
 }
+
 /*-----------------TOOLTIP--------------*/
 /* Tooltip container */
 .tooltip-error {
@@ -111,4 +113,71 @@ body {
 /*do not highlight on click*/
 #btn-delete-contacts:focus {
     outline: 0;
+}
+
+.page-list {
+    display: none;
+}
+
+.show-list {
+    display: inline-block;
+    position: relative;
+    bottom: 35px;
+    right: 125px;
+    height: 46px;
+    z-index: 3;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .3);
+    background: #fff;
+    border-radius: 3px;
+    max-width: 60%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.show-list a {
+    display: inline-block;
+    padding: 6px 10px;
+}
+
+#anchor-select-page:hover{
+    cursor: hand;
+}
+
+.pages{
+    display: inline;
+    position: relative;
+    left: 40%;
+}
+.items-display{
+    display: inline;
+    float: right;
+    width: 19%;
+    min-width: 240px;
+    position: relative;
+    top: 20px;
+}
+
+@media (max-width: 1050px) {
+    .pages {
+        display: inline;
+        position: relative;
+        left: 30%;
+    }
+}
+
+@media (max-width: 870px) {
+    .pages {
+        display: inline;
+        position: relative;
+        left: 20%;
+    }
+}
+
+@media (max-width: 760px) {
+    .pages {
+        display: block;
+        position: relative;
+        left: 0;
+    }
 }

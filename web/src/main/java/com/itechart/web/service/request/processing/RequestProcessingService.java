@@ -151,5 +151,18 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         return selectedIdList;
     }
 
+    @Override
+    public int processChangeContactsCountRequest(HttpServletRequest request) throws ValidationException {
+        String contactsCountParam = request.getParameter("contactsOnPage");
+        logger.info("Processing request:  change contacts count to value: {}", contactsCountParam);
+        if (StringUtils.isNotBlank(contactsCountParam)){
+
+        } else {
+            throw new ValidationException("Illegal parameter");
+        }
+
+        return 0;
+    }
+
 
 }
