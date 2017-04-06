@@ -44,11 +44,23 @@
 .popup-content {
     background-color: #fefefe;
     margin: 8% auto;
-    padding: 20px;
+    padding: 3px;
     border: 1px solid #888;
     width: 25%;
     min-width: 360px;
     text-align: center;
+}
+
+.popup-content button {
+    width: 100%;
+}
+
+.margin-top{
+    margin-top: 40px;
+}
+
+.popup-content-padding {
+    padding: 45px 17px 17px 17px;
 }
 
 .attach-popup {
@@ -87,6 +99,9 @@
     margin-top: 12px;
     margin-bottom: 3px;
 }
+.padding-top{
+    padding-top: 12px;
+}
 
 #input-phone-type-mobile, #input-phone-type-home {
     margin: 5px 0 5px 15px;
@@ -114,10 +129,6 @@
 #loadFile {
     width: 100%;
     margin-bottom: 20px;
-}
-
-.popup-button {
-    margin: 10px 20px !important;
 }
 
 #inputPhotoFile {
@@ -197,6 +208,12 @@
 
 }
 
+.close-popup {
+    position: relative;
+    right: 3px;
+    top: 3px;
+}
+
 .close:hover {
     opacity: 1;
 }
@@ -225,3 +242,4 @@
 .family-status-radio {
     margin-bottom: 10px;
 }
+

@@ -8,6 +8,7 @@ var btnEditAttach = document.getElementById("btn-edit-attach");
 var btnDeleteAttaches = document.getElementById("btn-delete-attach");
 //table with attaches
 var attachTable = document.getElementById("attach-table");
+var anchorUndoAttach = document.getElementById("anchor-undo-attach");
 
 // hidden div with attach meta data which then are submitted to server
 var hiddenMetaDiv = document.getElementById("hidden-div");
@@ -31,7 +32,6 @@ var editAttachTooltip = document.getElementById("edit-attach-tooltip");
 // Elements on attach popup
 //-------------------------------
 var divInputFileContainer = document.getElementById("file-container");
-var btnUndoAttach = document.getElementById("btn-undo-attach");
 var inputAttachName = document.getElementById("file-name-input");
 var inputAttachComment = document.getElementsByName("inputAttachComment");
 //-------------------------------
@@ -180,7 +180,7 @@ btnAddAttach.onclick = function () {
         changeFormAttribute(newInput, "main-form");
         return false;
     }
-    btnUndoAttach.onclick = function () {
+    anchorUndoAttach.onclick = function () {
         cancelAttachCreation(newInput);
     }
 
@@ -260,7 +260,7 @@ btnEditAttach.onclick = function () {
             editExistingAttach(attachment);
             return false;
         }
-        btnUndoAttach.onclick = function () {
+        anchorUndoAttach.onclick = function () {
             cancelAttachEditing(attachment);
         }
         attachPopup.className += " show";
@@ -511,4 +511,10 @@ function FileNameExtractor(fullName) {
         }
     }
 }
+
+
+// anchorUndoPhone.onclick = function () {
+//     'use strict'
+//     attachPopup.className = "popup";
+// }
 

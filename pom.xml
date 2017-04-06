@@ -28,7 +28,7 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <path>/</path>
+                    <path>/web</path>
                     <mode>both</mode>
                     <!--<contextFile>${project.basedir}\web\src\main\webapp\META_INF\context.xml</contextFile>-->
                 </configuration>

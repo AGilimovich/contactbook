@@ -2,9 +2,8 @@ var photo = document.getElementById('photo');
 var photoPopup = document.getElementById('photo-popup');
 var inputPhotoFile = document.getElementById("inputPhotoFile");
 var btnSavePhoto = document.getElementById("btn-save-photo");
-var btnUndoPhoto = document.getElementById("btn-undo-photo");
 var btnLoadFile = document.getElementById("loadFile");
-
+var anchorUndoPhoto = document.getElementById("anchor-undo-photo");
 
 //By click on photo opening popup window
 photo.onclick = function () {
@@ -14,14 +13,15 @@ photo.onclick = function () {
 
 btnSavePhoto.onclick = function () {
     'use strict'
+    // photo.setAttribute("src", image);
     photoPopup.className = "popup";
 }
-
-btnUndoPhoto.onclick = function () {
+anchorUndoPhoto.onclick= function () {
     'use strict'
     inputPhotoFile.value = "";
     photoPopup.className = "popup";
 }
+
 
 btnLoadFile.onclick = function () {
     inputPhotoFile.click();
@@ -39,7 +39,11 @@ function loadImg() {
     var reader = new FileReader();
     reader.readAsDataURL(photoInput[0].files[0]);
     reader.onload = function (e) {
-        photo.setAttribute("src", e.target.result);
+        btnSavePhoto.onclick = function () {
+            'use strict'
+            photo.setAttribute("src", e.target.result);
+            photoPopup.className = "popup";
+        }
 
     }
 

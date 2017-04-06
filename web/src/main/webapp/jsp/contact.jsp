@@ -26,8 +26,8 @@
           accept-charset="UTF-8" class="form-horizontal">
         <div class="row">
 
-                <a class="cancel-anchor close" href="${pageContext.request.contextPath}/">
-                </a>
+            <a class="cancel-anchor close" href="${pageContext.request.contextPath}/">
+            </a>
 
             <!--Photo-->
             <div class="col-lg-2 col-md-3">
@@ -64,7 +64,8 @@
                                         type="date" pattern="dd.MM.yyyy"/>
                         <input id="date-input" type="text" name="dateOfBirth" value="${formattedDateOfBirth}"
                                placeholder="ДД.ММ.ГГГГ"
-                               pattern="^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$" class="form-control">
+                               pattern="^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$"
+                               class="form-control">
 
 
                         <p class="form-text">Пол:</p>
@@ -207,11 +208,7 @@
 
         <%--Buttons for form--%>
         <div class="row">
-
-                <button class="btn btn-primary btn-save"  type="submit">Сохранить</button>
-                <%--<a class="cancel-anchor" href="${pageContext.request.contextPath}/">--%>
-                    <%--<button type="button" class="btn">Отменить</button>--%>
-                <%--</a>--%>
+            <button class="btn btn-primary btn-save" type="submit">Сохранить</button>
 
         </div>
 
@@ -239,15 +236,20 @@
 
         <%--Add photo POPUP--%>
         <div id="photo-popup" class="popup">
-            <div class="popup-content photo-popup-content">
-                <p>Путь к картинке:</p>
-                <input type="button" id="loadFile" class="btn" value="Найти"/>
-                <input id="inputPhotoFile" type="file" name="photoFile"
-                       accept="image/jpeg,image/png,image/gif" class="form-control">
-                <div class="row controls-group">
 
-                    <button id="btn-save-photo" class="btn popup-button" type="button">Сохранить</button>
-                    <button id="btn-undo-photo" type="button" class="btn popup-button">Отменить</button>
+
+            <div class="popup-content photo-popup-content">
+                <a id="anchor-undo-photo" class="close close-popup">
+                </a>
+                <div class="popup-content-padding">
+                    <p>Путь к картинке:</p>
+                    <input type="button" id="loadFile" class="btn" value="Найти"/>
+                    <input id="inputPhotoFile" type="file" name="photoFile"
+                           accept="image/jpeg,image/png,image/gif" class="form-control">
+
+                    <button id="btn-save-photo" class="btn btn-primary" type="button">Сохранить</button>
+
+
                 </div>
             </div>
         </div>
@@ -257,64 +259,70 @@
     <%--Add phone POPUP--%>
     <div id="phone-popup" class="popup">
         <div class="popup-content">
-            <form id="phone-form">
+            <a id="anchor-undo-phone" class="close close-popup">
+            </a>
+            <div class="popup-content-padding">
+                <form id="phone-form">
 
-                <p class="form-text">Код страны:</p>
-                <input id="country-code-input" type="tel" pattern="\d{3}" class="form-control input-margin input-inline"
-                       name="inputCountryCode"
-                       placeholder="XXX" required>
+                    <p class="form-text">Код страны:</p>
+                    <input id="country-code-input" type="tel" pattern="\d{3}"
+                           class="form-control input-margin input-inline"
+                           name="inputCountryCode"
+                           placeholder="XXX" required>
 
-                <p class="form-text">Код оператора:</p>
-                <input id="operator-code-input" type="tel" pattern="\d{2}" class="form-control input-margin"
-                       name="inputOperatorCode"
-                       placeholder="XX" required>
+                    <p class="form-text">Код оператора:</p>
+                    <input id="operator-code-input" type="tel" pattern="\d{2}" class="form-control input-margin"
+                           name="inputOperatorCode"
+                           placeholder="XX" required>
 
-                <p class="form-text">Телефонный номер:</p>
-                <input id="phone-number-input" type="tel" pattern="\d{7}" class="form-control input-margin"
-                       name="inputPhoneNumber"
-                       placeholder="XXXXXXX" required>
-                <p class="form-text">Тип телефона:</p>
-
-
-                <input type="radio" id="input-phone-type-home" class="input-margin" name="inputPhoneType"
-                       value="home" checked>
-
-                <span>Домашний</span>
-                <input type="radio" id="input-phone-type-mobile" class="input-margin" name="inputPhoneType"
-                       value="mobile">
-                <span>Мобильный</span>
+                    <p class="form-text">Телефонный номер:</p>
+                    <input id="phone-number-input" type="tel" pattern="\d{7}" class="form-control input-margin"
+                           name="inputPhoneNumber"
+                           placeholder="XXXXXXX" required>
+                    <p class="form-text">Тип телефона:</p>
 
 
-                <p class="form-text">Комментарий:</p>
-                <input type="text" class="form-control input-margin" name="inputPhoneComment">
+                    <input type="radio" id="input-phone-type-home" class="input-margin" name="inputPhoneType"
+                           value="home" checked>
+
+                    <span>Домашний</span>
+                    <input type="radio" id="input-phone-type-mobile" class="input-margin" name="inputPhoneType"
+                           value="mobile">
+                    <span>Мобильный</span>
 
 
-                <div class="controls-group">
-                    <button id="btn-save-phone" type="submit" class="btn popup-button">Сохранить</button>
-                    <button id="btn-undo-phone" type="button" class="btn popup-button">Отменить</button>
-                </div>
-            </form>
+                    <p class="form-text">Комментарий:</p>
+                    <input type="text" class="form-control input-margin" name="inputPhoneComment">
+
+
+                    <button id="btn-save-phone" type="submit" class="btn margin-top btn-primary">Сохранить</button>
+
+                </form>
+            </div>
         </div>
     </div>
 
     <%--Add attach POPUP--%>
     <div id="attach-popup" class="popup">
         <div class="popup-content attach-popup">
-            <form id="attachForm">
-                <div id="file-container">
-                </div>
-                <p class="form-text" id="file-name-label">Имя файла:</p>
-                <input type="text" id="file-name-input" class="form-control input-margin" name="inputAttachName"
-                       required>
+            <a id="anchor-undo-attach" class="close close-popup">
+            </a>
+            <div class="popup-content-padding">
+                <form id="attachForm">
+                    <div id="file-container" class="padding-top">
+                    </div>
+                    <p class="form-text" id="file-name-label">Имя файла:</p>
+                    <input type="text" id="file-name-input" class="form-control input-margin" name="inputAttachName"
+                           required>
 
-                <p class="form-text">Комментарий:</p>
-                <input type="text" class="form-control input-margin" name="inputAttachComment">
+                    <p class="form-text">Комментарий:</p>
+                    <input type="text" class="form-control input-margin" name="inputAttachComment">
 
-                <div class="row controls-group">
-                    <button id="btn-save-attach" class="btn popup-button" type="submit">Сохранить</button>
-                    <button id="btn-undo-attach" class="btn popup-button" type="button">Отменить</button>
-                </div>
-            </form>
+
+                    <button id="btn-save-attach" class="btn margin-top btn-primary" type="submit">Сохранить</button>
+
+                </form>
+            </div>
         </div>
     </div>
 

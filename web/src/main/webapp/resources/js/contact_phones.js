@@ -29,7 +29,6 @@ var editPhoneTooltip = document.getElementById("edit-phone-tooltip");
 // Elements on phone popup
 //-------------------------------
 var btnSavePhone = document.getElementById("btn-save-phone");
-var btnUndoPhone = document.getElementById("btn-undo-phone");
 var inputCountryCode = document.getElementsByName("inputCountryCode");
 var inputOperatorCode = document.getElementsByName("inputOperatorCode");
 var inputPhoneNumber = document.getElementsByName("inputPhoneNumber");
@@ -124,11 +123,7 @@ btnAddPhone.onclick = function () {
     phonePopup.className += " show";
 }
 
-//action - hide phone creating or editing popup
-btnUndoPhone.onclick = function () {
-    'use strict'
-    phonePopup.className = "popup";
-}
+
 
 
 //action - delete selected phones
@@ -422,4 +417,8 @@ phoneNumberInput.oninput = function () {
 
 
 
-
+var anchorUndoPhone = document.getElementById("anchor-undo-phone");
+anchorUndoPhone.onclick = function () {
+    'use strict'
+    phonePopup.className = "popup";
+}

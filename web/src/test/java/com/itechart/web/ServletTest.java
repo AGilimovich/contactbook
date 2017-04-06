@@ -20,18 +20,18 @@ public class ServletTest {
     private HttpServletRequest request;
     private HttpServletResponse response;
 
-    @Before
-    public void setUp() {
-        servlet = new FrontCtrl();
-        request = mock(HttpServletRequest.class);
-        response = mock(HttpServletResponse.class);
-    }
-
-    @Test
-    public void correctUsernameInRequest() throws ServletException, IOException {
-        servlet.doGet(request, response);
-        verify(response).setStatus(404);
-    }
+//    @Before
+//    public void setUp() {
+//        servlet = new FrontCtrl();
+//        request = mock(HttpServletRequest.class);
+//        response = mock(HttpServletResponse.class);
+//    }
+//
+//    @Test
+//    public void correctUsernameInRequest() throws ServletException, IOException {
+//        servlet.doGet(request, response);
+//        verify(response).setStatus(404);
+//    }
 
 
 }
