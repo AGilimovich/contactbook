@@ -166,12 +166,9 @@ btnAddAttach.onclick = function () {
     inputAttachName.value = "";
     inputAttachComment[0].value = "";
     attachPopup.className += " show";
-    // btnSaveAttach.onclick = function () {
-    //     saveNewAttach(newInput);
-    // }
+    inputAttachName.disabled = true;
     newInput.onchange = function () {
-        //todo
-        // inputAttachName.value = newInput.files[0].name;
+        inputAttachName.disabled = false;
         inputAttachName.value = new FileNameExtractor(newInput.files[0].name).getName();
 
     }
@@ -238,24 +235,19 @@ btnEditAttach.onclick = function () {
     }
     else {
         //fill inputs with values
-        // inputAttachName.value = attachName[checkedIndex].innerText;
+
         inputAttachName.value = new FileNameExtractor(attachName[checkedIndex].innerText).getName();
         inputAttachComment[0].value = attachComment[checkedIndex].innerText;
         var attachment = attachments[checkedIndex];
         var fileInput = attachment.getAttachFileInput();
         if (typeof fileInput !== "undefined") {
             fileInput.onchange = function () {
-                //todo
-                // inputAttachName.value = fileInput.files[0].name;
                 inputAttachName.value = new FileNameExtractor(fileInput.files[0].name).getName();
 
             }
         }
         if (typeof fileInput !== "undefined")
             fileInput.className = "form-control";
-        // btnSaveAttach.onclick = function () {
-        //     editExistingAttach(attachment);
-        // }
         saveAttach = function () {
             editExistingAttach(attachment);
             return false;
@@ -405,7 +397,7 @@ function editAttachTableRow(attachment) {
     var fullName;
     attachment.getExtension() === '' ? fullName = attachment.getName() : fullName = attachment.getName() + "." + attachment.getExtension();
     cellAttachName.innerText = fullName;
-   
+
     // inputAttachName.value;
     cellAttachComment.innerText = inputAttachComment[0].value;
     cellAttachUploadDate.innerText;
@@ -513,8 +505,4 @@ function FileNameExtractor(fullName) {
 }
 
 
-// anchorUndoPhone.onclick = function () {
-//     'use strict'
-//     attachPopup.className = "popup";
-// }
 
