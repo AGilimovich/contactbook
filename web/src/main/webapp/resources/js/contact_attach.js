@@ -396,8 +396,11 @@ function editAttachTableRow(attachment) {
     var cellAttachComment = row.cells[3];
     var fullName;
     attachment.getExtension() === '' ? fullName = attachment.getName() : fullName = attachment.getName() + "." + attachment.getExtension();
-    cellAttachName.innerText = fullName;
-
+    if (cellAttachName.childNodes[0].nodeType === 1) {
+        cellAttachName.childNodes[0].innerText = fullName;
+    } else {
+        cellAttachName.innerText = fullName;
+    }
     // inputAttachName.value;
     cellAttachComment.innerText = inputAttachComment[0].value;
     cellAttachUploadDate.innerText;
