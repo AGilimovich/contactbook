@@ -39,24 +39,23 @@ public class PhoneBuilder {
                 phone.setCountryCode(countryCodeParam);
                 phone.setOperatorCode(operatorCodeParam);
                 phone.setPhoneNumber(phoneNumberParam);
-            }
-            else throw new ValidationException("Illegal phone parameters");
+            } else throw new ValidationException("Illegal phone parameters");
         }
 
         if (StringUtils.isNotBlank(phoneTypeParam)) {
             try {
                 phone.setPhoneType(Phone.PhoneType.valueOf(phoneTypeParam.toUpperCase()));
-            } catch (Exception e){
+            } catch (Exception e) {
                 throw new ValidationException("Phone type parameter has illegal value", e);
             }
         }
 
-
-
-
-
         if (StringUtils.isNotBlank(commentParam)) {
-            phone.setComment(commentParam);
+            if (validationService.validateField(commentParam)) {
+                phone.setComment(commentParam);
+            } else {
+                throw new ValidationException("Invalid phone comment field value");
+            }
         }
 
         return phone;

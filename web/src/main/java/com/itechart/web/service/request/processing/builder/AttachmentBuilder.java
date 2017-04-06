@@ -46,13 +46,21 @@ public class AttachmentBuilder {
         if (StringUtils.isNotBlank(idParam)) {
             if (validationService.validateId(idParam))
                 attachment.setId(Long.valueOf(idParam));
-            else throw new ValidationException("Invalid id of phone");
+            else throw new ValidationException("Invalid id of attachment");
         }
         if (StringUtils.isNotBlank(nameParam)) {
-            attachment.setName(nameParam);
+            if (validationService.validateField(nameParam)) {
+                attachment.setName(nameParam);
+            } else {
+                throw new ValidationException("Invalid name field value");
+            }
         }
         if (StringUtils.isNotBlank(commentParam)) {
-            attachment.setComment(commentParam);
+            if (validationService.validateField(commentParam)) {
+                attachment.setComment(commentParam);
+            } else {
+                throw new ValidationException("Invalid attachment comment field value");
+            }
         }
 
 

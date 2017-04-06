@@ -87,17 +87,32 @@ public class ContactBuilder {
             }
         }
         if (StringUtils.isNotBlank(websiteParam)) {
-            contact.setWebsite(websiteParam);
+            if (validationService.validateField(websiteParam)) {
+                contact.setWebsite(websiteParam);
+            } else {
+                throw new ValidationException("Invalid website field value");
+            }
         }
         if (StringUtils.isNotBlank(emailParam)) {
-            if (validationService.validateEmail(emailParam))
+            if (validationService.validateEmail(emailParam)) {
                 contact.setEmail(emailParam);
+            } else {
+                throw new ValidationException("Invalid email field value");
+            }
         }
         if (StringUtils.isNotBlank(placeOfWorkParam)) {
-            contact.setPlaceOfWork(placeOfWorkParam);
+            if (validationService.validateField(placeOfWorkParam)) {
+                contact.setPlaceOfWork(placeOfWorkParam);
+            } else {
+                throw new ValidationException("Invalid place of work field value");
+            }
         }
         if (StringUtils.isNotBlank(citizenshipParam)) {
-            contact.setCitizenship(citizenshipParam);
+            if (validationService.validateField(citizenshipParam)) {
+                contact.setCitizenship(citizenshipParam);
+            } else {
+                throw new ValidationException("Invalid citizenship field value");
+            }
         }
         return contact;
     }

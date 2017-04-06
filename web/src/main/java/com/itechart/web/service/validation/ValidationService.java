@@ -59,12 +59,23 @@ public class ValidationService implements AbstractValidationService {
 
     @Override
     public boolean validateName(String name) {
-        logger.info("Validating credential: {}", name);
+        logger.info("Validating name: {}", name);
         if (StringUtils.isBlank(name)) return false;
         String nameRegex = "[[А-ЯЁ][-А-яЁё][a-zA-Z]]{1,50}";
         Pattern pattern = Pattern.compile(nameRegex);
         boolean isValid = pattern.matcher(name).matches();
         logger.info("Name validation result: {}", isValid);
+        return isValid;
+    }
+
+    @Override
+    public boolean validateField(String field) {
+        logger.info("Validating field: {}", field);
+        if (StringUtils.isBlank(field)) return false;
+        String nameRegex = "<script>";
+        Pattern pattern = Pattern.compile(nameRegex);
+        boolean isValid = !pattern.matcher(field).find();
+        logger.info("Field validation result: {}", isValid);
         return isValid;
     }
 }

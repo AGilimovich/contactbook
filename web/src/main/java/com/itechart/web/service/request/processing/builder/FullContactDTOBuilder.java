@@ -74,7 +74,7 @@ public class FullContactDTOBuilder {
         contact = contactBuilder.buildContact(formFields);
     }
 
-    private void buildAddress(Map<String, String> formFields) {
+    private void buildAddress(Map<String, String> formFields) throws ValidationException {
         logger.info("Build address from form fields: {}", formFields);
         if (formFields == null) return;
         AddressBuilder addressBuilder = new AddressBuilder();

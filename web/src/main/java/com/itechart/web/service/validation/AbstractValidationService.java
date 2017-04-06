@@ -10,5 +10,8 @@ public interface AbstractValidationService {
 
     boolean validateId(String id);
 
-    boolean validateName(String credential);
+    boolean validateName(String name);
+
+    boolean validateField(String field);
+
 }
