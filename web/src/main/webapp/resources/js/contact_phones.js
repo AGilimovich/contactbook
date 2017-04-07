@@ -253,6 +253,7 @@ function createRow(table, phone) {
 
     var cellPhoneComment = row.insertCell(7);
     cellPhoneComment.setAttribute("width", "50%")
+    cellPhoneComment.className= "padding-left";
 
 
     // ------------------add checkbox into cell[0]

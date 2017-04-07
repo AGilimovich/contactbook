@@ -331,7 +331,8 @@ function newAttachTableRow(attachment) {
     cellUploadDate.setAttribute("width", "19%")
     cellUploadDate.setAttribute("align", "center");
     var cellComment = row.insertCell(3);
-    cellComment.setAttribute("width", "50%")
+    cellComment.setAttribute("width", "50%");
+    cellComment.className= "padding-left";
 
     // ------------------add checkbox into cell[0]
     var checkbox = document.createElement("input");

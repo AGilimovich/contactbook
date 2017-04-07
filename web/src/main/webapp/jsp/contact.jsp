@@ -159,7 +159,7 @@
                             <td width="1%" align="left">)</td>
                             <td name="phoneNumber" width="15%">${phone.phoneNumber}</td>
                             <td name="phoneType" align="center" width="19%">${phone.phoneType.toString()}</td>
-                            <td name="phoneComment" width="50%">${phone.comment}</td>
+                            <td name="phoneComment" class="padding-left" width="50%">${phone.comment}</td>
                         </tr>
                     </c:forEach>
 
@@ -198,7 +198,7 @@
                                                 type="date" pattern="dd.MM.yyyy HH:mm:ss"/>
                                     ${formattedDate}
                             </td>
-                            <td width="50%" name="attachComment">${attachment.getAttachment().comment}</td>
+                            <td width="50%" class="padding-left" name="attachComment">${attachment.getAttachment().comment}</td>
                         </tr>
                     </c:forEach>
                 </table>
