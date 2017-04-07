@@ -37,7 +37,7 @@ public class DoDeleteContact implements Command {
             dataService.deleteContacts(selectedContactsId);
         } catch (DataException e) {
             logger.error("Error during deleting contacts: {}", e.getMessage());
-            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
 

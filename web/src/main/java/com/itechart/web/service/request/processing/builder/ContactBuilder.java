@@ -76,6 +76,8 @@ public class ContactBuilder {
             } catch (Exception e) {
                 throw new ValidationException("Gender parameter has illegal value", e);
             }
+        } else {
+            throw new ValidationException("Gender parameter is empty");
         }
 
         if (StringUtils.isNotBlank(familyStatusParam)) {
@@ -85,6 +87,8 @@ public class ContactBuilder {
             } catch (Exception e) {
                 throw new ValidationException("Family status parameter has illegal value", e);
             }
+        } else {
+            throw new ValidationException("Family status parameter is empty");
         }
         if (StringUtils.isNotBlank(websiteParam)) {
             if (validationService.validateField(websiteParam)) {

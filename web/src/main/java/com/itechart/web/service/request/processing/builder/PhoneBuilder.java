@@ -1,9 +1,7 @@
 package com.itechart.web.service.request.processing.builder;
 
-import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.Phone;
 import com.itechart.web.service.ServiceFactory;
-import com.itechart.web.service.request.processing.parser.AttachmentFormFieldParser;
 import com.itechart.web.service.validation.AbstractValidationService;
 import com.itechart.web.service.validation.ValidationException;
 import org.apache.commons.lang3.StringUtils;
@@ -48,6 +46,8 @@ public class PhoneBuilder {
             } catch (Exception e) {
                 throw new ValidationException("Phone type parameter has illegal value", e);
             }
+        } else {
+            throw new ValidationException("Phone type parameter is empty");
         }
 
         if (StringUtils.isNotBlank(commentParam)) {

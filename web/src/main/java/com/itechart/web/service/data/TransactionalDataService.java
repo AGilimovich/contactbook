@@ -44,19 +44,23 @@ public class TransactionalDataService implements AbstractDataService {
         Contact contact = null;
         try {
             contact = contactDao.getContactById(contactId);
-            long photoId = contact.getPhoto();
-            ArrayList<Attachment> attachments = attachmentDao.getAllForContact(contactId);
-            //delete contact; phones, address, attachments are cascading
-            contactDao.delete(contactId);
-            //delete files
-            listOfFilesForDeleting.add(fileDao.getFileById(photoId).getStoredName());
-            fileDao.delete(photoId);
-            for (Attachment attachment : attachments) {
-                listOfFilesForDeleting.add(fileDao.getFileById(attachment.getFile()).getStoredName());
-                fileDao.delete(attachment.getFile());
-            }
-            for (String name : listOfFilesForDeleting) {
-                fileService.deleteFile(name);
+            if (contact!=null) {
+                long photoId = contact.getPhoto();
+                ArrayList<Attachment> attachments = attachmentDao.getAllForContact(contactId);
+                //delete contact; phones, address, attachments are cascading
+                contactDao.delete(contactId);
+                //delete files
+                listOfFilesForDeleting.add(fileDao.getFileById(photoId).getStoredName());
+                fileDao.delete(photoId);
+                for (Attachment attachment : attachments) {
+                    listOfFilesForDeleting.add(fileDao.getFileById(attachment.getFile()).getStoredName());
+                    fileDao.delete(attachment.getFile());
+                }
+                for (String name : listOfFilesForDeleting) {
+                    fileService.deleteFile(name);
+                }
+            } else {
+                throw new DataException("Contact with provided id was not found");
             }
             transaction.commitTransaction();
         } catch (DaoException e) {
@@ -406,7 +410,7 @@ public class TransactionalDataService implements AbstractDataService {
                 fullContactDTO.setPhones(phones);
                 fullContactDTO.setAttachments(fullAttachmentDTOs);
             } else {
-                throw new DataException("Contact not found");
+                throw new DataException("Contact with provided id was not found");
             }
             transaction.commitTransaction();
 
