@@ -66,7 +66,7 @@
                                         </p>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <div class="row">
                                                 <p><b>Дата рождения:</b></p>
                                             </div>
@@ -77,12 +77,12 @@
                                                 <p>${formattedDateOfBirth}</p>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-5">
                                             <div class="row">
                                                 <p><b>Домашний адрес:</b></p>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-5">
+                                                <div class="col-md-4">
                                                     <div class="row">Страна:</div>
                                                     <div class="row">Город:</div>
                                                     <div class="row">Улица:</div>
@@ -91,7 +91,7 @@
                                                 </div>
 
 
-                                                <div class="col-md-7">
+                                                <div class="col-md-8">
                                                     <div class="row">${contact.country}</div>
                                                     <div class="row">${contact.city}</div>
                                                     <div class="row">${contact.street}</div>
@@ -103,7 +103,7 @@
 
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <div class="row">
                                                 <p><b>Место работы:</b></p>
                                             </div>
