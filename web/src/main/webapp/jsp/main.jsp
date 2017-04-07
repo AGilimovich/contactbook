@@ -148,9 +148,9 @@
             <div class="pages">
 
                 <ul class="pagination">
-                    <li class="page-item ${pageNumber == 0? ' hidden':''}">
-                        <a href="..${pageContext.request.contextPath}?pageNumber=${pageNumber-1}&search=${isSearch}">Предыдущая</a>
-                    </li>
+                    <%--<li class="page-item ${pageNumber == 0? ' hidden':''}">--%>
+                        <%--<a href="..${pageContext.request.contextPath}?pageNumber=${pageNumber-1}&search=${isSearch}">Предыдущая</a>--%>
+                    <%--</li>--%>
                     <c:forEach begin="${pageNumber==0?1:pageNumber}"
                                end="${pageNumber==pagesCount-1?pageNumber+1:pageNumber+2}" varStatus="counter">
                         <li class="page ${counter.index == pageNumber+1 ? ' active':''} ${pagesCount == 0 ?'hidden':''}">
@@ -166,9 +166,9 @@
                         <a id="anchor-select-page">...</a>
 
                     </li>
-                    <li class="page-item ${pageNumber == pagesCount-1 || pagesCount==0? ' hidden':''}">
-                        <a href="..${pageContext.request.contextPath}?pageNumber=${pageNumber+1}&search=${isSearch}">Следующая</a>
-                    </li>
+                    <%--<li class="page-item ${pageNumber == pagesCount-1 || pagesCount==0? ' hidden':''}">--%>
+                        <%--<a href="..${pageContext.request.contextPath}?pageNumber=${pageNumber+1}&search=${isSearch}">Следующая</a>--%>
+                    <%--</li>--%>
 
                 </ul>
             </div>

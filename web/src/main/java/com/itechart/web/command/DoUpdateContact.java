@@ -36,19 +36,20 @@ public class DoUpdateContact implements Command {
             return null;
         }
         //id of contacted retrieved from session
-        long contactId = (long) request.getSession().getAttribute("id");
-        reconstructedFullContactDTO.getContact().setContactId(contactId);
-        AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
-        FullContactDTO contactToUpdate = (FullContactDTO) request.getSession().getAttribute("contactToUpdate");
+        if(request.getSession().getAttribute("id")!=null) {
+            long contactId = (long) request.getSession().getAttribute("id");
+            reconstructedFullContactDTO.getContact().setContactId(contactId);
+            AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
+            FullContactDTO contactToUpdate = (FullContactDTO) request.getSession().getAttribute("contactToUpdate");
 
-        try {
-            dataService.updateContact(reconstructedFullContactDTO, contactToUpdate);
-        } catch (DataException e) {
-            logger.error("Error during contact updating: {}", e.getMessage());
-            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return null;
+            try {
+                dataService.updateContact(reconstructedFullContactDTO, contactToUpdate);
+            } catch (DataException e) {
+                logger.error("Error during contact updating: {}", e.getMessage());
+                ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return null;
+            }
         }
-
         //remove session attributes
         request.getSession().removeAttribute("contactToUpdate");
         request.getSession().removeAttribute("action");

@@ -117,13 +117,13 @@ body {
     display: inline-block;
     position: relative;
     bottom: 35px;
-    right: 125px;
+    right: 15px;
     height: 46px;
     z-index: 3;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .3);
     background: #fff;
     border-radius: 3px;
-    max-width: 60%;
+    max-width: 70%;
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
@@ -192,6 +192,9 @@ body {
 
 #btn-delete-contacts {
     border-top: none;
+}
+#btn-delete-contacts:focus, #btn-delete-contacts:hover {
+    border: 1px solid #8c8c8c;
 }
 
 .btn-container {
