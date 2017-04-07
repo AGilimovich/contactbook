@@ -176,7 +176,6 @@ public class TransactionalDataService implements AbstractDataService {
 
         ArrayList<String> filesToDelete = new ArrayList<>();
         ArrayList<String> savedFiles = new ArrayList<>();
-
         try {
             if (contactToUpdate.getPhoto() != null && reconstructedContact.getPhoto() != null) {
                 //if old file exists and new file was stored -> mark old file for deleting
