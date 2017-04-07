@@ -103,7 +103,6 @@
 
                         <p class="form-text">Email:</p>
                         <input id="email-input" type="email"
-                               pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$"
                                name="email" value="${contact.email}" class="form-control">
 
                         <p class="form-text">Текущее место работы:</p>
