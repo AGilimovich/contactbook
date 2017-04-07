@@ -63,7 +63,7 @@ public class ShowContactsView implements Command {
             contactsInDBCount = dataService.getContactsCount();
         } catch (DataException e) {
             logger.error("Error during fetching contacts: {}", e.getMessage());
-            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
 

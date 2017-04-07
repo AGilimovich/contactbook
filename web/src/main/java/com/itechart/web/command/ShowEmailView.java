@@ -48,7 +48,7 @@ public class ShowEmailView implements Command {
                         }
                     } catch (DataException e) {
                         logger.error("Error during fetching contacts: {}", e.getMessage());
-                        ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                        ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_NOT_FOUND);
                         return null;
                     }
 

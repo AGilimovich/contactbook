@@ -360,10 +360,12 @@ public class TransactionalDataService implements AbstractDataService {
         try {
             contacts = contactDao.getContactsLimit(page * count, count);
             for (Contact contact : contacts) {
-                File photo = fileDao.getFileById(contact.getPhoto());
-                Address address = addressDao.getAddressByContactId(contact.getContactId());
-                MainPageContactDTO mainPageContactDTO = new MainPageContactDTO(contact, address, photo);
-                mainPageContactDTOs.add(mainPageContactDTO);
+                if(contact!=null) {
+                    File photo = fileDao.getFileById(contact.getPhoto());
+                    Address address = addressDao.getAddressByContactId(contact.getContactId());
+                    MainPageContactDTO mainPageContactDTO = new MainPageContactDTO(contact, address, photo);
+                    mainPageContactDTOs.add(mainPageContactDTO);
+                }
             }
             transaction.commitTransaction();
         } catch (DaoException e) {
@@ -388,20 +390,24 @@ public class TransactionalDataService implements AbstractDataService {
         Contact contact = null;
         try {
             contact = contactDao.getContactById(contactId);
-            Address address = addressDao.getAddressByContactId(contactId);
-            File photo = fileDao.getFileById(contact.getPhoto());
-            ArrayList<Phone> phones = phoneDao.getAllForContact(contactId);
+            if (contact!=null) {
+                Address address = addressDao.getAddressByContactId(contactId);
+                File photo = fileDao.getFileById(contact.getPhoto());
+                ArrayList<Phone> phones = phoneDao.getAllForContact(contactId);
 
-            ArrayList<FullAttachmentDTO> fullAttachmentDTOs = new ArrayList<>();
-            ArrayList<Attachment> attachments = attachmentDao.getAllForContact(contactId);
-            for (Attachment attachment : attachments) {
-                File file = fileDao.getFileById(attachment.getFile());
-                FullAttachmentDTO fullAttachmentDTO = new FullAttachmentDTO(attachment, file);
-                fullAttachmentDTOs.add(fullAttachmentDTO);
+                ArrayList<FullAttachmentDTO> fullAttachmentDTOs = new ArrayList<>();
+                ArrayList<Attachment> attachments = attachmentDao.getAllForContact(contactId);
+                for (Attachment attachment : attachments) {
+                    File file = fileDao.getFileById(attachment.getFile());
+                    FullAttachmentDTO fullAttachmentDTO = new FullAttachmentDTO(attachment, file);
+                    fullAttachmentDTOs.add(fullAttachmentDTO);
+                }
+                fullContactDTO = new FullContactDTO(contact, address, photo);
+                fullContactDTO.setPhones(phones);
+                fullContactDTO.setAttachments(fullAttachmentDTOs);
+            } else {
+                throw new DataException("Contact not found");
             }
-            fullContactDTO = new FullContactDTO(contact, address, photo);
-            fullContactDTO.setPhones(phones);
-            fullContactDTO.setAttachments(fullAttachmentDTOs);
             transaction.commitTransaction();
 
         } catch (DaoException e) {
