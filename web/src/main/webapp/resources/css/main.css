@@ -189,17 +189,19 @@ body {
     height: 60px;
     border-radius: 0;
     background-color: #f8f8f8;
+    color: #337ab7;
+    font-size: 1.1em;
 
 }
 
-#btn-delete-contacts{
+#btn-delete-contacts {
     border-top: none;
 }
 
 .btn-container {
     position: fixed;
     width: 14.5%;
-    top:90px;
+    top: 90px;
 }
 
 .content {
@@ -218,7 +220,7 @@ body {
     .btn-container {
         width: 100%;
         position: relative;
-        top:0px;
+        top: 0px;
     }
 
     .content {

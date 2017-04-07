@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * Created by Aleksandr on 24.03.2017.
  */
 public class PhoneFormFieldParser {
-    private final String formFieldRegex = "(\\w+)=(\\+*\\w*)&?";
+    private final String formFieldRegex = "(\\w+)=(\\+*[\\w[А-ЯЁ][-А-яЁё]]*)&?";
     private final Pattern formFieldPattern = Pattern.compile(formFieldRegex);
     private Logger logger = LoggerFactory.getLogger(PhoneFormFieldParser.class);
 

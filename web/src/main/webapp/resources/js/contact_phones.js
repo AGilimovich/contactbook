@@ -159,7 +159,7 @@ function deleteHiddenInput(phone) {
         if (phone.getStatus() == STATUS.NEW) {
             hiddenInput.parentNode.removeChild(hiddenInput);
         } else {
-            var value = new Appendable("id", phone.getId()).append("countryCode", phone.getCountryCode()).append("operatorCode", phone.getOperatorCode()).append("phoneNumber", phone.getPhoneNumber()).append("phoneType", phone.getPhoneType()).append("phone", phone.getPhoneComment()).append("status", phone.getStatus()).value();
+            var value = new Appendable("id", phone.getId()).append("countryCode", phone.getCountryCode()).append("operatorCode", phone.getOperatorCode()).append("phoneNumber", phone.getPhoneNumber()).append("type", phone.getPhoneType()).append("comment", phone.getPhoneComment()).append("status", phone.getStatus()).value();
             hiddenInput.setAttribute("value", value);
         }
     }
