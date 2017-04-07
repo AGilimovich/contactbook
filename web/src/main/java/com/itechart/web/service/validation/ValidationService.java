@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.util.regex.Pattern;
 
 /**
- * Created by Aleksandr on 22.03.2017.
+ * Validation service.
  */
 public class ValidationService implements AbstractValidationService {
     private Logger logger = LoggerFactory.getLogger(ValidationService.class);

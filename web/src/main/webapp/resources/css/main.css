@@ -67,6 +67,8 @@ body {
 .tooltip-error {
     position: relative;
     display: inline-block;
+    width: 100%;
+
 }
 
 /* Tooltip text */
@@ -79,29 +81,25 @@ body {
     padding: 5px 0;
     border-radius: 6px;
     font-size: 1em;
-
-    /* Position the tooltip text */
     position: absolute;
     z-index: 1;
-    bottom: 125%;
+    top: 95%;
     left: 50%;
     margin-left: -60px;
-
-    /* Fade in tooltip */
     opacity: 0;
     transition: opacity 1s;
 }
 
 /* Tooltip arrow */
-.tooltip-error .tooltiptext::after {
+.tooltip-error .tooltiptext::before {
     content: "";
     position: absolute;
-    top: 100%;
+    bottom: 100%;
     left: 50%;
     margin-left: -5px;
-    border-width: 5px;
+    border-width: 6px;
     border-style: solid;
-    border-color: #555 transparent transparent transparent;
+    border-color: transparent transparent #555 transparent;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
@@ -140,16 +138,17 @@ body {
     padding: 6px 10px;
 }
 
-#anchor-select-page:hover{
+#anchor-select-page:hover {
     cursor: hand;
 }
 
-.pages{
+.pages {
     display: inline;
     position: relative;
     left: 40%;
 }
-.items-display{
+
+.items-display {
     display: inline;
     float: right;
     width: 19%;
@@ -179,5 +178,45 @@ body {
         display: block;
         position: relative;
         left: 0;
+    }
+}
+
+/*-----------*/
+
+.navbar-right button {
+    width: 100%;
+    margin: 15px auto;
+    height: 40px;
+}
+
+.btn-container {
+    position: fixed;
+    width: 15%;
+    top:90px;
+}
+
+.content {
+    margin-top: 60px;
+}
+
+@media (max-width: 767px) {
+    .navbar-right button {
+        width: 100%;
+        margin: 10px auto;
+    }
+
+    .btn-container {
+        width: 100%;
+        position: relative;
+        top:0px;
+    }
+
+    .content {
+        margin-top: 150px;
+    }
+
+    .tooltip-error .tooltiptext {
+        left: 10%;
+
     }
 }
