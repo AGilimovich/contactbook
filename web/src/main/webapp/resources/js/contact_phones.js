@@ -244,14 +244,15 @@ function createRow(table, phone) {
     var cellCloseBracket = row.insertCell(4);
     cellCloseBracket.setAttribute("width", "1%")
 
+
     var cellPhoneNumber = row.insertCell(5);
-    cellPhoneNumber.setAttribute("width", "10%")
+    cellPhoneNumber.setAttribute("width", "15%")
 
     var cellPhoneType = row.insertCell(6);
-    cellPhoneType.setAttribute("width", "20%")
+    cellPhoneType.setAttribute("width", "19%")
 
     var cellPhoneComment = row.insertCell(7);
-    cellPhoneComment.setAttribute("width", "54%")
+    cellPhoneComment.setAttribute("width", "50%")
 
 
     // ------------------add checkbox into cell[0]

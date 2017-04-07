@@ -325,13 +325,13 @@ function newAttachTableRow(attachment) {
     var cellCheckbox = row.insertCell(0);
     cellCheckbox.setAttribute("width", "6%")
     var cellName = row.insertCell(1);
-    cellName.setAttribute("width", "20%")
+    cellName.setAttribute("width", "25%")
 
     var cellUploadDate = row.insertCell(2);
-    cellUploadDate.setAttribute("width", "20%")
+    cellUploadDate.setAttribute("width", "19%")
     cellUploadDate.setAttribute("align", "center");
     var cellComment = row.insertCell(3);
-    cellComment.setAttribute("width", "54%")
+    cellComment.setAttribute("width", "50%")
 
     // ------------------add checkbox into cell[0]
     var checkbox = document.createElement("input");
@@ -490,7 +490,7 @@ function setValidationMessageToInput(input) {
 function FileNameExtractor(fullName) {
     'use strict'
     this.fullName = fullName;
-    var regex = /([^\/\\:&*"<>]+)\.([^\s\/\\:&*"<>]+)/;
+    var regex = /([^\/\\:?|*"<>]+)\.([^\/\\:?|*"<>]+)/;
     return {
         getName: function () {
             var match = regex.exec(fullName);

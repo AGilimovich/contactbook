@@ -235,7 +235,7 @@
     transform: rotate(-45deg);
 }
 
-.tbl-attach td {
+.tbl-attach td, .tbl-phone td {
     padding: 0 5px;
 }
 

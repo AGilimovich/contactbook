@@ -72,7 +72,7 @@ public class ValidationService implements AbstractValidationService {
     public boolean validateField(String field) {
         logger.info("Validating field: {}", field);
         if (StringUtils.isBlank(field)) return false;
-        String nameRegex = "<script>";
+        String nameRegex = "[<>]";
         Pattern pattern = Pattern.compile(nameRegex);
         boolean isValid = !pattern.matcher(field).find();
         logger.info("Field validation result: {}", isValid);

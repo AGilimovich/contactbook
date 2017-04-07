@@ -150,7 +150,7 @@
                 </div>
 
 
-                <table id="phone-table" class="tbl" width="100%">
+                <table id="phone-table" class="tbl tbl-phone" width="100%">
                     <c:forEach var="phone" items="${phones}">
                         <tr>
                             <td width="6%"><input type="checkbox" value="${phone.id}" name="phoneIsSelected"></td>
@@ -158,8 +158,8 @@
                             <td width="1%" align="right">(</td>
                             <td name="operatorCode" width="3%" align="center">${phone.operatorCode}</td>
                             <td width="1%" align="left">)</td>
-                            <td name="phoneNumber" width="19%">${phone.phoneNumber}</td>
-                            <td name="phoneType" align="center" width="15%">${phone.phoneType.toString()}</td>
+                            <td name="phoneNumber" width="15%">${phone.phoneNumber}</td>
+                            <td name="phoneType" align="center" width="19%">${phone.phoneType.toString()}</td>
                             <td name="phoneComment" width="50%">${phone.comment}</td>
                         </tr>
                     </c:forEach>
