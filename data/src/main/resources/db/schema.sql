@@ -55,7 +55,7 @@ CREATE TABLE `contact`(
 `gender` INT UNSIGNED NOT NULL,
 `citizenship` VARCHAR(50),
 `family_status` INT UNSIGNED NOT NULL,
-`website` VARCHAR(20),
+`website` VARCHAR(50),
 `email` VARCHAR(50),
 `place_of_work` VARCHAR(50),
 `photo` BIGINT UNSIGNED,
@@ -69,10 +69,10 @@ CREATE TABLE `address`(
 `address_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 `country` VARCHAR(50),
 `city` VARCHAR(50),
-`street` VARCHAR(30),
+`street` VARCHAR(50),
 `house` VARCHAR(20),
-`apartment` VARCHAR(10),
-`zip_code` VARCHAR(10),
+`apartment` VARCHAR(20),
+`zip_code` VARCHAR(20),
 `contact_id` BIGINT UNSIGNED NOT NULL,
 FOREIGN KEY(`contact_id`) REFERENCES `contact`(`contact_id`) ON DELETE CASCADE,
 PRIMARY KEY(`address_id`)
@@ -80,7 +80,7 @@ PRIMARY KEY(`address_id`)
 
 CREATE TABLE `attachment` (
     `attach_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `attach_name` VARCHAR(50),
+    `attach_name` VARCHAR(100),
     `upload_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `comment` TEXT(500),
     `file` BIGINT UNSIGNED,

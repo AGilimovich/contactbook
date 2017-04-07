@@ -10,8 +10,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 </head>
 <body>
-<nav class="navbar navbar-default navbar-fixed-top" >
+<nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
+
         <div class="navbar-header">
             <a href="../${pageContext.request.contextPath}?search=false" class="navbar-brand">Справочник контактов</a>
         </div>
@@ -53,9 +54,11 @@
 
                                 <td width="230px" class="td-photo">
                                     <div class="photo-container">
-                                        <img src="${pageContext.request.contextPath}/image?id=${contact.photo}"
-                                             alt="photo"
-                                             height="100%" class="photo">
+                                        <div class="fillwidth">
+                                            <img src="${pageContext.request.contextPath}/image?id=${contact.photo}"
+                                                 alt="photo"
+                                                 height="100%" class="photo">
+                                        </div>
                                     </div>
                                 </td>
                                 <td>
@@ -119,7 +122,7 @@
                 </div>
             </div>
             <div class="col-md-2 col-sm-2">
-                <div class="btn-group-vertical navbar-right btn-container" >
+                <div class="btn-group-vertical navbar-right btn-container">
                     <button type="submit" formaction="${pageContext.request.contextPath}/add" formmethod="get"
                             class="btn btn-default">
                         Добавить

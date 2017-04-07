@@ -16,13 +16,18 @@
     overflow: hidden;
 }
 
-.photo-container > img {
-    margin: auto;
-    display: block;
-    height: 100%;
-    width: 100%;
-    object-fit: contain;
+.fillwidth {
+    min-width: 100%;
+    height: auto;
+    text-align: center;
 }
+/*.photo-container > img {*/
+    /*margin: auto;*/
+    /*display: block;*/
+    /*height: 100%;*/
+    /*width: 100%;*/
+    /*object-fit: contain;*/
+/*}*/
 
 .popup {
     display: none;

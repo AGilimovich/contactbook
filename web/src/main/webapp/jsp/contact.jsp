@@ -33,8 +33,11 @@
             <div class="col-lg-2 col-md-3">
 
                 <div class="photo-container">
-                    <img src="${pageContext.request.contextPath}/image?id=${photo.storedName}" height="100%" alt="photo"
-                         id="photo">
+                    <div class="fillwidth">
+                        <img src="${pageContext.request.contextPath}/image?id=${photo.storedName}" height="100%"
+                             alt="photo"
+                             id="photo">
+                    </div>
                 </div>
 
             </div>
@@ -198,7 +201,8 @@
                                                 type="date" pattern="dd.MM.yyyy HH:mm:ss"/>
                                     ${formattedDate}
                             </td>
-                            <td width="50%" class="padding-left" name="attachComment">${attachment.getAttachment().comment}</td>
+                            <td width="50%" class="padding-left"
+                                name="attachComment">${attachment.getAttachment().comment}</td>
                         </tr>
                     </c:forEach>
                 </table>
