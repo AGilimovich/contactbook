@@ -119,14 +119,14 @@
                 </div>
             </div>
             <div class="col-md-2 col-sm-2">
-                <div class="btn-group-vertical navbar-right btn-container">
+                <div class="btn-group-vertical navbar-right btn-container" >
                     <button type="submit" formaction="${pageContext.request.contextPath}/add" formmethod="get"
-                            class="btn btn-primary">
+                            class="btn btn-default">
                         Добавить
                     </button>
 
                     <div class="tooltip-error">
-                        <button type="button" id="btn-delete-contacts" class="btn btn-danger">
+                        <button type="button" id="btn-delete-contacts" class="btn btn-default">
                             Удалить
                         </button>
                         <span class="tooltiptext" id="delete-contact-tooltip">Выберите контакты</span>
