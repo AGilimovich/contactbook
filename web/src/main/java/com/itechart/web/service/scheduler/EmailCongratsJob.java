@@ -4,11 +4,9 @@ import com.itechart.data.entity.Contact;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.exception.DataException;
 import com.itechart.web.service.email.AbstractEmailingService;
-import com.itechart.web.service.email.EmailingService;
 import com.itechart.web.service.template.AbstractTemplateProvidingService;
 import com.itechart.web.service.template.BirthdayEmailTemplate;
 import com.itechart.web.service.template.Template;
-import com.itechart.web.service.template.TemplatesProvidingService;
 import org.apache.commons.mail.EmailException;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -33,12 +31,12 @@ public class EmailCongratsJob implements Job {
         try {
             Date date = new Date();
             logger.info("Fetch contacts with birth day: {}", date.toString());
-            contacts = ServiceFactory.getServiceFactory().getDataService().getContactsWithBirthday(date);
+            contacts = ServiceFactory.getInstance().getDataService().getContactsWithBirthday(date);
         } catch (DataException e) {
             logger.error("Error during fetching contacts", e.getMessage());
         }
-        AbstractEmailingService emailingService = ServiceFactory.getServiceFactory().getEmailService();
-        AbstractTemplateProvidingService templateService = ServiceFactory.getServiceFactory().getEmailTemplateProvidingService();
+        AbstractEmailingService emailingService = ServiceFactory.getInstance().getEmailService();
+        AbstractTemplateProvidingService templateService = ServiceFactory.getInstance().getEmailTemplateProvidingService();
 
         Template template = templateService.getPredefinedEmailTemplates().get(BirthdayEmailTemplate.class);
         String subject = "C днем рождения!";

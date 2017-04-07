@@ -40,9 +40,9 @@
             <div class="col-md-10 col-sm-10">
                 <div class="row">
                     <table class="table">
-                        <tr>
+                        <tr class="${contacts.size()>0 ? '':'hidden'}" >
                             <td class="table-checkbox" width="5%" align="middle">
-                                <input type="checkbox" class="${contacts.size()>0 ? '':'hidden'}" id="selectAll">
+                                <input type="checkbox" id="selectAll">
                             </td>
                         </tr>
                         <c:forEach var="contact" items="${contacts}" varStatus="status">
@@ -80,12 +80,12 @@
                                                 <p>${formattedDateOfBirth}</p>
                                             </div>
                                         </div>
-                                        <div class="col-md-5">
+                                        <div class="col-md-6">
                                             <div class="row">
                                                 <p><b>Домашний адрес:</b></p>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <div class="row">Страна:</div>
                                                     <div class="row">Город:</div>
                                                     <div class="row">Улица:</div>
@@ -94,7 +94,7 @@
                                                 </div>
 
 
-                                                <div class="col-md-8">
+                                                <div class="col-md-9">
                                                     <div class="row">${contact.country}</div>
                                                     <div class="row">${contact.city}</div>
                                                     <div class="row">${contact.street}</div>
@@ -129,7 +129,7 @@
                     </button>
 
                     <div class="tooltip-error">
-                        <button type="button" id="btn-delete-contacts" class="btn btn-default">
+                        <button type="button" id="btn-delete-contacts" class="btn btn-default ${contacts.size()>0 ? '':'hidden'}">
                             Удалить
                         </button>
                         <span class="tooltiptext" id="delete-contact-tooltip">Выберите контакты</span>
@@ -148,16 +148,13 @@
             <div class="pages">
 
                 <ul class="pagination">
-                    <%--<li class="page-item ${pageNumber == 0? ' hidden':''}">--%>
-                        <%--<a href="..${pageContext.request.contextPath}?pageNumber=${pageNumber-1}&search=${isSearch}">Предыдущая</a>--%>
-                    <%--</li>--%>
                     <c:forEach begin="${pageNumber==0?1:pageNumber}"
                                end="${pageNumber==pagesCount-1?pageNumber+1:pageNumber+2}" varStatus="counter">
                         <li class="page ${counter.index == pageNumber+1 ? ' active':''} ${pagesCount == 0 ?'hidden':''}">
                             <a href="..${pageContext.request.contextPath}?pageNumber=${counter.index-1}&search=${isSearch}"> ${counter.index}</a>
                         </li>
                     </c:forEach>
-                    <li class="page-item">
+                    <li class="page-item ${pagesCount == 0 ?'hidden':''}">
                         <div id="page-list" class="page-list">
                             <c:forEach begin="1" end="${pagesCount}" varStatus="counter">
                                 <a href="..${pageContext.request.contextPath}?pageNumber=${counter.index-1}&search=${isSearch}">${counter.index}</a>
@@ -166,15 +163,12 @@
                         <a id="anchor-select-page">...</a>
 
                     </li>
-                    <%--<li class="page-item ${pageNumber == pagesCount-1 || pagesCount==0? ' hidden':''}">--%>
-                        <%--<a href="..${pageContext.request.contextPath}?pageNumber=${pageNumber+1}&search=${isSearch}">Следующая</a>--%>
-                    <%--</li>--%>
+
 
                 </ul>
             </div>
-            <%--</div>--%>
-            <%--<div class="col-lg-2 col-md-3 col-sm-4 col-xs-4">--%>
-            <div class="items-display">
+
+            <div class="items-display ${pagesCount == 0 ?'hidden':''}">
                 <span class="display-items-span">Контактов на странице:</span>
                 <select id="display-items" name="contactsOnPage" class="form-control">
                     <option value="10" ${contactsOnPage == 10 ? 'selected': ''}>10</option>
@@ -182,10 +176,9 @@
                 </select>
             </div>
             <input type="submit" id="btn-submit-item-count" form="main-form"
-                   formaction="../${pageContext.request.contextPath}?search=${isSearch}" class="hidden">
+                   formaction="${pageContext.request.contextPath}/count" class="hidden">
 
         </div>
-        <%--</div>--%>
     </form>
 </div>
 <footer>

@@ -174,7 +174,7 @@ btnAddAttach.onclick = function () {
     }
     saveAttach = function () {
         saveNewAttach(newInput);
-        changeFormAttribute(newInput, "main-form");
+        changeFormAttribute(newInput, "formatter-form");
         return false;
     }
     anchorUndoAttach.onclick = function () {
@@ -377,7 +377,7 @@ function newAttachFileInput() {
     newInput.setAttribute("type", "file");
     newInput.className = "form-control";
     setValidationMessageToInput(newInput);
-    //newInput.setAttribute("form", "main-form");
+    //newInput.setAttribute("form", "formatter-form");
     divInputFileContainer.appendChild(newInput);
     return newInput;
 }

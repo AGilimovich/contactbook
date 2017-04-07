@@ -31,7 +31,7 @@ public class ContextListener implements ServletContextListener {
         logger.info("Initialize quartz scheduler");
         int scheduledHours = Integer.valueOf(PropertiesManager.scheduledHours());
         int scheduledMinutes = Integer.valueOf(PropertiesManager.scheduledMinutes());
-        AbstractSchedulingService schedulingService = ServiceFactory.getServiceFactory().getEmailCongratsService();
+        AbstractSchedulingService schedulingService = ServiceFactory.getInstance().getEmailCongratsService();
         schedulingService.startScheduler(scheduledHours, scheduledMinutes);
     }
 

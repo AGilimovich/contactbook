@@ -22,7 +22,7 @@ public class ContactBuilder {
 
     public Contact buildContact(Map<String, String> parameters) throws ValidationException {
         logger.info("Build contact entity with parameters: {}", parameters);
-        AbstractValidationService validationService = ServiceFactory.getServiceFactory().getValidationService();
+        AbstractValidationService validationService = ServiceFactory.getInstance().getValidationService();
 
         String nameParam = StringUtils.trim(parameters.get("name"));
         String surnameParam = StringUtils.trim(parameters.get("surname"));

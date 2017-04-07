@@ -20,7 +20,7 @@ public class DoSendImage implements Command {
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         logger.info("Execute command");
 
-        byte[] image = ServiceFactory.getServiceFactory().getFileService().getFile(request.getParameter("id"));
+        byte[] image = ServiceFactory.getInstance().getFileService().getFile(request.getParameter("id"));
         if (image != null) {
             try {
                 response.getOutputStream().write(image);

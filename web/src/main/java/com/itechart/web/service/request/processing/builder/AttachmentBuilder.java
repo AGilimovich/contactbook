@@ -2,14 +2,9 @@ package com.itechart.web.service.request.processing.builder;
 
 import com.itechart.data.entity.Attachment;
 import com.itechart.web.service.ServiceFactory;
-import com.itechart.web.service.request.processing.parser.AttachmentFormFieldParser;
 import com.itechart.web.service.validation.AbstractValidationService;
 import com.itechart.web.service.validation.ValidationException;
-import com.itechart.web.service.validation.ValidationService;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +24,7 @@ public class AttachmentBuilder {
 //        String uploadDateParam = StringUtils.trim(parameters.get("uploadDate"));
         String commentParam = StringUtils.trim(parameters.get("comment"));
         Attachment attachment = new Attachment();
-        AbstractValidationService validationService = ServiceFactory.getServiceFactory().getValidationService();
+        AbstractValidationService validationService = ServiceFactory.getInstance().getValidationService();
 //        DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyy HH:mm:ss");
 //        if (StringUtils.isNotBlank(uploadDateParam)) {
 //            DateTime dateTime = null;

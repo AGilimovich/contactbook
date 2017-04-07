@@ -1,6 +1,7 @@
 package com.itechart.web.command;
 
 import com.itechart.data.dto.FullContactDTO;
+import com.itechart.data.dto.SearchDTO;
 import com.itechart.web.command.dispatcher.ErrorDispatcher;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.AbstractDataService;
@@ -25,7 +26,7 @@ public class DoCreateContact implements Command {
         logger.info("Execute command");
         FullContactDTO fullContactDTO = null;
         try {
-            fullContactDTO = ServiceFactory.getServiceFactory().getRequestProcessingService().processMultipartContactRequest(request);
+            fullContactDTO = ServiceFactory.getInstance().getRequestProcessingService().processMultipartContactRequest(request);
         } catch (FileSizeException e) {
             logger.error("Error during request processing: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE);
@@ -38,7 +39,7 @@ public class DoCreateContact implements Command {
 
         request.getSession().setAttribute("isSearch", false);
 
-        AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
+        AbstractDataService dataService = ServiceFactory.getInstance().getDataService();
         try {
             dataService.saveNewContact(fullContactDTO);
         } catch (DataException e) {
@@ -46,7 +47,10 @@ public class DoCreateContact implements Command {
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return null;
         }
-        return (new ShowContactsView()).execute(servlet, request, response);
+        request.getSession().setAttribute("searchDTO", null);
+        return "/jsp/main.jsp";
+
+//        return (new ShowMainView()).execute(servlet, request, response);
 
 //
 //        //todo

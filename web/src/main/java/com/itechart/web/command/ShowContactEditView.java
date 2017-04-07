@@ -25,7 +25,7 @@ public class ShowContactEditView implements Command {
         logger.info("Execute command");
         long id = 0;
         try {
-            id = ServiceFactory.getServiceFactory().getRequestProcessingService().processFetchSingleContactRequest(request);
+            id = ServiceFactory.getInstance().getRequestProcessingService().processFetchSingleContactRequest(request);
         } catch (ValidationException e) {
             logger.error("Error during request processing: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_BAD_REQUEST);
@@ -34,7 +34,7 @@ public class ShowContactEditView implements Command {
 
         FullContactDTO fullContactDTO = null;
         try {
-            fullContactDTO = ServiceFactory.getServiceFactory().getDataService().getFullContactById(id);
+            fullContactDTO = ServiceFactory.getInstance().getDataService().getFullContactById(id);
         } catch (DataException e) {
             logger.error("Error during fetching contact: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_NOT_FOUND);

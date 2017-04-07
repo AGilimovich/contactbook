@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * This is controller of all requests on the main form.
+ * This is controller of all requests on the formatter form.
  */
 public class FrontCtrl extends HttpServlet {
 

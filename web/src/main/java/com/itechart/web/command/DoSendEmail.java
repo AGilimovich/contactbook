@@ -25,9 +25,9 @@ public class DoSendEmail implements Command {
         logger.info("Execute command");
 
         ArrayList<Email> emails = null;
-        AbstractEmailingService emailingService = ServiceFactory.getServiceFactory().getEmailService();
+        AbstractEmailingService emailingService = ServiceFactory.getInstance().getEmailService();
         try {
-            emails = ServiceFactory.getServiceFactory().getRequestProcessingService().processSendEmailRequest(request);
+            emails = ServiceFactory.getInstance().getRequestProcessingService().processSendEmailRequest(request);
             for (Email email: emails){
                 try {
                     emailingService.sendEmail(email.getEmailAddress(), email.getSubject(), email.getBody());
@@ -38,10 +38,11 @@ public class DoSendEmail implements Command {
         } catch (ValidationException e) {
             logger.error("Error during request processing: {}", e.getMessage());
         }
+        request.getSession().setAttribute("searchDTO", null);
+        return "/jsp/main.jsp";
 
-
-        return new ShowContactsView().execute(servlet, request, response);
-//        ArrayList<MainPageContactDTO> contacts = ServiceFactory.getServiceFactory().getDataService().getMainPageContactDTO();
+//        return new ShowMainView().execute(servlet, request, response);
+//        ArrayList<MainPageContactDTO> contacts = ServiceFactory.getInstance().getDataService().getMainPageContactDTO();
 //        request.setAttribute("contacts", contacts);
 //        return "/jsp/main.jsp";
     }

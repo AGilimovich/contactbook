@@ -5,7 +5,6 @@ import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.data.exception.DataException;
 import com.itechart.web.service.validation.ValidationException;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,13 +25,13 @@ public class DoDeleteContact implements Command {
 
         ArrayList<Long> selectedContactsId = null;
         try {
-            selectedContactsId = ServiceFactory.getServiceFactory().getRequestProcessingService().processDeleteContactRequest(request);
+            selectedContactsId = ServiceFactory.getInstance().getRequestProcessingService().processDeleteContactRequest(request);
         } catch (ValidationException e) {
             logger.error("Error during request processing: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_BAD_REQUEST);
             return null;
         }
-        AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
+        AbstractDataService dataService = ServiceFactory.getInstance().getDataService();
         try {
             dataService.deleteContacts(selectedContactsId);
         } catch (DataException e) {
@@ -41,12 +40,14 @@ public class DoDeleteContact implements Command {
             return null;
         }
 
+        request.getSession().setAttribute("searchDTO", null);
+        return "/jsp/main.jsp";
 
 //        int contactsOnPage = 10;
         // TODO: 31.03.2017 null check
 
-        request.getSession().setAttribute("isSearch", false);
-        return new ShowContactsView().execute(servlet, request, response);
+//        request.getSession().setAttribute("isSearch", false);
+//        return new ShowMainView().execute(servlet, request, response);
 
 //
 //        int pageNumber = (int) request.getSession().getAttribute("page");

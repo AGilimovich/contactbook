@@ -16,7 +16,7 @@ public class CommandFactory {
     private static Map<String, Class<? extends Command>> commands = new HashMap();
 
     static {
-        commands.put("/", ShowContactsView.class);
+        commands.put("/", ShowMainView.class);
         commands.put("/email", ShowEmailView.class);
         commands.put("/send", DoSendEmail.class);
         commands.put("/search", ShowSearchView.class);
@@ -28,7 +28,7 @@ public class CommandFactory {
         commands.put("/delete", DoDeleteContact.class);
         commands.put("/file", DoSendFile.class);
         commands.put("/image", DoSendImage.class);
-        commands.put("/count", DoChangeContactsCount.class);
+        commands.put("/count", DoSetContactsCount.class);
     }
 
 

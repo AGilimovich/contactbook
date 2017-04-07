@@ -3,12 +3,10 @@ package com.itechart.web.command;
 import com.itechart.data.entity.Contact;
 import com.itechart.web.command.dispatcher.ErrorDispatcher;
 import com.itechart.web.service.data.AbstractDataService;
-import com.itechart.web.service.data.TransactionalDataService;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.exception.DataException;
 import com.itechart.web.service.template.AbstractTemplateProvidingService;
 import com.itechart.web.service.template.Template;
-import com.itechart.web.service.template.TemplatesProvidingService;
 import com.itechart.web.service.validation.ValidationException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -34,9 +32,9 @@ public class ShowEmailView implements Command {
         ArrayList<Contact> contacts = new ArrayList<>();
         ArrayList<String> emailList = new ArrayList<>();
         try {
-            selectedContacts = ServiceFactory.getServiceFactory().getRequestProcessingService().processShowEmailViewRequest(request);
+            selectedContacts = ServiceFactory.getInstance().getRequestProcessingService().processShowEmailViewRequest(request);
             //create array list of email addresses of selected contacts
-            AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
+            AbstractDataService dataService = ServiceFactory.getInstance().getDataService();
             if (selectedContacts != null) {
                 for (Long contactId : selectedContacts) {
                     try {
@@ -61,7 +59,7 @@ public class ShowEmailView implements Command {
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_BAD_REQUEST);
             return null;
         }
-        AbstractTemplateProvidingService templateService = ServiceFactory.getServiceFactory().getEmailTemplateProvidingService();
+        AbstractTemplateProvidingService templateService = ServiceFactory.getInstance().getEmailTemplateProvidingService();
         Map<Class<? extends Template>, Template> templates = templateService.getPredefinedEmailTemplates();
         Template emailListTemplate = templateService.getEmailListTemplate(emailList);
 

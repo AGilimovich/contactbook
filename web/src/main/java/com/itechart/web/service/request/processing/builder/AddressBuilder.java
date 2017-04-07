@@ -25,7 +25,7 @@ public class AddressBuilder {
         String houseParam = StringUtils.trim(parameters.get("house"));
         String apartmentParam = StringUtils.trim(parameters.get("apartment"));
         String zipCodeParam = StringUtils.trim(parameters.get("zipCode"));
-        AbstractValidationService validationService = ServiceFactory.getServiceFactory().getValidationService();
+        AbstractValidationService validationService = ServiceFactory.getInstance().getValidationService();
         if (StringUtils.isNotBlank(countryParam)) {
             if (validationService.validateField(countryParam)) {
                 address.setCountry(countryParam);

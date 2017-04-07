@@ -1,7 +1,9 @@
 package com.itechart.web.command;
 
 import com.itechart.web.command.dispatcher.ErrorDispatcher;
+import com.itechart.web.command.view.formatter.DisplayingContactsListFormatter;
 import com.itechart.web.service.ServiceFactory;
+import com.itechart.web.service.data.exception.DataException;
 import com.itechart.web.service.request.processing.AbstractRequestProcessingService;
 import com.itechart.web.service.validation.ValidationException;
 import org.slf4j.Logger;
@@ -15,14 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by Aleksandr on 06.04.2017.
  */
-public class DoChangeContactsCount implements Command {
-    private Logger logger = LoggerFactory.getLogger(DoChangeContactsCount.class);
+public class DoSetContactsCount implements Command {
+    private Logger logger = LoggerFactory.getLogger(DoSetContactsCount.class);
 
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         logger.info("Execute command");
 
-        AbstractRequestProcessingService processingService = ServiceFactory.getServiceFactory().getRequestProcessingService();
+        AbstractRequestProcessingService processingService = ServiceFactory.getInstance().getRequestProcessingService();
         int contactsOnPage;
         try {
             contactsOnPage = processingService.processChangeContactsCountRequest(request);
@@ -32,9 +34,14 @@ public class DoChangeContactsCount implements Command {
             return null;
         }
 
-
         request.getSession().setAttribute("contactsOnPage", contactsOnPage);
 
-        return null;
+        try {
+            new DisplayingContactsListFormatter().formContactsList(request);
+        } catch (DataException e) {
+            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return null;
+        }
+        return "/jsp/main.jsp";
     }
 }

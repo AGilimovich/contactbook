@@ -22,7 +22,7 @@ public class AttachFileBuilder {
         if (parameters == null) return null;
         String realNameParam = StringUtils.trim(parameters.get("realName"));
         String storedNameParam = parameters.get("storedName");
-        AbstractValidationService validationService = ServiceFactory.getServiceFactory().getValidationService();
+        AbstractValidationService validationService = ServiceFactory.getInstance().getValidationService();
 
         File file = new File();
 

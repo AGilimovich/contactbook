@@ -6,6 +6,7 @@ import com.itechart.data.entity.Address;
 import com.itechart.data.entity.Contact;
 import com.itechart.data.entity.File;
 import com.itechart.web.command.dispatcher.ErrorDispatcher;
+import com.itechart.web.command.view.formatter.DisplayingContactsListFormatter;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.data.exception.DataException;
@@ -30,65 +31,81 @@ public class DoSearch implements Command {
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         logger.info("Execute command");
         SearchDTO dto = null;
-        if (request.getSession().getAttribute("searchDTO") == null) {
-            try {
-                dto = ServiceFactory.getServiceFactory().getRequestProcessingService().processSearchContactsRequest(request);
-            } catch (ValidationException e) {
-                logger.error("Error during request processing: {}", e.getMessage());
-                ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_BAD_REQUEST);
-                return null;
-            }
-        } else
-            dto = (SearchDTO) request.getSession().getAttribute("searchDTO");
-        AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
-
-        //default values
-        int pageNumber = 0;
-        int contactsOnPage = 10;
-
-        String contactsOnPageParam = request.getParameter("contactsOnPage");
-        String pageNumberParam = request.getParameter("pageNumber");
-        if (StringUtils.isEmpty(contactsOnPageParam)) {
-            if (request.getSession().getAttribute("contactsOnPage") != null)
-                contactsOnPage = (int) request.getSession().getAttribute("contactsOnPage");
-        } else {
-            //if displaying contacts count was changed
-            contactsOnPage = Integer.valueOf(contactsOnPageParam);
-            request.getSession().setAttribute("contactsOnPage", contactsOnPage);
-        }
-        if (StringUtils.isNotEmpty(pageNumberParam)) {
-            pageNumber = Integer.valueOf(pageNumberParam);
-        }
-
-
-        int contactsCount = 0;
-        ArrayList<MainPageContactDTO> mainPageContactDTOs = new ArrayList<>();
         try {
-            ArrayList<Contact> contacts = dataService.getContactsSearchResultForPage(dto, pageNumber, contactsOnPage);
-            contactsCount = dataService.getContactsSearchResultCount(dto);
-            for (Contact contact : contacts) {
-                Address address = dataService.getAddressByContactId(contact.getContactId());
-                File photo = dataService.getPhotoById(contact.getPhoto());
-                MainPageContactDTO mainPageContactDTO = new MainPageContactDTO(contact, address, photo);
-                mainPageContactDTOs.add(mainPageContactDTO);
-            }
+            dto = ServiceFactory.getInstance().getRequestProcessingService().processSearchContactsRequest(request);
+        } catch (ValidationException e) {
+            logger.error("Error during request processing: {}", e.getMessage());
+            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_BAD_REQUEST);
+            return null;
+        }
+        request.getSession().setAttribute("searchDTO", dto);
+        try {
+            new DisplayingContactsListFormatter().formContactsList(request);
         } catch (DataException e) {
             logger.error("Error during fetching contacts: {}", e.getMessage());
-            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
 
-
-        int pagesCount = 1;
-        if (contactsOnPage != 0) {
-            pagesCount = (int) Math.ceil((double) contactsCount / contactsOnPage);
-        }
-        request.getSession().setAttribute("searchDTO", dto);
-        request.getSession().setAttribute("isSearch", true);
-        request.setAttribute("contacts", mainPageContactDTOs);
-        request.setAttribute("pagesCount", pagesCount);
-        request.getSession().setAttribute("pageNumber", pageNumber);
-
+//        SearchDTO dto = null;
+//        if (request.getSession().getAttribute("searchDTO") == null) {
+//            try {
+//                dto = ServiceFactory.getInstance().getRequestProcessingService().processSearchContactsRequest(request);
+//            } catch (ValidationException e) {
+//                logger.error("Error during request processing: {}", e.getMessage());
+//                ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_BAD_REQUEST);
+//                return null;
+//            }
+//        } else
+//            dto = (SearchDTO) request.getSession().getAttribute("searchDTO");
+//        AbstractDataService dataService = ServiceFactory.getInstance().getDataService();
+//
+//        //default values
+//        int pageNumber = 0;
+//        int contactsOnPage = 10;
+//
+//        String contactsOnPageParam = request.getParameter("contactsOnPage");
+//        String pageNumberParam = request.getParameter("pageNumber");
+//        if (StringUtils.isEmpty(contactsOnPageParam)) {
+//            if (request.getSession().getAttribute("contactsOnPage") != null)
+//                contactsOnPage = (int) request.getSession().getAttribute("contactsOnPage");
+//        } else {
+//            //if displaying contacts count was changed
+//            contactsOnPage = Integer.valueOf(contactsOnPageParam);
+//            request.getSession().setAttribute("contactsOnPage", contactsOnPage);
+//        }
+//        if (StringUtils.isNotEmpty(pageNumberParam)) {
+//            pageNumber = Integer.valueOf(pageNumberParam);
+//        }
+//
+//
+//        int contactsCount = 0;
+//        ArrayList<MainPageContactDTO> mainPageContactDTOs = new ArrayList<>();
+//        try {
+//            ArrayList<Contact> contacts = dataService.getSearchResultContactsDTOForPage(dto, pageNumber, contactsOnPage);
+//            contactsCount = dataService.getContactsSearchResultCount(dto);
+//            for (Contact contact : contacts) {
+//                Address address = dataService.getAddressByContactId(contact.getContactId());
+//                File photo = dataService.getPhotoById(contact.getPhoto());
+//                MainPageContactDTO mainPageContactDTO = new MainPageContactDTO(contact, address, photo);
+//                mainPageContactDTOs.add(mainPageContactDTO);
+//            }
+//        } catch (DataException e) {
+//            logger.error("Error during fetching contacts: {}", e.getMessage());
+//            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//            return null;
+//        }
+//
+//
+//        int pagesCount = 1;
+//        if (contactsOnPage != 0) {
+//            pagesCount = (int) Math.ceil((double) contactsCount / contactsOnPage);
+//        }
+//        request.getSession().setAttribute("searchDTO", dto);
+//        request.getSession().setAttribute("isSearch", true);
+//        request.setAttribute("contacts", mainPageContactDTOs);
+//        request.setAttribute("pagesCount", pagesCount);
+//        request.getSession().setAttribute("pageNumber", pageNumber);
         return "/jsp/main.jsp";
     }
 }

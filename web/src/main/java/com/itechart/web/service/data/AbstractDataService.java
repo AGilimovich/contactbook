@@ -28,7 +28,8 @@ public interface AbstractDataService {
 
 //    ArrayList<Contact> getAllContactsByFields(SearchDTO dto) throws DataException;
 
-    ArrayList<Contact> getContactsSearchResultForPage(SearchDTO dto, int page, int count) throws DataException;
+    //    ArrayList<Contact> getSearchResultContactsDTOForPage(SearchDTO dto, int page, int count) throws DataException;
+    ArrayList<MainPageContactDTO> getSearchResultContactsDTOForPage(SearchDTO dto, int page, int count) throws DataException;
 
     int getContactsSearchResultCount(SearchDTO dto) throws DataException;
 

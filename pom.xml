@@ -30,7 +30,7 @@
                 <configuration>
                     <path>/web</path>
                     <mode>both</mode>
-                    <!--<contextFile>${project.basedir}\web\src\main\webapp\META_INF\context.xml</contextFile>-->
+                    <!--<contextFile>${project.basedir}\web\src\formatter\webapp\META_INF\context.xml</contextFile>-->
                 </configuration>
             </plugin>
 

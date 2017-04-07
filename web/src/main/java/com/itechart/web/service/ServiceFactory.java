@@ -64,7 +64,7 @@ public class ServiceFactory {
     }
 
 
-    public static ServiceFactory getServiceFactory() {
+    public static ServiceFactory getInstance() {
         if (instance == null) {
             synchronized (ServiceFactory.class) {
                 if (instance == null) {

@@ -25,7 +25,7 @@ public class DoUpdateContact implements Command {
         logger.info("Execute command");
         FullContactDTO reconstructedFullContactDTO = null;
         try {
-            reconstructedFullContactDTO = ServiceFactory.getServiceFactory().getRequestProcessingService().processMultipartContactRequest(request);
+            reconstructedFullContactDTO = ServiceFactory.getInstance().getRequestProcessingService().processMultipartContactRequest(request);
         } catch (FileSizeException e) {
             logger.error("Error during request processing: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE);
@@ -39,7 +39,7 @@ public class DoUpdateContact implements Command {
         if(request.getSession().getAttribute("id")!=null) {
             long contactId = (long) request.getSession().getAttribute("id");
             reconstructedFullContactDTO.getContact().setContactId(contactId);
-            AbstractDataService dataService = ServiceFactory.getServiceFactory().getDataService();
+            AbstractDataService dataService = ServiceFactory.getInstance().getDataService();
             FullContactDTO contactToUpdate = (FullContactDTO) request.getSession().getAttribute("contactToUpdate");
 
             try {
@@ -55,11 +55,14 @@ public class DoUpdateContact implements Command {
         request.getSession().removeAttribute("action");
         request.getSession().removeAttribute("id");
 
-        // TODO: 31.03.
-        request.getSession().setAttribute("isSearch", false);
+        request.getSession().setAttribute("searchDTO", null);
+        return "/jsp/main.jsp";
 
-
-        return (new ShowContactsView()).execute(servlet, request, response);
+//        // TODO: 31.03.
+//        request.getSession().setAttribute("isSearch", false);
+//
+//
+//        return (new ShowMainView()).execute(servlet, request, response);
 
 
         // request.setAttribute("contacts", contacts);

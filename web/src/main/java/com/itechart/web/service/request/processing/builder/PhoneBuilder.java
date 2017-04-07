@@ -25,7 +25,7 @@ public class PhoneBuilder {
         String phoneNumberParam = StringUtils.trim(parameters.get("number"));
         String phoneTypeParam = StringUtils.trim(parameters.get("type"));
         String commentParam = StringUtils.trim(parameters.get("comment"));
-        AbstractValidationService validationService = ServiceFactory.getServiceFactory().getValidationService();
+        AbstractValidationService validationService = ServiceFactory.getInstance().getValidationService();
         Phone phone = new Phone();
         if (StringUtils.isNotBlank(idParam)) {
             if (validationService.validateId(idParam))

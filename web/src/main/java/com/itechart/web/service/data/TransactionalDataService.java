@@ -39,7 +39,7 @@ public class TransactionalDataService implements AbstractDataService {
         IContactDao contactDao = new JdbcContactDao(transaction);
         //  JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
         IFileDao fileDao = new JdbcFileDao(transaction);
-        AbstractFileService fileService = ServiceFactory.getServiceFactory().getFileService();
+        AbstractFileService fileService = ServiceFactory.getInstance().getFileService();
         ArrayList<String> listOfFilesForDeleting = new ArrayList<>();
         Contact contact = null;
         try {
@@ -98,7 +98,7 @@ public class TransactionalDataService implements AbstractDataService {
         IContactDao contactDao = new JdbcContactDao(transaction);
         IAddressDao addressDao = new JdbcAddressDao(transaction);
         IFileDao fileDao = new JdbcFileDao(transaction);
-        AbstractFileService fileService = ServiceFactory.getServiceFactory().getFileService();
+        AbstractFileService fileService = ServiceFactory.getInstance().getFileService();
         ArrayList<String> savedFiles = new ArrayList<>();
         try {
             //save photo
@@ -172,7 +172,7 @@ public class TransactionalDataService implements AbstractDataService {
         IContactDao contactDao = new JdbcContactDao(transaction);
         IAddressDao addressDao = new JdbcAddressDao(transaction);
         IFileDao fileDao = new JdbcFileDao(transaction);
-        AbstractFileService fileService = ServiceFactory.getServiceFactory().getFileService();
+        AbstractFileService fileService = ServiceFactory.getInstance().getFileService();
 
         ArrayList<String> filesToDelete = new ArrayList<>();
         ArrayList<String> savedFiles = new ArrayList<>();
@@ -299,21 +299,50 @@ public class TransactionalDataService implements AbstractDataService {
     }
 
 
+//    @Override
+//    public ArrayList<Contact> getSearchResultContactsDTOForPage(SearchDTO dto, int page, int count) throws DataException {
+//        logger.info("Fetch search result contacts: {} for page: {}, count: {}", dto, page, count);
+//        Transaction transaction = tm.getTransaction();
+//        IContactDao contactDao = new JdbcContactDao(transaction);
+//        ArrayList<Contact> contacts = new ArrayList<>();
+//        try {
+//            contacts = contactDao.findContactsByFieldsLimit(dto, page * count, count);
+//            transaction.commitTransaction();
+//        } catch (DaoException e) {
+//            logger.error("Error fetching search result contacts: {}", e.getCause().getMessage());
+//            transaction.rollbackTransaction();
+//            throw new DataException(e.getMessage());
+//        }
+//        return contacts;
+//    }
+
     @Override
-    public ArrayList<Contact> getContactsSearchResultForPage(SearchDTO dto, int page, int count) throws DataException {
+    public ArrayList<MainPageContactDTO> getSearchResultContactsDTOForPage(SearchDTO dto, int page, int count) throws DataException {
         logger.info("Fetch search result contacts: {} for page: {}, count: {}", dto, page, count);
         Transaction transaction = tm.getTransaction();
         IContactDao contactDao = new JdbcContactDao(transaction);
-        ArrayList<Contact> contacts = new ArrayList<>();
+        IFileDao fileDao = new JdbcFileDao(transaction);
+        IAddressDao addressDao = new JdbcAddressDao(transaction);
+        ArrayList<MainPageContactDTO> mainPageContactDTOs = new ArrayList<>();
         try {
-            contacts = contactDao.findContactsByFieldsLimit(dto, page * count, count);
+            ArrayList<Contact> contacts = contactDao.findContactsByFieldsLimit(dto, page * count, count);
+            if (contacts != null) {
+                for (Contact contact : contacts) {
+                    if (contact != null) {
+                        File photo = fileDao.getFileById(contact.getPhoto());
+                        Address address = addressDao.getAddressByContactId(contact.getContactId());
+                        MainPageContactDTO mainPageContactDTO = new MainPageContactDTO(contact, address, photo);
+                        mainPageContactDTOs.add(mainPageContactDTO);
+                    }
+                }
+            }
             transaction.commitTransaction();
         } catch (DaoException e) {
             logger.error("Error fetching search result contacts: {}", e.getCause().getMessage());
             transaction.rollbackTransaction();
             throw new DataException(e.getMessage());
         }
-        return contacts;
+        return mainPageContactDTOs;
     }
 
     @Override
@@ -405,7 +434,7 @@ public class TransactionalDataService implements AbstractDataService {
             }
             transaction.commitTransaction();
         } catch (DaoException e) {
-            logger.error("Error fetching main page contact DTOs: {}", e.getCause().getMessage());
+            logger.error("Error fetching formatter page contact DTOs: {}", e.getCause().getMessage());
             transaction.rollbackTransaction();
             throw new DataException(e.getMessage());
         }
