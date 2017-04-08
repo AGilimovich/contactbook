@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Created by Aleksandr on 27.03.2017.
+ * Service for extracting templates from files.
  */
 public interface AbstractTemplateProvidingService {
 

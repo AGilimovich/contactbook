@@ -11,16 +11,13 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**
- * Created by Aleksandr on 25.03.2017.
+ * Implementation of file DAO using jdbc.
  */
 public class JdbcFileDao implements IFileDao {
     private Transaction transaction;
     private Logger logger = LoggerFactory.getLogger(JdbcFileDao.class);
 
-
     private final String SELECT_BY_ID_QUERY = "SELECT * FROM file WHERE file_id = ?";
-
-    private final String SELECT_BY_NAME_QUERY = "SELECT * FROM file WHERE name = ?";
 
     private final String INSERT_FILE_QUERY = "INSERT INTO file(name,stored_name) VALUES (?, ?)";
 
@@ -61,34 +58,6 @@ public class JdbcFileDao implements IFileDao {
         return file;
     }
 
-    @Override
-    public ArrayList<File> getFilesByName(String name) throws DaoException {
-        logger.info("Fetch files by name: {}", name);
-        if (name == null) throw new DaoException("Name is null");
-        Connection cn = null;
-        PreparedStatement st = null;
-        ResultSet rs = null;
-        ArrayList<File> files = new ArrayList<>();
-        try {
-            cn = transaction.getConnection();
-            st = cn.prepareStatement(SELECT_BY_NAME_QUERY);
-            st.setString(1, name);
-            rs = st.executeQuery();
-            while (rs.next()) {
-                long id = rs.getLong("file_id");
-                String fileName = rs.getString("name");
-                String storedName = rs.getString("stored_name");
-                File file = new File(id, fileName, storedName);
-                files.add(file);
-            }
-        } catch (SQLException e) {
-            throw new DaoException("Exception during file retrieval from the database", e);
-        } finally {
-            DBResourceManager.closeResources(null, st, rs);
-        }
-
-        return files;
-    }
 
     @Override
     public void update(File file) throws DaoException {

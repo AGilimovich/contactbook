@@ -4,7 +4,7 @@ import com.itechart.data.entity.Attachment;
 import com.itechart.data.entity.File;
 
 /**
- * Created by Aleksandr on 25.03.2017.
+ * Data transfer object which includes attachments and file objects.
  */
 public class FullAttachmentDTO {
     private Attachment attachment;

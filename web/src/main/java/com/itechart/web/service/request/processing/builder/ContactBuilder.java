@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * Builds contact using values from map of parameters.
+ * Builder of contact object from request parameters.
  */
 public class ContactBuilder {
     private Logger logger = LoggerFactory.getLogger(ContactBuilder.class);

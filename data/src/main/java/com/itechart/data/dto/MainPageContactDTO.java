@@ -7,7 +7,7 @@ import com.itechart.data.entity.File;
 import java.util.Date;
 
 /**
- * Created by Aleksandr on 14.03.2017.
+ * Data transfer object which includes some fields of contact and address objects.
  */
 public class MainPageContactDTO {
     private long contactId;

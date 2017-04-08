@@ -5,8 +5,7 @@ import com.itechart.data.entity.*;
 import java.util.ArrayList;
 
 /**
- * Contact DTO with all relevant fields including address, phones (new, updated and deleted),
- * attachments (new, updated and deleted).
+ * Data transfer object which includes contact object and all objects related to contact.
  */
 public class FullContactDTO {
 
@@ -20,10 +19,7 @@ public class FullContactDTO {
     private ArrayList<Phone> deletedPhones;
     private ArrayList<FullAttachmentDTO> deletedAttachments;
 
-    public FullContactDTO() {
-    }
-
-    public FullContactDTO(Contact contact, Address address, File photo) {
+      public FullContactDTO(Contact contact, Address address, File photo) {
         this.contact = contact;
         this.address = address;
         this.photo = photo;

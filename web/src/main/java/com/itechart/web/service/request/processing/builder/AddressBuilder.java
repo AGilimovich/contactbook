@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 /**
- * Class for building Address object from request parameters.
+ * Builder of address object from request parameters.
  */
 public class AddressBuilder {
     private Logger logger = LoggerFactory.getLogger(AddressBuilder.class);

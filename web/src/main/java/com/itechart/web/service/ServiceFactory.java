@@ -5,7 +5,7 @@ import com.itechart.web.properties.PropertiesManager;
 import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.data.TransactionalDataService;
 import com.itechart.web.service.email.AbstractEmailingService;
-import com.itechart.web.service.email.EmailingService;
+import com.itechart.web.service.email.EmailService;
 import com.itechart.web.service.files.AbstractFileService;
 import com.itechart.web.service.files.FileService;
 import com.itechart.web.service.request.processing.AbstractRequestProcessingService;
@@ -26,13 +26,13 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 /**
+ * Factory of services.
  * Singleton class.
  */
 public class ServiceFactory {
 
     private Logger logger = LoggerFactory.getLogger(ServiceFactory.class);
     private static ServiceFactory instance;
-
     private String hostName;
     private int SMTPPort;
     private String userName;
@@ -88,7 +88,7 @@ public class ServiceFactory {
     }
 
     public AbstractEmailingService getEmailService() {
-        return new EmailingService(hostName, SMTPPort, userName, password, emailFrom);
+        return new EmailService(hostName, SMTPPort, userName, password, emailFrom);
     }
 
     public AbstractTemplateProvidingService getEmailTemplateProvidingService() {

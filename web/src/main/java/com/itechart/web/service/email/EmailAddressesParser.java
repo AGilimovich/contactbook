@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Class for parsing list of emails from string.
+ * Class for parsing list of email addresses from string.
  */
 public class EmailAddressesParser {
     private final String emailRegex = "([^,]+),?\\s*";

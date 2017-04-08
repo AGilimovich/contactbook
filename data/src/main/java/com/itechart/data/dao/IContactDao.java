@@ -18,11 +18,7 @@ public interface IContactDao {
 
     void update(Contact contact) throws DaoException;
 
-    ArrayList<Contact> getAll() throws DaoException;
-
     Contact getContactById(long id) throws DaoException;
-
- //   ArrayList<Contact> findContactsByFields(SearchDTO dto) throws DaoException;
 
     ArrayList<Contact> findContactsByFieldsLimit(SearchDTO dto, int from, int count) throws DaoException;
 

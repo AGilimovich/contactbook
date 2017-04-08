@@ -1,7 +1,7 @@
 package com.itechart.web.command;
 
 import com.itechart.data.entity.Contact;
-import com.itechart.web.command.dispatcher.ErrorDispatcher;
+import com.itechart.web.command.errors.ErrorDispatcher;
 import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.exception.DataException;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Command for invoking emailing view.
+ * Command executed on request to show send emails view.
  */
 public class ShowEmailView implements Command {
     private Logger logger = LoggerFactory.getLogger(ShowEmailView.class);

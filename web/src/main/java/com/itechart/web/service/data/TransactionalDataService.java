@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Data service layer using transactions.
+ * Implementation of service for manipulation data which uses transactions.
  */
 public class TransactionalDataService implements AbstractDataService {
     private static final Logger logger = LoggerFactory.getLogger(TransactionalDataService.class);
@@ -299,7 +299,6 @@ public class TransactionalDataService implements AbstractDataService {
     }
 
 
-
     @Override
     public ArrayList<MainPageContactDTO> getSearchResultContactsDTOForPage(SearchDTO dto, int page, int count) throws DataException {
         logger.info("Fetch search result contacts: {} for page: {}, count: {}", dto, page, count);
@@ -361,40 +360,6 @@ public class TransactionalDataService implements AbstractDataService {
             throw new DataException(e.getMessage());
         }
         return contact;
-    }
-
-    @Override
-    public Address getAddressByContactId(long contactId) throws DataException {
-        logger.info("Fetch address for contact with id: {}", contactId);
-        Transaction transaction = tm.getTransaction();
-        IAddressDao addressDao = new JdbcAddressDao(transaction);
-        Address address = null;
-        try {
-            address = addressDao.getAddressByContactId(contactId);
-            transaction.commitTransaction();
-        } catch (DaoException e) {
-            logger.error("Error fetching address by contact id: {}", e.getCause().getMessage());
-            transaction.rollbackTransaction();
-            throw new DataException(e.getMessage());
-        }
-        return address;
-    }
-
-    @Override
-    public File getPhotoById(long photoId) throws DataException {
-        logger.info("Fetch photo with id: {}", photoId);
-        Transaction transaction = tm.getTransaction();
-        IFileDao fileDao = new JdbcFileDao(transaction);
-        File photo = null;
-        try {
-            photo = fileDao.getFileById(photoId);
-            transaction.commitTransaction();
-        } catch (DaoException e) {
-            logger.error("Error fetching photo file: {}", e.getCause().getMessage());
-            transaction.rollbackTransaction();
-            throw new DataException(e.getMessage());
-        }
-        return photo;
     }
 
     @Override

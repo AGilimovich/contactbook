@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * Created by Aleksandr on 25.03.2017.
+ * Implementation of service class for executing operations with files in file system. .
  */
 public class FileService implements AbstractFileService {
     private String FILE_PATH;
@@ -40,7 +40,6 @@ public class FileService implements AbstractFileService {
                 logger.error("Error during deleting file: {}", e.getMessage());
             }
         }
-
     }
 
     @Override

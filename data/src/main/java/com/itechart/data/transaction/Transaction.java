@@ -8,7 +8,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * Transaction.
+ * Transaction object which includes connection to database.
+ * Posses methods for committing and rolling back transactions.
  */
 public class Transaction {
     private Connection connection;

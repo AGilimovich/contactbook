@@ -18,18 +18,14 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Class for persisting and modifying data in the database.
+ * Implementation of contact DAO using jdbc.
  */
 public class JdbcContactDao implements IContactDao {
     private Logger logger = LoggerFactory.getLogger(JdbcContactDao.class);
 
     private Transaction transaction;
 
-    private final String SELECT_ALL_CONTACTS_QUERY = "SELECT c.*, g.gender_value, f_s.family_status_value " +
-            " FROM contact AS c INNER JOIN gender AS g ON c.gender = g.gender_id" +
-            " INNER JOIN family_status AS f_s ON c.family_status = f_s.family_status_id";
-
-    private final String SELECT_BY_ID_QUERY = "SELECT c.*, g.gender_value, f_s.family_status_value" +
+        private final String SELECT_BY_ID_QUERY = "SELECT c.*, g.gender_value, f_s.family_status_value" +
             " FROM contact AS c" +
             " INNER JOIN gender AS g ON c.gender = g.gender_id" +
             " INNER JOIN family_status AS f_s ON c.family_status = f_s.family_status_id" +
@@ -42,21 +38,6 @@ public class JdbcContactDao implements IContactDao {
 
     private final String DELETE_CONTACT_QUERY = "DELETE FROM contact WHERE contact_id = ?";
 
-    //todo delete
-//    private final String SELECT_All_BY_FIELDS_QUERY = "SELECT c.*, gender.gender_value, family_status.family_status_value, a.* FROM contact AS c " +
-//            "INNER JOIN address AS a ON c.contact_id = a.contact_id " +
-//            "INNER JOIN family_status ON c.family_status = family_status.family_status_id " +
-//            "INNER JOIN gender ON c.gender = gender.gender_id " +
-//            "WHERE (c.surname LIKE ?) AND (c.name LIKE ?) AND (c.patronymic LIKE ?) AND ((c.date_of_birth BETWEEN ? AND ?) OR (COALESCE(c.date_of_birth,'NULL') LIKE ?)) AND (gender.gender_value LIKE ?) AND (family_status.family_status_value LIKE ?) " +
-//            "AND (c.citizenship LIKE ?) AND (a.country LIKE ?) AND (a.city LIKE ?) AND (a.street LIKE ?) AND (a.house LIKE ?) AND (a.apartment LIKE ?) AND (a.zip_code LIKE ?)";
-//
-//    private final String SELECT_BY_FIELDS_LIMIT_QUERY = "SELECT c.*, gender.gender_value, family_status.family_status_value, a.* FROM contact AS c " +
-//            "INNER JOIN address AS a ON c.contact_id = a.contact_id " +
-//            "INNER JOIN family_status ON c.family_status = family_status.family_status_id " +
-//            "INNER JOIN gender ON c.gender = gender.gender_id " +
-//            "WHERE (c.surname LIKE ?) AND (c.name LIKE ?) AND (c.patronymic LIKE ?) AND ((c.date_of_birth BETWEEN ? AND ?) OR (COALESCE(c.date_of_birth,'NULL') LIKE ?)) AND (gender.gender_value LIKE ?) AND (family_status.family_status_value LIKE ?) " +
-//            "AND (c.citizenship LIKE ?) AND (a.country LIKE ?) AND (a.city LIKE ?) AND (a.street LIKE ?) AND (a.house LIKE ?) AND (a.apartment LIKE ?) AND (a.zip_code LIKE ?)" +
-//            "LIMIT ?,?";
 
     private final String SELECT_CONTACTS_BY_BIRTHDATE = "SELECT name, email FROM contact WHERE DAY(date_of_birth) = ? AND MONTH (date_of_birth) = ?";
 
@@ -66,14 +47,6 @@ public class JdbcContactDao implements IContactDao {
             " LIMIT ?,?";
 
     private final String SELECT_CONTACTS_COUNT_QUERY = "SELECT count(*) FROM contact";
-
-//    private final String SELECT_COUNT_BY_FIELDS_QUERY = "SELECT count(*) " +
-//            "FROM contact AS c " +
-//            "INNER JOIN address AS a ON c.contact_id = a.contact_id " +
-//            "INNER JOIN family_status ON c.family_status = family_status.family_status_id " +
-//            "INNER JOIN gender ON c.gender = gender.gender_id " +
-//            "WHERE (c.surname LIKE ?) AND (c.name LIKE ?) AND (c.patronymic LIKE ?) AND ((c.date_of_birth BETWEEN ? AND ?) OR (COALESCE(c.date_of_birth,'NULL') LIKE ?)) AND (gender.gender_value LIKE ?) AND (family_status.family_status_value LIKE ?) " +
-//            "AND (c.citizenship LIKE ?) AND (a.country LIKE ?) AND (a.city LIKE ?) AND (a.street LIKE ?) AND (a.house LIKE ?) AND (a.apartment LIKE ?) AND (a.zip_code LIKE ?)";
 
 
     private final String SELECT_BY_FIELDS_BASE_QUERY = "SELECT c.*, gender.gender_value, family_status.family_status_value, a.* FROM contact AS c " +
@@ -197,62 +170,6 @@ public class JdbcContactDao implements IContactDao {
         }
     }
 
-    @Override
-    public ArrayList<Contact> getAll() throws DaoException {
-        logger.info("Fetch all contacts");
-        ArrayList<Contact> contacts = new ArrayList<>();
-        Connection cn = null;
-        Statement st = null;
-        ResultSet rs = null;
-        try {
-            cn = transaction.getConnection();
-            st = cn.createStatement();
-            rs = st.executeQuery(SELECT_ALL_CONTACTS_QUERY);
-            while (rs.next()) {
-
-                //contact info
-                long contactId = rs.getLong("contact_id");
-                String name = rs.getString("name");
-                String surname = rs.getString("surname");
-                String patronymic = rs.getString("patronymic");
-                Date dateOfBirth = rs.getDate("date_of_birth");
-                Contact.Gender gender = null;
-                try {
-                    gender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
-                } catch (Exception e) {
-                    throw new DaoException("Illegal gender value", e);
-                }
-                String citizenship = rs.getString("citizenship");
-                Contact.FamilyStatus familyStatus = null;
-                try {
-                    familyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
-                } catch (Exception e) {
-                    throw new DaoException("Illegal family status value", e);
-                }
-                String website = rs.getString("website");
-                String email = rs.getString("email");
-                String placeOfWork = rs.getString("place_of_work");
-                long photo = rs.getLong("photo");
-                Contact contact = new Contact(contactId, name, surname);
-                contact.setPatronymic(patronymic);
-                contact.setDateOfBirth(dateOfBirth);
-                contact.setGender(gender);
-                contact.setCitizenship(citizenship);
-                contact.setFamilyStatus(familyStatus);
-                contact.setWebsite(website);
-                contact.setEmail(email);
-                contact.setPlaceOfWork(placeOfWork);
-                contact.setPhoto(photo);
-                contacts.add(contact);
-            }
-        } catch (SQLException e) {
-            throw new DaoException("Exception during contacts retrieval from the database", e);
-        } finally {
-            DBResourceManager.closeResources(null, st, rs);
-
-        }
-        return contacts;
-    }
 
     @Override
     public Contact getContactById(long id) throws DaoException {
@@ -591,7 +508,6 @@ public class JdbcContactDao implements IContactDao {
             if (dto.getFromDate() != null) {
                 parameters.add(new java.sql.Date(dto.getFromDate().getTime()));
             } else {
-                // TODO: 05.04.2017  
                 DateTime date = formatter.parseDateTime("1000-01-01");
                 parameters.add(new java.sql.Date(date.toDate().getTime()));
             }

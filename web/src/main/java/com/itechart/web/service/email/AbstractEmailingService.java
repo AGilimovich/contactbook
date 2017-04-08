@@ -3,7 +3,7 @@ package com.itechart.web.service.email;
 import org.apache.commons.mail.EmailException;
 
 /**
- * Created by Aleksandr on 27.03.2017.
+ * Interface of service for sending emails.
  */
 public interface AbstractEmailingService {
 

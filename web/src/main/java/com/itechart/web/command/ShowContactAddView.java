@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Created by Aleksandr on 14.03.2017.
+ * Command executed on request to show contact creating view.
  */
 public class ShowContactAddView implements Command {
 

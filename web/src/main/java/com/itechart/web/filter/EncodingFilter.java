@@ -5,7 +5,7 @@ import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 
 /**
- * Created by Aleksandr on 24.03.2017.
+ * Servlet filter implementation. Sets all requests and responses encoding to UTF-8.
  */
 
 

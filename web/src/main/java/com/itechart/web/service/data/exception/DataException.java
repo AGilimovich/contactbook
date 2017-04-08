@@ -1,7 +1,7 @@
 package com.itechart.web.service.data.exception;
 
 /**
- * Created by Aleksandr on 03.04.2017.
+ * Exception thrown if error on data service layer occur.
  */
 public class DataException extends Exception {
     public DataException() {

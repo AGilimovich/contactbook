@@ -1,7 +1,7 @@
 package com.itechart.web.command;
 
 import com.itechart.data.dto.SearchDTO;
-import com.itechart.web.command.dispatcher.ErrorDispatcher;
+import com.itechart.web.command.errors.ErrorDispatcher;
 import com.itechart.web.command.view.formatter.DisplayingContactsListFormatter;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.exception.DataException;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
 /**
- * Created by Aleksandr on 18.03.2017.
+ * Command executed on request to send email.
  */
 public class DoSendEmail implements Command {
     private static Logger logger = LoggerFactory.getLogger(DoSendEmail.class);

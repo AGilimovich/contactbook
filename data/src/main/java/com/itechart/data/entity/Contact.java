@@ -3,7 +3,7 @@ package com.itechart.data.entity;
 import java.util.Date;
 
 /**
- * Represents Contact entity.
+ * Contact entity.
  */
 public class Contact {
     private long contactId;

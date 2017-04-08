@@ -13,14 +13,12 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by Aleksandr on 13.03.2017.
+ * Implementation of attachment DAO using jdbc.
  */
 public class JdbcAttachmentDao implements IAttachmentDao {
     private Logger logger = LoggerFactory.getLogger(JdbcAttachmentDao.class);
 
     private final String SELECT_ATTACHMENTS_FOR_CONTACT_QUERY = "SELECT attach_id, attach_name, upload_date, comment, file, contact_id FROM attachment WHERE contact_id = ?";
-    private final String SELECT_ATTACHMENTS_BY_ID_QUERY = "SELECT attach_id, attach_name, upload_date, comment, file, contact_id FROM attachment WHERE attach_id = ?";
-    private final String DELETE_FOR_USER_QUERY = "DELETE FROM attachment WHERE contact_id = ?";
     private final String INSERT_ATTACHMENT_QUERY = "INSERT INTO attachment(attach_name,upload_date,comment,file,contact_id) VALUES (?,?,?,?,?)";
     private final String UPDATE_ATTACHMENT_QUERY = "UPDATE attachment SET attach_name=?,comment=? WHERE attach_id=?";
     private final String DELETE_ATTACHMENT_QUERY = "DELETE FROM attachment WHERE attach_id = ?";
@@ -34,7 +32,6 @@ public class JdbcAttachmentDao implements IAttachmentDao {
     @Override
     public ArrayList<Attachment> getAllForContact(long id) throws DaoException {
         logger.info("Fetch attachments for contact with id: {}", id);
-
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -65,34 +62,6 @@ public class JdbcAttachmentDao implements IAttachmentDao {
 
     }
 
-    @Override
-    public Attachment getAttachmentById(long id) throws DaoException {
-        logger.info("Fetch attachment with id: {}", id);
-        Connection cn = null;
-        PreparedStatement st = null;
-        ResultSet rs = null;
-        Attachment attachment = null;
-        try {
-            cn = transaction.getConnection();
-            st = cn.prepareStatement(SELECT_ATTACHMENTS_BY_ID_QUERY);
-            st.setLong(1, id);
-            rs = st.executeQuery();
-            Date uploadDate = new Date(rs.getTimestamp("upload_date").getTime());
-            String attach_name = rs.getString("attach_name");
-            long attach_id = rs.getLong("attach_id");
-            String comment = rs.getString("comment");
-            Long file = rs.getLong("file");
-            long contact = rs.getLong("contact_id");
-            attachment = new Attachment(attach_id, attach_name, uploadDate, comment, file, contact);
-
-        } catch (SQLException e) {
-            throw new DaoException("Exception during attachment retrieval from the database", e);
-        } finally {
-            DBResourceManager.closeResources(null, st, rs);
-        }
-        return attachment;
-
-    }
 
     @Override
     public long save(Attachment attachment) throws DaoException {
@@ -165,22 +134,7 @@ public class JdbcAttachmentDao implements IAttachmentDao {
         }
     }
 
-    @Override
-    public void deleteForUser(long contactId) throws DaoException {
-        logger.info("Delete attachments for contact with id: {}", contactId);
-        Connection cn = null;
-        PreparedStatement st = null;
-        try {
-            cn = transaction.getConnection();
-            st = cn.prepareStatement(DELETE_FOR_USER_QUERY);
-            st.setLong(1, contactId);
-            st.executeUpdate();
-        } catch (SQLException e) {
-            throw new DaoException("Exception during deleting attachments from the database", e);
-        } finally {
-            DBResourceManager.closeResources(null, st, null);
-        }
-    }
+
 }
 
 

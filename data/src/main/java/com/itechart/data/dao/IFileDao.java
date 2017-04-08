@@ -11,8 +11,6 @@ import java.util.ArrayList;
 public interface IFileDao {
     File getFileById(long id) throws DaoException;
 
-    ArrayList<File> getFilesByName(String name) throws DaoException;
-
     void update(File file) throws DaoException;
 
     long save(File file) throws DaoException;

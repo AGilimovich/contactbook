@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by Aleksandr on 24.03.2017.
+ * Class for parsing phone's field values from request parameter.
  */
 public class PhoneFormFieldParser {
     private final String formFieldRegex = "(\\w+)=(\\+*[\\w[А-ЯЁ][-А-яЁё]]*)&?";

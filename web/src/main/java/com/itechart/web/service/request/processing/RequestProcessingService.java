@@ -20,11 +20,18 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
- * Service layer. Process different requests.
+ * Implementation of service class for processing requests.
  */
 public class RequestProcessingService implements AbstractRequestProcessingService {
     private Logger logger = LoggerFactory.getLogger(RequestProcessingService.class);
 
+    /**
+     * Processes multipart requests to create or update contact.
+     * @param request received from client.
+     * @return constructed from request contact DTO.
+     * @throws FileSizeException when size of one of files in request exceeds maximum permitted value
+     * @throws ValidationException when one of fields has invalid value.
+     */
     @Override
     public FullContactDTO processMultipartContactRequest(HttpServletRequest request) throws FileSizeException, ValidationException {
         logger.info("Processing multipart request");
@@ -35,7 +42,6 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         Map<String, String> formFields = handler.getFormFields();
         //get map of field names and corresponding file parts
         Map<String, FileItem> fileParts = handler.getFileParts();
-
 
         FullContactDTOBuilder builder = new FullContactDTOBuilder();
         try {
@@ -48,6 +54,12 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         return builder.getFullContact();
     }
 
+    /**
+     * Processes requests to delete contacts.
+     * @param request received from client.
+     * @return list of contacts id's deleting of which was requested.
+     * @throws ValidationException when one of received in request id's has illegal value.
+     */
     @Override
     public ArrayList<Long> processDeleteContactRequest(HttpServletRequest request) throws ValidationException {
         String[] idArrayParam = request.getParameterValues("isSelected");
@@ -72,6 +84,12 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         return selectedIdList;
     }
 
+    /**
+     * Processes requests to fetch one contact.
+     * @param request received from client.
+     * @return id of requested contact.
+     * @throws ValidationException when received in request id has illegal value.
+     */
     @Override
     public long processFetchSingleContactRequest(HttpServletRequest request) throws ValidationException {
         String idParam = request.getParameter("id");
@@ -89,7 +107,12 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         throw new ValidationException("Illegal id");
     }
 
-
+    /**
+     * Processes requests to search contacts and fetch found ones.
+     * @param request received from client.
+     * @return contact DTO corresponding to the search parameters.
+     * @throws ValidationException when one of fields in request has illegal value.
+     */
     @Override
     public SearchDTO processSearchContactsRequest(HttpServletRequest request) throws ValidationException {
         logger.info("Processing request: search for contacts");
@@ -112,6 +135,12 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         return dto;
     }
 
+    /**
+     * Processes requests to send emails.
+     * @param request received from client.
+     * @return list of email objects to be sent.
+     * @throws ValidationException when list of emails is empty.
+     */
     @Override
     public ArrayList<Email> processSendEmailRequest(HttpServletRequest request) throws ValidationException {
         AbstractValidationService validationService = ServiceFactory.getInstance().getValidationService();
@@ -136,6 +165,12 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
 
     }
 
+    /**
+     * Processes request to show email sending view.
+     * @param request received from client.
+     * @return list of contacts id's to whom emails are sent.
+     * @throws ValidationException if one of received contact's id's has illegal value.
+     */
     @Override
     public ArrayList<Long> processShowEmailViewRequest(HttpServletRequest request) throws ValidationException {
         AbstractValidationService validationService = ServiceFactory.getInstance().getValidationService();
@@ -160,6 +195,12 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         return selectedIdList;
     }
 
+    /**
+     * Process requests to change the count of displauing on main page contacts.
+     * @param request received from client.
+     * @return count of contacts to display.
+     * @throws ValidationException if received count has illegal value.
+     */
     @Override
     public int processChangeContactsCountRequest(HttpServletRequest request) throws ValidationException {
         String contactsCountParam = request.getParameter("contactsOnPage");

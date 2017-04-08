@@ -1,9 +1,7 @@
 package com.itechart.web.service.email;
 
-import java.util.ArrayList;
-
 /**
- * Created by Aleksandr on 24.03.2017.
+ * Base class of email to be sent.
  */
 public class Email {
     private String emailAddress;

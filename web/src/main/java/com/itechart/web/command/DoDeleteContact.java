@@ -1,7 +1,7 @@
 package com.itechart.web.command;
 
 import com.itechart.data.dto.SearchDTO;
-import com.itechart.web.command.dispatcher.ErrorDispatcher;
+import com.itechart.web.command.errors.ErrorDispatcher;
 import com.itechart.web.command.view.formatter.DisplayingContactsListFormatter;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.AbstractDataService;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
 /**
- * Command for deleting selected contacts.
+ * Command executed on request to delete contacts.
  */
 public class DoDeleteContact implements Command {
     private static Logger logger = LoggerFactory.getLogger(DoDeleteContact.class);

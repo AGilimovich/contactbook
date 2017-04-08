@@ -1,16 +1,17 @@
 package com.itechart.web.service.template;
 
-import com.itechart.web.service.request.processing.RequestProcessingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Created by Aleksandr on 24.03.2017.
+ * Implementation of service for extracting templates from file.
  */
 public class TemplatesProvidingService implements AbstractTemplateProvidingService {
     private Logger logger = LoggerFactory.getLogger(TemplatesProvidingService.class);

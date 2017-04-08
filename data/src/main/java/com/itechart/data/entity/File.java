@@ -3,7 +3,7 @@ package com.itechart.data.entity;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Created by Aleksandr on 25.03.2017.
+ * File entity.
  */
 public class File {
     private long id;

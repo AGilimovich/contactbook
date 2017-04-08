@@ -3,7 +3,7 @@ package com.itechart.web.service.template;
 import org.stringtemplate.v4.ST;
 
 /**
- * Created by Aleksandr on 25.03.2017.
+ * Template for common email.
  */
 public class CommonEmailTemplate implements Template {
     private ST template;

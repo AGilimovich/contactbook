@@ -21,7 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Class for building DTO object.
+ * Builder of contact DTO including objects it consists from request parameters.
  */
 public class FullContactDTOBuilder {
     private Logger logger = LoggerFactory.getLogger(FullContactDTOBuilder.class);

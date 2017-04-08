@@ -12,14 +12,10 @@ public interface IPhoneDao {
 
     ArrayList<Phone> getAllForContact(long id) throws DaoException;
 
-    Phone getPhoneById(long id) throws DaoException;
-
     long save(Phone phone) throws DaoException;
 
     void delete(long id) throws DaoException;
 
     void update(Phone phone) throws DaoException;
-
-    void deleteForContact(long contactId) throws DaoException;
 
 }

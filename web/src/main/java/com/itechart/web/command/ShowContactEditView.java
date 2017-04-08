@@ -1,7 +1,7 @@
 package com.itechart.web.command;
 
 import com.itechart.data.dto.FullContactDTO;
-import com.itechart.web.command.dispatcher.ErrorDispatcher;
+import com.itechart.web.command.errors.ErrorDispatcher;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.exception.DataException;
 import com.itechart.web.service.validation.ValidationException;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Command for creating new contact.
+ * Command executed on request to show contact editing view.
  */
 public class ShowContactEditView implements Command {
 

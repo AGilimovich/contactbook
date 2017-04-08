@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 /**
- * Parses phone objects from request parameters.
+ * Builder of phone object from request parameters.
  */
 public class PhoneBuilder {
     private Logger logger = LoggerFactory.getLogger(PhoneBuilder.class);

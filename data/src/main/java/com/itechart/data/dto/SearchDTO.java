@@ -5,7 +5,7 @@ import com.itechart.data.entity.Contact;
 import java.util.Date;
 
 /**
- * DTO object containing fields by which search executed.
+ * Data transfer object which includes fields by which search executed.
  */
 public class SearchDTO {
     private String name;

@@ -1,7 +1,7 @@
 package com.itechart.web.service.validation;
 
 /**
- * Created by Aleksandr on 01.04.2017.
+ * Exception thrown when validation failed.
  */
 public class ValidationException extends Exception{
     public ValidationException() {

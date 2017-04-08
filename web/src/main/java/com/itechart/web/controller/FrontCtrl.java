@@ -2,7 +2,7 @@ package com.itechart.web.controller;
 
 import com.itechart.web.command.Command;
 import com.itechart.web.command.CommandFactory;
-import com.itechart.web.command.dispatcher.ErrorDispatcher;
+import com.itechart.web.command.errors.ErrorDispatcher;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * This is controller of all requests on the formatter form.
+ * Front controller which handles all requests to the application.
  */
 public class FrontCtrl extends HttpServlet {
 

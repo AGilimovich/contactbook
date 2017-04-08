@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 /**
- * Created by Aleksandr on 25.03.2017.
+ * Builder of attachment's file object from request parameters.
  */
 
 public class AttachFileBuilder {

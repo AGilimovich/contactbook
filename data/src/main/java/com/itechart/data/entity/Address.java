@@ -1,7 +1,7 @@
 package com.itechart.data.entity;
 
 /**
- * Represents living address of contact.
+ * Living address of contact.
  */
 public class Address {
     private long id;

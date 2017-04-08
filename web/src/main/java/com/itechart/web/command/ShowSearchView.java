@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Invokes contact searching view.
+ * Command executed on request to show contacts search view.
  */
 public class ShowSearchView implements Command {
     private Logger logger = LoggerFactory.getLogger(ShowEmailView.class);
@@ -17,7 +17,6 @@ public class ShowSearchView implements Command {
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         logger.info("Execute command");
-//        request.getSession().removeAttribute("searchDTO");
         return "/jsp/search.jsp";
     }
 }

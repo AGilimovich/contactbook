@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Stores on disk file parts.
+ * Class for witing parts of multipart requests to disk.
  */
 public class FilePartWriter {
     private final String basePath;
@@ -23,29 +23,7 @@ public class FilePartWriter {
         this.basePath = basePath;
     }
 
-
-    public Map<String, String> writeFileParts(Map<String, FileItem> fileParts) {
-        logger.info("Writing file parts");
-        if (fileParts == null) return null;
-        Map<String, String> storedFiles = new HashMap<>();
-        for (Map.Entry<String, FileItem> part : fileParts.entrySet()) {
-            //if there is file, then save it
-            if (part.getValue() != null) {
-                if (StringUtils.isNotEmpty(part.getValue().getName())) {
-                    //stored name = name on disk
-                    if (part.getKey() != null) {
-                        storedFiles.put(StringUtils.join(new Object[]{part.getKey(), "_stored"}), writeFilePart(part.getValue()));
-                        //real file name
-                        storedFiles.put(StringUtils.join(new Object[]{part.getKey(), "_real"}), part.getValue().getName());
-                    }
-                }
-            }
-        }
-        return storedFiles;
-    }
-
-
-    public String writeFilePart(FileItem item) {
+       public String writeFilePart(FileItem item) {
         try {
             String storedFileName = UUID.randomUUID().toString();
             //create folder with name first character of generated UUID

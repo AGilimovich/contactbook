@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by Aleksandr on 28.03.2017.
+ * Command executed on image request.
  */
 public class DoSendImage implements Command {
     private static Logger logger = LoggerFactory.getLogger(DoSearch.class);

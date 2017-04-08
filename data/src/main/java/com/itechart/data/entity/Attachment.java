@@ -3,7 +3,7 @@ package com.itechart.data.entity;
 import java.util.Date;
 
 /**
- * Represents attachments added by contact.
+ * Attachment added by contact.
  */
 public class Attachment {
     private long id;

@@ -11,7 +11,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**
- * Created by Aleksandr on 13.03.2017.
+ * Implementation of phone DAO using jdbc.
  */
 public class JdbcPhoneDao implements IPhoneDao {
     private Logger logger = LoggerFactory.getLogger(JdbcFileDao.class);
@@ -20,8 +20,6 @@ public class JdbcPhoneDao implements IPhoneDao {
             " FROM phone AS p LEFT OUTER JOIN phone_type ON p.phone_type = phone_type.phone_type_id" +
             " WHERE p.contact_id = ?;";
 
-    private final String SELECT_PHONE_FOR_ID_QUERY = "SELECT * FROM phone WHERE contact_id = ?";
-
     private final String INSERT_PHONE_QUERY = "INSERT INTO phone(country_code, operator_code,phone_number, phone_type, comment, contact_id)" +
             " SELECT ?, ?, ?,  p_t.phone_type_id, ?, ? FROM  phone_type AS p_t WHERE p_t.phone_type_value = ?";
 
@@ -29,7 +27,6 @@ public class JdbcPhoneDao implements IPhoneDao {
             "  SET country_code=?, operator_code=?,phone_number=?,phone_type = p_t.phone_type_id, comment=? WHERE phone_id = ?";
 
     private final String DELETE_PHONE_QUERY = "DELETE FROM phone WHERE phone_id = ?";
-    private final String DELETE_FOR_CONTACT_QUERY = "DELETE FROM phone WHERE contact_id = ?";
 
     public JdbcPhoneDao(Transaction transaction) {
         this.transaction = transaction;
@@ -76,42 +73,7 @@ public class JdbcPhoneDao implements IPhoneDao {
         return phones;
     }
 
-    @Override
-    public Phone getPhoneById(long id) throws DaoException {
-        logger.info("Fetch phone with id: {}", id);
-        Connection cn = null;
-        PreparedStatement st = null;
-        ResultSet rs = null;
-        Phone phone = null;
-        try {
-            cn = transaction.getConnection();
-            st = cn.prepareStatement(SELECT_PHONE_FOR_ID_QUERY);
-            st.setLong(1, id);
-            rs = st.executeQuery();
-            if (rs.next()) {
-                long phone_id = rs.getLong("phone_id");
-                String countryCode = rs.getString("country_code");
-                String operatorCode = rs.getString("operator_code");
-                String phoneNumber = rs.getString("phone_number");
-                Phone.PhoneType phoneType = null;
-                try {
-                    phoneType = Phone.PhoneType.valueOf(rs.getString("phone_type_value").toUpperCase());
-                } catch (Exception e) {
-                    throw new DaoException("Illegal phone type value", e);
-                }
-                String phone_comment = rs.getString("comment");
-                long contact = rs.getLong("contact_id");
-                phone = new Phone(phone_id, countryCode, operatorCode, phoneNumber, phoneType, phone_comment, contact);
-            }
 
-        } catch (SQLException e) {
-            throw new DaoException("Exception during phone retrieval from the database", e);
-        } finally {
-            DBResourceManager.closeResources(null, st, rs);
-        }
-
-        return phone;
-    }
 
 
     @Override
@@ -134,15 +96,11 @@ public class JdbcPhoneDao implements IPhoneDao {
             rs = st.getGeneratedKeys();
             if (rs.next())
                 return rs.getLong(1);
-
-
         } catch (SQLException e) {
             throw new DaoException("Exception during saving phone in the database", e);
         } finally {
             DBResourceManager.closeResources(null, st, rs);
         }
-
-
         return 0;
     }
 
@@ -183,26 +141,8 @@ public class JdbcPhoneDao implements IPhoneDao {
         } catch (SQLException e) {
             throw new DaoException("Exception during updating phone in the database", e);
         } finally {
-
-            DBResourceManager.closeResources(null, st, null);
-        }
-
-    }
-
-    @Override
-    public void deleteForContact(long contactId) throws DaoException {
-        logger.info("Delete phones for contact with id: {}", contactId);
-        Connection cn = null;
-        PreparedStatement st = null;
-        try {
-            cn = transaction.getConnection();
-            st = cn.prepareStatement(DELETE_FOR_CONTACT_QUERY);
-            st.setLong(1, contactId);
-            st.executeUpdate();
-        } catch (SQLException e) {
-            throw new DaoException("Exception during deleting phones from the database", e);
-        } finally {
             DBResourceManager.closeResources(null, st, null);
         }
     }
+
 }

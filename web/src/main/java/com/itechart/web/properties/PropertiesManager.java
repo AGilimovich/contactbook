@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ResourceBundle;
 
 /**
- * Class for access to the properties of the application.
+ * Class for managing loading and access to the properties of the application.
  */
 public class PropertiesManager {
     Logger logger = LoggerFactory.getLogger(PropertiesManager.class);

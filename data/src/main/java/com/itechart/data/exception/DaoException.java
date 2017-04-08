@@ -1,7 +1,7 @@
 package com.itechart.data.exception;
 
 /**
- * Created by Aleksandr on 29.03.2017.
+ * Exception generated when exception was generated in DAO level methods.
  */
 public class DaoException extends Exception {
 

@@ -9,7 +9,9 @@ import com.itechart.web.service.validation.ValidationException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
-
+/**
+ * Interface of service class for processing requests.
+ */
 public interface AbstractRequestProcessingService {
 
     FullContactDTO processMultipartContactRequest(HttpServletRequest request) throws FileSizeException, ValidationException;

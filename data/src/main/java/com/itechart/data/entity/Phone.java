@@ -1,7 +1,7 @@
 package com.itechart.data.entity;
 
 /**
- * Represents phone entity.
+ * Phone entity.
  */
 public class Phone {
     private long id;

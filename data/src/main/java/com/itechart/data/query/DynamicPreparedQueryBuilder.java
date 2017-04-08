@@ -3,7 +3,7 @@ package com.itechart.data.query;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Created by Aleksandr on 03.04.2017.
+ * Class for creating dynamic query for using in prepared statements.
  */
 public class DynamicPreparedQueryBuilder {
 

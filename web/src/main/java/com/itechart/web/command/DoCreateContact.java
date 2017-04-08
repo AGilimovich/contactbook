@@ -2,7 +2,7 @@ package com.itechart.web.command;
 
 import com.itechart.data.dto.FullContactDTO;
 import com.itechart.data.dto.SearchDTO;
-import com.itechart.web.command.dispatcher.ErrorDispatcher;
+import com.itechart.web.command.errors.ErrorDispatcher;
 import com.itechart.web.command.view.formatter.DisplayingContactsListFormatter;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.AbstractDataService;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Creates new contact.
+ * Command executed on request to create contact.
  */
 
 public class DoCreateContact implements Command {

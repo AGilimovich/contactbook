@@ -3,7 +3,7 @@ package com.itechart.web.service.template;
 import org.stringtemplate.v4.ST;
 
 /**
- * Created by Aleksandr on 25.03.2017.
+ * Template for happy birthday email.
  */
 public class BirthdayEmailTemplate implements Template {
     private ST template;

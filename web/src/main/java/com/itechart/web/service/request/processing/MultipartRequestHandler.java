@@ -25,9 +25,9 @@ public class MultipartRequestHandler {
     private Logger logger = LoggerFactory.getLogger(MultipartRequestHandler.class);
 
     /**
-     * Creates maps of form fields names and their values, file items and their field names.
-     *
-     * @param request from client.
+     * Extracts from request form fields and file parts and puts them into maps.
+     * @param request received from client.
+     * @throws FileSizeException when received file size exceeds maximum permitted value.
      */
     public void handle(HttpServletRequest request) throws FileSizeException {
         logger.info("Handle multipart request");

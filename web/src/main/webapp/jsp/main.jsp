@@ -122,7 +122,7 @@
                 <div class="btn-group-vertical navbar-right btn-container">
                     <button type="submit" formaction="${pageContext.request.contextPath}/add" formmethod="get"
                             class="btn btn-default">
-                        Добавить
+                        Создать
                     </button>
 
                     <div class="tooltip-error">

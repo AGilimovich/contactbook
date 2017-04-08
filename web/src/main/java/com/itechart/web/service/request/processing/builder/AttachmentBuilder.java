@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * Created by Aleksandr on 17.03.2017.
+ * Builder of attachment object from request parameters.
  */
 public class AttachmentBuilder {
     private Logger logger = LoggerFactory.getLogger(AttachmentBuilder.class);

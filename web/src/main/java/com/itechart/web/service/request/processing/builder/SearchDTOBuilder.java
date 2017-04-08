@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 /**
- * Created by Aleksandr on 03.04.2017.
+ * Builder of contact search DTO from request parameters.
  */
 public class SearchDTOBuilder {
     private Logger logger = LoggerFactory.getLogger(SearchDTOBuilder.class);
@@ -58,8 +58,6 @@ public class SearchDTOBuilder {
             if (dateTime != null)
                 dto.setToDate(dateTime.toDate());
         }
-
-
         if (StringUtils.isNotBlank(surnameParam)) {
             dto.setSurname(surnameParam);
         }
@@ -87,12 +85,6 @@ public class SearchDTOBuilder {
                 }
             }
         }
-
-
-
-
-
-
         if (StringUtils.isNotBlank(citizenshipParam)) {
             dto.setCitizenship(citizenshipParam);
         }

@@ -2,8 +2,6 @@ package com.itechart.web.command.view.formatter;
 
 import com.itechart.data.dto.MainPageContactDTO;
 import com.itechart.data.dto.SearchDTO;
-import com.itechart.web.command.CommandFactory;
-import com.itechart.web.command.dispatcher.ErrorDispatcher;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.data.exception.DataException;
@@ -12,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
 /**
@@ -53,7 +50,6 @@ public class DisplayingContactsListFormatter {
             contactsFoundCount = dataService.getContactsCount();
             contacts = dataService.getMainPageContactDTO(pageNumber, contactsOnPage);
         }
-
 
         //calculate number of pages
         int pagesCount = 0;

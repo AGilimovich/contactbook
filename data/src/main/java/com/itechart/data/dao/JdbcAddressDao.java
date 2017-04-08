@@ -14,7 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * DAO class for address entity.
+ * Implementation of address DAO using jdbc.
  */
 public class JdbcAddressDao implements IAddressDao {
     private Logger logger = LoggerFactory.getLogger(JdbcAddressDao.class);
@@ -23,7 +23,6 @@ public class JdbcAddressDao implements IAddressDao {
 
     private final String INSERT_ADDRESS_QUERY = "INSERT INTO address(country, city, street, house, apartment, zip_code, contact_id) VALUES(?, ?, ?, ?, ?, ?, ?)";
     private final String SELECT_ADDRESS_BY_CONTACT_ID_QUERY = "SELECT * FROM address WHERE contact_id = ?";
-    private final String DELETE_ADDRESS_FOR_CONTACT_QUERY = "DELETE FROM address WHERE contact_id = ?";
     private final String UPDATE_ADDRESS_QUERY = "UPDATE address SET country = ?, city = ?, street = ?, house = ?, apartment = ?, zip_code = ? WHERE contact_id = ?";
 
 
@@ -61,22 +60,7 @@ public class JdbcAddressDao implements IAddressDao {
         return id;
     }
 
-    @Override
-    public void deleteForContact(long contactId) throws DaoException {
-        logger.info("Delete address for contact with id: {}", contactId);
-        Connection cn = null;
-        PreparedStatement st = null;
-        try {
-            cn = transaction.getConnection();
-            st = cn.prepareStatement(DELETE_ADDRESS_FOR_CONTACT_QUERY);
-            st.setLong(1, contactId);
-            st.executeUpdate();
-        } catch (SQLException e) {
-            throw new DaoException("Exception during deleting address from the database", e);
-        } finally {
-            DBResourceManager.closeResources(null, st, null);
-        }
-    }
+
 
     @Override
     public void update(Address address) throws DaoException {

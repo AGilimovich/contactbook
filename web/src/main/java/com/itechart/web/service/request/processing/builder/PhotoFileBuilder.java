@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 /**
- * Created by Aleksandr on 25.03.2017.
+ * Builder of photo's file object from request parameters.
  */
 public class PhotoFileBuilder {
     private Logger logger = LoggerFactory.getLogger(PhotoFileBuilder.class);
@@ -21,18 +21,15 @@ public class PhotoFileBuilder {
         String storedNameParam = parameters.get("storedName");
         File file = new File();
 
-        if (StringUtils.isNotBlank(realNameParam)){
+        if (StringUtils.isNotBlank(realNameParam)) {
             file.setName(realNameParam);
         } else {
             //if real name is empty, give file stored name
             file.setName(storedNameParam);
         }
-        if (StringUtils.isNotBlank(storedNameParam)){
+        if (StringUtils.isNotBlank(storedNameParam)) {
             file.setStoredName(storedNameParam);
         }
-
-        // TODO: 29.03.2017 if  was not saved??
-
         return file;
     }
 }
