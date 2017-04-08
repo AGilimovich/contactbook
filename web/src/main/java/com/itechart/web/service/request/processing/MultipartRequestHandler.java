@@ -55,9 +55,7 @@ public class MultipartRequestHandler {
             throw new FileSizeException("The file size exceeds maximum permitted value");
         } catch (FileUploadException e) {
             logger.error("Error during file uploading: {}", e.getMessage());
-
         }
-
     }
 
 

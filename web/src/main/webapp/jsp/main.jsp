@@ -14,7 +14,7 @@
     <div class="container-fluid">
 
         <div class="navbar-header">
-            <a href="../${pageContext.request.contextPath}" class="navbar-brand">Справочник контактов</a>
+            <a href="${pageContext.request.contextPath}" class="navbar-brand">Справочник контактов</a>
         </div>
         <div id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
@@ -152,13 +152,13 @@
                     <c:forEach begin="${pageNumber==0?1:pageNumber}"
                                end="${pageNumber==pagesCount-1?pageNumber+1:pageNumber+2}" varStatus="counter">
                         <li class="page ${counter.index == pageNumber+1 ? ' active':''} ${pagesCount == 0 ?'hidden':''}">
-                            <a href="..${pageContext.request.contextPath}?pageNumber=${counter.index-1}"> ${counter.index}</a>
+                            <a href="${pageContext.request.contextPath}?pageNumber=${counter.index-1}"> ${counter.index}</a>
                         </li>
                     </c:forEach>
-                    <li class="page-item ${pagesCount == 0 ?'hidden':''}">
+                    <li class="page-item ${pagesCount < 3 ?'hidden':''}">
                         <div id="page-list" class="page-list">
                             <c:forEach begin="1" end="${pagesCount}" varStatus="counter">
-                                <a href="..${pageContext.request.contextPath}?pageNumber=${counter.index-1}">${counter.index}</a>
+                                <a href="${pageContext.request.contextPath}?pageNumber=${counter.index-1}">${counter.index}</a>
                             </c:forEach>
                         </div>
                         <a id="anchor-select-page">...</a>

@@ -45,7 +45,8 @@ public class DoSetContactsCount implements Command {
         try {
             new DisplayingContactsListFormatter().formContactsList(request, searchDTO);
         } catch (DataException e) {
-            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            logger.error("Error fetching contacts: {}", e);
+            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
         return "/jsp/main.jsp";

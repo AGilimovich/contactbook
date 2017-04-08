@@ -192,7 +192,7 @@
                             <td width="6%"><input type="checkbox" name="attachIsSelected"
                                                   value="${attachment.getAttachment().id}"></td>
                             <td width="25%" name="attachName"><a name="attachLink"
-                                                                 href="/file?id=${attachment.getFile().storedName}"
+                                                                 href="${pageContext.request.contextPath}/file?id=${attachment.getFile().storedName}"
                                                                  download="${attachment.getAttachment().name}">${attachment.getAttachment().name}</a>
                             </td>
 

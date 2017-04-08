@@ -10,7 +10,7 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a href="../${pageContext.request.contextPath}?pageNumber=0" class="navbar-brand">На главную</a>
+            <a href="${pageContext.request.contextPath}?pageNumber=0" class="navbar-brand">На главную</a>
         </div>
 
     </div>

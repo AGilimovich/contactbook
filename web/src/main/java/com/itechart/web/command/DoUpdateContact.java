@@ -72,7 +72,6 @@ public class DoUpdateContact implements Command {
                 logger.error("Error getting attribute from session: {}", e);
             }
         }
-
         try {
             new DisplayingContactsListFormatter().formContactsList(request, searchDTO);
         } catch (DataException e) {
