@@ -52,13 +52,10 @@
                                     <input type="checkbox" name="isSelected" value="${contact.contactId}">
                                 </td>
 
-                                <td width="230px" class="td-photo">
+                                <td width="230px" class="td-photo" valign="middle">
                                     <div class="photo-container">
-                                        <div class="fillwidth">
-                                            <img src="${pageContext.request.contextPath}/image?id=${contact.photo}"
-                                                 alt="photo"
-                                                 height="100%" class="photo">
-                                        </div>
+                                        <img src="${pageContext.request.contextPath}/image?id=${contact.photo}"
+                                             alt="photo" height="100%" class="photo">
                                     </div>
                                 </td>
                                 <td>

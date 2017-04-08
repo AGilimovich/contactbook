@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Factory class for which produces command objects.
+ * Factory class for creating command objects.
  */
 public class CommandFactory {
     private static Logger logger = LoggerFactory.getLogger(CommandFactory.class);

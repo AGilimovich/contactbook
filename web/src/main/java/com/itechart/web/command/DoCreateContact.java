@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Creates new contact.
  */
+
 public class DoCreateContact implements Command {
     private static Logger logger = LoggerFactory.getLogger(DoCreateContact.class);
 
@@ -38,7 +39,6 @@ public class DoCreateContact implements Command {
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_BAD_REQUEST);
             return null;
         }
-
         AbstractDataService dataService = ServiceFactory.getInstance().getDataService();
         try {
             dataService.saveNewContact(fullContactDTO);
@@ -47,7 +47,6 @@ public class DoCreateContact implements Command {
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return null;
         }
-
         SearchDTO searchDTO = null;
         if (StringUtils.isNotBlank(request.getParameter("pageNumber"))) {
             try {
@@ -56,7 +55,6 @@ public class DoCreateContact implements Command {
                 logger.error("Error getting attribute from session: {}", e);
             }
         }
-
         try {
             new DisplayingContactsListFormatter().formContactsList(request, searchDTO);
         } catch (DataException e) {
@@ -65,8 +63,5 @@ public class DoCreateContact implements Command {
             return null;
         }
         return "/jsp/main.jsp";
-
     }
-
-
 }

@@ -33,11 +33,8 @@
             <div class="col-lg-2 col-md-3">
 
                 <div class="photo-container">
-                    <div class="fillwidth">
                         <img src="${pageContext.request.contextPath}/image?id=${photo.storedName}" height="100%"
-                             alt="photo"
-                             id="photo">
-                    </div>
+                             alt="photo" id="photo">
                 </div>
 
             </div>

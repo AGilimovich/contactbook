@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Interface for command which is then executed by controller.
+ * Interface of command which is then executed by controller.
  */
 public interface Command {
     String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException;

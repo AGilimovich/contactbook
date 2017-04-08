@@ -9,25 +9,20 @@
 
 /*Container for contact's photo*/
 .photo-container {
-    margin-left: 20px;
+    margin-left: 10px;
     height: 225px;
     width: 400px;
     max-width: 100%;
-    overflow: hidden;
+    text-align: center;
+ }
+.photo-container img{
+    width:auto;
+    height:auto;
+    max-width:100%;
+    max-height:100%;
 }
 
-.fillwidth {
-    min-width: 100%;
-    height: auto;
-    text-align: center;
-}
-/*.photo-container > img {*/
-    /*margin: auto;*/
-    /*display: block;*/
-    /*height: 100%;*/
-    /*width: 100%;*/
-    /*object-fit: contain;*/
-/*}*/
+
 
 .popup {
     display: none;
