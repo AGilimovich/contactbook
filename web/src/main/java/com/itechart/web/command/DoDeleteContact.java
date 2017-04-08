@@ -1,10 +1,13 @@
 package com.itechart.web.command;
 
+import com.itechart.data.dto.SearchDTO;
 import com.itechart.web.command.dispatcher.ErrorDispatcher;
+import com.itechart.web.command.view.formatter.DisplayingContactsListFormatter;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.data.exception.DataException;
 import com.itechart.web.service.validation.ValidationException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,27 +42,24 @@ public class DoDeleteContact implements Command {
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
+        SearchDTO searchDTO = null;
+        if (StringUtils.isNotBlank(request.getParameter("pageNumber"))) {
+            try {
+                searchDTO = (SearchDTO) request.getSession().getAttribute("searchDTO");
+            } catch (Exception e) {
+                logger.error("Error getting attribute from session: {}", e);
+            }
+        }
 
-        request.getSession().setAttribute("searchDTO", null);
+        try {
+            new DisplayingContactsListFormatter().formContactsList(request, searchDTO);
+        } catch (DataException e) {
+            logger.error("Error during fetching contacts: {}", e.getMessage());
+            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
         return "/jsp/main.jsp";
 
-//        int contactsOnPage = 10;
-        // TODO: 31.03.2017 null check
 
-//        request.getSession().setAttribute("isSearch", false);
-//        return new ShowMainView().execute(servlet, request, response);
-
-//
-//        int pageNumber = (int) request.getSession().getAttribute("page");
-//
-//        String contactsOnPageParam = request.getParameter("contactsOnPage");
-//        String pageNumberParam = request.getParameter("pageNumber");
-//        if (request.getSession().getAttribute("contactsOnPage") != null)
-//            contactsOnPage = (int) request.getSession().getAttribute("contactsOnPage");
-//
-//
-//        ArrayList<MainPageContactDTO> contacts = dataService.getMainPageContactDTO(pageNumber, contactsOnPage);
-//        request.setAttribute("contacts", contacts);
-//        return "/jsp/main.jsp";
     }
 }

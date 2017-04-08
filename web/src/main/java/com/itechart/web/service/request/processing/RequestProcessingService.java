@@ -59,7 +59,11 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         if (idArrayParam != null) {
             for (String id : idArrayParam) {
                 if (validationService.validateId(id)) {
-                    selectedIdList.add(Long.valueOf(id));
+                    try {
+                        selectedIdList.add(Long.valueOf(id));
+                    } catch (Exception e){
+                        throw new ValidationException(StringUtils.join(new Object[]{"Illegal id", id}, ": "), e);
+                    }
                 } else {
                     throw new ValidationException(StringUtils.join(new Object[]{"Illegal id", id}, ": "));
                 }
@@ -75,7 +79,11 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         AbstractValidationService validationService = ServiceFactory.getInstance().getValidationService();
         if (StringUtils.isNotEmpty(idParam)) {
             if (validationService.validateId(idParam)) {
-                return Long.valueOf(idParam);
+                try {
+                    return Long.valueOf(idParam);
+                }catch (Exception e){
+                    throw new ValidationException(StringUtils.join(new Object[]{"Illegal id", idParam}, ": "), e);
+                }
             }
         }
         throw new ValidationException("Illegal id");
@@ -139,7 +147,11 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         if (selectedIdArrayParam != null) {
             for (String id : selectedIdArrayParam) {
                 if (validationService.validateId(id)) {
-                    selectedIdList.add(Long.valueOf(id));
+                    try {
+                        selectedIdList.add(Long.valueOf(id));
+                    } catch (Exception e){
+                        throw new ValidationException(StringUtils.join(new Object[]{"Illegal id", id}, ": "), e);
+                    }
                 } else {
                     throw new ValidationException(StringUtils.join(new Object[]{"Illegal id", id}, ": "));
                 }
@@ -153,9 +165,14 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         String contactsCountParam = request.getParameter("contactsOnPage");
         logger.info("Processing request:  change contacts count to value: {}", contactsCountParam);
         if (StringUtils.isNotBlank(contactsCountParam)) {
-            return Integer.valueOf(contactsCountParam);
+            try {
+                int contactsCount = Integer.valueOf(contactsCountParam);
+                return contactsCount;
+            } catch (Exception e) {
+                throw new ValidationException("Illegal request parameter", e);
+            }
         } else {
-            throw new ValidationException("Illegal parameter");
+            throw new ValidationException("Illegalrequest parameter");
         }
 
     }

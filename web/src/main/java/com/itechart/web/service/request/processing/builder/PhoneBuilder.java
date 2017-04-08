@@ -29,8 +29,12 @@ public class PhoneBuilder {
         Phone phone = new Phone();
         if (StringUtils.isNotBlank(idParam)) {
             if (validationService.validateId(idParam))
-                phone.setId(Long.valueOf(idParam));
-            else throw new ValidationException("Invalid id of phone");
+                try {
+                    phone.setId(Long.valueOf(idParam));
+                }catch (Exception e){
+                    throw new ValidationException("Invalid phone id", e);
+                }
+            else throw new ValidationException("Invalid phone id");
         }
         if (StringUtils.isNotBlank(countryCodeParam) && StringUtils.isNotBlank(operatorCodeParam) && StringUtils.isNotBlank(phoneNumberParam)) {
             if (validationService.validatePhone(countryCodeParam, operatorCodeParam, phoneNumberParam)) {

@@ -1,6 +1,7 @@
 package com.itechart.web.command;
 
 import com.itechart.data.dto.MainPageContactDTO;
+import com.itechart.data.dto.SearchDTO;
 import com.itechart.web.command.dispatcher.ErrorDispatcher;
 import com.itechart.web.command.view.formatter.DisplayingContactsListFormatter;
 import com.itechart.web.service.ServiceFactory;
@@ -25,66 +26,24 @@ public class ShowMainView implements Command {
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         logger.info("Execute command");
+        SearchDTO searchDTO = null;
+        if (StringUtils.isNotBlank(request.getParameter("pageNumber"))) {
+            try {
+                searchDTO = (SearchDTO) request.getSession().getAttribute("searchDTO");
+            } catch (Exception e) {
+                logger.error("Error getting attribute from session: {}", e);
+            }
+        } else {
+            request.getSession().setAttribute("searchDTO", null);
+        }
 
         try {
-            new DisplayingContactsListFormatter().formContactsList(request);
+            new DisplayingContactsListFormatter().formContactsList(request, searchDTO);
         } catch (DataException e) {
             logger.error("Error during fetching contacts: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
-//        if (request.getSession().getAttribute("isSearch") != null) {
-//            if ((boolean) request.getSession().getAttribute("isSearch")) {
-//                if (StringUtils.isNotEmpty(request.getParameter("search"))) {
-//                    if (!request.getParameter("search").equals("false"))
-//                        return new DoSearch().execute(servlet, request, response);
-//                } else {
-//                    return new DoSearch().execute(servlet, request, response);
-//                }
-//            }
-//        }
-
-//        request.getSession().setAttribute("isSearch", false);
-//        //default values
-//        int pageNumber = 0;
-//        int contactsOnPage = 10;
-//
-//        String contactsOnPageParam = request.getParameter("contactsOnPage");
-//        String pageNumberParam = request.getParameter("pageNumber");
-//        if (StringUtils.isEmpty(contactsOnPageParam)) {
-//            if (request.getSession().getAttribute("contactsOnPage") != null)
-//                contactsOnPage = (int) request.getSession().getAttribute("contactsOnPage");
-//        } else {
-//            //if displaying contacts count was changed
-//            contactsOnPage = Integer.valueOf(contactsOnPageParam);
-//            request.getSession().setAttribute("contactsOnPage", contactsOnPage);
-//        }
-//        if (StringUtils.isNotEmpty(pageNumberParam)) {
-//            pageNumber = Integer.valueOf(pageNumberParam);
-//        }
-//        AbstractDataService dataService = ServiceFactory.getInstance().getDataService();
-//
-//        int contactsInDBCount = 0;
-//        ArrayList<MainPageContactDTO> mainPageContactDTOs = null;
-//        try {
-//            mainPageContactDTOs = dataService.getMainPageContactDTO(pageNumber, contactsOnPage);
-//            contactsInDBCount = dataService.getContactsCount();
-//        } catch (DataException e) {
-//            logger.error("Error during fetching contacts: {}", e.getMessage());
-//            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_NOT_FOUND);
-//            return null;
-//        }
-//
-//
-//        int pagesCount = 1;
-//        if (contactsOnPage != 0) {
-//            pagesCount = (int) Math.ceil((double) contactsInDBCount / contactsOnPage);
-//        }
-//        request.getSession().removeAttribute("searchDTO");
-//        request.getSession().setAttribute("pageNumber", pageNumber);
-//        request.setAttribute("contacts", mainPageContactDTOs);
-//        request.setAttribute("pagesCount", pagesCount);
-
 
         return "/jsp/main.jsp";
     }

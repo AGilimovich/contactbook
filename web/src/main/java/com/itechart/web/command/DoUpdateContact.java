@@ -1,12 +1,15 @@
 package com.itechart.web.command;
 
 import com.itechart.data.dto.FullContactDTO;
+import com.itechart.data.dto.SearchDTO;
 import com.itechart.web.command.dispatcher.ErrorDispatcher;
+import com.itechart.web.command.view.formatter.DisplayingContactsListFormatter;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.data.exception.DataException;
 import com.itechart.web.service.request.processing.exception.FileSizeException;
 import com.itechart.web.service.validation.ValidationException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,16 +39,22 @@ public class DoUpdateContact implements Command {
             return null;
         }
         //id of contacted retrieved from session
-        if(request.getSession().getAttribute("id")!=null) {
-            long contactId = (long) request.getSession().getAttribute("id");
-            reconstructedFullContactDTO.getContact().setContactId(contactId);
-            AbstractDataService dataService = ServiceFactory.getInstance().getDataService();
-            FullContactDTO contactToUpdate = (FullContactDTO) request.getSession().getAttribute("contactToUpdate");
-
+        if (request.getSession().getAttribute("id") != null) {
             try {
-                dataService.updateContact(reconstructedFullContactDTO, contactToUpdate);
-            } catch (DataException e) {
-                logger.error("Error during contact updating: {}", e.getMessage());
+                long contactId = (long) request.getSession().getAttribute("id");
+                FullContactDTO contactToUpdate = (FullContactDTO) request.getSession().getAttribute("contactToUpdate");
+                reconstructedFullContactDTO.getContact().setContactId(contactId);
+                AbstractDataService dataService = ServiceFactory.getInstance().getDataService();
+                try {
+                    dataService.updateContact(reconstructedFullContactDTO, contactToUpdate);
+                } catch (DataException e) {
+                    logger.error("Error during contact updating: {}", e.getMessage());
+                    ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    return null;
+                }
+
+            } catch (Exception e) {
+                logger.error("Error retrieving session attribute:{}", e.getMessage());
                 ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return null;
             }
@@ -55,18 +64,25 @@ public class DoUpdateContact implements Command {
         request.getSession().removeAttribute("action");
         request.getSession().removeAttribute("id");
 
-        request.getSession().setAttribute("searchDTO", null);
+        SearchDTO searchDTO = null;
+        if (StringUtils.isNotBlank(request.getParameter("pageNumber"))) {
+            try {
+                searchDTO = (SearchDTO) request.getSession().getAttribute("searchDTO");
+            } catch (Exception e) {
+                logger.error("Error getting attribute from session: {}", e);
+            }
+        }
+
+        try {
+            new DisplayingContactsListFormatter().formContactsList(request, searchDTO);
+        } catch (DataException e) {
+            logger.error("Error during fetching contacts: {}", e.getMessage());
+            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
         return "/jsp/main.jsp";
 
-//        // TODO: 31.03.
-//        request.getSession().setAttribute("isSearch", false);
-//
-//
-//        return (new ShowMainView()).execute(servlet, request, response);
 
-
-        // request.setAttribute("contacts", contacts);
-        // return "/jsp/main.jsp";
     }
 
 }

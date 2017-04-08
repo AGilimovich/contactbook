@@ -216,9 +216,19 @@ public class JdbcContactDao implements IContactDao {
                 String surname = rs.getString("surname");
                 String patronymic = rs.getString("patronymic");
                 Date dateOfBirth = rs.getDate("date_of_birth");
-                Contact.Gender gender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
+                Contact.Gender gender = null;
+                try {
+                    gender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
+                } catch (Exception e) {
+                    throw new DaoException("Illegal gender value", e);
+                }
                 String citizenship = rs.getString("citizenship");
-                Contact.FamilyStatus familyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
+                Contact.FamilyStatus familyStatus = null;
+                try {
+                    familyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
+                } catch (Exception e) {
+                    throw new DaoException("Illegal family status value", e);
+                }
                 String website = rs.getString("website");
                 String email = rs.getString("email");
                 String placeOfWork = rs.getString("place_of_work");
@@ -262,9 +272,19 @@ public class JdbcContactDao implements IContactDao {
                 String surname = rs.getString("surname");
                 String patronymic = rs.getString("patronymic");
                 Date dateOfBirth = rs.getDate("date_of_birth");
-                Contact.Gender gender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
+                Contact.Gender gender = null;
+                try {
+                    gender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
+                } catch (Exception e) {
+                    throw new DaoException("Illegal gender value", e);
+                }
                 String citizenship = rs.getString("citizenship");
-                Contact.FamilyStatus familyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
+                Contact.FamilyStatus familyStatus = null;
+                try {
+                    familyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
+                } catch (Exception e) {
+                    throw new DaoException("Illegal family status value", e);
+                }
                 String website = rs.getString("website");
                 String email = rs.getString("email");
                 String placeOfWork = rs.getString("place_of_work");
@@ -393,9 +413,19 @@ public class JdbcContactDao implements IContactDao {
                 String foundSurname = rs.getString("surname");
                 String foundPatronymic = rs.getString("patronymic");
                 Date foundDateOfBirth = rs.getDate("date_of_birth");
-                Contact.Gender foundGender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
+                Contact.Gender foundGender = null;
+                try {
+                    foundGender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
+                } catch (Exception e) {
+                    throw new DaoException("Illegal gender value", e);
+                }
                 String foundCitizenship = rs.getString("citizenship");
-                Contact.FamilyStatus foundFamilyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
+                Contact.FamilyStatus foundFamilyStatus = null;
+                try {
+                    foundFamilyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
+                } catch (Exception e) {
+                    throw new DaoException("Illegal famile status value", e);
+                }
                 String foundWebsite = rs.getString("website");
                 String foundEmail = rs.getString("email");
                 String foundPlaceOfWork = rs.getString("place_of_work");
@@ -425,7 +455,7 @@ public class JdbcContactDao implements IContactDao {
 
     @Override
     public ArrayList<Contact> getByBirthDate(Date date) throws DaoException {
-        logger.info("Fetch contact by birthday, day: {}, month: {}", new DateTime(date).getDayOfMonth(),new DateTime(date).getMonthOfYear());
+        logger.info("Fetch contact by birthday, day: {}, month: {}", new DateTime(date).getDayOfMonth(), new DateTime(date).getMonthOfYear());
 
         if (date == null) throw new DaoException("Date is null");
         ArrayList<Contact> contacts = new ArrayList<>();
@@ -477,9 +507,19 @@ public class JdbcContactDao implements IContactDao {
                 String surname = rs.getString("surname");
                 String patronymic = rs.getString("patronymic");
                 Date dateOfBirth = rs.getDate("date_of_birth");
-                Contact.Gender gender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
+                Contact.Gender gender = null;
+                try {
+                   gender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
+                } catch (Exception e){
+                    throw new DaoException("Illegal gender value", e);
+                }
                 String citizenship = rs.getString("citizenship");
-                Contact.FamilyStatus familyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
+                Contact.FamilyStatus familyStatus= null;
+                try {
+                familyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
+                } catch (Exception e){
+                    throw new DaoException("Illegal family status value", e);
+                }
                 String website = rs.getString("website");
                 String email = rs.getString("email");
                 String placeOfWork = rs.getString("place_of_work");

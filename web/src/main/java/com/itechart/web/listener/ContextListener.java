@@ -29,10 +29,14 @@ public class ContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         logger.info("Initialize quartz scheduler");
-        int scheduledHours = Integer.valueOf(PropertiesManager.scheduledHours());
-        int scheduledMinutes = Integer.valueOf(PropertiesManager.scheduledMinutes());
-        AbstractSchedulingService schedulingService = ServiceFactory.getInstance().getEmailCongratsService();
-        schedulingService.startScheduler(scheduledHours, scheduledMinutes);
+        try {
+            int scheduledHours = Integer.valueOf(PropertiesManager.scheduledHours());
+            int scheduledMinutes = Integer.valueOf(PropertiesManager.scheduledMinutes());
+            AbstractSchedulingService schedulingService = ServiceFactory.getInstance().getEmailCongratsService();
+            schedulingService.startScheduler(scheduledHours, scheduledMinutes);
+        }catch (Exception e){
+            logger.error("Error during schedule starting : {}", e.getMessage());
+        }
     }
 
     @Override

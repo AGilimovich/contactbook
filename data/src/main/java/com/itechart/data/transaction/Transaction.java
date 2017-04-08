@@ -30,7 +30,7 @@ public class Transaction {
             connection.commit();
             DBResourceManager.closeResources(connection, null, null);
         } catch (SQLException e) {
-            logger.info("Error committing transaction: {}", e.getMessage());
+            logger.error("Error committing transaction: {}", e.getMessage());
         }
     }
 
@@ -40,7 +40,7 @@ public class Transaction {
             connection.rollback();
             DBResourceManager.closeResources(connection, null, null);
         } catch (SQLException e) {
-            logger.info("Error rolling back transaction: {}", e.getMessage());
+            logger.error("Error rolling back transaction: {}", e.getMessage());
         }
     }
 }

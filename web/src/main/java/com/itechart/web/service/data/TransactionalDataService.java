@@ -299,26 +299,11 @@ public class TransactionalDataService implements AbstractDataService {
     }
 
 
-//    @Override
-//    public ArrayList<Contact> getSearchResultContactsDTOForPage(SearchDTO dto, int page, int count) throws DataException {
-//        logger.info("Fetch search result contacts: {} for page: {}, count: {}", dto, page, count);
-//        Transaction transaction = tm.getTransaction();
-//        IContactDao contactDao = new JdbcContactDao(transaction);
-//        ArrayList<Contact> contacts = new ArrayList<>();
-//        try {
-//            contacts = contactDao.findContactsByFieldsLimit(dto, page * count, count);
-//            transaction.commitTransaction();
-//        } catch (DaoException e) {
-//            logger.error("Error fetching search result contacts: {}", e.getCause().getMessage());
-//            transaction.rollbackTransaction();
-//            throw new DataException(e.getMessage());
-//        }
-//        return contacts;
-//    }
 
     @Override
     public ArrayList<MainPageContactDTO> getSearchResultContactsDTOForPage(SearchDTO dto, int page, int count) throws DataException {
         logger.info("Fetch search result contacts: {} for page: {}, count: {}", dto, page, count);
+        if (dto == null) throw new DataException("DTO object is null");
         Transaction transaction = tm.getTransaction();
         IContactDao contactDao = new JdbcContactDao(transaction);
         IFileDao fileDao = new JdbcFileDao(transaction);
@@ -348,6 +333,7 @@ public class TransactionalDataService implements AbstractDataService {
     @Override
     public int getContactsSearchResultCount(SearchDTO dto) throws DataException {
         logger.info("Fetch search result contacts count: {}", dto);
+        if (dto == null) throw new DataException("DTO object is null");
         Transaction transaction = tm.getTransaction();
         IContactDao contactDao = new JdbcContactDao(transaction);
         try {

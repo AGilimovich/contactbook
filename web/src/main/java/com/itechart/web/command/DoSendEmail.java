@@ -1,6 +1,10 @@
 package com.itechart.web.command;
 
+import com.itechart.data.dto.SearchDTO;
+import com.itechart.web.command.dispatcher.ErrorDispatcher;
+import com.itechart.web.command.view.formatter.DisplayingContactsListFormatter;
 import com.itechart.web.service.ServiceFactory;
+import com.itechart.web.service.data.exception.DataException;
 import com.itechart.web.service.email.AbstractEmailingService;
 import com.itechart.web.service.email.Email;
 import com.itechart.web.service.validation.ValidationException;
@@ -38,12 +42,21 @@ public class DoSendEmail implements Command {
         } catch (ValidationException e) {
             logger.error("Error during request processing: {}", e.getMessage());
         }
-        request.getSession().setAttribute("searchDTO", null);
+
+        SearchDTO searchDTO = null;
+        try {
+            searchDTO = (SearchDTO) request.getSession().getAttribute("searchDTO");
+        } catch (Exception e) {
+            logger.error("Error getting attribute from session: {}", e);
+        }
+        try {
+            new DisplayingContactsListFormatter().formContactsList(request, searchDTO);
+        } catch (DataException e) {
+            logger.error("Error during fetching contacts: {}", e.getMessage());
+            ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
         return "/jsp/main.jsp";
 
-//        return new ShowMainView().execute(servlet, request, response);
-//        ArrayList<MainPageContactDTO> contacts = ServiceFactory.getInstance().getDataService().getMainPageContactDTO();
-//        request.setAttribute("contacts", contacts);
-//        return "/jsp/main.jsp";
     }
 }

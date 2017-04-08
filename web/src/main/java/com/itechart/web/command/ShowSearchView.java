@@ -17,7 +17,7 @@ public class ShowSearchView implements Command {
     @Override
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         logger.info("Execute command");
-        request.getSession().removeAttribute("searchDTO");
+//        request.getSession().removeAttribute("searchDTO");
         return "/jsp/search.jsp";
     }
 }

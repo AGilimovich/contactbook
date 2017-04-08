@@ -10,7 +10,7 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a href="../${pageContext.request.contextPath}?search=false" class="navbar-brand">На главную</a>
+            <a href="../${pageContext.request.contextPath}?pageNumber=0" class="navbar-brand">На главную</a>
         </div>
 
     </div>
@@ -18,10 +18,10 @@
 
 <div class="container-fluid">
     <div class="row">
-        <a class="cancel-anchor close" href="${pageContext.request.contextPath}/">
+        <a class="cancel-anchor close" href="${pageContext.request.contextPath}?pageNumber=0">
         </a>
     </div>
-    <form action="${pageContext.request.contextPath}/find" method="post">
+    <form action="${pageContext.request.contextPath}/find?pageNumber=0" method="post">
         <div class="top-buffer row ">
             <div class="col-md-12">
                 <div class="row well">

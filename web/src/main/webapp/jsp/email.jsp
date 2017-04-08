@@ -12,7 +12,7 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a href="../${pageContext.request.contextPath}" class="navbar-brand">На главную</a>
+            <a href="../${pageContext.request.contextPath}?pageNumber=0" class="navbar-brand">На главную</a>
         </div>
 
     </div>
@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col-lg-6 col-md-8 well offset20px">
                 <div class="row">
-                    <a class="cancel-anchor close" href="${pageContext.request.contextPath}/">
+                    <a class="cancel-anchor close" href="${pageContext.request.contextPath}?pageNumber=0">
                     </a>
                 </div>
                 <div class="row buffer-top">

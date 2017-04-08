@@ -25,23 +25,17 @@ public class AttachmentBuilder {
         String commentParam = StringUtils.trim(parameters.get("comment"));
         Attachment attachment = new Attachment();
         AbstractValidationService validationService = ServiceFactory.getInstance().getValidationService();
-//        DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyy HH:mm:ss");
-//        if (StringUtils.isNotBlank(uploadDateParam)) {
-//            DateTime dateTime = null;
-//            try {
-//                dateTime = format.parseDateTime(uploadDateParam);
-//            } catch (Exception e) {
-//                throw new ValidationException("Date has illegal format");
-//            }
-//            if (dateTime != null)
-//                attachment.setUploadDate(dateTime.toDate());
-//        }
+
         attachment.setUploadDate(new Date());
 
         if (StringUtils.isNotBlank(idParam)) {
             if (validationService.validateId(idParam))
-                attachment.setId(Long.valueOf(idParam));
-            else throw new ValidationException("Invalid id of attachment");
+                try {
+                    attachment.setId(Long.valueOf(idParam));
+                } catch (Exception e){
+                    throw new ValidationException("Invalid attachment id", e);
+                }
+            else throw new ValidationException("Invalid attachment id");
         }
         if (StringUtils.isNotBlank(nameParam)) {
             if (validationService.validateField(nameParam)) {

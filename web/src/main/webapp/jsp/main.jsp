@@ -14,7 +14,7 @@
     <div class="container-fluid">
 
         <div class="navbar-header">
-            <a href="../${pageContext.request.contextPath}?search=false" class="navbar-brand">Справочник контактов</a>
+            <a href="../${pageContext.request.contextPath}" class="navbar-brand">Справочник контактов</a>
         </div>
         <div id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
@@ -40,7 +40,7 @@
             <div class="col-md-10 col-sm-10">
                 <div class="row">
                     <table class="table">
-                        <tr class="${contacts.size()>0 ? '':'hidden'}" >
+                        <tr class="${contacts.size()>0 ? '':'hidden'}">
                             <td class="table-checkbox" width="5%" align="middle">
                                 <input type="checkbox" id="selectAll">
                             </td>
@@ -129,13 +129,14 @@
                     </button>
 
                     <div class="tooltip-error">
-                        <button type="button" id="btn-delete-contacts" class="btn btn-default ${contacts.size()>0 ? '':'hidden'}">
+                        <button type="button" id="btn-delete-contacts"
+                                class="btn btn-default ${contacts.size()>0 ? '':'hidden'}">
                             Удалить
                         </button>
                         <span class="tooltiptext" id="delete-contact-tooltip">Выберите контакты</span>
                     </div>
                     <button type="submit" id="btn-submit-delete"
-                            formaction="${pageContext.request.contextPath}/delete" formmethod="post"
+                            formaction="${pageContext.request.contextPath}/delete?pageNumber=0" formmethod="post"
                             class="hidden">
                     </button>
                 </div>
@@ -151,13 +152,13 @@
                     <c:forEach begin="${pageNumber==0?1:pageNumber}"
                                end="${pageNumber==pagesCount-1?pageNumber+1:pageNumber+2}" varStatus="counter">
                         <li class="page ${counter.index == pageNumber+1 ? ' active':''} ${pagesCount == 0 ?'hidden':''}">
-                            <a href="..${pageContext.request.contextPath}?pageNumber=${counter.index-1}&search=${isSearch}"> ${counter.index}</a>
+                            <a href="..${pageContext.request.contextPath}?pageNumber=${counter.index-1}"> ${counter.index}</a>
                         </li>
                     </c:forEach>
                     <li class="page-item ${pagesCount == 0 ?'hidden':''}">
                         <div id="page-list" class="page-list">
                             <c:forEach begin="1" end="${pagesCount}" varStatus="counter">
-                                <a href="..${pageContext.request.contextPath}?pageNumber=${counter.index-1}&search=${isSearch}">${counter.index}</a>
+                                <a href="..${pageContext.request.contextPath}?pageNumber=${counter.index-1}">${counter.index}</a>
                             </c:forEach>
                         </div>
                         <a id="anchor-select-page">...</a>

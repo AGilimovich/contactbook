@@ -1,5 +1,6 @@
 package com.itechart.web.command;
 
+import com.itechart.data.dto.SearchDTO;
 import com.itechart.web.command.dispatcher.ErrorDispatcher;
 import com.itechart.web.command.view.formatter.DisplayingContactsListFormatter;
 import com.itechart.web.service.ServiceFactory;
@@ -35,9 +36,14 @@ public class DoSetContactsCount implements Command {
         }
 
         request.getSession().setAttribute("contactsOnPage", contactsOnPage);
-
+        SearchDTO searchDTO = null;
         try {
-            new DisplayingContactsListFormatter().formContactsList(request);
+            searchDTO = (SearchDTO) request.getSession().getAttribute("searchDTO");
+        } catch (Exception e) {
+            logger.error("Error getting attribute from session: {}", e);
+        }
+        try {
+            new DisplayingContactsListFormatter().formContactsList(request, searchDTO);
         } catch (DataException e) {
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return null;

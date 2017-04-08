@@ -13,7 +13,7 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a href="${pageContext.request.contextPath}/" class="navbar-brand">На главную</a>
+            <a href="${pageContext.request.contextPath}?pageNumber=0" class="navbar-brand">На главную</a>
         </div>
 
     </div>
@@ -21,12 +21,12 @@
 
 
 <div class="container-fluid">
-    <form id="main-form" action="${pageContext.request.contextPath}/${action}" method="post"
+    <form id="main-form" action="${pageContext.request.contextPath}/${action}?pageNumber=0" method="post"
           enctype="multipart/form-data"
           accept-charset="UTF-8" class="form-horizontal">
         <div class="row">
 
-            <a class="cancel-anchor close" href="${pageContext.request.contextPath}/">
+            <a class="cancel-anchor close" href="${pageContext.request.contextPath}?pageNumber=0">
             </a>
 
             <!--Photo-->

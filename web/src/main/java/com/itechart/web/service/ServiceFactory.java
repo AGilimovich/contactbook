@@ -24,7 +24,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-import java.util.ResourceBundle;
 
 /**
  * Singleton class.
@@ -40,15 +39,15 @@ public class ServiceFactory {
     private String password;
     private String emailFrom;
     private TransactionManager transactionManager;
-    private String FILE_PATH = PropertiesManager.FILE_PATH();
+    private String FILE_PATH;
 
     private ServiceFactory() {
-        ResourceBundle bundle = ResourceBundle.getBundle("application");
-        hostName = bundle.getString("HOST_NAME");
-        SMTPPort = Integer.valueOf(bundle.getString("PORT"));
-        userName = bundle.getString("USER_NAME");
-        password = bundle.getString("PASSWORD");
-        emailFrom = bundle.getString("EMAIL");
+        FILE_PATH = PropertiesManager.FILE_PATH();
+        hostName = PropertiesManager.HOST_NAME();
+        SMTPPort = PropertiesManager.PORT();
+        userName = PropertiesManager.USER_NAME();
+        password = PropertiesManager.PASSWORD();
+        emailFrom = PropertiesManager.EMAIL();
         DataSource dataSource = null;
         try {
             logger.info("Lookup datasource");
