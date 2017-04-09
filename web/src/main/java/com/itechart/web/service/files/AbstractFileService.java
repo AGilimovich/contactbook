@@ -1,5 +1,7 @@
 package com.itechart.web.service.files;
 
+import com.itechart.data.entity.File;
+
 import java.util.Collection;
 
 /**
@@ -9,7 +11,7 @@ public interface AbstractFileService {
 
     void deleteFile(String name);
 
-    void deleteFiles(Collection<String> names);
+    void deleteFiles(Collection<File> files);
 
     byte[] getFile(String name);
 }

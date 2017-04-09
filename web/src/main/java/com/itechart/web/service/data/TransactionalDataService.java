@@ -34,40 +34,39 @@ public class TransactionalDataService implements AbstractDataService {
     public void deleteContact(long contactId) throws DataException {
         logger.info("Delete contact with id: {}", contactId);
         Transaction transaction = tm.getTransaction();
-        // JdbcPhoneDao phoneDao = new JdbcPhoneDao(transaction);
         IAttachmentDao attachmentDao = new JdbcAttachmentDao(transaction);
         IContactDao contactDao = new JdbcContactDao(transaction);
-        //  JdbcAddressDao addressDao = new JdbcAddressDao(transaction);
         IFileDao fileDao = new JdbcFileDao(transaction);
         AbstractFileService fileService = ServiceFactory.getInstance().getFileService();
-        ArrayList<String> listOfFilesForDeleting = new ArrayList<>();
+        ArrayList<File> listOfFilesForDeleting = new ArrayList<>();
         Contact contact = null;
         try {
             contact = contactDao.getContactById(contactId);
             if (contact != null) {
-                contactDao.delete(contactId);
-                //delete files
-                long photoId = contact.getPhoto();
-                File photo = fileDao.getFileById(photoId);
-                if (photo != null) {
-                    if (StringUtils.isNotEmpty(photo.getStoredName()))
-                        listOfFilesForDeleting.add(photo.getStoredName());
-                    fileDao.delete(photoId);
-                }
                 ArrayList<Attachment> attachments = attachmentDao.getAllForContact(contactId);
                 for (Attachment attachment : attachments) {
                     if (attachment != null) {
                         File file = fileDao.getFileById(attachment.getFile());
                         if (file != null) {
                             if (StringUtils.isNotEmpty(file.getStoredName()))
-                                listOfFilesForDeleting.add(file.getStoredName());
-                            fileDao.delete(attachment.getFile());
+                                listOfFilesForDeleting.add(file);
                         }
                     }
                 }
-                for (String name : listOfFilesForDeleting) {
-                    fileService.deleteFile(name);
+                contactDao.delete(contactId);
+                //delete files
+                long photoId = contact.getPhoto();
+                File photo = fileDao.getFileById(photoId);
+                if (photo != null) {
+                    if (StringUtils.isNotEmpty(photo.getStoredName()))
+                        listOfFilesForDeleting.add(photo);
+                    fileDao.delete(photoId);
                 }
+                for (File file : listOfFilesForDeleting) {
+                    if (file != null)
+                        fileDao.delete(file.getId());
+                }
+                fileService.deleteFiles(listOfFilesForDeleting);
             } else {
                 throw new DataException("Contact with provided id was not found");
             }
@@ -99,7 +98,7 @@ public class TransactionalDataService implements AbstractDataService {
         IAddressDao addressDao = new JdbcAddressDao(transaction);
         IFileDao fileDao = new JdbcFileDao(transaction);
         AbstractFileService fileService = ServiceFactory.getInstance().getFileService();
-        ArrayList<String> savedFiles = new ArrayList<>();
+        ArrayList<File> savedFiles = new ArrayList<>();
         try {
             //save photo
             Contact contactToSave = fullContactDTO.getContact();
@@ -107,7 +106,7 @@ public class TransactionalDataService implements AbstractDataService {
                 File photo = fullContactDTO.getPhoto();
                 if (photo != null) {
                     if (StringUtils.isNotEmpty(photo.getStoredName())) {
-                        savedFiles.add(photo.getStoredName());
+                        savedFiles.add(photo);
                     }
                     long photoId = fileDao.save(photo);
                     //set photo id in contact and save it
@@ -139,7 +138,7 @@ public class TransactionalDataService implements AbstractDataService {
                         if (fullAttachmentToSave != null) {
                             File fileToSave = fullAttachmentToSave.getFile();
                             if (fileToSave != null) {
-                                savedFiles.add(fileToSave.getStoredName());
+                                savedFiles.add(fileToSave);
                                 long fileId = fileDao.save(fileToSave);
                                 Attachment attachmentToSave = fullAttachmentToSave.getAttachment();
                                 if (addressToSave != null) {
@@ -174,13 +173,13 @@ public class TransactionalDataService implements AbstractDataService {
         IFileDao fileDao = new JdbcFileDao(transaction);
         AbstractFileService fileService = ServiceFactory.getInstance().getFileService();
 
-        ArrayList<String> filesToDelete = new ArrayList<>();
-        ArrayList<String> savedFiles = new ArrayList<>();
+        ArrayList<File> filesToDelete = new ArrayList<>();
+        ArrayList<File> savedFiles = new ArrayList<>();
         try {
             if (contactToUpdate.getPhoto() != null && reconstructedContact.getPhoto() != null) {
                 //if old file exists and new file was stored -> mark old file for deleting
                 if (StringUtils.isNotEmpty(contactToUpdate.getPhoto().getStoredName()) && StringUtils.isNotEmpty(reconstructedContact.getPhoto().getStoredName()))
-                    filesToDelete.add(contactToUpdate.getPhoto().getStoredName());
+                    filesToDelete.add(contactToUpdate.getPhoto());
             }
             contactToUpdate.update(reconstructedContact);
             if (reconstructedContact.getPhoto() != null) {
@@ -241,7 +240,7 @@ public class TransactionalDataService implements AbstractDataService {
                             File file = fileDao.getFileByAttachmentId(fullAttachmentToDelete.getAttachment().getId());
                             if (file != null) {
                                 if (StringUtils.isNotEmpty(file.getStoredName()))
-                                    filesToDelete.add(file.getStoredName());
+                                    filesToDelete.add(file);
                                 attachmentDao.delete(fullAttachmentToDelete.getAttachment().getId());
                                 fileDao.delete(file.getId());
                             }
@@ -257,7 +256,7 @@ public class TransactionalDataService implements AbstractDataService {
                         if (fileToSave != null) {
                             long fileId = fileDao.save(fileToSave);
                             if (StringUtils.isNotBlank(fileToSave.getStoredName()))
-                                savedFiles.add(fileToSave.getStoredName());
+                                savedFiles.add(fileToSave);
                             Attachment attachmentToSave = fullAttachmentToCreate.getAttachment();
                             if (attachmentToSave != null && contactToUpdate.getContact() != null) {
                                 attachmentToSave.setContact(contactToUpdate.getContact().getContactId());

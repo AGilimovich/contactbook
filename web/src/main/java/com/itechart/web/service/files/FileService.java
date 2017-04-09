@@ -43,11 +43,12 @@ public class FileService implements AbstractFileService {
     }
 
     @Override
-    public void deleteFiles(Collection<String> names) {
-        logger.info("Delete files with names: {}", names);
-        if (names != null) {
-            for (String name : names) {
-                deleteFile(name);
+    public void deleteFiles(Collection<com.itechart.data.entity.File> files) {
+        logger.info("Delete files with names: {}", files);
+        if (files != null) {
+            for (com.itechart.data.entity.File file : files) {
+                if (file != null)
+                    deleteFile(file.getStoredName());
             }
         }
     }
