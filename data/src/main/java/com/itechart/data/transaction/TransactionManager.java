@@ -21,12 +21,14 @@ public class TransactionManager {
 
     public Transaction getTransaction() {
         logger.info("Create transaction");
-        try {
-            Connection connection = dataSource.getConnection();
-            connection.setAutoCommit(false);
-            return new Transaction(connection);
-        } catch (SQLException e) {
-            logger.error("Error creating transaction: {}", e.getMessage());
+        if (dataSource != null) {
+            try {
+                Connection connection = dataSource.getConnection();
+                connection.setAutoCommit(false);
+                return new Transaction(connection);
+            } catch (SQLException e) {
+                logger.error("Error creating transaction: {}", e.getMessage());
+            }
         }
         return null;
     }

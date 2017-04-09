@@ -336,7 +336,9 @@ public class TransactionalDataService implements AbstractDataService {
         Transaction transaction = tm.getTransaction();
         IContactDao contactDao = new JdbcContactDao(transaction);
         try {
-            return contactDao.getContactsSearchResultCount(dto);
+            int count = contactDao.getContactsSearchResultCount(dto);
+            transaction.commitTransaction();
+            return count;
         } catch (DaoException e) {
             logger.error("Error fetching search result contacts count: {}", e.getCause().getMessage());
             transaction.rollbackTransaction();

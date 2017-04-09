@@ -18,10 +18,6 @@ import java.io.IOException;
 public class FrontCtrl extends HttpServlet {
 
 
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-    }
-
     public void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Command command = CommandFactory.getCommand(request);
         String page = null;

@@ -314,7 +314,7 @@ function createHiddenInputForPhone(phone) {
     var phoneHiddenInput = document.createElement("input");
     phoneHiddenInput.setAttribute("name", "phone[" + phone.getId() + "]");
     phoneHiddenInput.setAttribute("value", value);
-    phones.push(phone);
+   // phones.push(phone);
     hiddenPhoneTable.appendChild(phoneHiddenInput);
     return phoneHiddenInput;
 }
@@ -334,7 +334,7 @@ function saveNew() {
     createRow(phoneTable, newPhone);
     var hiddenInput = createHiddenInputForPhone(newPhone);
     newPhone.setHiddenInput(hiddenInput);
-    phones.push(hiddenInput);
+    phones.push(newPhone);
     //close popup
     phonePopup.className = "popup";
 }

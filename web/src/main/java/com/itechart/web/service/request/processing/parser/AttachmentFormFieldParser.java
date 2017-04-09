@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * Class for parsing attachment's field values from request parameter.
  */
 public class AttachmentFormFieldParser {
-    private final String formFieldRegex = "(\\w+)=([[А-ЯЁ][-А-яЁё]\\w\\d\\s\\.\\-:]*)&?";
+    private final String formFieldRegex = "(\\w+)=([[^/\\:?|*\"<>&]+)]*)&?";
     private final Pattern formFieldPattern = Pattern.compile(formFieldRegex);
     private Logger logger = LoggerFactory.getLogger(AttachmentFormFieldParser.class);
 

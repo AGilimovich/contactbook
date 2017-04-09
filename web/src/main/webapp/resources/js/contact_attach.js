@@ -465,7 +465,7 @@ attachForm.onsubmit = function () {
 
 inputAttachName.oninvalid = function () {
     'use strict'
-    inputAttachName.setCustomValidity('Имя не может быть пустым');
+    inputAttachName.setCustomValidity('Имя не может пустым или содержать символ &');
 }
 inputAttachName.oninput = function () {
     'use strict'

@@ -66,7 +66,7 @@
                                         </p>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-3 col-sm-3">
                                             <div class="row">
                                                 <p><b>Дата рождения:</b></p>
                                             </div>
@@ -77,12 +77,12 @@
                                                 <p>${formattedDateOfBirth}</p>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-6 col-sm-3" >
                                             <div class="row">
                                                 <p><b>Домашний адрес:</b></p>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-3">
+                                                <div class="col-md-3 left-padding-0">
                                                     Страна:
                                                 </div>
                                                 <div class="col-md-9">
@@ -90,25 +90,25 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-3">Город:</div>
+                                                <div class="col-md-3 left-padding-0">Город:</div>
                                                 <div class="col-md-9">${contact.city}</div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-3">Улица:</div>
+                                                <div class="col-md-3 left-padding-0">Улица:</div>
                                                 <div class="col-md-9">${contact.street}</div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-3">Дом:</div>
+                                                <div class="col-md-3 left-padding-0">Дом:</div>
                                                 <div class="col-md-9">${contact.house}</div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-3">Квартира:</div>
+                                                <div class="col-md-3 left-padding-0">Квартира:</div>
                                                 <div class="col-md-9"><p>${contact.apartment}</p></div>
                                             </div>
 
                                         </div>
 
-                                        <div class="col-md-3">
+                                        <div class="col-md-3 col-sm-6">
                                             <div class="row">
                                                 <p><b>Место работы:</b></p>
                                             </div>
