@@ -120,7 +120,7 @@ function Attachment(id, name, extension, uploadDate, comment, status) {
         getExtension: function () {
             return extension;
         },
-        getFullName: function(){
+        getFullName: function () {
             var fullName;
             return extension === '' ? fullName = name : fullName = name + "." + extension;
         },
@@ -170,7 +170,11 @@ btnAddAttach.onclick = function () {
     inputAttachName.disabled = true;
     newInput.onchange = function () {
         inputAttachName.disabled = false;
-        inputAttachName.value = new FileNameExtractor(newInput.files[0].name).getName();
+        if (newInput.files[0] !== undefined) {
+            inputAttachName.value = new FileNameExtractor(newInput.files[0].name).getName();
+        } else {
+            inputAttachName.value = "";
+        }
 
     }
     saveAttach = function () {
@@ -333,7 +337,7 @@ function newAttachTableRow(attachment) {
     cellUploadDate.setAttribute("align", "center");
     var cellComment = row.insertCell(3);
     cellComment.setAttribute("width", "50%");
-    cellComment.className= "padding-left";
+    cellComment.className = "padding-left";
 
     // ------------------add checkbox into cell[0]
     var checkbox = document.createElement("input");
