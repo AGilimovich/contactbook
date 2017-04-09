@@ -37,7 +37,7 @@ window.onload = function () {
             this.setCustomValidity('Поле "Текст" не может быть пустым');
         }
         emailBodies[i].oninput = function () {
-            
+
             this.setCustomValidity('');
         }
     }
@@ -48,16 +48,19 @@ btnSendEmail.onclick = function () {
     'use strict'
     var emailBody = document.getElementById("email-body[" + previousSelectedIndex + "]");
 
-    if (isBlank(inputEmailAddresses.value) || isBlank(emailBody.value)) {
-        btnSubmitForm.click();
-        return;
-    }
-
-    if (isBlank(inputSubject.value)) {
-        if (confirm('Отправить это письмо без темы?')) {
+    if (!isBlank(inputEmailAddresses.value) && !isBlank(emailBody.value)) {
+        if (isBlank(inputSubject.value)) {
+            if (confirm('Отправить это письмо без темы?')) {
+                btnSubmitForm.click();
+            }
+        }
+        else {
             btnSubmitForm.click();
         }
+    } else {
+        btnSubmitForm.click();
     }
+
 
 }
 
