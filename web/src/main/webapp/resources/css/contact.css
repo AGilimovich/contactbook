@@ -22,8 +22,6 @@
     max-height:100%;
 }
 
-
-
 .popup {
     display: none;
     position: fixed;
@@ -234,7 +232,6 @@
 .close:after {
     transform: rotate(-45deg);
 }
-
 
 .padding-left{
     padding: 0 5px;

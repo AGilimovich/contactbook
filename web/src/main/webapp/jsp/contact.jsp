@@ -33,8 +33,8 @@
             <div class="col-lg-2 col-md-3">
 
                 <div class="photo-container">
-                        <img src="${pageContext.request.contextPath}/image?id=${photo.storedName}" height="100%"
-                             alt="photo" id="photo">
+                    <img src="${pageContext.request.contextPath}/image?id=${photo.storedName}" height="100%"
+                         alt="photo" id="photo">
                 </div>
 
             </div>
@@ -269,32 +269,23 @@
                            class="form-control input-margin input-inline"
                            name="inputCountryCode"
                            placeholder="XXX" required>
-
                     <p class="form-text">Код оператора:</p>
                     <input id="operator-code-input" type="tel" pattern="\d{2}" class="form-control input-margin"
                            name="inputOperatorCode"
                            placeholder="XX" required>
-
                     <p class="form-text">Телефонный номер:</p>
                     <input id="phone-number-input" type="tel" pattern="\d{7}" class="form-control input-margin"
                            name="inputPhoneNumber"
                            placeholder="XXXXXXX" required>
                     <p class="form-text">Тип телефона:</p>
-
-
                     <input type="radio" id="input-phone-type-home" class="input-margin" name="inputPhoneType"
                            value="home" checked>
-
                     <span>Домашний</span>
                     <input type="radio" id="input-phone-type-mobile" class="input-margin" name="inputPhoneType"
                            value="mobile">
                     <span>Мобильный</span>
-
-
                     <p class="form-text">Комментарий:</p>
                     <input type="text" class="form-control input-margin" name="inputPhoneComment">
-
-
                     <button id="btn-save-phone" type="submit" class="btn margin-top btn-primary">Сохранить</button>
 
                 </form>

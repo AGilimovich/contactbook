@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 
 /**
- * Initializes resources on startup and frees resources on shutdown.
+ * Initializes resources on startup and closes resources on shutdown.
  */
 public class ContextListener implements ServletContextListener {
     Logger logger = LoggerFactory.getLogger(ContextListener.class);

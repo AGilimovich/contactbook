@@ -43,9 +43,7 @@ function findIndexOfAttachment(attachment) {
     'use strict'
     for (var i = 0; i < attachments.length; i++) {
         if (attachments[i] === attachment) return i;
-
     }
-
 }
 
 
@@ -122,6 +120,10 @@ function Attachment(id, name, extension, uploadDate, comment, status) {
         getExtension: function () {
             return extension;
         },
+        getFullName: function(){
+            var fullName;
+            return extension === '' ? fullName = name : fullName = name + "." + extension;
+        },
         getComment: function () {
             return comment;
         },
@@ -149,7 +151,6 @@ function Attachment(id, name, extension, uploadDate, comment, status) {
         setAttachCheckBox: function (checkBox) {
             attachCheckBox = checkBox;
         }
-
 
     }
 }
@@ -279,7 +280,6 @@ function saveNewAttach(input) {
     'use strict'
     var attachmentName = inputAttachName.value;
     var attachmentExtension = new FileNameExtractor(input.files[0].name).getExtension();
-    // var attachmentUploadDate = dateToString(new Date());
     var attachmentUploadDate = "";
     var attachmentComment = inputAttachComment[0].value;
     var attachmentId = new Date().getTime();

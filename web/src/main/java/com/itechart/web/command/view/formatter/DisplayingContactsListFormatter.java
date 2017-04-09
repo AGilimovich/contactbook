@@ -45,7 +45,6 @@ public class DisplayingContactsListFormatter {
         if (searchDTO != null) {
             contactsFoundCount = dataService.getContactsSearchResultCount(searchDTO);
             contacts = dataService.getSearchResultContactsDTOForPage(searchDTO, pageNumber, contactsOnPage);
-
         } else {
             contactsFoundCount = dataService.getContactsCount();
             contacts = dataService.getMainPageContactDTO(pageNumber, contactsOnPage);
@@ -55,6 +54,9 @@ public class DisplayingContactsListFormatter {
         int pagesCount = 0;
         if (contactsOnPage != 0) {
             pagesCount = (int) Math.ceil((double) contactsFoundCount / contactsOnPage);
+        }
+        if (pageNumber != 0 && pageNumber >= pagesCount) {
+            throw new DataException("Requested page was not found");
         }
 
         request.setAttribute("pageNumber", pageNumber);
