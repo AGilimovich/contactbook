@@ -238,6 +238,7 @@ btnEditAttach.onclick = function () {
         //fill inputs with values
 
         inputAttachName.value = new FileNameExtractor(attachName[checkedIndex].innerText).getName();
+        inputAttachName.disabled = false;
         inputAttachComment[0].value = attachComment[checkedIndex].innerText;
         var attachment = attachments[checkedIndex];
         var fileInput = attachment.getAttachFileInput();
