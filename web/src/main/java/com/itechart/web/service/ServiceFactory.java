@@ -13,8 +13,8 @@ import com.itechart.web.service.request.processing.RequestProcessingService;
 import com.itechart.web.service.scheduler.AbstractSchedulingService;
 import com.itechart.web.service.scheduler.EmailCongratsJob;
 import com.itechart.web.service.scheduler.SchedulingService;
-import com.itechart.web.service.template.AbstractTemplateProvidingService;
-import com.itechart.web.service.template.TemplatesProvidingService;
+import com.itechart.web.service.template.AbstractTemplateFactory;
+import com.itechart.web.service.template.TemplateFactory;
 import com.itechart.web.service.validation.AbstractValidationService;
 import com.itechart.web.service.validation.ValidationService;
 import org.slf4j.Logger;
@@ -91,8 +91,8 @@ public class ServiceFactory {
         return new EmailService(hostName, SMTPPort, userName, password, emailFrom);
     }
 
-    public AbstractTemplateProvidingService getEmailTemplateProvidingService() {
-        return new TemplatesProvidingService();
+    public AbstractTemplateFactory getEmailTemplateProvidingService() {
+        return new TemplateFactory();
     }
 
     public AbstractSchedulingService getEmailCongratsService() {

@@ -28,9 +28,10 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
 
     /**
      * Processes multipart requests to create or update contact.
+     *
      * @param request received from client.
      * @return constructed from request contact DTO.
-     * @throws FileSizeException when size of one of files in request exceeds maximum permitted value
+     * @throws FileSizeException   when size of one of files in request exceeds maximum permitted value
      * @throws ValidationException when one of fields has invalid value.
      */
     @Override
@@ -57,6 +58,7 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
 
     /**
      * Processes requests to delete contacts.
+     *
      * @param request received from client.
      * @return list of contacts id's deleting of which was requested.
      * @throws ValidationException when one of received in request id's has illegal value.
@@ -74,7 +76,7 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
                 if (validationService.validateId(id)) {
                     try {
                         selectedIdList.add(Long.valueOf(id));
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         throw new ValidationException(StringUtils.join(new Object[]{"Illegal id", id}, ": "), e);
                     }
                 } else {
@@ -87,6 +89,7 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
 
     /**
      * Processes requests to fetch one contact.
+     *
      * @param request received from client.
      * @return id of requested contact.
      * @throws ValidationException when received in request id has illegal value.
@@ -100,7 +103,7 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
             if (validationService.validateId(idParam)) {
                 try {
                     return Long.valueOf(idParam);
-                }catch (Exception e){
+                } catch (Exception e) {
                     throw new ValidationException(StringUtils.join(new Object[]{"Illegal id", idParam}, ": "), e);
                 }
             }
@@ -110,6 +113,7 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
 
     /**
      * Processes requests to search contacts and fetch found ones.
+     *
      * @param request received from client.
      * @return contact DTO corresponding to the search parameters.
      * @throws ValidationException when one of fields in request has illegal value.
@@ -138,37 +142,27 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
 
     /**
      * Processes requests to send emails.
+     *
      * @param request received from client.
-     * @return list of email objects to be sent.
-     * @throws ValidationException when list of emails is empty.
+     * @return Email to be sent.
+     * @throws ValidationException when body of email is empty.
      */
     @Override
-    public ArrayList<Email> processSendEmailRequest(HttpServletRequest request) throws ValidationException {
-        AbstractValidationService validationService = ServiceFactory.getInstance().getValidationService();
-        String emailAddressesString = request.getParameter("emailAddresses");
+    public Email processSendEmailRequest(HttpServletRequest request) throws ValidationException {
         String subject = request.getParameter("subject");
         String body = request.getParameter("email-body");
         String template = request.getParameter("template");
-        logger.info("Processing request: send email with email addresses: {}, subject: {}, template:{}, email-body: {}", emailAddressesString, subject, template, body);
-
-        ArrayList<String> emailAddresses = new EmailAddressesParser().getEmailAddresses(emailAddressesString);
-
-        ArrayList<Email> emails = new ArrayList<>();
-        if (emailAddresses != null) {
-            for (String emailAddress : emailAddresses) {
-                if (validationService.validateEmail(emailAddress)) {
-                    emails.add(new Email(emailAddress, subject, template, body));
-                }
-            }
-        } else {
-            throw new ValidationException("List of emails is empty");
+        logger.info("Processing request: send email with subject: {}, template:{}, email-body: {}", subject, template, body);
+        if (StringUtils.isEmpty(body)) {
+            throw new ValidationException("Email body is empty");
         }
-        return emails;
+        return new Email(subject, template, body);
 
     }
 
     /**
      * Processes request to show email sending view.
+     *
      * @param request received from client.
      * @return list of contacts id's to whom emails are sent.
      * @throws ValidationException if one of received contact's id's has illegal value.
@@ -186,7 +180,7 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
                 if (validationService.validateId(id)) {
                     try {
                         selectedIdList.add(Long.valueOf(id));
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         throw new ValidationException(StringUtils.join(new Object[]{"Illegal id", id}, ": "), e);
                     }
                 } else {
@@ -199,6 +193,7 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
 
     /**
      * Process requests to change the count of displauing on main page contacts.
+     *
      * @param request received from client.
      * @return count of contacts to display.
      * @throws ValidationException if received count has illegal value.

@@ -4,25 +4,17 @@ package com.itechart.web.service.email;
  * Base class of email to be sent.
  */
 public class Email {
-    private String emailAddress;
     private String subject;
     private String template;
     private String body;
 
-    public Email(String emailAddress, String subject, String template, String body) {
-        this.emailAddress = emailAddress;
+    public Email(String subject, String template, String body) {
         this.subject = subject;
         this.template = template;
         this.body = body;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
-    }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
 
     public String getSubject() {
         return subject;

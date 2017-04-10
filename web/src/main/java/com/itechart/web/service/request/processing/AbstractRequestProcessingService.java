@@ -22,7 +22,7 @@ public interface AbstractRequestProcessingService {
 
     SearchDTO processSearchContactsRequest(HttpServletRequest request) throws ValidationException;
 
-    ArrayList<Email> processSendEmailRequest(HttpServletRequest request) throws ValidationException;
+    Email processSendEmailRequest(HttpServletRequest request) throws ValidationException;
 
     ArrayList<Long> processShowEmailViewRequest(HttpServletRequest request) throws ValidationException;
 

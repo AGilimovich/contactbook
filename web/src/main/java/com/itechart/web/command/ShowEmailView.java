@@ -5,7 +5,7 @@ import com.itechart.web.command.errors.ErrorDispatcher;
 import com.itechart.web.service.data.AbstractDataService;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.exception.DataException;
-import com.itechart.web.service.template.AbstractTemplateProvidingService;
+import com.itechart.web.service.template.AbstractTemplateFactory;
 import com.itechart.web.service.template.Template;
 import com.itechart.web.service.validation.ValidationException;
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * Command executed on request to show send emails view.
@@ -60,17 +59,18 @@ public class ShowEmailView implements Command {
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_BAD_REQUEST);
             return null;
         }
-        AbstractTemplateProvidingService templateService = ServiceFactory.getInstance().getEmailTemplateProvidingService();
-        Map<String, Template> templates = templateService.getPredefinedEmailTemplates();
+        AbstractTemplateFactory templateService = ServiceFactory.getInstance().getEmailTemplateProvidingService();
+        ArrayList<Template> templates = templateService.getPredefinedEmailTemplates();
         if (templates != null) {
-            for (Map.Entry<String, Template> entry : templates.entrySet()) {
-                ST st = entry.getValue().getTemplate();
-                st.add("name", "<name>");
+            for (Template template : templates) {
+                if (template != null)
+                    template.getTemplate().add("name", "[Имя Отчество]");
             }
         }
 
         Template emailListTemplate = templateService.getEmailListTemplate(emailList);
-        request.setAttribute("templates", templates.entrySet());
+        request.getSession().setAttribute("emailRecipients", contacts);
+        request.setAttribute("templates", templates);
         request.setAttribute("contacts", contacts);
         request.setAttribute("emailListTemplate", emailListTemplate);
 

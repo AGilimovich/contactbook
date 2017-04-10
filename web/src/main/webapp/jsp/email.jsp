@@ -42,7 +42,7 @@
                             class="form-control"
                             onchange="showTemplate(this.selectedIndex);">
                         <c:forEach var="template" items="${templates}" varStatus="status">
-                            <option value="${template.getValue().getTemplate().getName()}">${template.getValue().getDescription()}</option>
+                            <option value="${template.getTemplate().getName()}">${template.getDescription()}</option>
                         </c:forEach>
                     </select>
                 </div>
@@ -53,7 +53,7 @@
                         <textarea name="email-body"
                                   id="email-body[${status.index}]" ${status.index == 0? 'required' : 'disabled'}
 
-                                  class="${status.index == 0?'text-field white-space-pre' : 'text-field white-space-pre hidden'}">${template.getValue().getTemplate().render()}</textarea>
+                                  class="${status.index == 0?'text-field white-space-pre' : 'text-field white-space-pre hidden'}">${template.getTemplate().render()}</textarea>
                     </c:forEach>
 
 

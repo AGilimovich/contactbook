@@ -1,15 +1,17 @@
 package com.itechart.web.command;
 
 import com.itechart.data.dto.SearchDTO;
+import com.itechart.data.entity.Contact;
 import com.itechart.web.command.errors.ErrorDispatcher;
 import com.itechart.web.command.view.formatter.DisplayingContactsListFormatter;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.exception.DataException;
 import com.itechart.web.service.email.AbstractEmailingService;
 import com.itechart.web.service.email.Email;
-import com.itechart.web.service.template.AbstractTemplateProvidingService;
+import com.itechart.web.service.template.AbstractTemplateFactory;
 import com.itechart.web.service.template.Template;
 import com.itechart.web.service.validation.ValidationException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.mail.EmailException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,17 +32,24 @@ public class DoSendEmail implements Command {
     public String execute(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         logger.info("Execute command");
 
-        ArrayList<Email> emails = null;
+        Email email = null;
+        ArrayList<Contact> contacts = (ArrayList<Contact>) request.getSession().getAttribute("emailRecipients");
         AbstractEmailingService emailingService = ServiceFactory.getInstance().getEmailService();
-        AbstractTemplateProvidingService templateProvidingService = ServiceFactory.getInstance().getEmailTemplateProvidingService();
+        AbstractTemplateFactory templateProvidingService = ServiceFactory.getInstance().getEmailTemplateProvidingService();
         try {
-            emails = ServiceFactory.getInstance().getRequestProcessingService().processSendEmailRequest(request);
-            for (Email email : emails) {
+            email = ServiceFactory.getInstance().getRequestProcessingService().processSendEmailRequest(request);
+            for (Contact contact : contacts) {
                 Template template = templateProvidingService.getTemplate(email.getTemplate());
                 try {
-                    template.getTemplate().add("name", "asdasd");
+                    String name = contact.getName();
+                    if (name != null) {
+                        if (contact.getPatronymic() != null) {
+                            name = name.concat(" ").concat(contact.getPatronymic());
+                        }
+                    }
+                    template.getTemplate().add("name", name);
                     String body = template.getTemplate().render();
-                    emailingService.sendEmail(email.getEmailAddress(), email.getSubject(), body);
+                    emailingService.sendEmail(contact.getEmail(), email.getSubject(), body);
                 } catch (EmailException e) {
                     logger.error("Error during sending email: {}", e.getMessage());
                 }

@@ -1,14 +1,13 @@
 package com.itechart.web.service.template;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
- * Service for extracting templates from files.
+ * Factory of templates.
  */
-public interface AbstractTemplateProvidingService {
+public interface AbstractTemplateFactory {
 
-    Map<String, Template> getPredefinedEmailTemplates();
+    ArrayList<Template> getPredefinedEmailTemplates();
 
     Template getTemplate(String name);
 

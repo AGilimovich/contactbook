@@ -4,9 +4,10 @@ import com.itechart.data.entity.Contact;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.exception.DataException;
 import com.itechart.web.service.email.AbstractEmailingService;
-import com.itechart.web.service.template.AbstractTemplateProvidingService;
+import com.itechart.web.service.template.AbstractTemplateFactory;
 import com.itechart.web.service.template.BirthdayEmailTemplate;
 import com.itechart.web.service.template.Template;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.mail.EmailException;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -15,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -36,15 +36,20 @@ public class EmailCongratsJob implements Job {
             logger.error("Error during fetching contacts", e.getMessage());
         }
         AbstractEmailingService emailingService = ServiceFactory.getInstance().getEmailService();
-        AbstractTemplateProvidingService templateService = ServiceFactory.getInstance().getEmailTemplateProvidingService();
-
-        Template template = templateService.getPredefinedEmailTemplates().get(BirthdayEmailTemplate.class);
+        AbstractTemplateFactory templateService = ServiceFactory.getInstance().getEmailTemplateProvidingService();
         String subject = "C днем рождения!";
-        String body = template.getTemplate().render();
-
         if (contacts != null) {
             for (Contact con : contacts) {
                 try {
+                    Template template = templateService.getTemplate("/birthdayEmail");
+                    String name = con.getName();
+                    if (name != null) {
+                        if (con.getPatronymic() != null) {
+                            name = name.concat(" ").concat(con.getPatronymic());
+                        }
+                    }
+                    template.getTemplate().add("name", name);
+                    String body = template.getTemplate().render();
                     logger.info("Send email, email address {}, subject: {}, body: {}", con.getEmail(), subject, body);
                     emailingService.sendEmail(con.getEmail(), subject, body);
                 } catch (EmailException e) {
