@@ -44,11 +44,11 @@
             <fmt:formatDate value="${searchDTO.fromDate}"
                             var="formattedDateOfBirth"
                             type="date" pattern="dd.MM.yyyy"/>
-            <p class="${searchDTO.fromDate==null? 'hidden':''}">Дата рождения > ${formattedDateOfBirth}</p>
+            <p class="${searchDTO.fromDate==null? 'hidden':''}">Дата рождения >= ${formattedDateOfBirth}</p>
             <fmt:formatDate value="${searchDTO.toDate}"
                             var="formattedDateOfBirth"
                             type="date" pattern="dd.MM.yyyy"/>
-            <p class="${searchDTO.toDate==null? 'hidden':''}">Дата рождения < ${formattedDateOfBirth}</p>
+            <p class="${searchDTO.toDate==null? 'hidden':''}">Дата рождения <= ${formattedDateOfBirth}</p>
             <p class="${searchDTO.gender==null? 'hidden':''}">Пол =
                 <c:choose>
                     <c:when test="${searchDTO.gender.name().equals('MALE')}">

@@ -22,9 +22,9 @@ public class TemplateFactory implements AbstractTemplateFactory {
     private STGroup stGroup = new STGroupFile("templates/template.stg");
 
     static {
-        STNames.add("/commonEmail");
+        STNames.add("/newYearEmail");
         STNames.add("/birthdayEmail");
-        templateClasses.put("/commonEmail", CommonEmailTemplate.class);
+        templateClasses.put("/newYearEmail", NewYearEmailTemplate.class);
         templateClasses.put("/birthdayEmail", BirthdayEmailTemplate.class);
     }
 

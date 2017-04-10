@@ -39,20 +39,28 @@ public class DoSendEmail implements Command {
         try {
             email = ServiceFactory.getInstance().getRequestProcessingService().processSendEmailRequest(request);
             for (Contact contact : contacts) {
-                Template template = templateProvidingService.getTemplate(email.getTemplate());
+                Template template = null;
+                if (email.getTemplate() != null) {
+                    template = templateProvidingService.getTemplate(email.getTemplate());
+                }
                 try {
-                    String name = contact.getName();
-                    if (name != null) {
-                        if (contact.getPatronymic() != null) {
-                            name = name.concat(" ").concat(contact.getPatronymic());
+                    if (template != null) {
+                        String name = contact.getName();
+                        if (name != null) {
+                            if (contact.getPatronymic() != null) {
+                                name = name.concat(" ").concat(contact.getPatronymic());
+                            }
                         }
+                        template.getTemplate().add("name", name);
+                        String body = template.getTemplate().render();
+                        emailingService.sendEmail(contact.getEmail(), email.getSubject(), body);
+                    } else {
+                        emailingService.sendEmail(contact.getEmail(), email.getSubject(), email.getBody());
                     }
-                    template.getTemplate().add("name", name);
-                    String body = template.getTemplate().render();
-                    emailingService.sendEmail(contact.getEmail(), email.getSubject(), body);
                 } catch (EmailException e) {
                     logger.error("Error during sending email: {}", e.getMessage());
                 }
+
             }
         } catch (ValidationException e) {
             logger.error("Error during request processing: {}", e.getMessage());

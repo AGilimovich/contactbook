@@ -5,11 +5,11 @@ import org.stringtemplate.v4.ST;
 /**
  * Template for common email.
  */
-public class CommonEmailTemplate implements Template {
+public class NewYearEmailTemplate implements Template {
     private ST template;
-    private final String description = "Стандартный email";
+    private final String description = "Поздравление с новым годом";
 
-    public CommonEmailTemplate(ST template) {
+    public NewYearEmailTemplate(ST template) {
         this.template = template;
     }
 

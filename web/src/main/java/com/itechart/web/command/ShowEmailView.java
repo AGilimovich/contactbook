@@ -49,11 +49,8 @@ public class ShowEmailView implements Command {
                         ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_NOT_FOUND);
                         return null;
                     }
-
                 }
             }
-
-
         } catch (ValidationException e) {
             logger.error("Error during request processing: {}", e.getMessage());
             ErrorDispatcher.dispatchError(response, HttpServletResponse.SC_BAD_REQUEST);

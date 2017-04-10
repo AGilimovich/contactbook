@@ -153,10 +153,11 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         String body = request.getParameter("email-body");
         String template = request.getParameter("template");
         logger.info("Processing request: send email with subject: {}, template:{}, email-body: {}", subject, template, body);
-        if (StringUtils.isEmpty(body)) {
-            throw new ValidationException("Email body is empty");
+        String templateParam = null;
+        if (StringUtils.isNotEmpty(template)) {
+            templateParam = template;
         }
-        return new Email(subject, template, body);
+        return new Email(subject, templateParam, body);
 
     }
 

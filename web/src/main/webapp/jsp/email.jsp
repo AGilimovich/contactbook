@@ -39,8 +39,8 @@
                 <div class="row">
                     <p class="form-text">Шаблон:</p>
                     <select id="template-select" name="template" value="${template.getValue().getDescription()}"
-                            class="form-control"
-                            onchange="showTemplate(this.selectedIndex);">
+                            class="form-control">
+                        <option value=""></option>
                         <c:forEach var="template" items="${templates}" varStatus="status">
                             <option value="${template.getTemplate().getName()}">${template.getDescription()}</option>
                         </c:forEach>
@@ -49,11 +49,12 @@
 
                 <div class="row">
                     <p class="form-text">Текст:</p>
-                    <c:forEach var="template" items="${templates}" varStatus="status">
+                     <textarea name="email-body"
+                               id="email-body[0]" class="text-field white-space-pre" required></textarea>
+                    <c:forEach var="template" items="${templates}" begin="0" varStatus="status">
                         <textarea name="email-body"
-                                  id="email-body[${status.index}]" ${status.index == 0? 'required' : 'disabled'}
-
-                                  class="${status.index == 0?'text-field white-space-pre' : 'text-field white-space-pre hidden'}">${template.getTemplate().render()}</textarea>
+                                  id="email-body[${status.index+1}]"
+                                  class="text-field white-space-pre hidden" disabled>${template.getTemplate().render()}</textarea>
                     </c:forEach>
 
 
