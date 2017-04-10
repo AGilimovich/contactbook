@@ -2,7 +2,6 @@ package com.itechart.web.service.request.processing.builder;
 
 import com.itechart.data.dto.SearchDTO;
 import com.itechart.data.entity.Contact;
-import com.itechart.data.entity.Phone;
 import com.itechart.web.service.validation.ValidationException;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -104,7 +103,7 @@ public class SearchDTOBuilder {
             dto.setApartment(apartmentParam);
         }
         if (StringUtils.isNotBlank(zipCodeParam)) {
-            dto.setZipCOde(zipCodeParam);
+            dto.setZipCode(zipCodeParam);
         }
         return dto;
     }

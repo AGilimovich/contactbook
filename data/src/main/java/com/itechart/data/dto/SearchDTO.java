@@ -23,7 +23,7 @@ public class SearchDTO {
     private String street;
     private String house;
     private String apartment;
-    private String zipCOde;
+    private String zipCode;
 
     @Override
     public String toString() {
@@ -42,7 +42,7 @@ public class SearchDTO {
                 ", street='" + street + '\'' +
                 ", house='" + house + '\'' +
                 ", apartment='" + apartment + '\'' +
-                ", zipCOde='" + zipCOde + '\'' +
+                ", zipCode='" + zipCode + '\'' +
                 '}';
     }
 
@@ -158,11 +158,11 @@ public class SearchDTO {
         this.apartment = apartment;
     }
 
-    public String getZipCOde() {
-        return zipCOde;
+    public String getZipCode() {
+        return zipCode;
     }
 
-    public void setZipCOde(String zipCOde) {
-        this.zipCOde = zipCOde;
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 }

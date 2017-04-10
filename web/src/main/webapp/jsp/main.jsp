@@ -35,7 +35,51 @@
 
 
 <div class="container-fluid content">
+    <div class="row ${searchDTO==null? 'hidden':''}">
+        <div class="col-md-3 well search-result">
+            <h4>Параметры поиска:</h4>
+            <p class="${searchDTO.name==null? 'hidden':''}">Имя = ${searchDTO.name}</p>
+            <p class="${searchDTO.surname==null? 'hidden':''}">Фамилия = ${searchDTO.surname}</p>
+            <p class="${searchDTO.patronymic==null? 'hidden':''}">Отчество = ${searchDTO.patronymic}</p>
+            <fmt:formatDate value="${searchDTO.fromDate}"
+                            var="formattedDateOfBirth"
+                            type="date" pattern="dd.MM.yyyy"/>
+            <p class="${searchDTO.fromDate==null? 'hidden':''}">Дата рождения > ${formattedDateOfBirth}</p>
+            <fmt:formatDate value="${searchDTO.toDate}"
+                            var="formattedDateOfBirth"
+                            type="date" pattern="dd.MM.yyyy"/>
+            <p class="${searchDTO.toDate==null? 'hidden':''}">Дата рождения < ${formattedDateOfBirth}</p>
+            <p class="${searchDTO.gender==null? 'hidden':''}">Пол =
+                <c:choose>
+                    <c:when test="${searchDTO.gender.name().equals('MALE')}">
+                        мужской
+                    </c:when>
+                    <c:when test="${searchDTO.gender.name().equals('FEMALE')}">
+                        женский
+                    </c:when>
+                </c:choose>
+            </p>
+            <p class="${searchDTO.familyStatus==null? 'hidden':''}">Семейное положение =
+                <c:choose>
+                    <c:when test="${searchDTO.familyStatus.name().equals('MARRIED')}">
+                        женат/замужем
+                    </c:when>
+                    <c:when test="${searchDTO.familyStatus.name().equals('SINGLE')}">
+                        холост/не замужем
+                    </c:when>
+                </c:choose>
+            </p>
+            <p class="${searchDTO.citizenship==null? 'hidden':''}">Гражданство = ${searchDTO.citizenship}</p>
+            <p class="${searchDTO.country==null? 'hidden':''}">Страна = ${searchDTO.country}</p>
+            <p class="${searchDTO.city==null? 'hidden':''}">Город = ${searchDTO.city}</p>
+            <p class="${searchDTO.street==null? 'hidden':''}">Улица = ${searchDTO.street}</p>
+            <p class="${searchDTO.house==null? 'hidden':''}">Дом = ${searchDTO.house}</p>
+            <p class="${searchDTO.apartment==null? 'hidden':''}">Квартира = ${searchDTO.apartment}</p>
+            <p class="${searchDTO.zipCode==null? 'hidden':''}">Почтовый индекс = ${searchDTO.zipCode}</p>
+        </div>
+    </div>
     <form id="main-form" action="${pageContext.request.contextPath}/email">
+
         <div class="row">
             <div class="col-md-10 col-sm-10">
                 <div class="row">
@@ -77,7 +121,7 @@
                                                 <p>${formattedDateOfBirth}</p>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 col-sm-3" >
+                                        <div class="col-md-6 col-sm-3">
                                             <div class="row">
                                                 <p><b>Домашний адрес:</b></p>
                                             </div>

@@ -296,8 +296,8 @@ public class JdbcContactDao implements IContactDao {
             parameters.add(appendPercents(dto.getApartment()));
             builder.appendWhereClause("a.apartment");
         }
-        if (StringUtils.isNotBlank(dto.getZipCOde())) {
-            parameters.add(appendPercents(dto.getZipCOde()));
+        if (StringUtils.isNotBlank(dto.getZipCode())) {
+            parameters.add(appendPercents(dto.getZipCode()));
             builder.appendWhereClause("a.zip_code");
         }
         builder.appendLimit(from, count);
@@ -553,8 +553,8 @@ public class JdbcContactDao implements IContactDao {
             parameters.add(appendPercents(dto.getApartment()));
             builder.appendWhereClause("a.apartment");
         }
-        if (StringUtils.isNotBlank(dto.getZipCOde())) {
-            parameters.add(appendPercents(dto.getZipCOde()));
+        if (StringUtils.isNotBlank(dto.getZipCode())) {
+            parameters.add(appendPercents(dto.getZipCode()));
             builder.appendWhereClause("a.zip_code");
         }
 
