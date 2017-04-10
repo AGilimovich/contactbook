@@ -18,10 +18,10 @@ public class DynamicPreparedQueryBuilder {
     public void appendWhereClause(String name) {
         if (StringUtils.isBlank(name)) return;
         if (isFirst) {
-            query.append(" WHERE ").append(name).append("=").append("?");
+            query.append(" WHERE ").append(name).append(" LIKE ").append("?");
             isFirst = false;
         } else
-            query.append(" AND ").append(name).append("=").append("?");
+            query.append(" AND ").append(name).append(" LIKE ").append("?");
     }
 
     public void appendBetween(String name) {

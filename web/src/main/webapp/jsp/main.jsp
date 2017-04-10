@@ -14,7 +14,7 @@
     <div class="container-fluid">
 
         <div class="navbar-header">
-            <a href="${pageContext.request.contextPath}" class="navbar-brand">Справочник контактов</a>
+            <a href="${pageContext.request.contextPath}" class="navbar-brand title">Справочник контактов</a>
         </div>
         <div id="myNavbar">
             <ul class="nav navbar-nav navbar-right">

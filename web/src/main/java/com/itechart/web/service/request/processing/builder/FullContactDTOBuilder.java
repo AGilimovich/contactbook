@@ -38,7 +38,7 @@ public class FullContactDTOBuilder {
     private ArrayList<FullAttachmentDTO> updatedAttachments = new ArrayList<>();
     private ArrayList<FullAttachmentDTO> deletedAttachments = new ArrayList<>();
     private FilePartWriter writer = new FilePartWriter(PropertiesManager.FILE_PATH());
-    private ArrayList<String> storedFiles = new ArrayList<>();
+    private ArrayList<File> storedFiles = new ArrayList<>();
 
     public void build(Map<String, String> formFields, Map<String, FileItem> fileParts) throws ValidationException {
         if (formFields != null) {
@@ -59,13 +59,14 @@ public class FullContactDTOBuilder {
             String storedName = null;
             if (photoFileItem.getSize() != 0) {
                 storedName = writer.writeFilePart(photoFileItem);
-                storedFiles.add(storedName);
             }
             Map<String, String> parameters = new HashMap<>();
             parameters.put("realName", photoFileItem.getName());
             parameters.put("storedName", storedName);
             PhotoFileBuilder builder = new PhotoFileBuilder();
             photo = builder.buildFile(parameters);
+            storedFiles.add(photo);
+
         }
     }
 
@@ -143,12 +144,13 @@ public class FullContactDTOBuilder {
                                 FileItem attachFileItem = fileParts.get("attachFile[" + fileFieldNumber + "]");
                                 if (attachFileItem != null) {
                                     String storedName = writer.writeFilePart(attachFileItem);
-                                    storedFiles.add(storedName);
+
                                     Map<String, String> filePartsParameters = new HashMap() {{
                                         put("realName", attachFileItem.getName());
                                         put("storedName", storedName);
                                     }};
                                     file = fileBuilder.buildFile(filePartsParameters);
+                                    storedFiles.add(file);
                                 }
                             }
                             if (file == null) return;
@@ -182,7 +184,7 @@ public class FullContactDTOBuilder {
 
     }
 
-    public Collection<String> getStoredFiles() {
+    public Collection<File> getStoredFiles() {
         return storedFiles;
     }
 

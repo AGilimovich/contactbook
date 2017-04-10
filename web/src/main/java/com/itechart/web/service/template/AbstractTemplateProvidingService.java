@@ -8,7 +8,9 @@ import java.util.Map;
  */
 public interface AbstractTemplateProvidingService {
 
-    Map<Class<? extends Template>, Template> getPredefinedEmailTemplates();
+    Map<String, Template> getPredefinedEmailTemplates();
+
+    Template getTemplate(String name);
 
     Template getEmailListTemplate(ArrayList<String> emailList);
 }

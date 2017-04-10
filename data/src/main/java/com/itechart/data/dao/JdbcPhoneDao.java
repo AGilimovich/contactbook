@@ -57,7 +57,7 @@ public class JdbcPhoneDao implements IPhoneDao {
                 try {
                     phoneType = Phone.PhoneType.valueOf(rs.getString("phone_type_value").toUpperCase());
                 } catch (Exception e) {
-                    throw new DaoException("Illegal phone type value", e);
+                    phoneType = null;
                 }
                 String phone_comment = rs.getString("comment");
                 long contact = rs.getLong("contact_id");
@@ -72,8 +72,6 @@ public class JdbcPhoneDao implements IPhoneDao {
         }
         return phones;
     }
-
-
 
 
     @Override
@@ -91,7 +89,11 @@ public class JdbcPhoneDao implements IPhoneDao {
             st.setString(3, phone.getPhoneNumber());
             st.setString(4, phone.getComment());
             st.setLong(5, phone.getContact());
-            st.setString(6, phone.getPhoneType().name());
+            if (phone.getPhoneType() != null) {
+                st.setString(6, phone.getPhoneType().name());
+            } else {
+                st.setString(6, "none");
+            }
             st.executeUpdate();
             rs = st.getGeneratedKeys();
             if (rs.next())
@@ -130,7 +132,11 @@ public class JdbcPhoneDao implements IPhoneDao {
         try {
             cn = transaction.getConnection();
             st = cn.prepareStatement(UPDATE_PHONE_QUERY);
-            st.setString(1, phone.getPhoneType().name());
+            if (phone.getPhoneType() != null) {
+                st.setString(1, phone.getPhoneType().name());
+            } else {
+                st.setString(1, "none");
+            }
             st.setString(2, phone.getCountryCode());
             st.setString(3, phone.getOperatorCode());
             st.setString(4, phone.getPhoneNumber());

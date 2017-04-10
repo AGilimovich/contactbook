@@ -50,9 +50,10 @@ public class PhoneBuilder {
             } catch (Exception e) {
                 throw new ValidationException("Phone type parameter has illegal value", e);
             }
-        } else {
-            throw new ValidationException("Phone type parameter is empty");
         }
+//        else {
+//            throw new ValidationException("Phone type parameter is empty");
+//        }
 
         if (StringUtils.isNotBlank(commentParam)) {
             if (validationService.validateField(commentParam)) {

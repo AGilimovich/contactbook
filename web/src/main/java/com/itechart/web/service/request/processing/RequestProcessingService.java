@@ -2,6 +2,7 @@ package com.itechart.web.service.request.processing;
 
 import com.itechart.data.dto.FullContactDTO;
 import com.itechart.data.dto.SearchDTO;
+import com.itechart.data.entity.File;
 import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.email.Email;
 import com.itechart.web.service.email.EmailAddressesParser;
@@ -47,7 +48,7 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         try {
             builder.build(formFields, fileParts);
         } catch (ValidationException e) {
-            Collection<String> storedFiles = builder.getStoredFiles();
+            Collection<File> storedFiles = builder.getStoredFiles();
             fileService.deleteFiles(storedFiles);
             throw e;
         }
@@ -147,7 +148,8 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         String emailAddressesString = request.getParameter("emailAddresses");
         String subject = request.getParameter("subject");
         String body = request.getParameter("email-body");
-        logger.info("Processing request: send email with email addresses: {}, subject: {},email-body: {}", emailAddressesString, subject, body);
+        String template = request.getParameter("template");
+        logger.info("Processing request: send email with email addresses: {}, subject: {}, template:{}, email-body: {}", emailAddressesString, subject, template, body);
 
         ArrayList<String> emailAddresses = new EmailAddressesParser().getEmailAddresses(emailAddressesString);
 
@@ -155,7 +157,7 @@ public class RequestProcessingService implements AbstractRequestProcessingServic
         if (emailAddresses != null) {
             for (String emailAddress : emailAddresses) {
                 if (validationService.validateEmail(emailAddress)) {
-                    emails.add(new Email(emailAddress, subject, body));
+                    emails.add(new Email(emailAddress, subject, template, body));
                 }
             }
         } else {

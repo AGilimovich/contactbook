@@ -11,6 +11,7 @@ import com.itechart.web.service.validation.ValidationException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.stringtemplate.v4.ST;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -60,9 +61,15 @@ public class ShowEmailView implements Command {
             return null;
         }
         AbstractTemplateProvidingService templateService = ServiceFactory.getInstance().getEmailTemplateProvidingService();
-        Map<Class<? extends Template>, Template> templates = templateService.getPredefinedEmailTemplates();
-        Template emailListTemplate = templateService.getEmailListTemplate(emailList);
+        Map<String, Template> templates = templateService.getPredefinedEmailTemplates();
+        if (templates != null) {
+            for (Map.Entry<String, Template> entry : templates.entrySet()) {
+                ST st = entry.getValue().getTemplate();
+                st.add("name", "<name>");
+            }
+        }
 
+        Template emailListTemplate = templateService.getEmailListTemplate(emailList);
         request.setAttribute("templates", templates.entrySet());
         request.setAttribute("contacts", contacts);
         request.setAttribute("emailListTemplate", emailListTemplate);

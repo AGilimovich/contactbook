@@ -29,7 +29,7 @@
                 <div class="row buffer-top">
                     <p class="form-text">Кому:</p>
                     <input id="input-email-addresses" type="text" name="emailAddresses" required
-                           value="${emailListTemplate.getTemplate().render()}"
+                           value="${emailListTemplate.getTemplate().render()}" disabled
                            class="form-control">
                 </div>
                 <div class="row">
@@ -42,7 +42,7 @@
                             class="form-control"
                             onchange="showTemplate(this.selectedIndex);">
                         <c:forEach var="template" items="${templates}" varStatus="status">
-                            <option value="${status.index}">${template.getValue().getDescription()}</option>
+                            <option value="${template.getValue().getTemplate().getName()}">${template.getValue().getDescription()}</option>
                         </c:forEach>
                     </select>
                 </div>

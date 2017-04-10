@@ -6,11 +6,13 @@ package com.itechart.web.service.email;
 public class Email {
     private String emailAddress;
     private String subject;
+    private String template;
     private String body;
 
-    public Email(String emailAddress, String subject, String body) {
+    public Email(String emailAddress, String subject, String template, String body) {
         this.emailAddress = emailAddress;
         this.subject = subject;
+        this.template = template;
         this.body = body;
     }
 
@@ -36,5 +38,13 @@ public class Email {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(String template) {
+        this.template = template;
     }
 }

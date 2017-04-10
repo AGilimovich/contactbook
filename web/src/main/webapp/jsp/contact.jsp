@@ -72,11 +72,13 @@
 
 
                         <input id="gender-radio-male" type="radio" name="gender"
-                               value="male" ${contact.gender.name() =='MALE'?'checked':''} ${contact == null ?'checked':''}>
+                               <%--value="male" ${contact.gender.name() =='MALE'?'checked':''} ${contact == null ?'checked':''}>--%>
+                               value="male" ${contact.gender!=null ? (contact.gender.name() =='MALE'?'checked':'') :''}>
+
                         м
 
                         <input id="gender-radio-female" type="radio" name="gender"
-                               value="female" ${contact.gender.name() =='FEMALE'?'checked':''}> ж
+                               value="female" ${contact.gender!=null ? (contact.gender.name() =='FEMALE'?'checked':'') :''}> ж
 
                         <p class="form-text">Гражданство:</p>
                         <input type="text" name="citizenship" value="${contact.citizenship}" class="form-control">
@@ -85,8 +87,8 @@
 
                         <div>
                             <input class="family-status-radio" type="radio" name="familyStatus"
-                                   value="married" ${contact.familyStatus.name() =='MARRIED'?'checked':''} ${contact == null ?'checked':''}>
-
+                                   <%--value="married" ${contact.familyStatus.name() =='MARRIED'?'checked':''} ${contact == null ?'checked':''}>--%>
+                                   value="married" ${contact.familyStatus.name() =='MARRIED'?'checked':''}>
                             <span>женат / замужем</span>
                         </div>
                         <div>
@@ -158,7 +160,7 @@
                             <td name="operatorCode" width="3%" align="center">${phone.operatorCode}</td>
                             <td width="1%" align="left">)</td>
                             <td name="phoneNumber" width="15%">${phone.phoneNumber}</td>
-                            <td name="phoneType" align="center" width="19%">${phone.phoneType.toString()}</td>
+                            <td name="phoneType" align="center" width="19%">${phone.phoneType == null? '' : phone.phoneType.toString()}</td>
                             <td name="phoneComment" class="padding-left" width="50%">${phone.comment}</td>
                         </tr>
                     </c:forEach>
@@ -208,8 +210,8 @@
 
         <%--Buttons for form--%>
         <div class="row">
-            <button class="btn btn-primary btn-save" type="submit">Сохранить</button>
-
+            <button class="btn btn-primary btn-save" id="btn-validate-form" type="button">Сохранить</button>
+            <button id="btn-submit-form" class="hidden" type="submit"></button>
         </div>
 
 
@@ -279,7 +281,7 @@
                            placeholder="XXXXXXX" required>
                     <p class="form-text">Тип телефона:</p>
                     <input type="radio" id="input-phone-type-home" class="input-margin" name="inputPhoneType"
-                           value="home" checked>
+                           value="home">
                     <span>Домашний</span>
                     <input type="radio" id="input-phone-type-mobile" class="input-margin" name="inputPhoneType"
                            value="mobile">

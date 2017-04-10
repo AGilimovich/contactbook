@@ -114,7 +114,8 @@ btnAddPhone.onclick = function () {
     inputOperatorCode[0].value = "";
     inputPhoneNumber[0].value = "";
     inputPhoneComment[0].value = "";
-    inputPhoneTypeHome.checked = true;
+    inputPhoneTypeMobile.checked = false;
+    inputPhoneTypeHome.checked = false;
 
     save = function () {
         saveNew();
@@ -122,8 +123,6 @@ btnAddPhone.onclick = function () {
     }
     phonePopup.className += " show";
 }
-
-
 
 
 //action - delete selected phones
@@ -163,7 +162,6 @@ function deleteHiddenInput(phone) {
             hiddenInput.setAttribute("value", value);
         }
     }
-
 }
 
 
@@ -209,7 +207,12 @@ btnEditPhone.onclick = function () {
         inputPhoneNumber[0].value = phoneNumber[checkedIndex].innerHTML;
         if (phoneType[checkedIndex].innerHTML === "Мобильный") {
             inputPhoneTypeMobile.checked = true;
-        } else inputPhoneTypeHome.checked = true;
+        } else if (phoneType[checkedIndex].innerHTML === "Домашний") {
+            inputPhoneTypeHome.checked = true;
+        } else {
+            inputPhoneTypeMobile.checked = false;
+            inputPhoneTypeHome.checked = false;
+        }
         inputPhoneComment[0].value = phoneComment[checkedIndex].innerHTML;
         save = function () {
             editExisting(checkedIndex);
@@ -253,7 +256,7 @@ function createRow(table, phone) {
 
     var cellPhoneComment = row.insertCell(7);
     cellPhoneComment.setAttribute("width", "50%")
-    cellPhoneComment.className= "padding-left";
+    cellPhoneComment.className = "padding-left";
 
 
     // ------------------add checkbox into cell[0]
@@ -282,7 +285,11 @@ function createRow(table, phone) {
 
     if (phone.getPhoneType() === "MOBILE") {
         cellPhoneType.innerHTML = "Мобильный";
-    } else cellPhoneType.innerHTML = "Домашний";
+    } else if (phone.getPhoneType() === "HOME") {
+        cellPhoneType.innerHTML = "Домашний";
+    } else {
+        cellPhoneType.innerHTML = "";
+    }
 
     cellPhoneType.setAttribute("name", "phoneType");
     cellPhoneType.setAttribute("align", "center");
@@ -314,7 +321,7 @@ function createHiddenInputForPhone(phone) {
     var phoneHiddenInput = document.createElement("input");
     phoneHiddenInput.setAttribute("name", "phone[" + phone.getId() + "]");
     phoneHiddenInput.setAttribute("value", value);
-   // phones.push(phone);
+    // phones.push(phone);
     hiddenPhoneTable.appendChild(phoneHiddenInput);
     return phoneHiddenInput;
 }
@@ -328,7 +335,11 @@ function saveNew() {
     phoneNumber = inputPhoneNumber[0].value;
     if (inputPhoneTypes[1].checked) {
         phoneType = "MOBILE";
-    } else phoneType = "HOME";
+    } else if (inputPhoneTypes[0].checked) {
+        phoneType = "HOME";
+    } else {
+        phoneType = "";
+    }
     phoneComment = inputPhoneComment[0].value;
     var newPhone = new Phone(new Date().getTime(), countryCode, operatorCode, phoneNumber, phoneType, phoneComment, STATUS.NEW);
     createRow(phoneTable, newPhone);
@@ -357,9 +368,11 @@ function editExisting(index) {
     if (inputPhoneTypes[1].checked) {
         phone.setPhoneType("MOBILE");
         cellPhoneType.innerHTML = "Мобильный";
-    } else {
+    } else if (inputPhoneTypes[0].checked) {
         phone.setPhoneType("HOME");
         cellPhoneType.innerHTML = "Домашний";
+    } else {
+        cellPhoneType.innerHTML = "";
     }
     phone.setPhoneComment(cellPhoneComment.innerHTML = inputPhoneComment[0].value);
     //close popup
@@ -414,9 +427,6 @@ phoneNumberInput.oninput = function () {
     'use strict'
     phoneNumberInput.setCustomValidity('');
 }
-
-
-
 
 
 var anchorUndoPhone = document.getElementById("anchor-undo-phone");

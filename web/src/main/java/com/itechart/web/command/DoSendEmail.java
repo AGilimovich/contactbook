@@ -7,6 +7,8 @@ import com.itechart.web.service.ServiceFactory;
 import com.itechart.web.service.data.exception.DataException;
 import com.itechart.web.service.email.AbstractEmailingService;
 import com.itechart.web.service.email.Email;
+import com.itechart.web.service.template.AbstractTemplateProvidingService;
+import com.itechart.web.service.template.Template;
 import com.itechart.web.service.validation.ValidationException;
 import org.apache.commons.mail.EmailException;
 import org.slf4j.Logger;
@@ -30,11 +32,15 @@ public class DoSendEmail implements Command {
 
         ArrayList<Email> emails = null;
         AbstractEmailingService emailingService = ServiceFactory.getInstance().getEmailService();
+        AbstractTemplateProvidingService templateProvidingService = ServiceFactory.getInstance().getEmailTemplateProvidingService();
         try {
             emails = ServiceFactory.getInstance().getRequestProcessingService().processSendEmailRequest(request);
-            for (Email email: emails){
+            for (Email email : emails) {
+                Template template = templateProvidingService.getTemplate(email.getTemplate());
                 try {
-                    emailingService.sendEmail(email.getEmailAddress(), email.getSubject(), email.getBody());
+                    template.getTemplate().add("name", "asdasd");
+                    String body = template.getTemplate().render();
+                    emailingService.sendEmail(email.getEmailAddress(), email.getSubject(), body);
                 } catch (EmailException e) {
                     logger.error("Error during sending email: {}", e.getMessage());
                 }

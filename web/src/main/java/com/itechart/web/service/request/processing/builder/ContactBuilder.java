@@ -62,6 +62,9 @@ public class ContactBuilder {
             DateTime dateTime = null;
             try {
                 dateTime = format.parseDateTime(dateOfBirthParam);
+                if (dateTime.isAfter(new DateTime())) {
+                    throw new ValidationException("Date of birth can't be in the future");
+                }
             } catch (Exception e) {
                 throw new ValidationException("Date has illegal format");
             }
@@ -76,9 +79,10 @@ public class ContactBuilder {
             } catch (Exception e) {
                 throw new ValidationException("Gender parameter has illegal value", e);
             }
-        } else {
-            throw new ValidationException("Gender parameter is empty");
         }
+//        else {
+//            throw new ValidationException("Gender parameter is empty");
+//        }
 
         if (StringUtils.isNotBlank(familyStatusParam)) {
             try {
@@ -87,9 +91,10 @@ public class ContactBuilder {
             } catch (Exception e) {
                 throw new ValidationException("Family status parameter has illegal value", e);
             }
-        } else {
-            throw new ValidationException("Family status parameter is empty");
         }
+//        else {
+//            throw new ValidationException("Family status parameter is empty");
+//        }
         if (StringUtils.isNotBlank(websiteParam)) {
             if (validationService.validateField(websiteParam)) {
                 contact.setWebsite(websiteParam);

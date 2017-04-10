@@ -4,6 +4,34 @@ var patronymicInput = document.getElementById("patronymic-input");
 var dateInput = document.getElementById("date-input");
 var emailInput = document.getElementById("email-input");
 
+var validateButton = document.getElementById("btn-validate-form");
+var submitButton = document.getElementById("btn-submit-form");
+var form = document.getElementById("main-form");
+
+
+dateInput.checkValidity = function () {
+    var dateString = document.getElementById("date-input").value;
+    if (dateString !== '') {
+        if (validateDate(dateString)) {
+            var date = parseDate(dateString);
+            if (date > new Date()) {
+                dateInput.setCustomValidity('Дата рождения не может быть в будущем');
+            } else {
+                dateInput.setCustomValidity('');
+            }
+        } else {
+            dateInput.setCustomValidity('Некорректно введена дата');
+        }
+    }
+
+}
+
+validateButton.onclick = function () {
+    'use strict'
+    dateInput.checkValidity();
+    submitButton.click()
+}
+
 nameInput.oninvalid = function () {
     'use strict'
     nameInput.setCustomValidity('Имя может содержать только буквы');
@@ -31,10 +59,7 @@ patronymicInput.oninput = function () {
     patronymicInput.setCustomValidity('');
 }
 
-dateInput.oninvalid = function () {
-    'use strict'
-    dateInput.setCustomValidity('Введите дату в формате: ДД.ММ.ГГГГ');
-}
+
 dateInput.oninput = function () {
     'use strict'
     dateInput.setCustomValidity('');
@@ -47,4 +72,20 @@ emailInput.oninvalid = function () {
 emailInput.oninput = function () {
     'use strict'
     emailInput.setCustomValidity('');
+}
+
+
+function parseDate(strDate) {
+    'use strict'
+    var dateParts = strDate.split(".");
+    return new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
+}
+
+function validateDate(strDate) {
+    var dateParts = strDate.split(".");
+    var composedDate = new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
+
+    return composedDate.getDate() == dateParts[0] &&
+        composedDate.getMonth() == (dateParts[1] - 1) &&
+        composedDate.getFullYear() == dateParts[2];
 }

@@ -25,7 +25,7 @@ public class JdbcContactDao implements IContactDao {
 
     private Transaction transaction;
 
-        private final String SELECT_BY_ID_QUERY = "SELECT c.*, g.gender_value, f_s.family_status_value" +
+    private final String SELECT_BY_ID_QUERY = "SELECT c.*, g.gender_value, f_s.family_status_value" +
             " FROM contact AS c" +
             " INNER JOIN gender AS g ON c.gender = g.gender_id" +
             " INNER JOIN family_status AS f_s ON c.family_status = f_s.family_status_id" +
@@ -90,10 +90,10 @@ public class JdbcContactDao implements IContactDao {
             st.setLong(9, contact.getPhoto());
             if (contact.getGender() != null)
                 st.setString(10, contact.getGender().name());
-            else st.setString(10, null);
+            else st.setString(10, "none");
             if (contact.getFamilyStatus() != null)
                 st.setString(11, contact.getFamilyStatus().name());
-            else st.setString(11, null);
+            else st.setString(11, "none");
             st.executeUpdate();
 
             rs = st.getGeneratedKeys();
@@ -139,12 +139,12 @@ public class JdbcContactDao implements IContactDao {
             if (contact.getGender() != null)
                 st.setString(1, contact.getGender().name().toUpperCase());
             else {
-                st.setString(1, null);
+                st.setString(1, "none");
             }
             if (contact.getFamilyStatus() != null)
                 st.setString(2, contact.getFamilyStatus().name().toUpperCase());
             else {
-                st.setString(2, null);
+                st.setString(2, "none");
             }
             st.setString(3, contact.getSurname());
             st.setString(4, contact.getName());
@@ -193,14 +193,14 @@ public class JdbcContactDao implements IContactDao {
                 try {
                     gender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
                 } catch (Exception e) {
-                    throw new DaoException("Illegal gender value", e);
+                    gender = null;
                 }
                 String citizenship = rs.getString("citizenship");
                 Contact.FamilyStatus familyStatus = null;
                 try {
                     familyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
                 } catch (Exception e) {
-                    throw new DaoException("Illegal family status value", e);
+                    familyStatus = null;
                 }
                 String website = rs.getString("website");
                 String email = rs.getString("email");
@@ -237,16 +237,16 @@ public class JdbcContactDao implements IContactDao {
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
 
         if (StringUtils.isNotBlank(dto.getSurname())) {
-            parameters.add(dto.getSurname());
+            parameters.add(appendPercents(dto.getSurname()));
             builder.appendWhereClause("c.surname");
         }
 
         if (StringUtils.isNotBlank(dto.getName())) {
-            parameters.add(dto.getName());
+            parameters.add(appendPercents(dto.getName()));
             builder.appendWhereClause("c.name");
         }
         if (StringUtils.isNotBlank(dto.getPatronymic())) {
-            parameters.add(dto.getPatronymic());
+            parameters.add(appendPercents(dto.getPatronymic()));
             builder.appendWhereClause("c.patronymic");
         }
         if (dto.getFromDate() != null || dto.getToDate() != null) {
@@ -273,31 +273,31 @@ public class JdbcContactDao implements IContactDao {
             builder.appendWhereClause("family_status.family_status_value");
         }
         if (StringUtils.isNotBlank(dto.getCitizenship())) {
-            parameters.add(dto.getCitizenship());
+            parameters.add(appendPercents(dto.getCitizenship()));
             builder.appendWhereClause("c.citizenship");
         }
         if (StringUtils.isNotBlank(dto.getCountry())) {
-            parameters.add(dto.getCountry());
+            parameters.add(appendPercents(dto.getCountry()));
             builder.appendWhereClause("a.country");
         }
         if (StringUtils.isNotBlank(dto.getCity())) {
-            parameters.add(dto.getCity());
+            parameters.add(appendPercents(dto.getCity()));
             builder.appendWhereClause("a.city");
         }
         if (StringUtils.isNotBlank(dto.getStreet())) {
-            parameters.add(dto.getStreet());
+            parameters.add(appendPercents(dto.getStreet()));
             builder.appendWhereClause("a.street");
         }
         if (StringUtils.isNotBlank(dto.getHouse())) {
-            parameters.add(dto.getHouse());
+            parameters.add(appendPercents(dto.getHouse()));
             builder.appendWhereClause("a.house");
         }
         if (StringUtils.isNotBlank(dto.getApartment())) {
-            parameters.add(dto.getApartment());
+            parameters.add(appendPercents(dto.getApartment()));
             builder.appendWhereClause("a.apartment");
         }
         if (StringUtils.isNotBlank(dto.getZipCOde())) {
-            parameters.add(dto.getZipCOde());
+            parameters.add(appendPercents(dto.getZipCOde()));
             builder.appendWhereClause("a.zip_code");
         }
         builder.appendLimit(from, count);
@@ -334,14 +334,14 @@ public class JdbcContactDao implements IContactDao {
                 try {
                     foundGender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
                 } catch (Exception e) {
-                    throw new DaoException("Illegal gender value", e);
+//                    throw new DaoException("Illegal gender value", e);
                 }
                 String foundCitizenship = rs.getString("citizenship");
                 Contact.FamilyStatus foundFamilyStatus = null;
                 try {
                     foundFamilyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
                 } catch (Exception e) {
-                    throw new DaoException("Illegal famile status value", e);
+//                    throw new DaoException("Illegal famile status value", e);
                 }
                 String foundWebsite = rs.getString("website");
                 String foundEmail = rs.getString("email");
@@ -404,6 +404,8 @@ public class JdbcContactDao implements IContactDao {
         return contacts;
     }
 
+
+
     @Override
     public ArrayList<Contact> getContactsLimit(int startingFrom, int count) throws DaoException {
         logger.info("Fetch contact starting from index: {}, count: {}", startingFrom, count);
@@ -426,16 +428,16 @@ public class JdbcContactDao implements IContactDao {
                 Date dateOfBirth = rs.getDate("date_of_birth");
                 Contact.Gender gender = null;
                 try {
-                   gender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
-                } catch (Exception e){
-                    throw new DaoException("Illegal gender value", e);
+                    gender = Contact.Gender.valueOf(rs.getString("gender_value").toUpperCase());
+                } catch (Exception e) {
+                    gender = null;
                 }
                 String citizenship = rs.getString("citizenship");
-                Contact.FamilyStatus familyStatus= null;
+                Contact.FamilyStatus familyStatus = null;
                 try {
-                familyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
-                } catch (Exception e){
-                    throw new DaoException("Illegal family status value", e);
+                    familyStatus = Contact.FamilyStatus.valueOf(rs.getString("family_status_value").toUpperCase());
+                } catch (Exception e) {
+                    familyStatus = null;
                 }
                 String website = rs.getString("website");
                 String email = rs.getString("email");
@@ -492,16 +494,16 @@ public class JdbcContactDao implements IContactDao {
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
 
         if (StringUtils.isNotBlank(dto.getSurname())) {
-            parameters.add(dto.getSurname());
+            parameters.add(appendPercents(dto.getSurname()));
             builder.appendWhereClause("c.surname");
         }
 
         if (StringUtils.isNotBlank(dto.getName())) {
-            parameters.add(dto.getName());
+            parameters.add(appendPercents(dto.getName()));
             builder.appendWhereClause("c.name");
         }
         if (StringUtils.isNotBlank(dto.getPatronymic())) {
-            parameters.add(dto.getPatronymic());
+            parameters.add(appendPercents(dto.getPatronymic()));
             builder.appendWhereClause("c.patronymic");
         }
         if (dto.getFromDate() != null || dto.getToDate() != null) {
@@ -528,31 +530,31 @@ public class JdbcContactDao implements IContactDao {
             builder.appendWhereClause("family_status.family_status_value");
         }
         if (StringUtils.isNotBlank(dto.getCitizenship())) {
-            parameters.add(dto.getCitizenship());
+            parameters.add(appendPercents(dto.getCitizenship()));
             builder.appendWhereClause("c.citizenship");
         }
         if (StringUtils.isNotBlank(dto.getCountry())) {
-            parameters.add(dto.getCountry());
+            parameters.add(appendPercents(dto.getCountry()));
             builder.appendWhereClause("a.country");
         }
         if (StringUtils.isNotBlank(dto.getCity())) {
-            parameters.add(dto.getCity());
+            parameters.add(appendPercents(dto.getCity()));
             builder.appendWhereClause("a.city");
         }
         if (StringUtils.isNotBlank(dto.getStreet())) {
-            parameters.add(dto.getStreet());
+            parameters.add(appendPercents(dto.getStreet()));
             builder.appendWhereClause("a.street");
         }
         if (StringUtils.isNotBlank(dto.getHouse())) {
-            parameters.add(dto.getHouse());
+            parameters.add(appendPercents(dto.getHouse()));
             builder.appendWhereClause("a.house");
         }
         if (StringUtils.isNotBlank(dto.getApartment())) {
-            parameters.add(dto.getApartment());
+            parameters.add(appendPercents(dto.getApartment()));
             builder.appendWhereClause("a.apartment");
         }
         if (StringUtils.isNotBlank(dto.getZipCOde())) {
-            parameters.add(dto.getZipCOde());
+            parameters.add(appendPercents(dto.getZipCOde()));
             builder.appendWhereClause("a.zip_code");
         }
 
@@ -583,5 +585,9 @@ public class JdbcContactDao implements IContactDao {
         return count;
     }
 
+    private String appendPercents(String value) {
+        if (value == null) return null;
+        return "%" + value + "%";
+    }
 
 }

@@ -4,7 +4,9 @@ body {
     margin: 0;
     padding: 0;
 }
-
+.title{
+    font-size: 1.6em;
+}
 /*Container for contact's photo*/
 .photo-container {
     height: 150px;
