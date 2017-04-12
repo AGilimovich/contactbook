@@ -3,7 +3,7 @@ package com.itechart.web.service.template;
 import org.stringtemplate.v4.ST;
 
 /**
- * Template for common email.
+ * Template for new year congratulation email.
  */
 public class NewYearEmailTemplate implements Template {
     private ST template;

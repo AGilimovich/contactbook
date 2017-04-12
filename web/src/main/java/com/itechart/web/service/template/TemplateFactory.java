@@ -17,13 +17,10 @@ import java.util.Map;
  */
 public class TemplateFactory implements AbstractTemplateFactory {
     private Logger logger = LoggerFactory.getLogger(TemplateFactory.class);
-    private static ArrayList<String> STNames = new ArrayList<>();
     private static Map<String, Class<? extends Template>> templateClasses = new HashMap<>();
     private STGroup stGroup = new STGroupFile("templates/template.stg");
 
     static {
-        STNames.add("/newYearEmail");
-        STNames.add("/birthdayEmail");
         templateClasses.put("/newYearEmail", NewYearEmailTemplate.class);
         templateClasses.put("/birthdayEmail", BirthdayEmailTemplate.class);
     }
@@ -33,9 +30,9 @@ public class TemplateFactory implements AbstractTemplateFactory {
     public ArrayList<Template> getPredefinedEmailTemplates() {
         logger.info("Get predefined email templates");
         ArrayList<Template> templates = new ArrayList<>();
-        for (String name : STNames) {
-            ST st = stGroup.getInstanceOf(name);
-            Class<? extends Template> templateClass = templateClasses.get(name);
+        for (Map.Entry<String, Class<? extends Template>> entry : templateClasses.entrySet()) {
+            ST st = stGroup.getInstanceOf(entry.getKey());
+            Class<? extends Template> templateClass = entry.getValue();
             try {
                 Constructor<? extends Template> cons = templateClass.getConstructor(ST.class);
                 Template template = cons.newInstance(st);

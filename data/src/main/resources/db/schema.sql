@@ -23,7 +23,7 @@ PRIMARY KEY(`file_id`)
 
 CREATE TABLE `gender`(
 `gender_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-`gender_value` VARCHAR(6) NOT NULL,
+`gender_value` VARCHAR(6),
 
 PRIMARY KEY (`gender_id`)
 ) DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
@@ -32,14 +32,14 @@ PRIMARY KEY (`gender_id`)
 
 CREATE TABLE `family_status`(
 `family_status_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-`family_status_value` VARCHAR(7) NOT NULL,
+`family_status_value` VARCHAR(7),
 
 PRIMARY KEY (`family_status_id`)
 ) DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
 
 CREATE TABLE `phone_type`(
 `phone_type_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-`phone_type_value` VARCHAR(6) NOT NULL,
+`phone_type_value` VARCHAR(6),
 
 PRIMARY KEY (`phone_type_id`)
 ) DEFAULT CHARSET utf8mb4 ENGINE InnoDB;
@@ -114,7 +114,10 @@ GRANT ALL PRIVILEGES ON `aleksandr_gilimovich`. * TO gilimovich@localhost;
 USE aleksandr_gilimovich;
 INSERT INTO gender(gender_value) VALUES ("male");
 INSERT INTO gender(gender_value) VALUES ("female");
+INSERT INTO gender(gender_value) VALUES ("none");
 INSERT INTO family_status(family_status_value) VALUES("married");
 INSERT INTO family_status(family_status_value) VALUES("single");
+INSERT INTO family_status(family_status_value) VALUES("none");
 INSERT INTO phone_type(phone_type_value) VALUES("home");
 INSERT INTO phone_type(phone_type_value) VALUES("mobile");
+INSERT INTO phone_type(phone_type_value) VALUES("none");

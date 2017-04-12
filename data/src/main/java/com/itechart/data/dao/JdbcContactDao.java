@@ -39,7 +39,7 @@ public class JdbcContactDao implements IContactDao {
     private final String DELETE_CONTACT_QUERY = "DELETE FROM contact WHERE contact_id = ?";
 
 
-    private final String SELECT_CONTACTS_BY_BIRTHDATE = "SELECT name, email FROM contact WHERE DAY(date_of_birth) = ? AND MONTH (date_of_birth) = ?";
+    private final String SELECT_CONTACTS_BY_BIRTHDATE = "SELECT name, patronymic, email FROM contact WHERE DAY(date_of_birth) = ? AND MONTH (date_of_birth) = ?";
 
     private final String SELECT_CONTACTS_LIMIT_QUERY = "SELECT c.*, g.gender_value, f_s.family_status_value " +
             " FROM contact AS c INNER JOIN gender AS g ON c.gender = g.gender_id" +
@@ -389,9 +389,11 @@ public class JdbcContactDao implements IContactDao {
             rs = st.executeQuery();
             while (rs.next()) {
                 String name = rs.getString("name");
+                String patronymic = rs.getString("patronymic");
                 String email = rs.getString("email");
                 Contact contact = new Contact();
                 contact.setName(name);
+                contact.setPatronymic(patronymic);
                 contact.setEmail(email);
                 contacts.add(contact);
             }
